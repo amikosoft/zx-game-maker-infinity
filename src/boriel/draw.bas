@@ -46,16 +46,30 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
         End If
     #endif
     
-    If tile < 187 Then
-        SetTile(tile, attrSet(tile), x, y)
-        Return
-    End If
-    
-    If tile = ITEM_TILE Then
-        If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-            SetTileChecked(tile, attrSet(tile), x, y)
+    #ifdef MULTI_ITEM_ENABLED
+        If tile < ITEM_TILE Then
+            SetTile(tile, attrSet(tile), x, y)
+            Return
         End If
-    Elseif tile = KEY_TILE
+
+        If tile >= ITEM_TILE and tile <= ITEM_TILE_END Then
+            If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
+                SetTileChecked(tile, attrSet(tile), x, y)
+            End If
+        End If
+    #Else
+        If tile < 187 Then
+            SetTile(tile, attrSet(tile), x, y)
+            Return
+        End If
+        If tile = ITEM_TILE Then
+            If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
+                SetTileChecked(tile, attrSet(tile), x, y)
+            End If
+        End If        
+    #endif
+
+    if tile = KEY_TILE
         #ifdef ARCADE_MODE
             currentScreenKeyX = x
             currentScreenKeyY = y

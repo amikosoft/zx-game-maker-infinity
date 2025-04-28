@@ -92,10 +92,16 @@ end sub
         itemsToFind = 0
         currentItems = 0
         for index=0 to SCREEN_LENGTH
-            if peek(@decompressedMap + index) - 1 = ITEM_TILE then
-                itemsToFind = itemsToFind + 1
-            end if
-
+            #ifdef MULTI_ITEM_ENABLED
+                if peek(@decompressedMap + index) - 1 >= ITEM_TILE and peek(@decompressedMap + index) - 1 <= ITEM_TILE_END then
+                    itemsToFind = itemsToFind + 1
+                end if
+            #else
+                if peek(@decompressedMap + index) - 1 = ITEM_TILE then
+                    itemsToFind = itemsToFind + 1
+                end if
+            #endif
+                
             x = x + 1
             if x = screenWidth then
                 x = 0

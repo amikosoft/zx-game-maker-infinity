@@ -41,6 +41,7 @@ screenAnimatedTiles = defaultdict(dict)
 ammoTile = 0
 keyTile = 0
 itemTile = 0
+itemTileEnd = 0
 doorTile = 0
 lifeTile = 0
 
@@ -52,7 +53,10 @@ for tileset in data['tilesets']:
             if tile['type'] == 'key':
                 keyTile = str(tile['id'])
             if tile['type'] == 'item':
-                itemTile = str(tile['id'])
+                if itemTile == 0:
+                    itemTile = tile['id']
+                if tile['id'] > itemTileEnd:
+                    itemTileEnd = tile['id']
             if tile['type'] == 'door':
                 doorTile = str(tile['id'])
             if tile['type'] == 'life':
@@ -245,7 +249,14 @@ configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
 configStr += "const BULLET_DISTANCE as ubyte = " + str(bulletDistance) + "\n"
 configStr += "const SHOULD_KILL_ENEMIES as ubyte = " + str(shouldKillEnemies) + "\n"
 configStr += "const KEY_TILE as ubyte = " + keyTile + "\n"
-configStr += "const ITEM_TILE as ubyte = " + itemTile + "\n"
+configStr += "const ITEM_TILE as ubyte = " + str(itemTile) + "\n"
+
+if itemTileEnd > itemTile:
+    configStr += "#define MULTI_ITEM_ENABLED\n"
+    configStr += "const ITEM_TILE_END as ubyte = " + str(itemTileEnd) + "\n"
+    print("MULTI ITEM TILE ENABLED")
+else:
+    print("MULTI ITEM TILE DISABLED")
 configStr += "const DOOR_TILE as ubyte = " + doorTile + "\n"
 configStr += "const LIFE_TILE as ubyte = " + lifeTile + "\n"
 configStr += "const ANIMATE_PERIOD_MAIN as ubyte = " + str(animatePeriodMain) + "\n"
@@ -388,10 +399,15 @@ for layer in data['layers']:
                 if int(tile) in animatedTilesIds and len(screenAnimatedTiles[idx]) < maxAnimatedTilesPerScreen:
                     screenAnimatedTiles[idx].append([tile, mapX, mapY])
 
+                if itemTile == itemTileEnd:
+                    if int(tile) == itemTile:
+                        screenObjects[idx]['item'] = 1
+                elif itemTile < itemTileEnd:
+                    if int(tile) >= itemTile and int(tile) <= itemTileEnd:
+                        screenObjects[idx]['item'] += 1
+
                 if tile == keyTile:
                     screenObjects[idx]['key'] = 1
-                elif tile == itemTile:
-                    screenObjects[idx]['item'] = 1
                 elif tile == doorTile:
                     screenObjects[idx]['door'] = 1
                 elif tile == lifeTile:

@@ -432,7 +432,12 @@ Sub keyboardListen()
 End Sub
 
 Function checkTileObject(tile As Ubyte) As Ubyte
-    If tile = ITEM_TILE Then
+    #ifdef MULTI_ITEM_ENABLED
+        if tile < ITEM_TILE Then Return 0
+        If tile > ITEM_TILE -1 and tile < ITEM_TILE_END + 1 Then
+    #Else
+        If tile = ITEM_TILE Then
+    #endif
         #ifndef ARCADE_MODE
             If Not screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
                 Return 0
@@ -455,7 +460,11 @@ Function checkTileObject(tile As Ubyte) As Ubyte
                 ending()
             End If
         #endif
-        screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
+        #ifdef MULTI_ITEM_ENABLED
+            screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) - 1
+        #else
+            screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
+        #endif
         BeepFX_Play(5)
         Return 1
         #ifdef KEYS_ENABLED
