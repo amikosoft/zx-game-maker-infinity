@@ -512,10 +512,12 @@ for layer in data['layers']:
                     if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
                         keys[str(screenId)] = [int(initialMainCharacterX), int(initialMainCharacterY)]
                 elif object['type'] == 'text':
-                    xScreenPosition = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
-                    yScreenPosition = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
+                    xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
+                    yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
                     screenId = xScreenPosition + (yScreenPosition * mapCols)
-                    texts[str(screenId)] = [xScreenPosition, yScreenPosition, object['properties'][0]['value']]
+                    xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
+                    yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
+                    texts[str(screenId)] = [str(xScreenPosition), str(yScreenPosition), object['properties'][0]['value']]
                 else:
                     exitWithErrorMessage('Unknown object type. Only "enemy" and "mainCharacter" are allowed')
 
@@ -527,14 +529,44 @@ for i in range(screensCount):
     if str(i) not in texts:
         texts[str(i)] = ['0', '0', '']
 
-# save texts into binary file
-with open("output/texts.bin", "wb") as f:
-    for screen in texts:
-        f.write(bytearray([int(texts[screen][0]), int(texts[screen][1])]))
-        f.write(texts[screen][2].encode('ascii'))
-        f.write(b'\x00')
+allTexts = []
 
-                    
+# esto funciona
+# configStr += "dim textToDisplay(" + str(len(allTexts)) + ") as string\n"
+# configStr += "sub initAllTexts()\n"
+# configStr += "restore textsData\n"
+# configStr += "for i = 0 to " + str(len(allTexts) - 1) + "\n"
+# configStr += "read textToDisplay(i)\n"
+# configStr += "next i\n"
+# configStr += "end sub\n"
+
+# with open("output/textsCoord.bin", "wb") as f:
+#     for i in range(screensCount):
+#         if len(texts[str(i)][2]) > 0:
+#             allTexts.append(texts[str(i)][2])
+            
+#         f.write(bytearray([int(texts[str(i)][0]), int(texts[str(i)][1]), int(len(allTexts))]))
+#         print([int(texts[str(i)][0]), int(texts[str(i)][1]), len(allTexts)])
+
+# test todo en data
+configStr += "dim textToDisplay as string\n"
+configStr += "dim textProps(2) as ubyte\n"
+configStr += "sub initAllTexts()\n"
+configStr += "restore textsData\n"
+configStr += "read textToDisplay(i)\n"
+configStr += "next i\n"
+configStr += "end sub\n"
+
+# with open("output/texts.bin", "wb") as f:
+#     configStr += "dim textToDisplay(" + str(len(allTexts)) + ") as string\n\n"
+#     currentTextBank = 0
+#     for i in allTexts:
+#         f.write(i.encode('ascii'))
+#         f.write(b'\x00')
+#         configStr += "textToDisplay(" + str(currentTextBank) + ") = \"" + i  + "\"\n"
+#         currentTextBank += 1
+
+
 if arcadeMode == 1: # Defino el array de posiciones iniciales del personaje principal
     configStr += "dim mainCharactersArray(" + str(screensCount - 1) + ", 1) as ubyte = { _\n"
     for key in keys:
@@ -555,6 +587,13 @@ enemiesPerScreen = []
 configStr += "const INITIAL_SCREEN as ubyte = " + str(initialScreen) + "\n"
 configStr += "const INITIAL_MAIN_CHARACTER_X as ubyte = " + str(initialMainCharacterX) + "\n"
 configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(initialMainCharacterY) + "\n"
+
+configStr += "\n\ntextsData:\n"
+for i in allTexts:
+    # configStr += "DATA \"" + i + "\"\n"
+    configStr += "DATA \"" + i + "\"\n"
+
+configStr += "\n\n"
 
 enemiesArray = []
 
@@ -636,15 +675,15 @@ with open(outputDir + "enemiesInScreenOffsets.bin", "wb") as f:
     for offset in enemiesInScreenOffsets:
         f.write(offset.to_bytes(2, byteorder='little'))
 
-with open("output/enemiesPerScreen.bin", "wb") as f:
+with open(outputDir + "enemiesPerScreen.bin", "wb") as f:
     f.write(bytearray(enemiesPerScreen))
 
-with open("output/enemiesPerScreenInitial.bin", "wb") as f:
+with open(outputDir + "enemiesPerScreenInitial.bin", "wb") as f:
     f.write(bytearray(enemiesPerScreen))
 
 # configStr += "dim decompressedEnemiesScreen(" + str(maxEnemiesPerScreen - 1) + ", 11) as byte\n"
 
-with open("output/decompressedEnemiesScreen.bin", "wb") as f:
+with open(outputDir + "decompressedEnemiesScreen.bin", "wb") as f:
     for i in range(maxEnemiesPerScreen):
         f.write(bytearray([0] * 12))
 

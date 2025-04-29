@@ -96,6 +96,9 @@ dim enemiesPerScreenInitial(SCREENS_COUNT) as ubyte at ENEMIES_PER_SCREEN_INITIA
 dim screenObjects(SCREENS_COUNT, 4) as ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 dim screensWon(SCREENS_COUNT) as ubyte at SCREENS_WON_DATA_ADDRESS
 dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) as byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
+dim textsCoord(SCREENS_COUNT, 2) as ubyte at TEXTS_COORD_DATA_ADDRESS
+' dim texts(SCREENS_COUNT) as string at TEXTS_DATA_ADDRESS
+
 
 #ifdef USE_BREAKABLE_TILE
 dim brokenTiles(SCREENS_COUNT) as ubyte at BROKEN_TILES_DATA_ADDRESS

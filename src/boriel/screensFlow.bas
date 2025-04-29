@@ -234,9 +234,22 @@ Sub playGame()
         moveBullet()
         drawSprites()
         
+        If textsCoord(currentScreen, 2) Then
+            debugA(textsCoord(currentScreen, 2))
+            debugB(protaX)
+            If protaX >= textsCoord(currentScreen, 0) And protaY >= textsCoord(currentScreen, 1) Then
+                Print AT 23, 0; textToDisplay(textsCoord(currentScreen, 2)-1)
+            Else 
+                Print AT 23, 0; "        "
+            End If
+        Else
+            Print AT 23, 0; "        "
+        End If
+    
         If moveScreen <> 0 Then
             moveToScreen(moveScreen)
             moveScreen = 0
+            initAllTexts()
         End If
         
         If currentLife = 0 Then gameOver()
@@ -350,6 +363,8 @@ Sub resetValues()
     
     redrawScreen()
     ' drawSprites()
+
+    initAllTexts()
 End Sub
 
 Sub swapScreen()

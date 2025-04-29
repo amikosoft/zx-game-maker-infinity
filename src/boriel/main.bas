@@ -31,4 +31,5 @@ initGraphics()
     End If
 #endif
 
+' initAllTexts()
 showMenu()
