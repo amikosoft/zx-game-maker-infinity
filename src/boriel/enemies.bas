@@ -25,6 +25,11 @@ Sub moveEnemies()
         #endif
         
         If decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) > 0 Then 'In the Screen And still live
+            If decompressedEnemiesScreen(enemyId, ENEMY_SPEED) = 1 Then
+                If (framec bAnd 1) = 0 Then continue For
+            ElseIf decompressedEnemiesScreen(enemyId, ENEMY_SPEED) = 2 Then
+                If (framec bAnd 3) = 0 Then continue For
+            End If
         Dim tile As Byte
         Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
         Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
@@ -40,18 +45,24 @@ Sub moveEnemies()
             End If
         End If
         
+        If decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) Then
+            If decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI) = enemyLin Or decompressedEnemiesScreen(enemyId, ENEMY_LIN_END) = enemyLin Then
+                decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) * -1
+            End If
+        End If
+
         decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) + decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
         
         If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then ' Is a platform Not an enemy, only 2 frames, 1 direction
         #ifdef SIDE_VIEW
             If checkPlatformHasProtaOnTop(decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)) Then
-                If decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = 1 Then
-                    If Not CheckCollision(protaX + 1, protaY) Then
-                        spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaX + decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
-                        protaX = spritesLinColTileAndFrame(PROTA_SPRITE, 1)
-                    End If
-                Elseif decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = -1 Then
-                    If Not CheckCollision(protaX - 1, protaY) Then
+                If decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) Then
+                    spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaY + decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION)
+                    protaY = spritesLinColTileAndFrame(PROTA_SPRITE, 1)
+                End If
+                
+                If decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) Then
+                    If Not CheckCollision(protaX + decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION), protaY) Then
                         spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaX + decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
                         protaX = spritesLinColTileAndFrame(PROTA_SPRITE, 1)
                     End If
@@ -65,12 +76,6 @@ Sub moveEnemies()
         tile = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 16
     End If
     
-    If decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) Then
-        If decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI) = enemyLin Or decompressedEnemiesScreen(enemyId, ENEMY_LIN_END) = enemyLin Then
-            decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) * -1
-        End If
-    End If
-    
     decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) + decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION)
     
     ' If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16
@@ -82,12 +87,26 @@ Sub moveEnemies()
     End If
     
     saveSprite(enemyId, decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN), decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL), tile + 1, decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION))
-    
-    If decompressedEnemiesScreen(enemyId, ENEMY_TILE) > 15 Then
-        checkProtaCollision(enemyId)
-    End If
 End If
 Next enemyId
+End Sub
+
+Sub checkEnemiesCollection()
+    Dim maxEnemiesCount As Ubyte = 0
+    
+    If enemiesPerScreen(currentScreen) > 0 Then maxEnemiesCount = enemiesPerScreen(currentScreen) - 1
+    For enemyId=0 To maxEnemiesCount
+        If decompressedEnemiesScreen(enemyId, ENEMY_TILE) = 0 Then continue For
+        If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then continue For
+        If decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = 0 Then continue For
+        #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+            If decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) <> 99 Then
+                If screensWon(currentScreen) Then continue For
+            End If
+        #endif
+        
+        checkProtaCollision(enemyId)
+    Next enemyId
 End Sub
 
 Sub checkProtaCollision(enemyId As Ubyte)

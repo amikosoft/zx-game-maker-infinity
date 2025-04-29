@@ -482,15 +482,16 @@ for layer in data['layers']:
                     'colEnd': str(int((object['x'] % (tileWidth * screenWidth))) // 4),
                     'tile': str(object['gid'] - spriteTileOffset),
                     'life': '1',
-                    'color': '0',
+                    'speed': '3',
                 }
 
                 if 'properties' in object and len(object['properties']) > 0:
                     for property in object['properties']:
                         if property['name'] == 'life':
                             objects[str(object['id'])]['life'] = str(property['value'])
-                        elif property['name'] == 'color':
-                            objects[str(object['id'])]['color'] = str(property['value'])
+                        elif property['name'] == 'speed':
+                            if property['value'] in [0, 1, 2]:
+                                objects[str(object['id'])]['speed'] = str(property['value'] + 1)
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
         for object in layer['objects']:
@@ -629,7 +630,7 @@ for layer in data['layers']:
                         arrayBuffer.append(int(enemy['life']))
                         arrayBuffer.append(i + 1)
                         arrayBuffer.append(int(verticalDirection))                  
-                        arrayBuffer.append(int(enemy['color']))                  
+                        arrayBuffer.append(int(enemy['speed']))                  
                     else:
                         arrayBuffer.append(0)
                         arrayBuffer.append(0)
