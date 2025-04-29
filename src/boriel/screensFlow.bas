@@ -240,8 +240,6 @@ Sub playGame()
         drawSprites()
         
         If textsCoord(currentScreen, 2) Then
-            debugA(textsCoord(currentScreen, 2))
-            debugB(protaX)
             If protaX >= textsCoord(currentScreen, 0) And protaY >= textsCoord(currentScreen, 1) Then
                 Print AT 23, 0; textToDisplay(textsCoord(currentScreen, 2)-1)
             Else 

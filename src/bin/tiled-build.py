@@ -533,30 +533,21 @@ for i in range(screensCount):
 allTexts = []
 
 # esto funciona
-# configStr += "dim textToDisplay(" + str(len(allTexts)) + ") as string\n"
-# configStr += "sub initAllTexts()\n"
-# configStr += "restore textsData\n"
-# configStr += "for i = 0 to " + str(len(allTexts) - 1) + "\n"
-# configStr += "read textToDisplay(i)\n"
-# configStr += "next i\n"
-# configStr += "end sub\n"
-
-# with open("output/textsCoord.bin", "wb") as f:
-#     for i in range(screensCount):
-#         if len(texts[str(i)][2]) > 0:
-#             allTexts.append(texts[str(i)][2])
-            
-#         f.write(bytearray([int(texts[str(i)][0]), int(texts[str(i)][1]), int(len(allTexts))]))
-#         print([int(texts[str(i)][0]), int(texts[str(i)][1]), len(allTexts)])
-
-# test todo en data
-configStr += "dim textToDisplay as string\n"
-configStr += "dim textProps(2) as ubyte\n"
+configStr += "dim textToDisplay(" + str(len(allTexts)) + ") as string\n"
 configStr += "sub initAllTexts()\n"
 configStr += "restore textsData\n"
+configStr += "for i = 0 to " + str(len(allTexts)) + "\n"
 configStr += "read textToDisplay(i)\n"
 configStr += "next i\n"
 configStr += "end sub\n"
+
+with open("output/textsCoord.bin", "wb") as f:
+    for i in range(screensCount):
+        if len(texts[str(i)][2]) > 0:
+            allTexts.append(texts[str(i)][2])
+            
+        f.write(bytearray([int(texts[str(i)][0]), int(texts[str(i)][1]), int(len(allTexts))]))
+        print([int(texts[str(i)][0]), int(texts[str(i)][1]), len(allTexts)])
 
 # with open("output/texts.bin", "wb") as f:
 #     configStr += "dim textToDisplay(" + str(len(allTexts)) + ") as string\n\n"
@@ -591,7 +582,6 @@ configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(initialMainChara
 
 configStr += "\n\ntextsData:\n"
 for i in allTexts:
-    # configStr += "DATA \"" + i + "\"\n"
     configStr += "DATA \"" + i + "\"\n"
 
 configStr += "\n\n"
