@@ -29,7 +29,7 @@ Sub moveEnemies()
                 Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
                 
                 If enemySpeed = 1 Then
-                    If (framec bAnd 1) = 0 Then continue For
+                    If (framec bAnd 3) <> 0 Then continue For
                 ElseIf enemySpeed = 2 Then
                     If (framec bAnd 2) = 0 Then continue For
                 End If
@@ -148,6 +148,7 @@ Sub moveEnemies()
                 End if
                 
                 enemyCol = enemyCol + horizontalDirection
+                enemyLin = enemyLin + verticalDirection
                 
                 ' Is a platform Not an enemy, only 2 frames, 1 direction
                 If tile < 16 Then
@@ -172,8 +173,6 @@ Sub moveEnemies()
                 Elseif horizontalDirection = -1 Then
                     tile = tile + 16
                 End If
-                
-                enemyLin = enemyLin + verticalDirection
                 
                 If enemFrame Then
                     tile = tile + 1

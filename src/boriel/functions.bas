@@ -28,7 +28,7 @@ sub decrementLife()
         if currentLife > DAMAGE_AMOUNT then
             currentLife = currentLife - DAMAGE_AMOUNT
 
-             invincible = INVINCIBLE_FRAMES
+            invincible = INVINCIBLE_FRAMES
         else
             currentLife = 0
         end if

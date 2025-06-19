@@ -94,13 +94,19 @@ sub checkBulletCollision()
 
     if tile then
         resetBullet()
-        checkAndRemoveBreakableTile(tile)
+
+        #ifdef USE_BREAKABLE_TILE
+            checkAndRemoveBreakableTile(tile)
+        #endif
         return
     else
         tile = isSolidTileByColLin(xToCheck >> 1, (bulletPositionY + 1) >> 1)
         if tile then
             resetBullet()
+
+            #ifdef USE_BREAKABLE_TILE
             checkAndRemoveBreakableTile(tile)
+            #endif
             return
         end if
     end if
