@@ -211,6 +211,7 @@ End Sub
 Sub checkProtaCollision(enemyId As Ubyte)
     If invincible Then Return
     
+    Dim protaX1 As Ubyte = protaX + 2
     Dim protaY1 As Ubyte = protaY + 2
     Dim enemyX0 As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
     Dim enemyY0 As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
@@ -232,10 +233,10 @@ Sub checkProtaCollision(enemyId As Ubyte)
         #endif
     #endif
     
-    If (protaX + 2) < enemyX0 Then Return
+    If protaX1 < enemyX0 Then Return
     If protaX > enemyX1 Then Return
     If protaY1 < enemyY0 Then Return
-    If protaY > (enemyY0 + 2) Then Return
+    If protaY > enemyY1 Then Return
     
     decrementLife()
 End Sub
