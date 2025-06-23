@@ -219,6 +219,8 @@ Sub playGame()
         Print AT 23, 20; "00000"
     #endif
     
+    enemiesScreen = enemiesPerScreen(currentScreen)
+
     Do
         waitretrace
         
@@ -246,6 +248,7 @@ Sub playGame()
         If moveScreen <> 0 Then
             moveToScreen(moveScreen)
             moveScreen = 0
+            enemiesScreen = enemiesPerScreen(currentScreen)
         End If
         
         If currentLife = 0 Then gameOver()

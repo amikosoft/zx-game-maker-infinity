@@ -1,16 +1,19 @@
 #ifdef SIDE_VIEW
     Function checkPlatformHasProtaOnTop(x As Ubyte, y As Ubyte) As Ubyte
-        If (protaX + 2) < x Then Return 0
-        If protaX > x + 4 Then Return 0
-        If protaY <> y - 4 Then Return 0
+        If (protaX + 2) < x Or protaX > (x + 2) Then Return 0
+        If (protaY + 4) > (y - 2) And (protaY + 4) < (y + 2) Then Return 1
         
-        Return 1
+        Return 0
     End Function
 #endif
 
+dim enemiesFrame as ubyte = 0
+
 Sub moveEnemies()
-    If enemiesPerScreen(currentScreen) > 0 Then        
-        For enemyId=0 To enemiesPerScreen(currentScreen) - 1
+    If enemiesScreen > 0 Then
+        enemiesFrame = enemiesFrame + 1
+        if enemiesFrame > 9 Then enemiesFrame = 1
+        For enemyId=0 To enemiesScreen- 1
             Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE)
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             
@@ -29,9 +32,9 @@ Sub moveEnemies()
                 Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
                 
                 If enemySpeed = 1 Then
-                    If (framec bAnd 3) <> 0 Then continue For
+                    If (enemiesFrame bAnd 3) = 3 Then continue For
                 ElseIf enemySpeed = 2 Then
-                    If (framec bAnd 2) = 0 Then continue For
+                    If (enemiesFrame bAnd 2) = 2 Then continue For
                 End If
                 
                 Dim enemyMode As Byte = decompressedEnemiesScreen(enemyId, ENEMY_MODE)
@@ -156,16 +159,16 @@ Sub moveEnemies()
                         If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
                             jumpCurrentKey = jumpStopValue
                             If verticalDirection Then
-                                spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaY + verticalDirection
-                                protaY = spritesLinColTileAndFrame(PROTA_SPRITE, 1)
-                                
+                                protaY = enemyLin - 4
+                                spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaY
+                            
                                 ' If protaY < 2 Then moveScreen = 8
                             End If
                             
                             If horizontalDirection Then
                                 If Not CheckCollision(protaX + horizontalDirection, protaY) Then
-                                    spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaX + horizontalDirection
-                                    protaX = spritesLinColTileAndFrame(PROTA_SPRITE, 1)
+                                    protaX = protaX + horizontalDirection
+                                    spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaX
                                 End If
                             End If
                         End If
@@ -179,10 +182,10 @@ Sub moveEnemies()
                 End If
                 
                 ' se guarda el estado final del enemigo
-                if enemyMode <> 2 And enemyMode <> 3 Then
+                'if enemyMode <> 2 And enemyMode <> 3 Then
                     decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = horizontalDirection
                     decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = verticalDirection
-                End if
+                'End if
                 decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
                 decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
                 decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyMode
@@ -193,59 +196,52 @@ Sub moveEnemies()
         Next enemyId
         
         'checkEnemiesCollection()
-        For enemyId=0 To enemiesPerScreen(currentScreen) - 1
-            If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then continue For
-            If decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = 0 Then continue For
-            #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                If decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) <> 99 Then
-                    If screensWon(currentScreen) Then continue For
-                End If
-            #endif
+        If Not invincible Then
+            For enemyId=0 To enemiesScreen - 1
+                Dim vidaColision As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             
-            checkProtaCollision(enemyId)
-        Next enemyId
+                If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 or vidaColision = 0 Then continue For
+                
+                #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+                    If vidaColision <> 99 Then
+                        If screensWon(currentScreen) Then continue For
+                    End If
+                #endif
+                
+                checkProtaCollision(enemyId)
+            Next enemyId
+        End If
     End if
 End Sub
 
 
 Sub checkProtaCollision(enemyId As Ubyte)
-    If invincible Then Return
-    
-    Dim protaX1 As Ubyte = protaX + 2
-    Dim protaY1 As Ubyte = protaY + 2
     Dim enemyX0 As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
     Dim enemyY0 As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
-    Dim enemyX1 As Ubyte = enemyX0 + 2
     
-    #ifdef SIDE_VIEW
+    If (protaX + 2) < enemyX0 Or protaX > (enemyX0 + 2) Then Return
+
+    #ifdef SIDE_VIEW 
         #ifdef KILL_JUMPING_ON_TOP
-            If Not landed Then
-                If (protaY1 + 2) = enemyY0 Or (protaY1 + 1) = enemyY0 Then
-                    If protaX >= enemyX0 And protaX <= enemyX1 Or protaX1 <= enemyX1 And protaX1 >= enemyX0 Then
-                        damageEnemy(enemyId)
-                        landed = 1
-                        jumpCurrentKey = jumpStopValue
-                        jump()
-                        Return
-                    End If
-                End If
-            End If
+            If (protaY + 4) > (enemyY0 - 2) And (protaY + 4) < (enemyY0 + 2) Then
+                landed = 1
+                jumpCurrentKey = jumpStopValue
+                jump()
+                Return
+            End if
         #endif
     #endif
-    
-    If protaX1 < enemyX0 Then Return
-    If protaX > enemyX1 Then Return
-    If protaY1 < enemyY0 Then Return
-    If protaY > enemyY1 Then Return
+
+    If (protaY + 2) < (enemyY0) Or protaY > (enemyY0 + 2) Then Return
     
     decrementLife()
 End Sub
 
 #ifdef SIDE_VIEW
     Function checkPlatformByXY(x As Ubyte, y As Ubyte) As Ubyte
-        If enemiesPerScreen(currentScreen) = 0 Then Return 0
+        If enemiesScreen = 0 Then Return 0
         
-        For enemyId=0 To enemiesPerScreen(currentScreen) - 1
+        For enemyId=0 To enemiesScreen - 1
             If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
                 Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
                  

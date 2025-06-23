@@ -200,8 +200,8 @@ Sub drawSprites()
         #endif
     End If
 
-    If enemiesPerScreen(currentScreen) > 0 Then
-        For i = 0 To enemiesPerScreen(currentScreen) - 1
+    If enemiesScreen Then
+        For i = 0 To enemiesScreen - 1
             If Not getSpriteLin(i) Then continue For
             
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED

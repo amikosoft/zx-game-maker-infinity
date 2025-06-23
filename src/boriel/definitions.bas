@@ -28,6 +28,7 @@ Dim currentKeys As Ubyte = 0
 Dim moveScreen As Ubyte
 Dim currentScreen As Ubyte = 0
 Dim currentBulletSpriteId As Ubyte
+Dim enemiesScreen as Ubyte = 0
 
 Dim protaFrame As Ubyte = 0
 Dim enemFrame As Ubyte = 0

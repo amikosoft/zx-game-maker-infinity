@@ -93,9 +93,9 @@ function isADamageTile(x as ubyte, y as ubyte) as UBYTE
 end function
 
 function allEnemiesKilled() as ubyte
-    if enemiesPerScreen(currentScreen) = 0 then return 1
+    if enemiesScreen = 0 then return 1
 
-    for enemyId=0 TO enemiesPerScreen(currentScreen) - 1
+    for enemyId=0 TO enemiesScreen - 1
         if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then
             continue for
         end if

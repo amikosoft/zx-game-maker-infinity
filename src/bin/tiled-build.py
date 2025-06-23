@@ -611,14 +611,12 @@ for layer in data['layers']:
                             colEnd = objects[str(object['properties'][0]['value'])]['colIni'] 
                             objects[str(object['properties'][0]['value'])]['colEnd'] = colEnd
                             objects[str(object['properties'][0]['value'])]['colIni'] = colIni
-                            print("====================== 1")
 
                         if int(objects[str(object['properties'][0]['value'])]['linEnd']) < int(objects[str(object['properties'][0]['value'])]['linIni']):
                             linIni = objects[str(object['properties'][0]['value'])]['linEnd']
                             linEnd = objects[str(object['properties'][0]['value'])]['linIni'] 
                             objects[str(object['properties'][0]['value'])]['linEnd'] = linEnd
                             objects[str(object['properties'][0]['value'])]['linIni'] = linIni
-                            print("====================== 2")
 
                 elif object['type'] == 'mainCharacter':
                     xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
