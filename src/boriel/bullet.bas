@@ -115,18 +115,21 @@ sub checkBulletCollision()
         if screensWon(currentScreen) then return
     #endif
     
-    for enemyId=0 TO MAX_ENEMIES_PER_SCREEN - 1
-        if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then continue for ' not enemy
-        if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = 0 then continue for
+    If enemiesScreen Then
+        For enemyId=0 To enemiesScreen - 1
+            if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then continue for 
+            if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = 0 then continue for
+            
+            Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
+            Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
+                
+            if (bulletPositionX + 1) < enemyCol or bulletPositionX > (enemyCol + 2) then continue for
+            if (bulletPositionY + 1) < enemyLin or bulletPositionY > (enemyLin+2) then continue for
 
-        if (bulletPositionX + 1) < decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) then continue for
-        if bulletPositionX > (decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) + 2) then continue for
-        if (bulletPositionY + 1) < decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) then continue for
-        if bulletPositionY > (decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)+2) then continue for
-
-        damageEnemy(enemyId)
-        resetBullet()
-    next enemyId
+            damageEnemy(enemyId)
+            resetBullet()
+        next enemyId
+    End if
 end sub
 
 sub resetBullet()

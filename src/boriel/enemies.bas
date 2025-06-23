@@ -5,12 +5,30 @@
         
         Return 0
     End Function
+
+    Function checkPlatformByXY(x As Ubyte, y As Ubyte) As Ubyte
+        If not enemiesScreen Then Return 0
+        
+        For enemyId=0 To enemiesScreen - 1
+            If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
+                If y <> decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) Then continue For
+                
+                Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
+                
+                If (x + 2) < enemyCol Or x > (enemyCol + 3) Then continue For
+                
+                Return 1
+            End If
+        Next enemyId
+        
+        Return 0
+    End Function
 #endif
 
 dim enemiesFrame as ubyte = 0
 
 Sub moveEnemies()
-    If enemiesScreen > 0 Then
+    If enemiesScreen Then
         enemiesFrame = enemiesFrame + 1
         if enemiesFrame > 9 Then enemiesFrame = 1
         For enemyId=0 To enemiesScreen- 1
@@ -31,12 +49,11 @@ Sub moveEnemies()
                 Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
                 Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
                 
-                If enemySpeed = 1 Then
-                    If (enemiesFrame bAnd 3) = 3 Then continue For
-                ElseIf enemySpeed = 2 Then
-                    If (enemiesFrame bAnd 2) = 2 Then continue For
+                If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then 
+                    Draw2x2Sprite(getSpriteTile(enemyId), enemyCol, enemyLin)
+                    continue For
                 End If
-                
+            
                 Dim enemyMode As Byte = decompressedEnemiesScreen(enemyId, ENEMY_MODE)
                 Dim enemyColIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_INI)
                 Dim enemyLinIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI)
@@ -160,7 +177,6 @@ Sub moveEnemies()
                             jumpCurrentKey = jumpStopValue
                             If verticalDirection Then
                                 protaY = enemyLin - 4
-                                spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaY
                             
                                 ' If protaY < 2 Then moveScreen = 8
                             End If
@@ -168,7 +184,6 @@ Sub moveEnemies()
                             If horizontalDirection Then
                                 If Not CheckCollision(protaX + horizontalDirection, protaY) Then
                                     protaX = protaX + horizontalDirection
-                                    spritesLinColTileAndFrame(PROTA_SPRITE, 1) = protaX
                                 End If
                             End If
                         End If
@@ -192,6 +207,7 @@ Sub moveEnemies()
                 
                 ' se actualiza el sprite
                 saveSprite(enemyId, enemyLin, enemyCol, tile + 1, horizontalDirection)
+                Draw2x2Sprite(getSpriteTile(enemyId), getSpriteCol(enemyId), getSpriteLin(enemyId))
             End If
         Next enemyId
         
@@ -237,20 +253,20 @@ Sub checkProtaCollision(enemyId As Ubyte)
     decrementLife()
 End Sub
 
-#ifdef SIDE_VIEW
-    Function checkPlatformByXY(x As Ubyte, y As Ubyte) As Ubyte
-        If enemiesScreen = 0 Then Return 0
+' #ifdef SIDE_VIEW
+'     Function checkPlatformByXY(x As Ubyte, y As Ubyte) As Ubyte
+'         If not enemiesScreen Then Return 0
         
-        For enemyId=0 To enemiesScreen - 1
-            If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
-                Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
+'         For enemyId=0 To enemiesScreen - 1
+'             If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
+'                 Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
                  
-                If x < enemyCol - 2 Or x > enemyCol + 4 Or y <> decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) Then continue For
+'                 If (x + 3) < enemyCol Or x > enemyCol + 3 Or y <> decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) Then continue For
                 
-                Return 1
-            End If
-        Next enemyId
+'                 Return 1
+'             End If
+'         Next enemyId
         
-        Return 0
-    End Function
-#endif
+'         Return 0
+'     End Function
+' #endif

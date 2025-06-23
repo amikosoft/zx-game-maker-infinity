@@ -93,15 +93,15 @@ function isADamageTile(x as ubyte, y as ubyte) as UBYTE
 end function
 
 function allEnemiesKilled() as ubyte
-    if enemiesScreen = 0 then return 1
+    if Not enemiesScreen then return 1
 
     for enemyId=0 TO enemiesScreen - 1
         if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then
             continue for
         end if
         dim alive as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
-        if alive <> 99 then  'is not invincible'
-            if alive > 0 then 'In the screen and still live
+        if alive <> 99 then  
+            if alive > 0 then 
                 return 0
             end if
         end if
