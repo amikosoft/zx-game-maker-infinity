@@ -51,6 +51,7 @@ Sub moveEnemies()
                 
                 If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then 
                     Draw2x2Sprite(getSpriteTile(enemyId), enemyCol, enemyLin)
+                    if tile > 15 Then checkProtaCollision(enemyId, enemyCol, enemyLin)
                     continue For
                 End If
             
@@ -208,38 +209,39 @@ Sub moveEnemies()
                 ' se actualiza el sprite
                 saveSprite(enemyId, enemyLin, enemyCol, tile + 1, horizontalDirection)
                 Draw2x2Sprite(getSpriteTile(enemyId), getSpriteCol(enemyId), getSpriteLin(enemyId))
+                if tile > 15 Then checkProtaCollision(enemyId, enemyCol, enemyLin)
             End If
         Next enemyId
         
         'checkEnemiesCollection()
-        If Not invincible Then
-            For enemyId=0 To enemiesScreen - 1
-                Dim vidaColision As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
+        ' If Not invincible Then
+        '     For enemyId=0 To enemiesScreen - 1
+        '         Dim vidaColision As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             
-                If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 or vidaColision = 0 Then continue For
+        '         If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 or vidaColision = 0 Then continue For
                 
-                #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                    If vidaColision <> 99 Then
-                        If screensWon(currentScreen) Then continue For
-                    End If
-                #endif
+        '         #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+        '             If vidaColision <> 99 Then
+        '                 If screensWon(currentScreen) Then continue For
+        '             End If
+        '         #endif
                 
-                checkProtaCollision(enemyId)
-            Next enemyId
-        End If
+        '         checkProtaCollision(enemyId)
+        '     Next enemyId
+        ' End If
     End if
 End Sub
 
 
-Sub checkProtaCollision(enemyId As Ubyte)
-    Dim enemyX0 As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
-    Dim enemyY0 As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
-    
-    If (protaX + 2) < enemyX0 Or protaX > (enemyX0 + 2) Then Return
+Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte)
+    If invincible Then Return
 
+    If (protaX + 2) < enemyX0 Or protaX > (enemyX0 + 2) Then Return
+    
     #ifdef SIDE_VIEW 
         #ifdef KILL_JUMPING_ON_TOP
             If (protaY + 4) > (enemyY0 - 2) And (protaY + 4) < (enemyY0 + 2) Then
+                damageEnemy(enemyId)
                 landed = 1
                 jumpCurrentKey = jumpStopValue
                 jump()
