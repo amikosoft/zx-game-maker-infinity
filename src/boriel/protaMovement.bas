@@ -186,7 +186,6 @@ End Function
                         moveScreen = 8
                     #endif
                 End If
-                Return
             End If
             
             If pressingUp() And jumpEnergy > 0 Then
