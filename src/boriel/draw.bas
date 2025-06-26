@@ -181,6 +181,8 @@ Sub moveToScreen(direction As Ubyte)
                 Do
                 Loop Until MultiKeys(KEYENTER)
                 
+                jumpCurrentKey = jumpStopValue
+                
                 currentScreen = (currentLevel * MAP_SCREENS_WIDTH_COUNT )
                 protaX = INITIAL_MAIN_CHARACTER_X
                 protaY = INITIAL_MAIN_CHARACTER_Y
