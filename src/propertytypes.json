@@ -29,7 +29,8 @@
         "type": "enum",
         "values": [
             "constant",
-            "accelerated"
+            "accelerated",
+            "smooth"
         ],
         "valuesAsFlags": false
     },

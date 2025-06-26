@@ -71,20 +71,20 @@ sub printLife()
 end sub
 
 #ifdef MESSAGES_ENABLED
-    sub printMessage(line1 as string, line2 as string, p as ubyte, i as ubyte)
+    sub printMessage(line1 as string, p as ubyte, i as ubyte)
         Paper p: Ink i: Flash 1
         PRINT AT 22, 18; line1
-        PRINT AT 23, 18; line2
         Paper 0: Ink 7: Flash 0
-        messageLoopCounter = 0
+        messageLoopCounter = MESSAGE_LOOPS_VISIBLE
     end sub
 
     sub checkMessageForDelete()
-        If messageLoopCounter = MESSAGE_LOOPS_VISIBLE Then
-            PRINT AT 22, 18; "        "
-            PRINT AT 23, 18; "        "
-        End If
-        messageLoopCounter = messageLoopCounter + 1
+        if messageLoopCounter Then
+            messageLoopCounter = messageLoopCounter - 1
+            If not messageLoopCounter Then
+                PRINT AT 22, 18; "         "
+            End If
+        End if
     end sub
 #endif
 
@@ -120,7 +120,7 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
 
     #ifdef MESSAGES_ENABLED
         If tile = ENEMY_DOOR_TILE Then
-            printMessage("Kill All", "Enemies!", 2, 0)
+            printMessage("Kill All!", 2, 0)
         End If
     #endif
 

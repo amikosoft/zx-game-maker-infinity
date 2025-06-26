@@ -245,8 +245,11 @@ if 'properties' in data:
             jetPackFuel = property['value'] 
         elif property['name'] == 'jumpType':
             if property['value'] == 'accelerated':
-                jumpArrayCount = 7
-                jumpArray = "{-2, -2, -2, -2, -1, -1, 0}"
+                jumpArrayCount = 8
+                jumpArray = "{-2, -2, -2, -2, -2, 0, 0, 0}"
+            elif property['value'] == 'smooth':
+                jumpArrayCount = 8
+                jumpArray = "{-2, -2, -2, -2, -1, -1, 0, 0}"
         elif property['name'] == 'livesMode':
             if property['value'] == 'instant respawn':
                 livesMode = 1

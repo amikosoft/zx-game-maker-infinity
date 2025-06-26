@@ -40,7 +40,8 @@
             "type": "enum",
             "values": [
                 "constant",
-                "accelerated"
+                "accelerated",
+                "smooth"
             ],
             "valuesAsFlags": false
         },
@@ -135,6 +136,11 @@
                 },
                 {
                     "name": "arcadeMode",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "levelsMode",
                     "type": "bool",
                     "value": false
                 },

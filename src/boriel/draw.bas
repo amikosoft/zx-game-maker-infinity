@@ -116,7 +116,7 @@ End Sub
                 BeepFX_Play(4)
             Else
                 #ifdef MESSAGES_ENABLED
-                    printMessage("No keys ", "left!   ", 2, 0)
+                    printMessage("Need keys", 2, 0)
                 #endif
             End If
             Return 1
