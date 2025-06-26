@@ -327,6 +327,10 @@ Sub resetValues()
     currentLife = INITIAL_LIFE
     currentKeys = 0
     
+    #ifdef LEVELS_MODE
+        currentLevel = 0
+    #endif
+    
     #ifdef ARCADE_MODE
         currentItems = 0
     #Else

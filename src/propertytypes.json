@@ -128,6 +128,11 @@
                 "value": false
             },
             {
+                "name": "levelsMode",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "backgroundAttribute",
                 "type": "int",
                 "value": 7

@@ -126,4 +126,8 @@ Const ENEMY_SPEED As Ubyte = 11
     Dim currentScreenKeyY As Ubyte
 #endif
 
+#ifdef LEVELS_MODE
+    Dim currentLevel As Ubyte = 0
+#endif
+
 Const ENEMY_DOOR_TILE As Ubyte = 63

@@ -104,13 +104,19 @@ End Sub
         If GetTile(col, lin) = DOOR_TILE Then
             If currentKeys <> 0 Then
                 currentKeys = currentKeys - 1
+
+                #ifdef LEVELS_MODE
+                    moveScreen = 2
+                #Else
+                    screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) = 0
+                    removeTilesFromScreen(DOOR_TILE)    
+                #endif
+                
                 printLife()
-                screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) = 0
                 BeepFX_Play(4)
-                removeTilesFromScreen(DOOR_TILE)
             Else
                 #ifdef MESSAGES_ENABLED
-                     printMessage("No keys ", "left!   ", 2, 0)
+                    printMessage("No keys ", "left!   ", 2, 0)
                 #endif
             End If
             Return 1
@@ -150,7 +156,7 @@ Sub moveToScreen(direction As Ubyte)
     If direction = 6 Then
         saveSprite(PROTA_SPRITE, protaY, 0, getSpriteTile(PROTA_SPRITE), protaDirection)
         currentScreen = currentScreen + 1
-
+        
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = 0
             protaYRespawn = protaY
@@ -158,18 +164,37 @@ Sub moveToScreen(direction As Ubyte)
     Elseif direction = 4 Then
         saveSprite(PROTA_SPRITE, protaY, 60, getSpriteTile(PROTA_SPRITE), protaDirection)
         currentScreen = currentScreen - 1
-
+        
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = 60
             protaYRespawn = protaY
         #endif
     Elseif direction = 2 Then
-        saveSprite(PROTA_SPRITE, 0, protaX, getSpriteTile(PROTA_SPRITE), protaDirection)
-        currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
-
-        #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = protaX
-            protaYRespawn = 0
+        #ifdef LEVELS_MODE
+            currentLevel = currentLevel + 1
+            if currentLevel > (SCREENS_COUNT/MAP_SCREENS_WIDTH_COUNT) then
+                moveScreen = 0
+                ending()
+            Else    
+                Print AT 13,8;"LEVEL COMPLETE!!!"
+                Print AT 15,8;"PRESS ENTER..."
+                Do
+                Loop Until MultiKeys(KEYENTER)
+                
+                currentScreen = (currentLevel * MAP_SCREENS_WIDTH_COUNT )
+                protaX = INITIAL_MAIN_CHARACTER_X
+                protaY = INITIAL_MAIN_CHARACTER_Y
+                protaXRespawn = INITIAL_MAIN_CHARACTER_X
+                protaYRespawn = INITIAL_MAIN_CHARACTER_Y
+            End if
+        #else
+            saveSprite(PROTA_SPRITE, 0, protaX, getSpriteTile(PROTA_SPRITE), protaDirection)
+            currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
+            
+            #ifdef LIVES_MODE_ENABLED
+                protaXRespawn = protaX
+                protaYRespawn = 0
+            #endif
         #endif
     Elseif direction = 8 Then
         saveSprite(PROTA_SPRITE, MAX_LINE, protaX, getSpriteTile(PROTA_SPRITE), protaDirection)
@@ -177,7 +202,7 @@ Sub moveToScreen(direction As Ubyte)
             jumpCurrentKey = 0
         #endif
         currentScreen = currentScreen - MAP_SCREENS_WIDTH_COUNT
-
+        
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = protaX
             protaYRespawn = MAX_LINE
@@ -199,11 +224,11 @@ Sub drawSprites()
             End If
         #endif
     End If
-
+    
     ' If enemiesScreen Then
     '     For i = 0 To enemiesScreen - 1
     '         If Not getSpriteLin(i) Then continue For
-            
+    
     '         #ifdef ENEMIES_NOT_RESPAWN_ENABLED
     '             If decompressedEnemiesScreen(i, ENEMY_ALIVE) <> 99 And decompressedEnemiesScreen(i, ENEMY_TILE) > 15 Then
     '                 If screensWon(currentScreen) Then continue For

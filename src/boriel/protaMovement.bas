@@ -150,7 +150,11 @@ End Function
                 #ifdef ARCADE_MODE
                     protaY = 39
                 #Else
-                    moveScreen = 8
+                    #ifdef LEVELS_MODE
+                        protaY = 2
+                    #Else
+                        moveScreen = 8
+                    #endif
                 #endif
                 jumpCurrentKey = jumpCurrentKey + 1
                 Return
@@ -183,7 +187,11 @@ End Function
                     #ifdef ARCADE_MODE
                         protaY = 39
                     #Else
-                        moveScreen = 8
+                        #ifdef LEVELS_MODE
+                            protaY = 2
+                        #Else
+                            moveScreen = 8
+                        #endif
                     #endif
                 End If
             End If
@@ -232,8 +240,15 @@ End Function
     
     Sub gravity()
         If jumpCurrentKey = jumpStopValue And isFalling() Then
+            landed = 0
             If protaY >= MAX_LINE Then
-                moveScreen = 2
+                #ifdef LEVELS_MODE
+                    landed = 1
+                    decrementLife()
+                    jump()
+                #else
+                    moveScreen = 2
+                #endif
             Else
                 #ifndef JETPACK_FUEL
                     saveSprite(PROTA_SPRITE, protaY + 2, protaX, getNextFrameJumpingFalling(), protaDirection)
@@ -241,7 +256,6 @@ End Function
                     saveSprite(PROTA_SPRITE, protaY + 1, protaX, getNextFrameJumpingFalling(), protaDirection)
                 #endif
             End If
-            landed = 0
         End If
     End Sub
     
@@ -421,7 +435,11 @@ Sub upKey()
         If canMoveUp() Then
             saveSprite(PROTA_SPRITE, protaY - 1, protaX, protaFrame + 1, 8)
             If protaY < 2 Then
-                moveScreen = 8
+                #ifdef LEVELS_MODE
+                    protaY = 2
+                #Else
+                    moveScreen = 8
+                #endif
             End If
         End If
     #endif
@@ -435,8 +453,10 @@ Sub downKey()
         End If
         If canMoveDown() Then
             If protaY >= MAX_LINE Then
-                #ifndef ARCADE_MODE
-                    moveScreen = 2
+                #ifndef LEVELS_MODE
+                    #ifndef ARCADE_MODE
+                        moveScreen = 2
+                    #endif
                 #endif
             Else
                 saveSprite(PROTA_SPRITE, protaY + 1, protaX, protaFrame + 1, 2)
@@ -509,9 +529,11 @@ Function checkTileObject(tile As Ubyte) As Ubyte
                 drawKey()
             End If
         #Else
-            If currentItems = GOAL_ITEMS Then
-                ending()
-            End If
+            #ifndef LEVELS_MODE
+                If currentItems = GOAL_ITEMS Then
+                    ending()
+                End If
+            #endif
         #endif
         screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
         BeepFX_Play(5)

@@ -63,6 +63,11 @@ sub printLife()
             PRINT AT 22, 30; currentItems
         #endif
     #endif
+
+    #ifdef LEVELS_MODE
+        PRINT AT 23, 10; "   "
+        PRINT AT 23, 10; currentLevel + 1
+    #endif
 end sub
 
 #ifdef MESSAGES_ENABLED

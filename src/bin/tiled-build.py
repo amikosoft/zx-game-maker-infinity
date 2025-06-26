@@ -137,6 +137,7 @@ mainCharacterExtraFrame = 1
 idleTime = 0
 
 arcadeMode = 0
+levelsMode = 0
 
 jetPackFuel = 0
 
@@ -238,6 +239,8 @@ if 'properties' in data:
             idleTime = property['value']
         elif property['name'] == 'arcadeMode':
             arcadeMode = 1 if property['value'] else 0
+        elif property['name'] == 'levelsMode':
+            levelsMode = 1 if property['value'] else 0
         elif property['name'] == 'jetPackFuel':
             jetPackFuel = property['value'] 
         elif property['name'] == 'jumpType':
@@ -333,6 +336,9 @@ configStr += "const BACKGROUND_ATTRIBUTE as ubyte = " + str(backgroundAttribute)
 
 if arcadeMode == 1:
     configStr += "#DEFINE ARCADE_MODE\n"
+
+if levelsMode == 1:
+    configStr += "#DEFINE LEVELS_MODE\n"
 
 if messagesEnabled == 1:
     configStr += "#DEFINE MESSAGES_ENABLED\n"
