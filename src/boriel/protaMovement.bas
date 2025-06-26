@@ -245,7 +245,10 @@ End Function
                 #ifdef LEVELS_MODE
                     landed = 1
                     decrementLife()
-                    jump()
+
+                    #ifndef LIVES_MODE_ENABLED
+                        jump()
+                    #endif
                 #else
                     moveScreen = 2
                 #endif
@@ -280,13 +283,13 @@ End Function
             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
             bulletPositionX = protaX + 2
             If BULLET_DISTANCE <> 0 Then
-                If protaX + BULLET_DISTANCE > maxXScreenRight Then
-                    bulletEndPositionX = maxXScreenRight
+                If protaX + BULLET_DISTANCE > MAX_SCREEEN_RIGHT Then
+                    bulletEndPositionX = MAX_SCREEEN_RIGHT
                 Else
                     bulletEndPositionX = protaX + BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionX = maxXScreenRight
+                bulletEndPositionX = MAX_SCREEEN_RIGHT
             End If
         Elseif protaDirection = 0
             #ifdef IDLE_ENABLED
@@ -296,12 +299,12 @@ End Function
             bulletPositionX = protaX
             If BULLET_DISTANCE <> 0 Then
                 If BULLET_DISTANCE > protaX Then
-                    bulletEndPositionX = maxXScreenLeft
+                    bulletEndPositionX = MAX_SCREEN_LEFT
                 Else
                     bulletEndPositionX = protaX - BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionX = maxXScreenLeft
+                bulletEndPositionX = MAX_SCREEN_LEFT
             End If
         End If
         
@@ -330,13 +333,13 @@ End Function
             bulletPositionX = protaX + 2
             bulletPositionY = protaY + 1
             If BULLET_DISTANCE <> 0 Then
-                If protaX + BULLET_DISTANCE > maxXScreenRight Then
-                    bulletEndPositionX = maxXScreenRight
+                If protaX + BULLET_DISTANCE > MAX_SCREEEN_RIGHT Then
+                    bulletEndPositionX = MAX_SCREEEN_RIGHT
                 Else
                     bulletEndPositionX = protaX + BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionX = maxXScreenRight
+                bulletEndPositionX = MAX_SCREEEN_RIGHT
             End If
         Elseif protaDirection = 0
             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
@@ -344,12 +347,12 @@ End Function
             bulletPositionY = protaY + 1
             If BULLET_DISTANCE <> 0 Then
                 If BULLET_DISTANCE > protaX Then
-                    bulletEndPositionX = maxXScreenLeft
+                    bulletEndPositionX = MAX_SCREEN_LEFT
                 Else
                     bulletEndPositionX = protaX - BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionX = maxXScreenLeft
+                bulletEndPositionX = MAX_SCREEN_LEFT
             End If
         Elseif protaDirection = 8
             currentBulletSpriteId = BULLET_SPRITE_UP_ID
@@ -357,25 +360,25 @@ End Function
             bulletPositionY = protaY + 1
             If BULLET_DISTANCE <> 0 Then
                 If BULLET_DISTANCE > protaY Then
-                    bulletEndPositionY = maxYScreenTop
+                    bulletEndPositionY = MAX_SCREEN_TOP
                 Else
                     bulletEndPositionY = protaY - BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionY = maxYScreenTop
+                bulletEndPositionY = MAX_SCREEN_TOP
             End If
         Else
             currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
             bulletPositionX = protaX + 1
             bulletPositionY = protaY + 2
             If BULLET_DISTANCE <> 0 Then
-                If protaY + BULLET_DISTANCE > maxYScreenBottom Then
-                    bulletEndPositionY = maxYScreenBottom
+                If protaY + BULLET_DISTANCE > MAX_SCREEN_BOTTOM Then
+                    bulletEndPositionY = MAX_SCREEN_BOTTOM
                 Else
                     bulletEndPositionY = protaY + BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionY = maxYScreenBottom
+                bulletEndPositionY = MAX_SCREEN_BOTTOM
             End If
         End If
         

@@ -15,11 +15,11 @@ dim bulletEndPositionY as ubyte = 0
 '     end if
 ' end sub
 
-dim maxXScreenRight as ubyte = 60
-dim maxXScreenLeft as ubyte = 2
+const MAX_SCREEEN_RIGHT as ubyte = 60
+const MAX_SCREEN_LEFT as ubyte = 2
 #ifdef OVERHEAD_VIEW
-    dim maxYScreenBottom as ubyte = 40
-    dim maxYScreenTop as ubyte = 2
+    const MAX_SCREEN_BOTTOM as ubyte = 40
+    const MAX_SCREEN_TOP as ubyte = 2
 #endif
 
 sub moveBullet()
@@ -78,7 +78,7 @@ end sub
 
 sub checkBulletCollision()
     #ifdef OVERHEAD_VIEW
-    if bulletPositionY = maxYScreenTop or bulletPositionY = maxYScreenBottom then
+    if bulletPositionY = MAX_SCREEN_TOP or bulletPositionY = MAX_SCREEN_BOTTOM then
         resetBullet()
         return
     end if
