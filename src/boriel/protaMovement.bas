@@ -150,7 +150,7 @@ End Function
                 #ifdef ARCADE_MODE
                     protaY = 39
                 #Else
-                    moveScreen = 8 ' stop jumping
+                    moveScreen = 8
                 #endif
                 jumpCurrentKey = jumpCurrentKey + 1
                 Return
@@ -183,7 +183,7 @@ End Function
                     #ifdef ARCADE_MODE
                         protaY = 39
                     #Else
-                        moveScreen = 8 ' stop jumping
+                        moveScreen = 8
                     #endif
                 End If
                 Return
@@ -195,16 +195,13 @@ End Function
                 End If
                 jumpCurrentKey = jumpCurrentKey + 1
                 jumpEnergy = jumpEnergy - 1
-                If jumpEnergy Mod 5 = 0 Then
-                    printLife()
-                End If
+                PRINT AT 23, 5; "   "
+                PRINT AT 23, 5; jumpEnergy
                 Return
             End If
             
-            jumpCurrentKey = jumpStopValue ' stop jumping
-            If jumpEnergy = 0 Then
-                printLife()
-            End If
+            ' stop flight
+            jumpCurrentKey = jumpStopValue
         End Sub
     #endif
     

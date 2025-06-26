@@ -1,22 +1,22 @@
 #ifdef SIDE_VIEW
     Function checkPlatformHasProtaOnTop(x As Ubyte, y As Ubyte) As Ubyte
-        If (protaX + 2) < x Or protaX > (x + 2) Then Return 0
-        If (protaY + 4) > (y - 2) And (protaY + 4) < (y + 2) Then Return 1
+        If (protaX + 3) < x Or protaX > (x + 3) Then Return 0
+        If (protaY + 4) > (y - 2) and (protaY + 4) < (y + 3) Then Return 1
         
         Return 0
     End Function
 
-    Function checkPlatformByXY(x As Ubyte, y As Ubyte) As Ubyte
-        If not enemiesScreen Then Return 0
+    Function checkPlatformByXY(protaX As Ubyte, protaY4 As Ubyte) As Ubyte
+         If enemiesScreen = 0 Then Return 0
         
         For enemyId=0 To enemiesScreen - 1
             If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
-                If y <> decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) Then continue For
-                
                 Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
+                Dim enemyLin As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
                 
-                If (x + 2) < enemyCol Or x > (enemyCol + 3) Then continue For
-                
+                If (protaX + 3) < enemyCol Or protaX > (enemyCol + 3) Then continue for
+                If protaY4 < enemyLin or protaY4 > (enemyLin + 1) Then continue For
+
                 Return 1
             End If
         Next enemyId
@@ -173,13 +173,13 @@ Sub moveEnemies()
                 ' Is a platform Not an enemy, only 2 frames, 1 direction
                 If tile < 16 Then
                     #ifdef SIDE_VIEW
-                        If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
+                        If jumpCurrentKey = jumpStopValue and checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
                             jumpCurrentKey = jumpStopValue
-                            If verticalDirection Then
+                            ' If verticalDirection Then
                                 protaY = enemyLin - 4
                             
                                 ' If protaY < 2 Then moveScreen = 8
-                            End If
+                            ' End If
                             
                             If horizontalDirection Then
                                 If Not CheckCollision(protaX + horizontalDirection, protaY) Then
@@ -252,21 +252,3 @@ Sub checkProtaCollision(enemyId As Ubyte)
     
     decrementLife()
 End Sub
-
-' #ifdef SIDE_VIEW
-'     Function checkPlatformByXY(x As Ubyte, y As Ubyte) As Ubyte
-'         If not enemiesScreen Then Return 0
-        
-'         For enemyId=0 To enemiesScreen - 1
-'             If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
-'                 Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
-                 
-'                 If (x + 3) < enemyCol Or x > enemyCol + 3 Or y <> decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) Then continue For
-                
-'                 Return 1
-'             End If
-'         Next enemyId
-        
-'         Return 0
-'     End Function
-' #endif
