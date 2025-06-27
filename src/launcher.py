@@ -296,25 +296,40 @@ def open_map_with_tiled():
 
 # Crear la ventana principal
 root = tk.Tk()
-root.title("ZX Spectrum Game Maker")
+root.title("ZXGM - Infinity")
 root.geometry("600x750")
-root.resizable(False, False)
+root.resizable(True, True)
+
+# root.grid_columnconfigure(0, weight=1)
+# root.grid(baseWidth=0, baseHeight=0,widthInc=1, heightInc=1)
+# content = tk.Frame(root)
+# content.grid(column=0, row=0)
 
 # Establecer el icono de la aplicación
-icon_path = os.path.join(os.getcwd(), "ui/logo.png")
+icon_path = os.path.join(os.getcwd(), "ui/infinity_logo.png")
 if os.path.exists(icon_path):
     root.iconphoto(True, PhotoImage(file=icon_path))
 else:
-    messagebox.showwarning("Advertencia", "No se encontró el icono en 'ui/logo.png'.")
+    messagebox.showwarning("Advertencia", "No se encontró el icono en 'ui/infinity_logo.png'.")
 
 # Cargar el logo
-logo_path = os.path.join(os.getcwd(), "ui/logo.png")
-if os.path.exists(logo_path):
-    logo = PhotoImage(file=logo_path)
-    logo_label = tk.Label(root, image=logo)
-    logo_label.pack(pady=10)
+# logo_path = os.path.join(os.getcwd(), "ui/logo.png")
+# if os.path.exists(logo_path):
+#     logo = PhotoImage(file=logo_path)
+#     logo_label = tk.Label(content, image=logo)
+#     logo_label.grid(column=0, row=0)
+#     # logo_label.pack(pady=10)
+# else:
+#     messagebox.showwarning("Advertencia", "No se encontró el logo en 'ui/logo.png'.")
+
+logo2_path = os.path.join(os.getcwd(), "ui/infinity_logo.png")
+if os.path.exists(logo2_path):
+    logo2 = PhotoImage(file=logo2_path)
+    logo2_label = tk.Label(root, image=logo2)
+    # logo2_label.grid(column=1, row=0)
+    logo2_label.pack(pady=10)
 else:
-    messagebox.showwarning("Advertencia", "No se encontró el logo en 'ui/logo.png'.")
+    messagebox.showwarning("Advertencia", "No se encontró el logo en 'ui/infinity_logo.png'.")
 
 # Crear el menú de barras
 menu_bar = tk.Menu(root)
@@ -323,6 +338,8 @@ menu_bar = tk.Menu(root)
 build_menu = tk.Menu(menu_bar, tearoff=0)
 build_menu.add_command(label="Game", command=lambda: run_script("make-game", output_text))
 build_menu.add_command(label="Game (verbose)", command=lambda: run_script("make-game", output_text, ["--verbose"]))
+build_menu.add_separator()
+build_menu.add_command(label="Tiles+Sprites", command=lambda: run_script("make-graphics", output_text))
 build_menu.add_command(label="FX", command=lambda: run_script("make-fx", output_text))
 build_menu.add_separator()
 build_menu.add_command(label="Exit", command=root.quit)
@@ -374,16 +391,17 @@ menu_bar.add_cascade(label="Memory Usage", menu=memory_menu)
 # Menú "Help"
 help_menu = tk.Menu(menu_bar, tearoff=0)
 help_menu.add_command(label="Documentation", command=lambda: webbrowser.open("https://gm.retrojuegos.org/"))
-help_menu.add_command(label="Telegram", command=lambda: webbrowser.open("https://t.me/zx_spectrum_game_maker"))
-help_menu.add_command(label="GitHub", command=lambda: webbrowser.open("https://github.com/rtorralba/zx-game-maker"))
+help_menu.add_command(label="Telegram", command=lambda: webbrowser.open("https://t.me/+R5PUBeHV0WhlMjQ0"))
+help_menu.add_command(label="GitHub", command=lambda: webbrowser.open("https://github.com/amikosoft/zx-game-maker-infinity"))
 menu_bar.add_cascade(label="Help", menu=help_menu)
 
 # Configurar el menú en la ventana principal
 root.config(menu=menu_bar)
 
 # Área de texto para mostrar la salida de los scripts
-output_text = tk.Text(root, height=30, width=70)
-output_text.pack(pady=10)
+output_text = tk.Text(root, width=100, height=100)
+output_text.pack(pady=1)
+# output_text.grid(column=0, row=1, columnspan=2)
 
 # Iniciar el bucle principal de la aplicación
 root.mainloop()

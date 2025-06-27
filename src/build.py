@@ -109,7 +109,7 @@ def build():
     totalExecutionTime = 0
 
     print("============================================")
-    print("=          ZX SPECTRUM GAME MAKER          =")
+    print("=          ZXGM - Infinity                 =")
     print("============================================")
 
     executeFunction(tiledExport, "Exporting game from Tiled")
