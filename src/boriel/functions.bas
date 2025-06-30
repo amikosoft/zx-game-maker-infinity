@@ -104,11 +104,8 @@ sub pauseUntilPressKey()
                 if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then
                     continue for
                 end if
-                dim alive as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
-                if alive <> 99 then
-                    if alive > 0 then
-                        return 0
-                    end if
+                if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) > 0 then
+                    return 0
                 end if
             next enemyId
             

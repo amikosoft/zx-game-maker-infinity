@@ -203,6 +203,11 @@
                     "value": true
                 },
                 {
+                    "name": "enemiesPursuitCollide",
+                    "type": "bool",
+                    "value": true
+                },
+                {
                     "name": "bulletAnimation",
                     "type": "bool",
                     "value": true

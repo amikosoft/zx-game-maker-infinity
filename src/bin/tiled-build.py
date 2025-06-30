@@ -151,7 +151,7 @@ livesMode = 0
 enemiesShoot = 0
 enemiesShootDirection = 'all'
 enemiesBulletCollision = True
-
+enemiesPursuitCollide = True
 bulletAnimation = 0
 
 messagesEnabled = 0
@@ -281,6 +281,8 @@ if 'properties' in data:
             enemiesShootDirection = property['value']
         elif property['name'] == 'enemiesBulletCollision':
             enemiesBulletCollision = property['value']
+        elif property['name'] == 'enemiesPursuitCollide':
+            enemiesPursuitCollide = property['value']
             
 
 if len(damageTiles) == 0:
@@ -608,7 +610,10 @@ for layer in data['layers']:
                 if 'properties' in object and len(object['properties']) > 0:
                     for property in object['properties']:
                         if property['name'] == 'life':
-                            objects[str(object['id'])]['life'] = str(property['value'])
+                            if property['value'] == 99:
+                                objects[str(object['id'])]['life'] = "-99"
+                            else:
+                                objects[str(object['id'])]['life'] = str(property['value'])
                         elif property['name'] == 'speed':
                             if property['value'] in [0, 1, 2]:
                                 objects[str(object['id'])]['speed'] = str(property['value'] + 1)
@@ -632,6 +637,8 @@ for layer in data['layers']:
 
 if enemiesPursuit == 1:
     configStr += "#DEFINE ENEMIES_PURSUIT_ENABLED\n"
+    if enemiesPursuitCollide == True:
+        configStr += "#DEFINE ENEMIES_PURSUIT_COLLIDE\n"
 
 if enemiesAlert == 1:
     configStr += "#DEFINE ENEMIES_ALERT_ENABLED\n"

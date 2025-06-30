@@ -82,13 +82,13 @@ Sub moveEnemies()
             
             If tile = 0 Then continue For
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                If enemyLive <> 99 And tile > 15 Then
+                If enemyLive < 1 And tile > 15 Then
                     If screensWon(currentScreen) Then continue For
                 End If
             #endif
             
             ' Se comprueba si tiene colision de bala
-            if enemyLive > 0 And tile > 15 and bulletPositionX and enemyLive <> 99 Then
+            if enemyLive > 0 And tile > 15 and bulletPositionX Then
                 if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
                     enemyLive = enemyLive - 1
                 End if
@@ -149,7 +149,7 @@ Sub moveEnemies()
                             horizontalDirection = Sgn(protaX - enemyCol)
                             verticalDirection = Sgn(protaY - enemyLin)
                             
-                            #ifdef OVERHEAD_VIEW
+                            #ifdef ENEMIES_PURSUIT_COLLIDE
                                 if CheckCollision(enemyCol + horizontalDirection, enemyLin) Then horizontalDirection = 0
                                 if CheckCollision(enemyCol, enemyLin + verticalDirection) Then verticalDirection = 0
                             #endif

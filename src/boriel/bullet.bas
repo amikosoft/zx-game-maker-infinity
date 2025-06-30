@@ -157,7 +157,7 @@ end sub
 
 sub damageEnemy(enemyToKill as Ubyte)
     dim alive as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE)
-    if alive = 99 then return
+    if alive < 1 then return
     
     alive = alive - 1
     
