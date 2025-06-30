@@ -142,10 +142,13 @@ levelsMode = 0
 jetPackFuel = 0
 
 gravitySpeed = 2
-jumpArrayCount = 5
-jumpArray = "{-2, -2, -2, -2, -2}"
+jumpArrayCount = 6
+jumpArray = "{-2, -2, -2, -2, -2, 0}"
 
 livesMode = 0
+
+enemiesShoot = 0
+bulletAnimation = 0
 
 messagesEnabled = 0
 enemiesAlertDistance = 10
@@ -264,6 +267,10 @@ if 'properties' in data:
                 enemiesAlertDistance = 20
             elif property['value'] == 'far':
                 enemiesAlertDistance = 30
+        elif property['name'] == 'bulletAnimation':
+            bulletAnimation = 1 if property['value'] else 0
+        elif property['name'] == 'enemiesShoot':
+            enemiesShoot = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -476,6 +483,13 @@ configStr += "    Const jumpStepsCount As Ubyte = JETPACK_FUEL\n"
 configStr += "    Dim jumpEnergy As Ubyte = jumpStepsCount\n"
 configStr += "  #endif\n"
 configStr += "#endif\n"
+
+if bulletAnimation == 1:
+    configStr += "#define BULLET_ANIMATION\n"
+
+if enemiesShoot > 0:
+    configStr += "#define BULLET_ENEMIES\n"
+    configStr += "const BULLET_ENEMIES_RANGE as ubyte = " + str((enemiesShoot*2)) + "\n"
 
 with open("output/screenObjects.bin", "wb") as f:
     for screen in screenObjects:

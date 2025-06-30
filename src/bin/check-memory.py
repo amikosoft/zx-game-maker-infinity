@@ -1,4 +1,3 @@
-import os
 import sys
 
 with open("output/map.txt", "r") as file:
@@ -7,11 +6,13 @@ with open("output/map.txt", "r") as file:
 
 memoryAddress = last_line.split(":")[0]
 
+print("")
 if int(memoryAddress, 16) > 0xC000:
-    print("")
     print("========================================================")
     print("ERROR: Memory address " + memoryAddress + " is greater than $C000")
     print("Try to disable some features in the map configuration")
     print("========================================================")
     print("")
     sys.exit(1)
+else:
+    print("MEMORY PRINT: " + memoryAddress)

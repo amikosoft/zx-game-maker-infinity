@@ -23,17 +23,38 @@
 
 'Total number of 1x1 defined sprites
 #ifdef SIDE_VIEW
-    #define TOTAL_1x1_SPRITES 2
+    #ifdef BULLET_ANIMATION
+        #ifdef BULLET_ENEMIES
+            #define TOTAL_1x1_SPRITES 5
+        #else
+            #define TOTAL_1x1_SPRITES 4
+        #endif
+    #else
+        #ifdef BULLET_ENEMIES
+            #define TOTAL_1x1_SPRITES 3
+        #else
+            #define TOTAL_1x1_SPRITES 2
+        #endif
+    #endif
 #else
-    #define TOTAL_1x1_SPRITES 4
+    #ifdef BULLET_ENEMIES
+        #define TOTAL_1x1_SPRITES 5
+    #else
+        #define TOTAL_1x1_SPRITES 4
+    #endif
 #endif
+
 'Total number of 1x2 defined sprites
 '#define TOTAL_1x2_SPRITES 0
 'Total number of 2x2 defined sprites
 #define TOTAL_2x2_SPRITES 48
 
 'Maximum on-screen 1x1 sprites
-#define ONSCREEN_1x1_SPRITES 1
+#ifdef BULLET_ENEMIES
+    #define ONSCREEN_1x1_SPRITES 2
+#Else
+    #define ONSCREEN_1x1_SPRITES 1
+#endif
 'Maximum on-screen 1x2 sprites
 '#define ONSCREEN_1x2_SPRITES 0
 'Maximum on-screen 2x2 sprites

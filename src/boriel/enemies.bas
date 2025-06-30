@@ -25,15 +25,55 @@
     End Function
 #endif
 
-dim enemiesFrame as ubyte = 0
+#ifdef BULLET_ENEMIES
+    Sub enemyShoot(posX as ubyte, posY as ubyte, direction as byte)
+        If direction = BULLET_DIRECTION_RIGHT Then
+            enemyBulletPositionX = posX + 2
+            enemyBulletPositionY = posY + 1
+            enemyBulletEndPositionX = MAX_SCREEEN_RIGHT
+        Elseif direction = BULLET_DIRECTION_LEFT
+            enemyBulletPositionX = posX
+            enemyBulletPositionY = posY + 1
+            enemyBulletEndPositionX = MAX_SCREEN_LEFT
+        Elseif direction = BULLET_DIRECTION_UP
+            enemyBulletPositionX = posX + 1
+            enemyBulletPositionY = posY + 1
+            enemyBulletEndPositionY = MAX_SCREEN_TOP
+        Else
+            enemyBulletPositionX = posX + 1
+            enemyBulletPositionY = posY + 2
+            enemyBulletEndPositionY = MAX_SCREEN_BOTTOM
+        End If
+        
+        enemyBulletDirection = direction
+        BeepFX_Play(2)
+    End Sub
+#endif
+
+function checkEnemyBullet(enemyId as ubyte, enemyCol as ubyte, enemyLin as ubyte) as Ubyte
+    if (bulletPositionX + 1) < enemyCol or bulletPositionX > (enemyCol + 2) then return 0
+    if (bulletPositionY + 1) < enemyLin or bulletPositionY > (enemyLin+2) then return 0
+    
+    resetBullet(0)
+    damageEnemy(enemyId)
+    return 1
+end function
+
+#ifndef ENABLED_128
+    dim enemiesFrame as ubyte = 0
+#endif
 
 Sub moveEnemies()
     If enemiesScreen Then
-        enemiesFrame = enemiesFrame + 1
-        if enemiesFrame > 9 Then enemiesFrame = 1
+        #ifndef ENABLED_128
+            enemiesFrame = enemiesFrame + 1
+            if enemiesFrame > 9 Then enemiesFrame = 1
+        #endif
         For enemyId=0 To enemiesScreen- 1
             Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE)
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
+            Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
+            Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
             
             If tile = 0 Then continue For
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
@@ -42,19 +82,31 @@ Sub moveEnemies()
                 End If
             #endif
             
+            ' Se comprueba si tiene colision de bala
+            if enemyLive > 0 And tile > 15 and bulletPositionX Then
+                if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
+                    enemyLive = enemyLive - 1
+                End if
+            End If
+            
             'In the Screen And still live
             If enemyLive > 0 Then
                 Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
                 Dim horizontalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
-                Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
-                Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
                 
-                If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
-                    Draw2x2Sprite(getSpriteTile(enemyId), enemyCol, enemyLin)
-                    if tile > 15 Then checkProtaCollision(enemyId, enemyCol, enemyLin)
-                    continue For
-                End If
-                
+                #ifdef ENABLED_128
+                    If (enemySpeed = 1 and (framec bAnd 3) <> 3) or (enemySpeed = 2 and (framec bAnd 1) = 1) Then
+                        Draw2x2Sprite(spritesLinColTileAndFrame(enemyId, 2), enemyCol, enemyLin)
+                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin)
+                        continue For
+                    End If
+                #Else
+                    If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
+                        Draw2x2Sprite(spritesLinColTileAndFrame(enemyId, 2), enemyCol, enemyLin)
+                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin)
+                        continue For
+                    End If
+                #endif
                 Dim enemyMode As Byte = decompressedEnemiesScreen(enemyId, ENEMY_MODE)
                 Dim enemyColIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_INI)
                 Dim enemyLinIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI)
@@ -87,12 +139,6 @@ Sub moveEnemies()
                         if invincible Then
                             horizontalDirection = 0
                             verticalDirection = 0
-                            ' enemyCol = enemyColIni
-                            ' enemyLin = enemyLinIni
-                            
-                            ' #ifdef ENEMIES_ALERT_ENABLED
-                            '     if enemyMode = 3 Then enemyMode = 1
-                            ' #endif
                         Else
                             horizontalDirection = Sgn(protaX - enemyCol)
                             verticalDirection = Sgn(protaY - enemyLin)
@@ -101,11 +147,6 @@ Sub moveEnemies()
                                 if CheckCollision(enemyCol + horizontalDirection, enemyLin) Then horizontalDirection = 0
                                 if CheckCollision(enemyCol, enemyLin + verticalDirection) Then verticalDirection = 0
                             #endif
-
-                            ' if CheckCollision(enemyCol + horizontalDirection, enemyLin + verticalDirection) Then 
-                            '     verticalDirection = 0
-                            '     horizontalDirection = 0
-                            ' End if
                         End if
                     #endif
                     #ifdef ENEMIES_ONE_DIRECTION_ENABLED
@@ -206,33 +247,38 @@ Sub moveEnemies()
                 
                 ' se actualiza el sprite
                 saveSprite(enemyId, enemyLin, enemyCol, tile + 1, horizontalDirection)
-                Draw2x2Sprite(getSpriteTile(enemyId), getSpriteCol(enemyId), getSpriteLin(enemyId))
-                if tile > 15 Then checkProtaCollision(enemyId, enemyCol, enemyLin)
+                Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+
+                if tile > 15 and Not invincible Then
+                    checkProtaCollision(enemyId, enemyCol, enemyLin)
+                    
+                    #ifdef BULLET_ENEMIES
+                        if enemyBulletPositionX = 0 then
+                            if (tile mod 16) < BULLET_ENEMIES_RANGE Then
+                                if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
+                                    if enemyCol < protaX Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                    else
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
+                                    End if
+                                elseif enemyCol > (protaX-2) and enemyCol < (protaX+4) Then
+                                    if enemyLin < protaY Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                    else
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
+                                    end if
+                                end if
+                            End if
+                        end if
+                    #endif
+                End if
             End If
         Next enemyId
-        
-        'checkEnemiesCollection()
-        ' If Not invincible Then
-        '     For enemyId=0 To enemiesScreen - 1
-        '         Dim vidaColision As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
-        
-        '         If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 or vidaColision = 0 Then continue For
-        
-        '         #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-        '             If vidaColision <> 99 Then
-        '                 If screensWon(currentScreen) Then continue For
-        '             End If
-        '         #endif
-        
-        '         checkProtaCollision(enemyId)
-        '     Next enemyId
-        ' End If
     End if
 End Sub
 
-
 Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte)
-    If invincible Then Return
+    'If invincible Then Return
     
     If (protaX + 2) < enemyX0 Or protaX > (enemyX0 + 2) Then Return
     

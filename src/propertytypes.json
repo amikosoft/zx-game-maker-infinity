@@ -159,6 +159,16 @@
                 "value": true
             },
             {
+                "name": "enemiesShoot",
+                "type": "int",
+                "value": 0
+            },
+            {
+                "name": "bulletAnimation",
+                "type": "bool",
+                "value": true
+            },
+            {
                 "name": "gameName",
                 "type": "string",
                 "value": "Game Name"

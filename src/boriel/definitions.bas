@@ -10,10 +10,52 @@
 Const PROTA_SPRITE As Ubyte = 5
 Const BULLET_SPRITE_RIGHT_ID As Ubyte = 49
 Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
+
 #ifdef OVERHEAD_VIEW
     Const BULLET_SPRITE_UP_ID As Ubyte = 51
     Const BULLET_SPRITE_DOWN_ID As Ubyte = 52
+
+    #ifdef BULLET_ENEMIES
+        Const BULLET_SPRITE_ENEMY_ID As Ubyte = 53
+    #endif
+#Else
+    #ifdef BULLET_ANIMATION
+        Const BULLET_SPRITE_RIGHT_2_ID As Ubyte = 51
+        Const BULLET_SPRITE_LEFT_2_ID As Ubyte = 52
+        
+        #ifdef BULLET_ENEMIES
+            Const BULLET_SPRITE_ENEMY_ID As Ubyte = 53
+        #endif
+    #else 
+        #ifdef BULLET_ENEMIES
+            Const BULLET_SPRITE_ENEMY_ID As Ubyte = 51
+        #endif
+    #endif
 #endif
+
+const MAX_SCREEEN_RIGHT as ubyte = 60
+const MAX_SCREEN_LEFT as ubyte = 2
+const MAX_SCREEN_BOTTOM as ubyte = 40
+const MAX_SCREEN_TOP as ubyte = 2
+
+const BULLET_DIRECTION_LEFT = 0
+const BULLET_DIRECTION_RIGHT = 1
+const BULLET_DIRECTION_UP = 8
+const BULLET_DIRECTION_DOWN = 2
+
+#ifdef BULLET_ENEMIES
+    dim enemyBulletPositionX as ubyte = 0
+    dim enemyBulletPositionY as ubyte = 0
+    dim enemyBulletDirection as ubyte = 0
+    dim enemyBulletEndPositionX as ubyte = 0
+    dim enemyBulletEndPositionY as ubyte = 0
+#endif
+
+dim bulletPositionX as ubyte = 0
+dim bulletPositionY as ubyte = 0
+dim bulletDirection as ubyte = 0
+dim bulletEndPositionX as ubyte = 0
+dim bulletEndPositionY as ubyte = 0
 
 Dim protaLastFrame As Ubyte
 
@@ -54,6 +96,7 @@ Dim invincible As Ubyte = 0
 Dim protaX As Ubyte
 Dim protaY As Ubyte
 Dim protaDirection As Ubyte
+Dim protaTile As Ubyte
 
 #ifdef LIVES_MODE_ENABLED
     dim protaXRespawn as ubyte

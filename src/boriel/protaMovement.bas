@@ -129,6 +129,15 @@ Function getNextFrameRunning() As Ubyte
     #endif
 End Function
 
+Function pressingUp() As Ubyte
+    Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
+End Function
+
+Function pressingDown() As Ubyte
+    Return ((kempston = 0 And MultiKeys(keyArray(DOWN)) <> 0) Or (kempston = 1 And In(31) bAND %100 <> 0))
+End Function
+
+
 #ifdef SIDE_VIEW
     Function getNextFrameJumpingFalling() As Ubyte
         If (protaDirection) Then
@@ -175,10 +184,6 @@ End Function
     #endif
     
     #ifdef JETPACK_FUEL
-        Function pressingUp() As Ubyte
-            Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
-        End Function
-        
         Sub checkIsFlying()
             If jumpCurrentKey = jumpStopValue Then Return
             
@@ -245,7 +250,7 @@ End Function
                 #ifdef LEVELS_MODE
                     landed = 1
                     decrementLife()
-
+                    
                     #ifndef LIVES_MODE_ENABLED
                         jump()
                     #endif
@@ -313,6 +318,7 @@ End Function
         BeepFX_Play(2)
     End Sub
 #endif
+
 
 #ifdef OVERHEAD_VIEW
     Sub shoot()
@@ -394,10 +400,9 @@ Sub leftKey()
         #Else
             protaFrame = 2
         #endif
-        spritesLinColTileAndFrame(PROTA_SPRITE, 3) = 0
     End If
     
-    If onFirstColumn(PROTA_SPRITE) Then
+    If protaX = 0 Then
         #ifdef ARCADE_MODE
             protaX = 60
             Return
@@ -412,10 +417,9 @@ End Sub
 Sub rightKey()
     If protaDirection <> 1 Then
         protaFrame = 0
-        spritesLinColTileAndFrame(PROTA_SPRITE, 3) = 1
     End If
     
-    If onLastColumn(PROTA_SPRITE) Then
+    If protaX = 60 Then
         #ifdef ARCADE_MODE
             protaX = 0
             Return
@@ -433,7 +437,6 @@ Sub upKey()
     #Else
         If protaDirection <> 8 Then
             protaFrame = 4
-            spritesLinColTileAndFrame(PROTA_SPRITE, 3) = 8
         End If
         If canMoveUp() Then
             saveSprite(PROTA_SPRITE, protaY - 1, protaX, protaFrame + 1, 8)
@@ -452,7 +455,6 @@ Sub downKey()
     #ifdef OVERHEAD_VIEW
         If protaDirection <> 2 Then
             protaFrame = 6
-            spritesLinColTileAndFrame(PROTA_SPRITE, 3) = 2
         End If
         If canMoveDown() Then
             If protaY >= MAX_LINE Then
@@ -486,12 +488,14 @@ Sub keyboardListen()
         If n bAND %1000 Then upKey()
         If n bAND %100 Then downKey()
         If n bAND %10000 Then fireKey()
-        #ifdef IDLE_ENABLED
-            If n = 0 Then
-                If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
-            Else
-                protaLoopCounter = 0
-            End If
+        #ifdef SIDE_VIEW
+            #ifdef IDLE_ENABLED
+                If n = 0 Then
+                    If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
+                Else
+                    protaLoopCounter = 0
+                End If
+            #endif
         #endif
     Else
         If MultiKeys(keyArray(LEFT))<>0 Then leftKey()
@@ -499,12 +503,15 @@ Sub keyboardListen()
         If MultiKeys(keyArray(UP))<>0 Then upKey()
         If MultiKeys(keyArray(DOWN))<>0 Then downKey()
         If MultiKeys(keyArray(FIRE))<>0 Then fireKey()
-        #ifdef IDLE_ENABLED
-            If MultiKeys(keyArray(LEFT))=0 And MultiKeys(keyArray(RIGHT))=0 And MultiKeys(keyArray(UP))=0 And MultiKeys(keyArray(DOWN))=0 And MultiKeys(keyArray(FIRE))=0 Then
-                If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
-            Else
-                protaLoopCounter = 0
-            End If
+        
+        #ifdef SIDE_VIEW
+            #ifdef IDLE_ENABLED
+                If MultiKeys(keyArray(LEFT))=0 And MultiKeys(keyArray(RIGHT))=0 And MultiKeys(keyArray(UP))=0 And MultiKeys(keyArray(DOWN))=0 And MultiKeys(keyArray(FIRE))=0 Then
+                    If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
+                Else
+                    protaLoopCounter = 0
+                End If
+            #endif
         #endif
     End If
 End Sub
@@ -638,7 +645,7 @@ Sub protaMovement()
                 If isFalling() Then Return
                 
                 If framec - lastFrameTiles = ANIMATE_PERIOD_TILE - 2 Then
-                    If getSpriteTile(PROTA_SPRITE) = 13 Then
+                    If protaTile = 13 Then
                         saveSprite(PROTA_SPRITE, protaY, protaX, 14, protaDirection)
                     Else
                         saveSprite(PROTA_SPRITE, protaY, protaX, 13, protaDirection)

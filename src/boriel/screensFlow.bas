@@ -142,7 +142,7 @@ End Sub
         '
         ' keyOption = ""
         
-        Print AT 20,2;"Press enter To Return To menu"
+        Print AT 20,2;"Enter To Continue..."
         Do
         Loop Until MultiKeys(KEYENTER)
         
@@ -220,7 +220,7 @@ Sub playGame()
     #endif
     
     enemiesScreen = enemiesPerScreen(currentScreen)
-
+    
     Do
         waitretrace
         
@@ -243,6 +243,10 @@ Sub playGame()
         checkDamageByTile()
         moveEnemies()
         moveBullet()
+        
+        #ifdef BULLET_ENEMIES
+            moveEnemyBullet()
+        #endif
         drawSprites()
         
         If moveScreen <> 0 Then
@@ -255,7 +259,7 @@ Sub playGame()
         
         If invincible Then
             invincible = invincible - 1
-        
+            
             #ifdef LIVES_MODE_GRAVEYARD
                 if Not invincible Then saveSprite(PROTA_SPRITE, protaYRespawn, protaXRespawn, 1, protaDirection)
             #endif
@@ -323,7 +327,7 @@ Sub resetValues()
     #endif
     
     invincible = 0
-
+    
     currentLife = INITIAL_LIFE
     currentKeys = 0
     
@@ -340,12 +344,12 @@ Sub resetValues()
             currentItems = 0
         End If
     #endif
-
+    
     #ifdef LIVES_MODE_ENABLED
         protaXRespawn = INITIAL_MAIN_CHARACTER_X
         protaYRespawn = INITIAL_MAIN_CHARACTER_Y
     #endif
-
+    
     ' removeScreenObjectFromBuffer()
     screenObjects = screenObjectsInitial
     enemiesPerScreen = enemiesPerScreenInitial
@@ -371,10 +375,13 @@ Sub swapScreen()
     dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), @decompressedMap)
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), @decompressedEnemiesScreen)
     bulletPositionX = 0
+    #ifdef BULLET_ENEMIES
+        enemyBulletPositionX = 0
+    #endif
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()
         saveSprite(PROTA_SPRITE, mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
-
+        
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = mainCharactersArray(currentScreen, 0)
             protaYRespawn = mainCharactersArray(currentScreen, 1)

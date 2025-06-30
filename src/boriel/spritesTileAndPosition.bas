@@ -3,7 +3,9 @@ sub saveSprite(sprite as ubyte, lin as ubyte, col as ubyte, tile as ubyte, direc
     if sprite = PROTA_SPRITE then
         protaX = col
         protaY = lin
+        protaTile = tile
         protaDirection = directionRight
+        return
     end if
     spritesLinColTileAndFrame(sprite, 0) = lin
     spritesLinColTileAndFrame(sprite, 1) = col
@@ -16,28 +18,6 @@ sub saveSprite(sprite as ubyte, lin as ubyte, col as ubyte, tile as ubyte, direc
     end if
 end sub
 
-function getSpriteLin(sprite as ubyte) as ubyte
-    if sprite = PROTA_SPRITE then
-        return protaY
-    end if
-    return spritesLinColTileAndFrame(sprite, 0)
-end function
-
-function getSpriteCol(sprite as ubyte) as ubyte
-    if sprite = PROTA_SPRITE then
-        return protaX
-    end if
-    return spritesLinColTileAndFrame(sprite, 1)
-end function
-
-function getSpriteTile(sprite as ubyte) as ubyte
-    return spritesLinColTileAndFrame(sprite, 2)
-end function
-
-function getSpriteDirection(sprite as ubyte) as ubyte
-    return spritesLinColTileAndFrame(sprite, 3)
-end function
-
 #ifdef SIDE_VIEW
     sub resetProtaSpriteToRunning()
         if protaDirection then
@@ -47,14 +27,6 @@ end function
         end if
     end sub
 #endif
-
-function onLastColumn(sprite as ubyte) as ubyte
-    return getSpriteCol(sprite) = 60
-end function
-
-function onFirstColumn(sprite as ubyte) as ubyte
-    return getSpriteCol(sprite) = 0
-end function
 
 ' sub removeScreenObjectFromBuffer()
 '     for i = 0 to 4

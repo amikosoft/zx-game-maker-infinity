@@ -1,12 +1,6 @@
 const BURST_SPRITE_ID as ubyte = 16
 const BULLET_SPEED as ubyte = 2
 
-dim bulletPositionX as ubyte = 0
-dim bulletPositionY as ubyte = 0
-dim bulletDirection as ubyte = 0
-dim bulletEndPositionX as ubyte = 0
-dim bulletEndPositionY as ubyte = 0
-
 ' sub createBullet(directionRight as ubyte)
 '     if directionRight
 '         spritesSet(BULLET_SPRITE_RIGHT_ID) = Create1x1Sprite(@bulletRight)
@@ -15,133 +9,154 @@ dim bulletEndPositionY as ubyte = 0
 '     end if
 ' end sub
 
-const MAX_SCREEEN_RIGHT as ubyte = 60
-const MAX_SCREEN_LEFT as ubyte = 2
-#ifdef OVERHEAD_VIEW
-    const MAX_SCREEN_BOTTOM as ubyte = 40
-    const MAX_SCREEN_TOP as ubyte = 2
-#endif
+Function checkBulletTileCollision(direction as ubyte, posx as ubyte, posy as ubyte) as ubyte
+    dim xToCheck as ubyte = posx
+    
+    if direction = BULLET_DIRECTION_RIGHT then xToCheck = posx + 1
+    
+    dim tile as ubyte = isSolidTileByColLin(xToCheck >> 1, posy >> 1)
+    
+    if tile then
+        return tile
+    else
+        tile = isSolidTileByColLin(xToCheck >> 1, (posy + 1) >> 1)
+        return tile
+    end if
+End Function
 
 sub moveBullet()
-    dim limit as ubyte = 0
-
-    if bulletPositionX = 0 then
-        return
-    end if
-
-    #ifdef OVERHEAD_VIEW
-        if bulletPositionY = 0 then
-            return
-        end if
-    #endif
-
-    if bulletDirection = 1 then
+    if bulletPositionX = 0 then return
+    
+    ' desplazamiento de bala
+    if bulletDirection = BULLET_DIRECTION_RIGHT then
         if bulletPositionX >= bulletEndPositionX then
-            resetBullet()
+            resetBullet(0)
             return
         end if
+        
+        #ifdef BULLET_ANIMATION
+            if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
+                currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
+            Else
+                currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+            End if
+        #endif
+        
         bulletPositionX = bulletPositionX + BULLET_SPEED
-    elseif bulletDirection = 0 then
+    elseif bulletDirection = BULLET_DIRECTION_LEFT then
         if bulletPositionX <= bulletEndPositionX then
-            resetBullet()
+            resetBullet(0)
             return
         end if
         bulletPositionX = bulletPositionX - BULLET_SPEED
-    #ifdef OVERHEAD_VIEW
-    elseif bulletDirection = 2 then
-        if bulletPositionY >= bulletEndPositionY then
-            resetBullet()
-            return
-        end if
-        bulletPositionY = bulletPositionY + BULLET_SPEED
-    elseif bulletDirection = 8
-        if bulletPositionY <= bulletEndPositionY then
-            resetBullet()
-            return
-        end if
-        bulletPositionY = bulletPositionY - BULLET_SPEED
-    #endif
-    endif
-
-    checkBulletCollision()
-end sub
-
-#ifdef USE_BREAKABLE_TILE
-sub checkAndRemoveBreakableTile(tile as ubyte)
-    if tile = 62 then
-        brokenTiles(currentScreen) = 1
-        BeepFX_Play(0)
-        removeTilesFromScreen(62)
+        
+        #ifdef BULLET_ANIMATION
+            if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
+                currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
+            Else
+                currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+            End if
+        #endif
+        #ifdef OVERHEAD_VIEW
+        elseif bulletDirection = BULLET_DIRECTION_DOWN then
+            if bulletPositionY >= bulletEndPositionY then
+                resetBullet(0)
+                return
+            end if
+            bulletPositionY = bulletPositionY + BULLET_SPEED
+        elseif bulletDirection = BULLET_DIRECTION_UP
+            if bulletPositionY <= bulletEndPositionY then
+                resetBullet(0)
+                return
+            end if
+            bulletPositionY = bulletPositionY - BULLET_SPEED
+        #endif
     end if
-end sub
-#EndIf
-
-sub checkBulletCollision()
-    #ifdef OVERHEAD_VIEW
-    if bulletPositionY = MAX_SCREEN_TOP or bulletPositionY = MAX_SCREEN_BOTTOM then
-        resetBullet()
-        return
-    end if
-    #endif
-
-    dim xToCheck as ubyte = bulletPositionX
-
-    if bulletDirection = 1 then
-        xToCheck = bulletPositionX + 1
-    end if
-
-    dim tile as ubyte = isSolidTileByColLin(xToCheck >> 1, bulletPositionY >> 1)
-
-    if tile then
-        resetBullet()
-
+    
+    dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
+    if tile Then
+        resetBullet(0)
+        
         #ifdef USE_BREAKABLE_TILE
             checkAndRemoveBreakableTile(tile)
         #endif
-        return
-    else
-        tile = isSolidTileByColLin(xToCheck >> 1, (bulletPositionY + 1) >> 1)
-        if tile then
-            resetBullet()
-
-            #ifdef USE_BREAKABLE_TILE
-            checkAndRemoveBreakableTile(tile)
-            #endif
-            return
-        end if
     end if
-
-    #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-        if screensWon(currentScreen) then return
-    #endif
-    
-    If enemiesScreen Then
-        For enemyId=0 To enemiesScreen - 1
-            if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then continue for 
-            if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = 0 then continue for
-            
-            Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
-            Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
-                
-            if (bulletPositionX + 1) < enemyCol or bulletPositionX > (enemyCol + 2) then continue for
-            if (bulletPositionY + 1) < enemyLin or bulletPositionY > (enemyLin+2) then continue for
-
-            damageEnemy(enemyId)
-            resetBullet()
-        next enemyId
-    End if
 end sub
 
-sub resetBullet()
-    bulletPositionX = 0
-    bulletPositionY = 0
-    bulletDirection = 0
+#ifdef BULLET_ENEMIES
+    sub moveEnemyBullet()
+        if enemyBulletPositionX = 0 then return
+        
+        ' desplazamiento de bala
+        if enemyBulletDirection = BULLET_DIRECTION_RIGHT then
+            if enemyBulletPositionX >= enemyBulletEndPositionX then
+                resetBullet(1)
+                return
+            end if
+            enemyBulletPositionX = enemyBulletPositionX + BULLET_SPEED
+        elseif enemyBulletDirection = BULLET_DIRECTION_LEFT then
+            if enemyBulletPositionX <= enemyBulletEndPositionX then
+                resetBullet(1)
+                return
+            end if
+            enemyBulletPositionX = enemyBulletPositionX - BULLET_SPEED
+        elseif enemyBulletDirection = BULLET_DIRECTION_DOWN then
+            if enemyBulletPositionY >= enemyBulletEndPositionY then
+                resetBullet(1)
+                return
+            end if
+            enemyBulletPositionY = enemyBulletPositionY + BULLET_SPEED
+        elseif enemyBulletDirection = BULLET_DIRECTION_UP
+            if enemyBulletPositionY <= enemyBulletEndPositionY then
+                resetBullet(1)
+                return
+            end if
+            enemyBulletPositionY = enemyBulletPositionY - BULLET_SPEED
+        end if
+        
+        if checkBulletTileCollision(enemyBulletDirection, enemyBulletPositionX, enemyBulletPositionY) Then resetBullet(1)
+
+        'colision con el player si es de enemigo
+        if (enemyBulletPositionX + 1) < protaX or enemyBulletPositionX > (protaX + 4) then Return
+        if (enemyBulletPositionY + 1) < protaY or enemyBulletPositionY > (protaY + 4) then Return
+        decrementLife()
+        resetBullet(1)
+    end sub
+#endif
+
+#ifdef USE_BREAKABLE_TILE
+    sub checkAndRemoveBreakableTile(tile as ubyte)
+        if tile = 62 then
+            brokenTiles(currentScreen) = 1
+            BeepFX_Play(0)
+            removeTilesFromScreen(62)
+        end if
+    end sub
+#EndIf
+
+
+sub resetBullet(isEnemyBullet as ubyte)
+    #ifdef BULLET_ENEMIES
+        if isEnemyBullet Then
+            enemyBulletPositionX = 0
+            enemyBulletPositionY = 0
+            enemyBulletDirection = 0
+        Else
+            bulletPositionX = 0
+            bulletPositionY = 0
+            bulletDirection = 0
+        end if
+    #Else
+        bulletPositionX = 0
+        bulletPositionY = 0
+        bulletDirection = 0
+    #endif
 end sub
 
 sub damageEnemy(enemyToKill as Ubyte)
     dim alive as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE)
-    if alive = 99 then return 'invincible enemies
-
+    if alive = 99 then return
+    
     alive = alive - 1
     
     #ifdef HISCORE_ENABLED
@@ -151,48 +166,48 @@ sub damageEnemy(enemyToKill as Ubyte)
         End If
         printLife()
     #endif
-
+    
     decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
-
+    
     if alive = 0 then
         saveSprite(enemyToKill, 0, 0, 0, 0)
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
         
         BeepFX_Play(0)
-
+        
         ' si ambos estan definidos
         #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-        #ifdef SHOULD_KILL_ENEMIES_ENABLED
-            if not screensWon(currentScreen) then
-                if allEnemiesKilled() then
-                    screensWon(currentScreen) = 1
-                    removeTilesFromScreen(63)
+            #ifdef SHOULD_KILL_ENEMIES_ENABLED
+                if not screensWon(currentScreen) then
+                    if allEnemiesKilled() then
+                        screensWon(currentScreen) = 1
+                        removeTilesFromScreen(63)
+                    end if
                 end if
-            end if
+            #endif
         #endif
-        #endif
-
+        
         ' si solo uno esta definido
         #ifndef ENEMIES_NOT_RESPAWN_ENABLED
-        #ifdef SHOULD_KILL_ENEMIES_ENABLED
-            if not screensWon(currentScreen) then
-                if allEnemiesKilled() then
-                    screensWon(currentScreen) = 1
-                    removeTilesFromScreen(63)
+            #ifdef SHOULD_KILL_ENEMIES_ENABLED
+                if not screensWon(currentScreen) then
+                    if allEnemiesKilled() then
+                        screensWon(currentScreen) = 1
+                        removeTilesFromScreen(63)
+                    end if
                 end if
-            end if
+            #endif
         #endif
-        #endif
-
+        
         #ifndef SHOULD_KILL_ENEMIES_ENABLED
-        #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-            if not screensWon(currentScreen) then
-                if allEnemiesKilled() then
-                    screensWon(currentScreen) = 1
-                    removeTilesFromScreen(63)
+            #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+                if not screensWon(currentScreen) then
+                    if allEnemiesKilled() then
+                        screensWon(currentScreen) = 1
+                        removeTilesFromScreen(63)
+                    end if
                 end if
-            end if
-        #endif
+            #endif
         #endif
     else
         BeepFX_Play(1)

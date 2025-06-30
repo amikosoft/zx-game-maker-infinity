@@ -84,6 +84,16 @@ def getUseBreakableTile():
         maps_json = json.load(f)
     return any(prop["name"] == "useBreakableTile" and prop["value"] for prop in maps_json["properties"])
 
+def getEnemiesShoot():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return any(prop["name"] == "enemiesShoot" and prop["value"] for prop in maps_json["properties"])
+
+def getBulletAnimation():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return any(prop["name"] == "bulletAnimation" and prop["value"] for prop in maps_json["properties"])
+
 def concatenateFiles(output_file, input_files):
     with open(output_file, "wb") as out_file:
         for file in input_files:
