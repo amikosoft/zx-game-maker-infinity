@@ -85,6 +85,18 @@
             "valuesAsFlags": false
         },
         {
+            "id": 8,
+            "name": "enemiesShootDirection",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "all",
+                "horizontal",
+                "vertical"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -180,6 +192,17 @@
                     "value": 0
                 },
                 {
+                    "name": "enemiesShootDirection",
+                    "propertyType": "enemiesShootDirection",
+                    "type": "string",
+                    "value": "all"
+                },
+                {
+                    "name": "enemiesBulletCollision",
+                    "type": "bool",
+                    "value": true
+                },
+                {
                     "name": "bulletAnimation",
                     "type": "bool",
                     "value": true
@@ -245,6 +268,11 @@
                     "name": "keysEnabled",
                     "type": "bool",
                     "value": true
+                },
+                {
+                    "name": "jumpOnEnemies",
+                    "type": "bool",
+                    "value": false
                 },
                 {
                     "name": "killJumpingOnTop",

@@ -154,19 +154,19 @@ End Sub
 Sub moveToScreen(direction As Ubyte)
     ' removeAllObjects()
     If direction = 6 Then
-        saveSprite(PROTA_SPRITE, protaY, 0, protaTile, protaDirection)
+        saveSprite( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
         currentScreen = currentScreen + 1
         
         #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = 0
+            protaXRespawn = 0 + SCREEN_ADJUSTMENT
             protaYRespawn = protaY
         #endif
     Elseif direction = 4 Then
-        saveSprite(PROTA_SPRITE, protaY, 60, protaTile, protaDirection)
+        saveSprite( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
         currentScreen = currentScreen - 1
         
         #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = 60
+            protaXRespawn = 60 - SCREEN_ADJUSTMENT
             protaYRespawn = protaY
         #endif
     Elseif direction = 2 Then
@@ -190,16 +190,16 @@ Sub moveToScreen(direction As Ubyte)
                 protaYRespawn = INITIAL_MAIN_CHARACTER_Y
             End if
         #else
-            saveSprite(PROTA_SPRITE, 0, protaX, protaTile, protaDirection)
+            saveSprite( 0, protaX + SCREEN_ADJUSTMENT, protaTile, protaDirection)
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
             
             #ifdef LIVES_MODE_ENABLED
-                protaXRespawn = protaX
-                protaYRespawn = 0
+                protaXRespawn = protaX 
+                protaYRespawn = 0 + SCREEN_ADJUSTMENT
             #endif
         #endif
     Elseif direction = 8 Then
-        saveSprite(PROTA_SPRITE, MAX_LINE, protaX, protaTile, protaDirection)
+        saveSprite( MAX_LINE, protaX, protaTile, protaDirection)
         #ifdef SIDE_VIEW
             jumpCurrentKey = 0
         #endif
@@ -207,7 +207,7 @@ Sub moveToScreen(direction As Ubyte)
         
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = protaX
-            protaYRespawn = MAX_LINE
+            protaYRespawn = MAX_LINE - SCREEN_ADJUSTMENT
         #endif
     End If
     
@@ -232,7 +232,7 @@ Sub drawSprites()
             Draw1x1Sprite(currentBulletSpriteId, bulletPositionX, bulletPositionY)
         End If
     #endif
-    
+
     #ifdef BULLET_ENEMIES
         If enemyBulletPositionX <> 0 Then
             Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBulletPositionX, enemyBulletPositionY)

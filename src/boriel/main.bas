@@ -15,7 +15,7 @@ loadDataFromTape()
 #include "graphicsInitializer.bas"
 #include "beepFx.bas"
 #include "functions.bas"
-#include "spritesTileAndPosition.bas"
+
 #include "enemies.bas"
 #include "bullet.bas"
 #include "draw.bas"

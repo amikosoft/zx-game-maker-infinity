@@ -90,18 +90,9 @@ End Sub
 
 #ifdef REDEFINE_KEYS_ENABLED
     Function LeerTecla() As Uinteger
-        ' Declaramos k con el valor 0 por defecto
-        Dim k As Uinteger = 0
-        ' Esperamos hasta que no se pulse nada
-        While GetKeyScanCode() <> 0
-        Wend
-        ' Repetimos mientras no se haya pulsado una tecla
-        While k = 0
-            ' Leemos la tecla pulsada
-            k = GetKeyScanCode()
-        Wend
-        ' Devolvemos el código de la tecla pulsada
-        Return k
+        Do Loop While GetKeyScanCode()
+        Do Loop Until GetKeyScanCode()
+        Return GetKeyScanCode()
     End Function
     
     Sub redefineKeys()
@@ -200,7 +191,7 @@ Sub playGame()
             protaYRespawn = INITIAL_MAIN_CHARACTER_Y
         #endif
         
-        saveSprite(PROTA_SPRITE, INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
+        saveSprite( INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
     #endif
     swapScreen()
     resetValues()
@@ -261,7 +252,7 @@ Sub playGame()
             invincible = invincible - 1
             
             #ifdef LIVES_MODE_GRAVEYARD
-                if Not invincible Then saveSprite(PROTA_SPRITE, protaYRespawn, protaXRespawn, 1, protaDirection)
+                if Not invincible Then saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
             #endif
         End If
         
@@ -307,11 +298,11 @@ Sub gameOver()
             dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
             PaginarMemoria(0)
         #Else
-            saveSprite(PROTA_SPRITE, protaY, protaX, 15, 0)
+            saveSprite( protaY, protaX, 15, 0)
             Print AT 7, 12; "GAME OVER"
         #endif
     #Else
-        saveSprite(PROTA_SPRITE, protaY, protaX, 15, 0)
+        saveSprite( protaY, protaX, 15, 0)
         Print at 7, 12; "GAME OVER"
     #endif
     
@@ -374,13 +365,15 @@ End Sub
 Sub swapScreen()
     dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), @decompressedMap)
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), @decompressedEnemiesScreen)
+
+    firstTimeScreen = 1
     bulletPositionX = 0
     #ifdef BULLET_ENEMIES
         enemyBulletPositionX = 0
     #endif
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()
-        saveSprite(PROTA_SPRITE, mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
+        saveSprite( mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
         
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = mainCharactersArray(currentScreen, 0)

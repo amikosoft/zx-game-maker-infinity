@@ -114,7 +114,9 @@ end sub
             enemyBulletPositionY = enemyBulletPositionY - BULLET_SPEED
         end if
         
-        if checkBulletTileCollision(enemyBulletDirection, enemyBulletPositionX, enemyBulletPositionY) Then resetBullet(1)
+        #ifdef BULLET_ENEMIES_COLLIDE
+            if checkBulletTileCollision(enemyBulletDirection, enemyBulletPositionX, enemyBulletPositionY) Then resetBullet(1)
+        #endIf
 
         'colision con el player si es de enemigo
         if (enemyBulletPositionX + 1) < protaX or enemyBulletPositionX > (protaX + 4) then Return
@@ -170,7 +172,7 @@ sub damageEnemy(enemyToKill as Ubyte)
     decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
     
     if alive = 0 then
-        saveSprite(enemyToKill, 0, 0, 0, 0)
+        enemySpriteTempTile(enemyToKill) = 0
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
         
         BeepFX_Play(0)

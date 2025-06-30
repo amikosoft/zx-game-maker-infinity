@@ -108,6 +108,7 @@ password = ""
 
 gameView = 'side'
 
+jumpOnEnemies = 0
 killJumpingOnTop = 0
 
 ammo = -1
@@ -148,6 +149,9 @@ jumpArray = "{-2, -2, -2, -2, -2, 0}"
 livesMode = 0
 
 enemiesShoot = 0
+enemiesShootDirection = 'all'
+enemiesBulletCollision = True
+
 bulletAnimation = 0
 
 messagesEnabled = 0
@@ -206,6 +210,8 @@ if 'properties' in data:
             password = property['value']
         elif property['name'] == 'gameView':
             gameView = property['value']
+        elif property['name'] == 'jumpOnEnemies':
+            jumpOnEnemies = 1 if property['value'] else 0
         elif property['name'] == 'killJumpingOnTop':
             killJumpingOnTop = 1 if property['value'] else 0
         elif property['name'] == 'ammo':
@@ -271,6 +277,11 @@ if 'properties' in data:
             bulletAnimation = 1 if property['value'] else 0
         elif property['name'] == 'enemiesShoot':
             enemiesShoot = property['value']
+        elif property['name'] == 'enemiesShootDirection':
+            enemiesShootDirection = property['value']
+        elif property['name'] == 'enemiesBulletCollision':
+            enemiesBulletCollision = property['value']
+            
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -387,7 +398,12 @@ if gameView == 'overhead':
 else:
     configStr += "#DEFINE SIDE_VIEW\n"
 
+if jumpOnEnemies == 1:
+    configStr += "#DEFINE JUMP_ON_ENEMIES\n"
+
 if killJumpingOnTop == 1:
+    if jumpOnEnemies == 0:
+        configStr += "#DEFINE JUMP_ON_ENEMIES\n"
     configStr += "#DEFINE KILL_JUMPING_ON_TOP\n"
 
 if ammo > -1:
@@ -490,6 +506,17 @@ if bulletAnimation == 1:
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"
     configStr += "const BULLET_ENEMIES_RANGE as ubyte = " + str((enemiesShoot*2)) + "\n"
+
+    if enemiesBulletCollision == True:
+        configStr += "#define BULLET_ENEMIES_COLLIDE\n"
+
+    if enemiesShootDirection == "all":
+        configStr += "#define BULLET_ENEMIES_DIRECTION_HORIZONTAL\n"
+        configStr += "#define BULLET_ENEMIES_DIRECTION_VERTICAL\n"
+    elif enemiesShootDirection == "horizontal":
+        configStr += "#define BULLET_ENEMIES_DIRECTION_HORIZONTAL\n"
+    elif enemiesShootDirection == "vertical":
+        configStr += "#define BULLET_ENEMIES_DIRECTION_VERTICAL\n"
 
 with open("output/screenObjects.bin", "wb") as f:
     for screen in screenObjects:

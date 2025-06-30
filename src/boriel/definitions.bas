@@ -6,7 +6,7 @@
 '         isAmstrad = 1
 '     End If
 ' #endif
-
+Const SCREEN_ADJUSTMENT As Ubyte = 1
 Const PROTA_SPRITE As Ubyte = 5
 Const BULLET_SPRITE_RIGHT_ID As Ubyte = 49
 Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
@@ -149,7 +149,8 @@ Dim bullet(7) As Ubyte
 Const FIRST_RUNNING_PROTA_SPRITE_RIGHT As Ubyte = 1
 Const FIRST_RUNNING_PROTA_SPRITE_LEFT As Ubyte = 5
 
-Dim spritesLinColTileAndFrame(MAX_ENEMIES_PER_SCREEN, 4) As Ubyte
+'Dim spritesLinColTileAndFrame(MAX_ENEMIES_PER_SCREEN, 4) As Ubyte
+Dim enemySpriteTempTile(MAX_ENEMIES_PER_SCREEN) As Ubyte
 
 Const ENEMY_TILE As Ubyte = 0
 Const ENEMY_LIN_INI As Ubyte = 1
