@@ -25,7 +25,7 @@ class ConvertZXPToGuSprites:
         bulletCount = 2
         if helper.getGameView() == "side":
             if helper.getBulletAnimation() == True:
-                bulletFile = "../assets/map/bulletOverhead.zxp"
+                bulletFile = "../assets/map/bulletAnimated.zxp"
                 bulletCount = 4
                 if helper.getEnemiesShoot() > 0:
                     bulletCount = 5

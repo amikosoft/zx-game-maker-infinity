@@ -152,6 +152,8 @@ enemiesShoot = 0
 enemiesShootDirection = 'all'
 enemiesBulletCollision = True
 enemiesPursuitCollide = True
+enemiesShootSpeed = 2
+enemiesShootingLookAtPlayer = False
 bulletAnimation = 0
 
 messagesEnabled = 0
@@ -283,8 +285,14 @@ if 'properties' in data:
             enemiesBulletCollision = property['value']
         elif property['name'] == 'enemiesPursuitCollide':
             enemiesPursuitCollide = property['value']
-            
-
+        elif property['name'] == 'enemiesShootSpeed':
+            if property['value'] == 'slow':
+                enemiesShootSpeed = 1
+            else:
+                enemiesShootSpeed = 2
+        elif property['name'] == 'enemiesShootingLookAtPlayer':
+            enemiesShootingLookAtPlayer = property['value']
+        
 if len(damageTiles) == 0:
     damageTiles.append('0')
  
@@ -508,6 +516,10 @@ if bulletAnimation == 1:
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"
     configStr += "const BULLET_ENEMIES_RANGE as ubyte = " + str((enemiesShoot*2)) + "\n"
+    configStr += "const BULLET_ENEMIES_SPEED as ubyte = " + str(enemiesShootSpeed) + "\n"
+    
+    if enemiesShootingLookAtPlayer == True:
+        configStr += "#define BULLET_ENEMIES_LOOK_AT\n"
 
     if enemiesBulletCollision == True:
         configStr += "#define BULLET_ENEMIES_COLLIDE\n"

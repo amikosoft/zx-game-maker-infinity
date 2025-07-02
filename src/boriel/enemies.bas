@@ -30,19 +30,15 @@
         If direction = BULLET_DIRECTION_RIGHT Then
             enemyBulletPositionX = posX + 2
             enemyBulletPositionY = posY + 1
-            enemyBulletEndPositionX = MAX_SCREEEN_RIGHT
         Elseif direction = BULLET_DIRECTION_LEFT
             enemyBulletPositionX = posX
             enemyBulletPositionY = posY + 1
-            enemyBulletEndPositionX = MAX_SCREEN_LEFT
         Elseif direction = BULLET_DIRECTION_UP
             enemyBulletPositionX = posX + 1
             enemyBulletPositionY = posY + 1
-            enemyBulletEndPositionY = MAX_SCREEN_TOP
         Else
             enemyBulletPositionX = posX + 1
             enemyBulletPositionY = posY + 2
-            enemyBulletEndPositionY = MAX_SCREEN_BOTTOM
         End If
         
         enemyBulletDirection = direction
@@ -71,7 +67,7 @@ Sub moveEnemies()
             enemiesFrame = enemiesFrame + 1
             if enemiesFrame > 9 Then enemiesFrame = 1
         #endif
-        For enemyId=0 To enemiesScreen- 1
+        For enemyId=0 To enemiesScreen - 1
             Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE)
             
             if firstTimeScreen Then enemySpriteTempTile(enemyId) = tile + 1
@@ -252,40 +248,62 @@ Sub moveEnemies()
                 decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
                 decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyMode
                 
-                ' se actualiza el sprite
                 enemySpriteTempTile(enemyId) = tile + 1
-                Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                
+                #ifdef BULLET_ENEMIES
+                    #ifndef BULLET_ENEMIES_LOOK_AT
+                        Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                    #endif
+                #Else
+                    Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                #endif
                 
                 if tile > 15 and Not invincible Then
                     checkProtaCollision(enemyId, enemyCol, enemyLin)
                     
                     #ifdef BULLET_ENEMIES
-                        if enemyBulletPositionX = 0 then
-                            if (tile mod 16) < BULLET_ENEMIES_RANGE Then
-                                #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
-                                    if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
-                                        if enemyCol < protaX Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
-                                        else
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
-                                        End if
-                                        continue for
+                        if enemyBulletPositionX = 0 and (tile mod 16) < BULLET_ENEMIES_RANGE then
+                            #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
+                                if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
+                                    #ifdef BULLET_ENEMIES_LOOK_AT
+                                        dim lookDirection as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
+                                    #endif
+                                    if enemyCol < protaX Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                    else
+                                        #ifdef BULLET_ENEMIES_LOOK_AT
+                                            lookDirection = lookDirection + 16
+                                        #endif
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
                                     End if
-                                #endif
-                                #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
-                                    if enemyCol > (protaX-2) and enemyCol < (protaX+4) Then
-                                        if enemyLin < protaY Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
-                                        else
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
-                                        end if
-                                        continue for
+                                    #ifdef BULLET_ENEMIES_LOOK_AT
+                                        Draw2x2Sprite(lookDirection, enemyCol, enemyLin)
+                                    #endif
+                                    continue for
+                                End if
+                            #endif
+                            #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
+                                if enemyCol > (protaX-2) and enemyCol < (protaX+4) Then
+                                    #ifdef BULLET_ENEMIES_LOOK_AT
+                                        Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                                    #endif
+                                    if enemyLin < protaY Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                    else
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
                                     end if
-                                #endif
-                            End if
+                                    continue for
+                                end if
+                            #endif
                         end if
                     #endif
                 End if
+                
+                #ifdef BULLET_ENEMIES
+                    #ifdef BULLET_ENEMIES_LOOK_AT
+                        Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                    #endif
+                #endif
             End If
         Next enemyId
         

@@ -97,6 +97,17 @@
             "valuesAsFlags": false
         },
         {
+            "id": 9,
+            "name": "enemiesShootSpeed",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "slow",
+                "fast"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -190,6 +201,17 @@
                     "name": "enemiesShoot",
                     "type": "int",
                     "value": 0
+                },
+                {
+                    "name": "enemiesShootSpeed",
+                    "propertyType": "enemiesShootSpeed",
+                    "type": "string",
+                    "value": "fast"
+                },
+                {
+                    "name": "enemiesShootingLookAtPlayer",
+                    "type": "bool",
+                    "value": false
                 },
                 {
                     "name": "enemiesShootDirection",

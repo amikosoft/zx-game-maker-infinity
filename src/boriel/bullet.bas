@@ -34,12 +34,14 @@ sub moveBullet()
             return
         end if
         
-        #ifdef BULLET_ANIMATION
-            if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
-                currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
-            Else
-                currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-            End if
+        #ifdef SIDE_VIEW
+            #ifdef BULLET_ANIMATION
+                if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
+                    currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
+                Else
+                    currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+                End if
+            #endif
         #endif
         
         bulletPositionX = bulletPositionX + BULLET_SPEED
@@ -50,12 +52,14 @@ sub moveBullet()
         end if
         bulletPositionX = bulletPositionX - BULLET_SPEED
         
-        #ifdef BULLET_ANIMATION
-            if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
-                currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
-            Else
-                currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-            End if
+        #ifdef SIDE_VIEW
+            #ifdef BULLET_ANIMATION
+                if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
+                    currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
+                Else
+                    currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+                End if
+            #endif
         #endif
         #ifdef OVERHEAD_VIEW
         elseif bulletDirection = BULLET_DIRECTION_DOWN then
@@ -86,38 +90,38 @@ end sub
 #ifdef BULLET_ENEMIES
     sub moveEnemyBullet()
         if enemyBulletPositionX = 0 then return
-        
+    
         ' desplazamiento de bala
         if enemyBulletDirection = BULLET_DIRECTION_RIGHT then
-            if enemyBulletPositionX >= enemyBulletEndPositionX then
+            if enemyBulletPositionX >= MAX_SCREEEN_RIGHT then
                 resetBullet(1)
                 return
             end if
-            enemyBulletPositionX = enemyBulletPositionX + BULLET_SPEED
+            enemyBulletPositionX = enemyBulletPositionX + BULLET_ENEMIES_SPEED
         elseif enemyBulletDirection = BULLET_DIRECTION_LEFT then
-            if enemyBulletPositionX <= enemyBulletEndPositionX then
+            if enemyBulletPositionX <= MAX_SCREEEN_LEFT then
                 resetBullet(1)
                 return
             end if
-            enemyBulletPositionX = enemyBulletPositionX - BULLET_SPEED
+            enemyBulletPositionX = enemyBulletPositionX - BULLET_ENEMIES_SPEED
         elseif enemyBulletDirection = BULLET_DIRECTION_DOWN then
-            if enemyBulletPositionY >= enemyBulletEndPositionY then
+            if enemyBulletPositionY >= MAX_SCREEN_BOTTOM then
                 resetBullet(1)
                 return
             end if
-            enemyBulletPositionY = enemyBulletPositionY + BULLET_SPEED
+            enemyBulletPositionY = enemyBulletPositionY + BULLET_ENEMIES_SPEED
         elseif enemyBulletDirection = BULLET_DIRECTION_UP
-            if enemyBulletPositionY <= enemyBulletEndPositionY then
+            if enemyBulletPositionY <= MAX_SCREEN_TOP then
                 resetBullet(1)
                 return
             end if
-            enemyBulletPositionY = enemyBulletPositionY - BULLET_SPEED
+            enemyBulletPositionY = enemyBulletPositionY - BULLET_ENEMIES_SPEED
         end if
-        
+    
         #ifdef BULLET_ENEMIES_COLLIDE
             if checkBulletTileCollision(enemyBulletDirection, enemyBulletPositionX, enemyBulletPositionY) Then resetBullet(1)
         #endIf
-
+    
         'colision con el player si es de enemigo
         if (enemyBulletPositionX + 1) < protaX or enemyBulletPositionX > (protaX + 4) then Return
         if (enemyBulletPositionY + 1) < protaY or enemyBulletPositionY > (protaY + 4) then Return
@@ -169,9 +173,8 @@ sub damageEnemy(enemyToKill as Ubyte)
         printLife()
     #endif
     
-    decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
-    
     if alive = 0 then
+        alive = -99
         enemySpriteTempTile(enemyToKill) = 0
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
         
@@ -214,4 +217,6 @@ sub damageEnemy(enemyToKill as Ubyte)
     else
         BeepFX_Play(1)
     end if
+    
+    decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
 end sub

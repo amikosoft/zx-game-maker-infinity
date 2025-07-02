@@ -47,8 +47,6 @@ const BULLET_DIRECTION_DOWN = 2
     dim enemyBulletPositionX as ubyte = 0
     dim enemyBulletPositionY as ubyte = 0
     dim enemyBulletDirection as ubyte = 0
-    dim enemyBulletEndPositionX as ubyte = 0
-    dim enemyBulletEndPositionY as ubyte = 0
 #endif
 
 dim bulletPositionX as ubyte = 0
