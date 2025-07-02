@@ -46,14 +46,16 @@
     End Sub
 #endif
 
-function checkEnemyBullet(enemyId as ubyte, enemyCol as ubyte, enemyLin as ubyte) as Ubyte
-    if (bulletPositionX + 1) < enemyCol or bulletPositionX > (enemyCol + 2) then return 0
-    if (bulletPositionY + 1) < enemyLin or bulletPositionY > (enemyLin+2) then return 0
-    
-    resetBullet(0)
-    damageEnemy(enemyId)
-    return 1
-end function
+#ifdef SHOOTING_ENABLED
+    function checkEnemyBullet(enemyId as ubyte, enemyCol as ubyte, enemyLin as ubyte) as Ubyte
+        if (bulletPositionX + 1) < enemyCol or bulletPositionX > (enemyCol + 2) then return 0
+        if (bulletPositionY + 1) < enemyLin or bulletPositionY > (enemyLin+2) then return 0
+        
+        resetBullet(0)
+        damageEnemy(enemyId)
+        return 1
+    end function
+#endif
 
 #ifndef ENABLED_128
     dim enemiesFrame as ubyte = 0
@@ -70,18 +72,18 @@ Sub moveEnemies()
         For enemyId=0 To enemiesScreen - 1
             Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE)
             
-            if firstTimeScreen Then enemySpriteTempTile(enemyId) = tile + 1
-            
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
             Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
-            
+
             If tile = 0 Then continue For
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
                 If enemyLive < 1 And tile > 15 Then
                     If screensWon(currentScreen) Then continue For
                 End If
             #endif
+
+            if firstTimeScreen Then enemySpriteTempTile(enemyId) = tile + 1
             
             ' Se comprueba si tiene colision de bala
             #ifdef SHOOTING_ENABLED
@@ -93,7 +95,7 @@ Sub moveEnemies()
             #endif
             
             'In the Screen And still live
-            If enemyLive > 0 Then
+            If enemyLive = -100 or enemyLive > 0 Then
                 Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
                 Dim horizontalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
                 

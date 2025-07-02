@@ -233,7 +233,10 @@ Sub playGame()
         protaMovement()
         checkDamageByTile()
         moveEnemies()
-        moveBullet()
+
+        #ifdef SHOOTING_ENABLED
+            moveBullet()
+        #endif
         
         #ifdef BULLET_ENEMIES
             moveEnemyBullet()
@@ -312,7 +315,9 @@ Sub gameOver()
 End Sub
 
 Sub resetValues()
+    #ifdef SHOOTING_ENABLED
     bulletPositionX = 0
+    #endif
     #ifdef SIDE_VIEW
         jumpCurrentKey = jumpStopValue
     #endif
@@ -370,7 +375,7 @@ Sub swapScreen()
     #ifdef SHOOTING_ENABLED
         bulletPositionX = 0
     #endif
-    
+
     #ifdef BULLET_ENEMIES
         enemyBulletPositionX = 0
     #endif

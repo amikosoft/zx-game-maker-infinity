@@ -629,7 +629,7 @@ for layer in data['layers']:
                     for property in object['properties']:
                         if property['name'] == 'life':
                             if property['value'] == 99:
-                                objects[str(object['id'])]['life'] = "-99"
+                                objects[str(object['id'])]['life'] = "-100"
                             else:
                                 objects[str(object['id'])]['life'] = str(property['value'])
                         elif property['name'] == 'speed':
