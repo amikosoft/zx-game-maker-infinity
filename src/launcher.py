@@ -390,7 +390,9 @@ menu_bar.add_cascade(label="Memory Usage", menu=memory_menu)
 
 # Menú "Help"
 help_menu = tk.Menu(menu_bar, tearoff=0)
-help_menu.add_command(label="Documentation", command=lambda: webbrowser.open("https://gm.retrojuegos.org/"))
+infinity_docs_path = os.path.join(os.path.dirname(__file__), "site", "index.html")
+help_menu.add_command(label="Infinity Docs", command=lambda: webbrowser.open(infinity_docs_path))
+help_menu.add_command(label="ZXGM Documentation", command=lambda: webbrowser.open("https://gm.retrojuegos.org/"))
 help_menu.add_command(label="Telegram", command=lambda: webbrowser.open("https://t.me/+R5PUBeHV0WhlMjQ0"))
 help_menu.add_command(label="GitHub", command=lambda: webbrowser.open("https://github.com/amikosoft/zx-game-maker-infinity"))
 menu_bar.add_cascade(label="Help", menu=help_menu)

@@ -198,6 +198,11 @@
                 "value": false
             },
             {
+                "name": "enemiesShootOnlyLookingPlayer",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "enemiesShootDirection",
                 "propertyType": "enemiesShootDirection",
                 "type": "string",
