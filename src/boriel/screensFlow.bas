@@ -229,7 +229,7 @@ Sub playGame()
             animateAnimatedTiles()
             Let lastFrameTiles = framec
         End If
-        
+
         protaMovement()
         checkDamageByTile()
         moveEnemies()
@@ -348,7 +348,7 @@ Sub resetValues()
     
     ' removeScreenObjectFromBuffer()
     screenObjects = screenObjectsInitial
-    enemiesPerScreen = enemiesPerScreenInitial
+
     For i = 0 To SCREENS_COUNT
         screensWon(i) = 0
     Next i

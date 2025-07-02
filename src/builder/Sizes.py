@@ -16,7 +16,6 @@ class Sizes:
         self.ENEMIES_IN_SCREEN_OFFSETS_DATA = 0
         self.ANIMATED_TILES_IN_SCREEN_DATA = 0
         self.DAMAGE_TILES_DATA = 0
-        self.ENEMIES_PER_SCREEN_DATA = 0
         self.ENEMIES_PER_SCREEN_INITIAL_DATA = 0
         self.SCREEN_OBJECTS_DATA = 0
         self.SCREENS_WON_DATA = 0
@@ -79,9 +78,9 @@ class Sizes:
     def DAMAGE_TILES_DATA_STRING():
         return "DAMAGE_TILES_DATA"
 
-    @staticmethod
-    def ENEMIES_PER_SCREEN_DATA_STRING():
-        return "ENEMIES_PER_SCREEN_DATA"
+    # @staticmethod
+    # def ENEMIES_PER_SCREEN_DATA_STRING():
+    #     return "ENEMIES_PER_SCREEN_DATA"
     
     @staticmethod
     def ENEMIES_PER_SCREEN_INITIAL_DATA_STRING():
@@ -132,7 +131,7 @@ class Sizes:
             self.SCREENS_WON_DATA_STRING(),
             self.ENEMIES_DATA_STRING(),
             self.ENEMIES_IN_SCREEN_OFFSETS_DATA_STRING(),
-            self.ENEMIES_PER_SCREEN_DATA_STRING(),
+            # self.ENEMIES_PER_SCREEN_DATA_STRING(),
             self.ENEMIES_PER_SCREEN_INITIAL_DATA_STRING(),
             self.DECOMPRESSED_ENEMIES_SCREEN_DATA_STRING(),
             self.TILESET_DATA_STRING(),
@@ -155,7 +154,7 @@ class Sizes:
             self.SCREENS_WON_DATA_STRING(),
             self.ENEMIES_DATA_STRING(),
             self.ENEMIES_IN_SCREEN_OFFSETS_DATA_STRING(),
-            self.ENEMIES_PER_SCREEN_DATA_STRING(),
+            # self.ENEMIES_PER_SCREEN_DATA_STRING(),
             self.ENEMIES_PER_SCREEN_INITIAL_DATA_STRING(),
             self.DECOMPRESSED_ENEMIES_SCREEN_DATA_STRING(),
             self.TILESET_DATA_STRING(),

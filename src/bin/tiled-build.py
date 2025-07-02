@@ -835,11 +835,6 @@ with open(outputDir + "enemiesInScreenOffsets.bin", "wb") as f:
 with open("output/enemiesPerScreen.bin", "wb") as f:
     f.write(bytearray(enemiesPerScreen))
 
-with open("output/enemiesPerScreenInitial.bin", "wb") as f:
-    f.write(bytearray(enemiesPerScreen))
-
-# configStr += "dim decompressedEnemiesScreen(" + str(maxEnemiesPerScreen - 1) + ", 11) as byte\n"
-
 with open("output/decompressedEnemiesScreen.bin", "wb") as f:
     for i in range(maxEnemiesPerScreen):
         f.write(bytearray([0] * 12))
