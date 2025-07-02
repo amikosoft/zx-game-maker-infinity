@@ -84,11 +84,13 @@ Sub moveEnemies()
             #endif
             
             ' Se comprueba si tiene colision de bala
-            if enemyLive > 0 And tile > 15 and bulletPositionX Then
-                if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
-                    enemyLive = enemyLive - 1
-                End if
-            End If
+            #ifdef SHOOTING_ENABLED
+                if enemyLive > 0 And tile > 15 and bulletPositionX Then
+                    if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
+                        enemyLive = enemyLive - 1
+                    End if
+                End If
+            #endif
             
             'In the Screen And still live
             If enemyLive > 0 Then
@@ -274,7 +276,7 @@ Sub moveEnemies()
                                         #ifdef BULLET_ENEMIES_LOOK_AT
                                             dim lookDirection as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
                                         #endif
-
+                                        
                                         if enemyCol < protaX Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
                                         else

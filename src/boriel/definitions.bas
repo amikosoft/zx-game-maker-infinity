@@ -49,11 +49,13 @@ const BULLET_DIRECTION_DOWN = 2
     dim enemyBulletDirection as ubyte = 0
 #endif
 
-dim bulletPositionX as ubyte = 0
-dim bulletPositionY as ubyte = 0
-dim bulletDirection as ubyte = 0
-dim bulletEndPositionX as ubyte = 0
-dim bulletEndPositionY as ubyte = 0
+#ifdef SHOOTING_ENABLED
+    dim bulletPositionX as ubyte = 0
+    dim bulletPositionY as ubyte = 0
+    dim bulletDirection as ubyte = 0
+    dim bulletEndPositionX as ubyte = 0
+    dim bulletEndPositionY as ubyte = 0
+#endif
 
 Dim protaLastFrame As Ubyte
 

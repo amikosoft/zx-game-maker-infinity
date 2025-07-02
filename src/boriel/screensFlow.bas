@@ -367,7 +367,10 @@ Sub swapScreen()
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), @decompressedEnemiesScreen)
 
     firstTimeScreen = 1
-    bulletPositionX = 0
+    #ifdef SHOOTING_ENABLED
+        bulletPositionX = 0
+    #endif
+    
     #ifdef BULLET_ENEMIES
         enemyBulletPositionX = 0
     #endif

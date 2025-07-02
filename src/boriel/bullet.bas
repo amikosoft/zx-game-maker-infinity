@@ -24,73 +24,75 @@ Function checkBulletTileCollision(direction as ubyte, posx as ubyte, posy as uby
     end if
 End Function
 
-sub moveBullet()
-    if bulletPositionX = 0 then return
-    
-    ' desplazamiento de bala
-    if bulletDirection = BULLET_DIRECTION_RIGHT then
-        if bulletPositionX >= bulletEndPositionX then
-            resetBullet(0)
-            return
-        end if
+#ifdef SHOOTING_ENABLED
+    sub moveBullet()
+        if bulletPositionX = 0 then return
         
-        #ifdef SIDE_VIEW
-            #ifdef BULLET_ANIMATION
-                if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
-                    currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
-                Else
-                    currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-                End if
-            #endif
-        #endif
-        
-        bulletPositionX = bulletPositionX + BULLET_SPEED
-    elseif bulletDirection = BULLET_DIRECTION_LEFT then
-        if bulletPositionX <= bulletEndPositionX then
-            resetBullet(0)
-            return
-        end if
-        bulletPositionX = bulletPositionX - BULLET_SPEED
-        
-        #ifdef SIDE_VIEW
-            #ifdef BULLET_ANIMATION
-                if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
-                    currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
-                Else
-                    currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-                End if
-            #endif
-        #endif
-        #ifdef OVERHEAD_VIEW
-        elseif bulletDirection = BULLET_DIRECTION_DOWN then
-            if bulletPositionY >= bulletEndPositionY then
+        ' desplazamiento de bala
+        if bulletDirection = BULLET_DIRECTION_RIGHT then
+            if bulletPositionX >= bulletEndPositionX then
                 resetBullet(0)
                 return
             end if
-            bulletPositionY = bulletPositionY + BULLET_SPEED
-        elseif bulletDirection = BULLET_DIRECTION_UP
-            if bulletPositionY <= bulletEndPositionY then
+            
+            #ifdef SIDE_VIEW
+                #ifdef BULLET_ANIMATION
+                    if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
+                        currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
+                    Else
+                        currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+                    End if
+                #endif
+            #endif
+            
+            bulletPositionX = bulletPositionX + BULLET_SPEED
+        elseif bulletDirection = BULLET_DIRECTION_LEFT then
+            if bulletPositionX <= bulletEndPositionX then
                 resetBullet(0)
                 return
             end if
-            bulletPositionY = bulletPositionY - BULLET_SPEED
-        #endif
-    end if
-    
-    dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
-    if tile Then
-        resetBullet(0)
+            bulletPositionX = bulletPositionX - BULLET_SPEED
+            
+            #ifdef SIDE_VIEW
+                #ifdef BULLET_ANIMATION
+                    if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
+                        currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
+                    Else
+                        currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+                    End if
+                #endif
+            #endif
+            #ifdef OVERHEAD_VIEW
+            elseif bulletDirection = BULLET_DIRECTION_DOWN then
+                if bulletPositionY >= bulletEndPositionY then
+                    resetBullet(0)
+                    return
+                end if
+                bulletPositionY = bulletPositionY + BULLET_SPEED
+            elseif bulletDirection = BULLET_DIRECTION_UP
+                if bulletPositionY <= bulletEndPositionY then
+                    resetBullet(0)
+                    return
+                end if
+                bulletPositionY = bulletPositionY - BULLET_SPEED
+            #endif
+        end if
         
-        #ifdef USE_BREAKABLE_TILE
-            checkAndRemoveBreakableTile(tile)
-        #endif
-    end if
-end sub
+        dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
+        if tile Then
+            resetBullet(0)
+            
+            #ifdef USE_BREAKABLE_TILE
+                checkAndRemoveBreakableTile(tile)
+            #endif
+        end if
+    end sub
+#endif
 
 #ifdef BULLET_ENEMIES
     sub moveEnemyBullet()
         if enemyBulletPositionX = 0 then return
-    
+        
         ' desplazamiento de bala
         if enemyBulletDirection = BULLET_DIRECTION_RIGHT then
             if enemyBulletPositionX >= MAX_SCREEEN_RIGHT then
@@ -117,11 +119,11 @@ end sub
             end if
             enemyBulletPositionY = enemyBulletPositionY - BULLET_ENEMIES_SPEED
         end if
-    
+        
         #ifdef BULLET_ENEMIES_COLLIDE
             if checkBulletTileCollision(enemyBulletDirection, enemyBulletPositionX, enemyBulletPositionY) Then resetBullet(1)
         #endIf
-    
+        
         'colision con el player si es de enemigo
         if (enemyBulletPositionX + 1) < protaX or enemyBulletPositionX > (protaX + 4) then Return
         if (enemyBulletPositionY + 1) < protaY or enemyBulletPositionY > (protaY + 4) then Return
