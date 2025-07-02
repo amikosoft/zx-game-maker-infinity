@@ -175,6 +175,8 @@ sub damageEnemy(enemyToKill as Ubyte)
         printLife()
     #endif
     
+    decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
+
     if alive = 0 then
         enemySpriteTempTile(enemyToKill) = 0
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
@@ -218,6 +220,5 @@ sub damageEnemy(enemyToKill as Ubyte)
     else
         BeepFX_Play(1)
     end if
-    
-    decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
+
 end sub
