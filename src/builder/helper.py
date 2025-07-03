@@ -94,6 +94,11 @@ def getBulletAnimation():
         maps_json = json.load(f)
     return any(prop["name"] == "bulletAnimation" and prop["value"] for prop in maps_json["properties"])
 
+def getBulletType():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return any(prop["name"] == "bulletType" and prop["value"] for prop in maps_json["properties"])
+
 def concatenateFiles(output_file, input_files):
     with open(output_file, "wb") as out_file:
         for file in input_files:

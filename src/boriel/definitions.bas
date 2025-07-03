@@ -43,18 +43,22 @@ const BULLET_DIRECTION_RIGHT = 1
 const BULLET_DIRECTION_UP = 8
 const BULLET_DIRECTION_DOWN = 2
 
+#ifdef BULLET_BOOMERANG
+const BULLET_DIRECTION_BOOMERANG = 10
+#endif
+
 #ifdef BULLET_ENEMIES
-    dim enemyBulletPositionX as ubyte = 0
-    dim enemyBulletPositionY as ubyte = 0
-    dim enemyBulletDirection as ubyte = 0
+    dim enemyBulletPositionX as byte = 0
+    dim enemyBulletPositionY as byte = 0
+    dim enemyBulletDirection as byte = 0
 #endif
 
 #ifdef SHOOTING_ENABLED
-    dim bulletPositionX as ubyte = 0
-    dim bulletPositionY as ubyte = 0
-    dim bulletDirection as ubyte = 0
-    dim bulletEndPositionX as ubyte = 0
-    dim bulletEndPositionY as ubyte = 0
+    dim bulletPositionX as byte = 0
+    dim bulletPositionY as byte = 0
+    dim bulletDirection as byte = 0
+    dim bulletEndPositionX as byte = 0
+    dim bulletEndPositionY as byte = 0
 #endif
 
 Dim protaLastFrame As Ubyte

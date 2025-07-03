@@ -43,64 +43,133 @@ End Function
     sub moveBullet()
         if bulletPositionX = 0 then return
         
-        ' desplazamiento de bala
-        if bulletDirection = BULLET_DIRECTION_RIGHT then
-            if bulletPositionX >= bulletEndPositionX then
-                resetBullet(0)
-                return
-            end if
-            
-            #ifdef SIDE_VIEW
+        #ifdef BULLET_BOOMERANG
+            if bulletDirection = BULLET_DIRECTION_BOOMERANG Then
+                bulletPositionX = bulletPositionX + (sgn((protaX+1) - bulletPositionX)*BULLET_SPEED)
+                bulletPositionY = bulletPositionY + (sgn((protaY+1) - bulletPositionY)*BULLET_SPEED)
+                if bulletPositionX >= protaX and bulletPositionX <= (protaX+4) Then
+                    if bulletPositionY >= protaY and bulletPositionY <= (protaY+4) Then
+                        resetBullet(0)
+                        Return
+                    end if
+                End if
                 #ifdef BULLET_ANIMATION
                     if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
-                        currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
+                        currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+                    Else
+                        currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+                    End if
+                #endif
+            else
+        #endif
+            ' desplazamiento de bala
+            if bulletDirection = BULLET_DIRECTION_RIGHT then
+                if bulletPositionX >= bulletEndPositionX then
+                    #ifdef BULLET_BOOMERANG
+                        bulletDirection = BULLET_DIRECTION_BOOMERANG
+                    #else
+                        resetBullet(0)
+                        return
+                    #endif
+                Else
+                    bulletPositionX = bulletPositionX + BULLET_SPEED
+                end if
+                
+                #ifndef BULLET_BOOMERANG
+                    #ifdef SIDE_VIEW
+                        #ifdef BULLET_ANIMATION
+                            if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
+                                currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
+                            Else
+                                currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+                            End if
+                        #endif
+                    #endif
+                #endif
+            elseif bulletDirection = BULLET_DIRECTION_LEFT then
+                if bulletPositionX <= bulletEndPositionX then
+                    #ifdef BULLET_BOOMERANG
+                        bulletDirection = BULLET_DIRECTION_BOOMERANG
+                    #else
+                        resetBullet(0)
+                        return
+                    #endif
+                else
+                    bulletPositionX = bulletPositionX - BULLET_SPEED
+                end if
+                
+                #ifndef BULLET_BOOMERANG
+                    #ifdef SIDE_VIEW
+                        #ifdef BULLET_ANIMATION
+                            if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
+                                currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
+                            Else
+                                currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+                            End if
+                        #endif
+                    #endif
+                #endif
+                #ifdef OVERHEAD_VIEW
+                elseif bulletDirection = BULLET_DIRECTION_DOWN then
+                    if bulletPositionY >= bulletEndPositionY then
+                        #ifdef BULLET_BOOMERANG
+                            bulletDirection = BULLET_DIRECTION_BOOMERANG
+                        #else
+                            resetBullet(0)
+                            return
+                        #endif
+                    else
+                        bulletPositionY = bulletPositionY + BULLET_SPEED
+                    end if
+                elseif bulletDirection = BULLET_DIRECTION_UP
+                    if bulletPositionY <= bulletEndPositionY then
+                        #ifdef BULLET_BOOMERANG
+                            bulletDirection = BULLET_DIRECTION_BOOMERANG
+                        #else
+                            resetBullet(0)
+                            return
+                        #endif
+                    else
+                        bulletPositionY = bulletPositionY - BULLET_SPEED
+                    end if
+                    
+                #endif
+            end if
+            
+            #ifdef BULLET_BOOMERANG
+                #ifdef BULLET_ANIMATION
+                    if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
+                        currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
                     Else
                         currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
                     End if
                 #endif
             #endif
             
-            bulletPositionX = bulletPositionX + BULLET_SPEED
-        elseif bulletDirection = BULLET_DIRECTION_LEFT then
-            if bulletPositionX <= bulletEndPositionX then
-                resetBullet(0)
-                return
-            end if
-            bulletPositionX = bulletPositionX - BULLET_SPEED
-            
-            #ifdef SIDE_VIEW
-                #ifdef BULLET_ANIMATION
-                    if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
-                        currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
-                    Else
-                        currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-                    End if
+            dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
+            if tile Then
+                #ifdef BULLET_BOOMERANG
+                    bulletDirection = BULLET_DIRECTION_BOOMERANG
+                #else
+                    resetBullet(0)
                 #endif
-            #endif
-            #ifdef OVERHEAD_VIEW
-            elseif bulletDirection = BULLET_DIRECTION_DOWN then
-                if bulletPositionY >= bulletEndPositionY then
-                    resetBullet(0)
-                    return
-                end if
-                bulletPositionY = bulletPositionY + BULLET_SPEED
-            elseif bulletDirection = BULLET_DIRECTION_UP
-                if bulletPositionY <= bulletEndPositionY then
-                    resetBullet(0)
-                    return
-                end if
-                bulletPositionY = bulletPositionY - BULLET_SPEED
-            #endif
-        end if
+                
+                #ifdef USE_BREAKABLE_TILE
+                    checkAndRemoveBreakableTile(tile)
+                #endif
+            end if
         
-        dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
-        if tile Then
-            resetBullet(0)
-            
-            #ifdef USE_BREAKABLE_TILE
-                checkAndRemoveBreakableTile(tile)
-            #endif
-        end if
+        #ifdef BULLET_BOOMERANG
+            End If
+        #endif
+        ' dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
+        ' if tile Then
+        '     resetBullet(0)
+        
+        '     #ifdef USE_BREAKABLE_TILE
+        '         checkAndRemoveBreakableTile(tile)
+        '     #endif
+        ' end if
     end sub
 #endif
 

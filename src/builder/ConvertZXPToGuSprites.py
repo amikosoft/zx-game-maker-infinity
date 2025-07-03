@@ -23,20 +23,26 @@ class ConvertZXPToGuSprites:
 
         bulletFile = "../assets/map/bullet.zxp"
         bulletCount = 2
-        if helper.getGameView() == "side":
-            if helper.getBulletAnimation() == True:
-                bulletFile = "../assets/map/bulletAnimated.zxp"
-                bulletCount = 4
+        if helper.getBulletType() == "boomerang":
+            if helper.getEnemiesShoot() > 0:
+                bulletCount = 3
+            else:
+                bulletCount = 2
+        else:
+            if helper.getGameView() == "side":
+                if helper.getBulletAnimation() == True:
+                    bulletFile = "../assets/map/bulletAnimated.zxp"
+                    bulletCount = 4
+                    if helper.getEnemiesShoot() > 0:
+                        bulletCount = 5
+                elif helper.getEnemiesShoot() > 0:
+                    bulletCount = 3
+            else:
+                bulletFile = "../assets/map/bulletOverhead.zxp"
                 if helper.getEnemiesShoot() > 0:
                     bulletCount = 5
-            elif helper.getEnemiesShoot() > 0:
-                bulletCount = 3
-        else:
-            bulletFile = "../assets/map/bulletOverhead.zxp"
-            if helper.getEnemiesShoot() > 0:
-                bulletCount = 5
-            else:
-                bulletCount = 4
+                else:
+                    bulletCount = 4
         
         sprites.extend(ZXPToSpritesConversor.convert(str(Path(bulletFile)), bulletCount, 8, 8))  # Use extend instead of append
 
