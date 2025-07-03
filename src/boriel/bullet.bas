@@ -25,6 +25,21 @@ Function checkBulletTileCollision(direction as ubyte, posx as ubyte, posy as uby
 End Function
 
 #ifdef SHOOTING_ENABLED
+    #ifdef BULLET_ENEMIES
+        #ifdef BULLET_COLLIDE_BULLET
+            Sub checkBulletsCollision()
+                if Not enemyBulletPositionX or not bulletPositionY Then Return
+                if (enemyBulletPositionY + 2) < bulletPositionY or enemyBulletPositionY  > (bulletPositionY + 2) then Return
+                if (enemyBulletPositionX + 2) < bulletPositionX or enemyBulletPositionX  > (bulletPositionX + 2) then Return
+                
+                resetBullet(0)
+                resetBullet(1)
+            End sub
+        #endif
+    #endif
+#endif
+
+#ifdef SHOOTING_ENABLED
     sub moveBullet()
         if bulletPositionX = 0 then return
         
@@ -176,7 +191,6 @@ sub damageEnemy(enemyToKill as Ubyte)
     #endif
     
     decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
-
     if alive = 0 then
         enemySpriteTempTile(enemyToKill) = 0
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
@@ -220,5 +234,5 @@ sub damageEnemy(enemyToKill as Ubyte)
     else
         BeepFX_Play(1)
     end if
-
+    
 end sub

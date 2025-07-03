@@ -235,6 +235,11 @@
                     "value": true
                 },
                 {
+                    "name": "bulletsCollisionWithBullets",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "bulletAnimation",
                     "type": "bool",
                     "value": true

@@ -299,7 +299,7 @@ Sub moveEnemies()
                                         if enemyCol < protaX and horizontalDirection = 1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
                                             continue for
-                                        elseif horizontalDirection = 0 Then
+                                        elseif enemyCol > protaX and horizontalDirection = -1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
                                             continue for
                                         end if
@@ -326,7 +326,7 @@ Sub moveEnemies()
                                         if enemyLin < protaY and verticalDirection = 1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
                                             continue for
-                                        elseif verticalDirection = -1 Then
+                                        elseif enemyLin > protaY and verticalDirection = -1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
                                             continue for
                                         end if

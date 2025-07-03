@@ -241,6 +241,15 @@ Sub playGame()
         #ifdef BULLET_ENEMIES
             moveEnemyBullet()
         #endif
+
+        #ifdef SHOOTING_ENABLED
+            #ifdef BULLET_ENEMIES
+                #ifdef BULLET_COLLIDE_BULLET
+                    checkBulletsCollision() 
+                #endif
+            #endif
+        #endif
+
         drawSprites()
         
         If moveScreen <> 0 Then

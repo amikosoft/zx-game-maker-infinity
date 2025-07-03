@@ -156,7 +156,7 @@ enemiesShootSpeed = 2
 enemiesShootingLookAtPlayer = False
 enemiesShootOnlyLookingPlayer = False
 bulletAnimation = 0
-
+bulletsCollisionWithBullets = False
 messagesEnabled = 0
 enemiesAlertDistance = 10
 
@@ -295,6 +295,9 @@ if 'properties' in data:
             enemiesShootingLookAtPlayer = property['value']
         elif property['name'] == 'enemiesShootOnlyLookingPlayer':
             enemiesShootOnlyLookingPlayer = property['value']
+        elif property['name'] == 'bulletsCollisionWithBullets':
+            bulletsCollisionWithBullets = property['value']
+            
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -526,6 +529,9 @@ if enemiesShoot > 0:
 
     if enemiesShootOnlyLookingPlayer == True:
         configStr += "#define BULLET_ENEMIES_MUST_LOOK\n"
+
+    if bulletsCollisionWithBullets == True:
+        configStr += "#define BULLET_COLLIDE_BULLET\n"
 
     if enemiesBulletCollision == True:
         configStr += "#define BULLET_ENEMIES_COLLIDE\n"
