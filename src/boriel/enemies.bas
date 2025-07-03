@@ -75,21 +75,23 @@ Sub moveEnemies()
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
             Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
-
+            
             If tile = 0 Then continue For
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
                 If enemyLive < 1 And tile > 15 Then
                     If screensWon(currentScreen) Then continue For
                 End If
             #endif
-
+            
             if firstTimeScreen Then enemySpriteTempTile(enemyId) = tile + 1
             
             ' Se comprueba si tiene colision de bala
             #ifdef SHOOTING_ENABLED
-                if enemyLive > 0 And tile > 15 and bulletPositionX Then
-                    if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
-                        enemyLive = enemyLive - 1
+                if enemyLive <> 100 and enemyLive > 0 then
+                    if tile > 15 and bulletPositionX Then
+                        if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
+                            enemyLive = enemyLive - 1
+                        End if
                     End if
                 End If
             #endif
@@ -102,13 +104,13 @@ Sub moveEnemies()
                 #ifdef ENABLED_128
                     If (enemySpeed = 1 and (framec bAnd 3) <> 3) or (enemySpeed = 2 and (framec bAnd 1) = 1) Then
                         Draw2x2Sprite(enemySpriteTempTile(enemyId), enemyCol, enemyLin)
-                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin)
+                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                         continue For
                     End If
                 #Else
                     If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
                         Draw2x2Sprite(enemySpriteTempTile(enemyId), enemyCol, enemyLin)
-                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin)
+                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                         continue For
                     End If
                 #endif
@@ -237,7 +239,7 @@ Sub moveEnemies()
                     #endif
                 Elseif horizontalDirection = -1 Then
                     tile = tile + 16
-                End If
+                End if
                 
                 If enemFrame Then
                     tile = tile + 1
@@ -268,7 +270,7 @@ Sub moveEnemies()
                 #endif
                 
                 if tile > 15 and Not invincible Then
-                    checkProtaCollision(enemyId, enemyCol, enemyLin)
+                    checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                     
                     #ifdef BULLET_ENEMIES
                         if enemyBulletPositionX = 0 and (tile mod 16) < BULLET_ENEMIES_RANGE then
@@ -297,7 +299,7 @@ Sub moveEnemies()
                                         if enemyCol < protaX and horizontalDirection = 1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
                                             continue for
-                                        elseif horizontalDirection = 0 Then
+                                        elseif enemyCol > protaX and horizontalDirection = -1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
                                             continue for
                                         end if
@@ -324,7 +326,7 @@ Sub moveEnemies()
                                         if enemyLin < protaY and verticalDirection = 1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
                                             continue for
-                                        elseif verticalDirection = -1 Then
+                                        elseif enemyLin > protaY and verticalDirection = -1 Then
                                             enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
                                             continue for
                                         end if
@@ -349,7 +351,7 @@ Sub moveEnemies()
     End if
 End Sub
 
-Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte)
+Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte, enemyLive As Ubyte)
     'If invincible Then Return
     
     If (protaX + 2) < enemyX0 Or protaX > (enemyX0 + 2) Then Return
@@ -358,7 +360,7 @@ Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte)
         #ifdef JUMP_ON_ENEMIES
             If (protaY + 4) > (enemyY0 - 2) And (protaY + 4) < (enemyY0 + 2) Then
                 #ifdef KILL_JUMPING_ON_TOP
-                    damageEnemy(enemyId)
+                    if enemyLive <> -100 Then damageEnemy(enemyId)
                 #endif
                 landed = 1
                 jumpCurrentKey = jumpStopValue
