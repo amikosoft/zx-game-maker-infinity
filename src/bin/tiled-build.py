@@ -345,6 +345,7 @@ else:
 with open("output/damageTiles.bin", "wb") as f:
     f.write(bytearray(damageTiles))
 
+
 configStr += "#define ONSCREEN_2x2_SPRITES " + str(maxEnemiesPerScreen) + "\n"
 
 configStr += "const DAMAGE_TILES_COUNT as ubyte = " + str(damageTilesCount) + "\n"
@@ -604,6 +605,7 @@ enemiesAnticlockwise = 0
 objects = {}
 keys = {}
 items = {}
+texts = {}
 
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
@@ -706,9 +708,80 @@ for layer in data['layers']:
                     
                     if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
                         keys[str(screenId)] = [int(initialMainCharacterX), int(initialMainCharacterY)]
+                elif object['type'] == 'text':
+                    xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
+                    yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
+                    screenId = xScreenPosition + (yScreenPosition * mapCols)
+                    xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
+                    yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
+
+                    if str(screenId) not in texts:
+                        texts[str(screenId)] = []
+                    texts[str(screenId)].append([str(xScreenPosition), str(yScreenPosition), object['properties'][0]['value']])
                 else:
-                    exitWithErrorMessage('Unknown object type. Only "enemy" and "mainCharacter" are allowed')   
-                    
+                    exitWithErrorMessage('Unknown object type. Only "enemy", "text" or "mainCharacter" are allowed')   
+
+if len(texts) > 0:
+    configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
+
+# fill emty screen text with empty string
+for i in range(screensCount):
+    if str(i) not in texts:
+        texts[str(i)] = []
+    
+    print("Pantalla: " + str(i))
+    print(texts[str(i)])
+
+    while len(texts[str(i)]) < 3:
+        texts[str(i)].append(['0', '0', ''])
+        print('Hueco vacío')
+allTexts = []
+
+with open("output/textsCoord.bin", "wb") as f:
+    for i in range(screensCount):
+        print("=========================")
+        print(texts[str(i)])
+        for itemText in texts[str(i)]:
+            print("texto: " + itemText[2])
+            if len(itemText[2]) > 0:
+                textoFinal = itemText[2]
+                # Truncar texto mayor de 45 caracteres
+                if len(textoFinal) > 45:
+                    print("texto truncado")
+                    textoFinal = itemText[2][0:45]
+
+                posicion = -1
+
+                for p, string in enumerate(allTexts):
+                    if string == textoFinal:
+                        print("texto existente "+ string + " en posicion " + str(p))
+                        posicion = p
+                        break
+                
+                if posicion == -1:
+                    # Verificar que no exista ya el texto
+                    allTexts.append(textoFinal)
+                    posicion = int(len(allTexts)) - 1
+                    print("texto nuevo "+ textoFinal + " en posicion " + str(posicion))
+                
+                print(textoFinal)
+                f.write(bytearray([int(itemText[0]), int(itemText[1]), posicion]))
+            else:
+                print("sin texto")
+                f.write(bytearray([int(0), int(0), int(0)]))
+
+print("ALL TEXTS")
+with open("output/texts.bin", "wb") as f:
+    for i in allTexts:
+        print(i)
+        # if len(i > 20)
+        f.write(i.ljust(45, ' ').encode('ascii'))
+        f.write(b'\x00')
+
+configStr += "const AVAILABLE_TEXTS as ubyte = " + str(len(allTexts)) + "\n"
+
+print("ALL TEXTS LENGTH "+ str(len(allTexts)))
+
 if arcadeMode == 1: # Defino el array de posiciones iniciales del personaje principal
     configStr += "dim mainCharactersArray(" + str(screensCount - 1) + ", 1) as ubyte = { _\n"
     for key in keys:
@@ -729,6 +802,12 @@ enemiesPerScreen = []
 configStr += "const INITIAL_SCREEN as ubyte = " + str(initialScreen) + "\n"
 configStr += "const INITIAL_MAIN_CHARACTER_X as ubyte = " + str(initialMainCharacterX) + "\n"
 configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(initialMainCharacterY) + "\n"
+
+# configStr += "\n\ntextsData:\n"
+# for i in allTexts:
+#     configStr += "DATA \"" + i + "\"\n"
+
+configStr += "\n\n"
 
 enemiesArray = []
 

@@ -134,8 +134,7 @@ End Sub
         ' keyOption = ""
         
         Print AT 20,2;"Enter To Continue..."
-        Do
-        Loop Until MultiKeys(KEYENTER)
+        pressEnterKey()
         
         showMenu()
     End Sub
@@ -155,8 +154,7 @@ Sub playGame()
             PaginarMemoria(DATA_BANK)
             dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
             PaginarMemoria(0)
-            Do
-            Loop Until MultiKeys(KEYENTER)
+            pressEnterKey()
         #endif
     #endif
     
@@ -211,7 +209,7 @@ Sub playGame()
     #endif
     
     enemiesScreen = enemiesPerScreen(currentScreen)
-    
+
     Do
         waitretrace
         
@@ -242,7 +240,7 @@ Sub playGame()
             moveEnemyBullet()
         #endif
         drawSprites()
-        
+
         If moveScreen <> 0 Then
             moveToScreen(moveScreen)
             moveScreen = 0
@@ -279,8 +277,7 @@ Sub ending()
     #Else
         dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
     #endif
-    Do
-    Loop Until MultiKeys(KEYENTER)
+    pressEnterKey()
     showMenu()
 End Sub
 
@@ -309,8 +306,7 @@ Sub gameOver()
         Print at 7, 12; "GAME OVER"
     #endif
     
-    Do
-    Loop Until MultiKeys(KEYENTER)
+    pressEnterKey()
     showMenu()
 End Sub
 

@@ -479,9 +479,43 @@ Sub downKey()
     #endif
 End Sub
 
+Function validaTexto() as ubyte
+    dim textFound as ubyte = 0
+    for texto=0 to 2
+        dim cordX as ubyte = textsCoord(currentScreen, texto, 0)
+        dim cordY as ubyte = textsCoord(currentScreen, texto, 1)
+        If (protaX-2) <= cordX And (protaX+6) >= cordX Then
+            If (protaY-2) <= cordY And (protaY+4) >= cordY Then
+                textFound = 1
+                
+                ' FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+                
+                for fila=0 to 2
+                    for letra=0 to 14
+                        Print AT 5+fila, 10 + letra; Chr$(textToDisplay(textsCoord(currentScreen, texto, 2), (fila*15)+letra))
+                    Next letra
+                Next fila
+                
+                pressEnterKey()
+                
+                mapDraw(1)
+                ' for lin=0 to 2
+                '     for col=0 to 14
+                '         if not GetTile(10+col, 5+lin) Then SetTile(0, BACKGROUND_ATTRIBUTE, 10+col, 5+lin)
+                '     Next col
+                ' Next lin
+            End if
+        End If
+    Next texto
+    
+    return textFound
+End Function
+
 Sub fireKey()
     #ifdef SHOOTING_ENABLED
-        shoot()
+        if not validaTexto() then shoot()
+    #Else
+        validaTexto()
     #endif
 End Sub
 
@@ -596,18 +630,23 @@ Sub checkObjectContact()
     
     If checkTileObject(GetTile(col, lin)) Then
         FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin)
+        validaTexto()
         Return
     Elseif checkTileObject(GetTile(col + 1, lin))
         FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin)
+        validaTexto()
         Return
     Elseif checkTileObject(GetTile(col, lin + 1))
         FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin + 1)
+        validaTexto()
         Return
     Elseif checkTileObject(GetTile(col + 1, lin + 1))
         FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin + 1)
+        validaTexto()
         Return
     End If
 End Sub
+
 
 Sub checkDamageByTile()
     If invincible Then Return

@@ -25,7 +25,9 @@ class Sizes:
         self.INTRO_SCREEN = 0
         self.GAMEOVER_SCREEN = 0
         self.TITLE_MUSIC = 0
-    
+        self.TEXTS_COORD_DATA = 0
+        self.TEXTS_DATA = 0
+        
     @staticmethod
     def BEEP_FX_STRING():
         return "BEEP_FX"
@@ -99,6 +101,14 @@ class Sizes:
         return "DECOMPRESSED_ENEMIES_SCREEN_DATA"
     
     @staticmethod
+    def TEXTS_DATA_STRING():
+        return "TEXTS_DATA"
+    
+    @staticmethod
+    def TEXTS_COORD_DATA_STRING():
+        return "TEXTS_COORD_DATA"
+    
+    @staticmethod
     def BROKEN_TILES_DATA_STRING():
         return "BROKEN_TILES_DATA"
     
@@ -134,6 +144,8 @@ class Sizes:
             # self.ENEMIES_PER_SCREEN_DATA_STRING(),
             self.ENEMIES_PER_SCREEN_INITIAL_DATA_STRING(),
             self.DECOMPRESSED_ENEMIES_SCREEN_DATA_STRING(),
+            self.TEXTS_COORD_DATA_STRING(),
+            self.TEXTS_DATA_STRING(),
             self.TILESET_DATA_STRING(),
             self.ATTR_DATA_STRING(),
             self.SCREEN_OBJECTS_INITIAL_DATA_STRING(),
@@ -157,6 +169,8 @@ class Sizes:
             # self.ENEMIES_PER_SCREEN_DATA_STRING(),
             self.ENEMIES_PER_SCREEN_INITIAL_DATA_STRING(),
             self.DECOMPRESSED_ENEMIES_SCREEN_DATA_STRING(),
+            self.TEXTS_COORD_DATA_STRING(),
+            self.TEXTS_DATA_STRING(),
             self.TILESET_DATA_STRING(),
             self.ATTR_DATA_STRING(),
             self.SCREEN_OBJECTS_INITIAL_DATA_STRING(),

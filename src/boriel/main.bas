@@ -27,7 +27,9 @@ initGraphics()
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
     If firstLoad Then
         firstLoad = 0
-        pauseUntilPressKey()
+        'pauseUntilPressKey()
+        while INKEY$<>"":wend
+        while INKEY$="":wend
     End If
 #endif
 

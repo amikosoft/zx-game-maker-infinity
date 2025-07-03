@@ -34,7 +34,9 @@ class BinaryFilesToTapMerger:
             OUTPUT_FOLDER + "enemiesPerScreen.bin",
             OUTPUT_FOLDER + "screenObjects.bin",
             OUTPUT_FOLDER + "screensWon.bin",
-            OUTPUT_FOLDER + "decompressedEnemiesScreen.bin"
+            OUTPUT_FOLDER + "decompressedEnemiesScreen.bin",
+            OUTPUT_FOLDER + "textsCoord.bin",
+            OUTPUT_FOLDER + "texts.bin"
         ]
 
         if useBreakableTile:

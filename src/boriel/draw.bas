@@ -1,4 +1,4 @@
-Sub mapDraw()
+Sub mapDraw(force As Ubyte)
     Dim index As Uinteger
     Dim y, x As Ubyte
     
@@ -6,7 +6,7 @@ Sub mapDraw()
     y = 0
     
     For index=0 To SCREEN_LENGTH
-        drawTile(Peek(@decompressedMap + index) - 1, x, y)
+        drawTile(Peek(@decompressedMap + index) - 1, x, y, force)
         
         x = x + 1
         If x = screenWidth Then
@@ -16,8 +16,11 @@ Sub mapDraw()
     Next index
 End Sub
 
-Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
-    If tile < 2 Then Return
+Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
+    If tile < 1 Then 
+        if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+        Return
+    End if
     
     #ifdef SHOULD_KILL_ENEMIES_ENABLED
         If tile = ENEMY_DOOR_TILE Then
@@ -94,7 +97,7 @@ Sub redrawScreen()
     ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
     FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
     ' clearBox(0,0,120,112)
-    mapDraw()
+    mapDraw(0)
     printLife()
     ' enemiesDraw(currentScreen)
 End Sub
@@ -176,10 +179,9 @@ Sub moveToScreen(direction As Ubyte)
                 moveScreen = 0
                 ending()
             Else
-                Print AT 13,8;"LEVEL COMPLETE!!!"
-                Print AT 15,8;"PRESS ENTER..."
-                Do
-                Loop Until MultiKeys(KEYENTER)
+                Print AT 10,8;"LEVEL COMPLETE"
+                Print AT 12,8;"PRESS ENTER..."
+                pressEnterKey()
                 
                 jumpCurrentKey = jumpStopValue
                 
@@ -194,7 +196,7 @@ Sub moveToScreen(direction As Ubyte)
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
             
             #ifdef LIVES_MODE_ENABLED
-                protaXRespawn = protaX 
+                protaXRespawn = protaX
                 protaYRespawn = 0 + SCREEN_ADJUSTMENT
             #endif
         #endif
@@ -232,7 +234,7 @@ Sub drawSprites()
             Draw1x1Sprite(currentBulletSpriteId, bulletPositionX, bulletPositionY)
         End If
     #endif
-
+    
     #ifdef BULLET_ENEMIES
         If enemyBulletPositionX <> 0 Then
             Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBulletPositionX, enemyBulletPositionY)
