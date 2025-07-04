@@ -262,6 +262,11 @@
                     "value": "bullet"
                 },
                 {
+                    "name": "bulletDisableCollisions",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "gameName",
                     "type": "string",
                     "value": "Game Name"

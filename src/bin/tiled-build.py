@@ -158,6 +158,7 @@ bulletsCollisionWithBullets = False
 messagesEnabled = 0
 enemiesAlertDistance = 10
 bulletType = 'bullet'
+bulletDisableCollisions = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -296,7 +297,8 @@ if 'properties' in data:
             bulletsCollisionWithBullets = property['value']
         elif property['name'] == 'bulletType':
             bulletType = property['value']
-            
+        elif property['name'] == 'bulletDisableCollisions':
+            bulletDisableCollisions = property['value']    
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -521,6 +523,10 @@ if bulletAnimation == 1:
 
 if bulletType == 'boomerang':
     configStr += "#define BULLET_BOOMERANG\n"
+
+if bulletDisableCollisions == False:
+    useBreakableTile = 0
+    configStr += "#define BULLET_COLLISIONS\n"
 
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"

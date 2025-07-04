@@ -240,6 +240,11 @@
                 "value": true
             },
             {
+                "name": "bulletDisableCollisions",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "bulletType",
                 "propertyType": "bulletType",
                 "type": "string",

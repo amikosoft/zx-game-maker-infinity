@@ -53,13 +53,6 @@ End Function
                         Return
                     end if
                 End if
-                #ifdef BULLET_ANIMATION
-                    if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
-                        currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-                    Else
-                        currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-                    End if
-                #endif
             else
         #endif
             ' desplazamiento de bala
@@ -146,30 +139,24 @@ End Function
                 #endif
             #endif
             
-            dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
-            if tile Then
-                #ifdef BULLET_BOOMERANG
-                    bulletDirection = BULLET_DIRECTION_BOOMERANG
-                #else
-                    resetBullet(0)
-                #endif
-                
-                #ifdef USE_BREAKABLE_TILE
-                    checkAndRemoveBreakableTile(tile)
-                #endif
-            end if
+            #ifdef BULLET_COLLISIONS
+                dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
+                if tile Then
+                    #ifdef BULLET_BOOMERANG
+                        bulletDirection = BULLET_DIRECTION_BOOMERANG
+                    #else
+                        resetBullet(0)
+                    #endif
+                    
+                    #ifdef USE_BREAKABLE_TILE
+                        checkAndRemoveBreakableTile(tile)
+                    #endif
+                end if
+            #endif
         
         #ifdef BULLET_BOOMERANG
             End If
         #endif
-        ' dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
-        ' if tile Then
-        '     resetBullet(0)
-        
-        '     #ifdef USE_BREAKABLE_TILE
-        '         checkAndRemoveBreakableTile(tile)
-        '     #endif
-        ' end if
     end sub
 #endif
 
