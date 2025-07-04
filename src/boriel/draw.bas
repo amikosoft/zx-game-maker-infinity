@@ -216,9 +216,11 @@ Sub moveToScreen(direction As Ubyte)
                 moveScreen = 0
                 ending()
             Else
-                Print AT 10,8;"LEVEL COMPLETE"
-                Print AT 12,8;"PRESS ENTER..."
-                pressEnterKey()
+                Print AT 13,8;"LEVEL COMPLETE!!!"
+                Print AT 15,8;"PRESS ENTER..."
+                'Do
+                'Loop Until MultiKeys(KEYENTER)
+                pauseUntilPressEnter()
                 
                 jumpCurrentKey = jumpStopValue
                 

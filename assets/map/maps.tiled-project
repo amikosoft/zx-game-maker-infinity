@@ -262,6 +262,11 @@
                     "value": "bullet"
                 },
                 {
+                    "name": "bulletDisableCollisions",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "gameName",
                     "type": "string",
                     "value": "Game Name"
@@ -358,6 +363,11 @@
                     "name": "maxEnemiesPerScreen",
                     "type": "int",
                     "value": 5
+                },
+                {
+                    "name": "platformMoveable",
+                    "type": "bool",
+                    "value": false
                 },
                 {
                     "name": "messagesEnabled",

@@ -96,8 +96,6 @@ initialMainCharacterY = 8
 spritesMergeModeXor = 0
 spritesWithColors = 0
 
-initTexts = ""
-
 backgroundAttribute = 7
 
 animatePeriodMain = 3
@@ -160,6 +158,8 @@ bulletsCollisionWithBullets = False
 messagesEnabled = 0
 enemiesAlertDistance = 10
 bulletType = 'bullet'
+bulletDisableCollisions = False
+platformMoveable = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -200,8 +200,6 @@ if 'properties' in data:
             spritesMergeModeXor = 1 if property['value'] else 0
         elif property['name'] == 'spritesWithColors':
             spritesWithColors = 1 if property['value'] else 0
-        elif property['name'] == 'initTexts':
-            initTexts = property['value']
         elif property['name'] == 'backgroundAttribute':
             backgroundAttribute = property['value']
         elif property['name'] == 'animatePeriodMain':
@@ -300,7 +298,10 @@ if 'properties' in data:
             bulletsCollisionWithBullets = property['value']
         elif property['name'] == 'bulletType':
             bulletType = property['value']
-            
+        elif property['name'] == 'bulletDisableCollisions':
+            bulletDisableCollisions = property['value']    
+        elif property['name'] == 'platformMoveable':
+            platformMoveable = property['value']    
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -386,15 +387,6 @@ if messagesEnabled == 1:
     configStr += "Dim messageLoopCounter As Ubyte = 0\n"
     configStr += "#Define MESSAGE_LOOPS_VISIBLE 30\n"
 
-if len(initTexts) > 0:
-    configStr += "#DEFINE INIT_TEXTS\n"
-    initTexts = initTexts.split("\n")
-    configStr += "dim initTexts(" + str(len(initTexts) - 1) + ") as string\n"
-    for idx, text in enumerate(initTexts):
-        configStr += "initTexts(" + str(idx) + ") = \"" + text + "\"\n"
-
-configStr += "\n"
-
 if enabled128K == 1:
     configStr += "#DEFINE ENABLED_128k\n"
 
@@ -411,7 +403,17 @@ if spritesWithColors == 1:
 
 if len(password) > 0:
     configStr += "#DEFINE PASSWORD_ENABLED\n"
-    configStr += "dim password as string = \"" + str(password) + "\"\n"
+    # configStr += "const password as string = \"" + str(password) + "\"\n"
+
+    configStr += "const passwordLen as ubyte = " + str(len(password)) + "\n"
+    configStr += "dim password(" + str(len(password)-1) + ") as ubyte => {"
+
+    for c in range(len(password)):
+        if c > 0:
+            configStr += ", "
+        configStr += str(ord(password[c]))
+
+    configStr += "}\n"
 
 if gameView == 'overhead':
     configStr += "#DEFINE OVERHEAD_VIEW\n"
@@ -525,6 +527,13 @@ if bulletAnimation == 1:
 
 if bulletType == 'boomerang':
     configStr += "#define BULLET_BOOMERANG\n"
+
+if bulletDisableCollisions == False:
+    useBreakableTile = 0
+    configStr += "#define BULLET_COLLISIONS\n"
+
+if platformMoveable == True:
+    configStr += "#define PLATFORM_MOVEABLE\n"
 
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"

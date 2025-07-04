@@ -110,10 +110,25 @@
 <h1 id="configuraciones-generales">Configuraciones generales</h1>
 <p>Aquí se incluye información de parámetros que no existen (en el momento de elaborar esto) en el proyecto original</p>
 <h2 id="configuracion-general-en-atributos-del-mapa-tiled">Configuración general en atributos del mapa (tiled)</h2>
+<h3 id="plataformas-controlables">Plataformas controlables</h3>
+<ul>
+<li><strong>platformMoveable</strong> habilita la opción de tener plataformas controladas por el jugador.</li>
+</ul>
+<p>Una vez activado, si configuras una plataforma móvil con los siguientes parámetros podrá ser controlada por el player al subirse encima pero no será capaz de moverse entre pantallas.</p>
+<p>Los parámetros son <strong>velocidad normal o 3</strong> y <strong>sin desplazamiento horizontal o vertical</strong>.</p>
+<p>Una vez el jugador se sitúe encima de la plataforma ésta caerá mientras que el jugador no pulse <strong>dirección abajo</strong>.</p>
+<p>Para salir de la plataforma se deberá de saltar y quedará inmóvil.</p>
 <h3 id="animacion-de-la-bala">Animación de la bala</h3>
 <ul>
-<li><strong>bulletAnimation</strong> habilita la animación de la bala (sólo en modo side)</li>
-<li><strong>bulletType</strong> te permite poder seleccionar entre 2 tipos de disparo para tú personaje: <strong>bullet</strong> (clásico) o <strong>boomerang</strong></li>
+<li>
+<p><strong>bulletAnimation</strong> habilita la animación de la bala (sólo en modo side)</p>
+</li>
+<li>
+<p><strong>bulletDisableCollisions</strong> permite que la bala de nuestro personaje atraviese paredes (esta opción deshabilita los bloques rompibles)</p>
+</li>
+<li>
+<p><strong>bulletType</strong> te permite poder seleccionar entre 2 tipos de disparo para tú personaje: <strong>bullet</strong> (clásico) o <strong>boomerang</strong></p>
+</li>
 </ul>
 <p>Para modo <strong>bullet</strong>, para editar la animación se debe usar bullet_animated.zxp siguiendo estas sencillas instrucciones</p>
 <p><img alt="Bullet animation" src="imgs/bullet_animation_tile.png" /></p>

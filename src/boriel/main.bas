@@ -33,4 +33,8 @@ initGraphics()
     End If
 #endif
 
-showMenu()
+#ifdef PASSWORD_ENABLED
+    passwordScreen()
+#else
+    showMenu()
+#endif
