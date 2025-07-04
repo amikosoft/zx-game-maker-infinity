@@ -1,3 +1,7 @@
+Sub clearScreen()
+    Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
+end sub
+
 Sub showMenu()
     #ifdef ENABLED_128k
         #ifdef MUSIC_ENABLED
@@ -5,7 +9,7 @@ Sub showMenu()
         #endif
     #endif
     inMenu = 1
-    Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
+    clearScreen()
     #ifdef ENABLED_128k
         PaginarMemoria(DATA_BANK)
         dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
@@ -31,6 +35,7 @@ Sub showMenu()
                 Let keyArray(DOWN) = KEYA
                 Let keyArray(FIRE) = KEYSPACE
             End If
+
             playGame()
         elseif MultiKeys(KEY2) Then
             kempston = 1
@@ -41,6 +46,7 @@ Sub showMenu()
             Let keyArray(UP)=KEY9
             Let keyArray(DOWN)=KEY8
             Let keyArray(FIRE)=KEY0
+            
             playGame()
             #ifdef REDEFINE_KEYS_ENABLED
             elseif MultiKeys(KEY4) Then
@@ -51,42 +57,6 @@ Sub showMenu()
 End Sub
 
 
-#ifdef PASSWORD_ENABLED
-    Function readKey() As Ubyte
-        Let k = GetKey
-        Let keyOption = chr(k)
-        If keyOption = " " Then showMenu()
-        Return k
-    End Function
-    
-    Sub passwordScreen()
-        Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
-        Print AT 10, 10; "INSERT PASSWORD"
-        Print AT 18, 0; "PRESS SPACE To Return To MENU"
-        For i=0 To 7
-            Print AT 12, 10 + i; "*"
-        Next i
-        
-        Let keyOption = ""
-        Dim pass(7) As Ubyte
-        Dim passwordIndex As Ubyte = 0
-        
-        For i=0 To 7
-            While GetKeyScanCode() <> 0
-            Wend
-            pass(i) = readKey()
-            Print AT 12, 10 + i; chr(pass(i))
-        Next i
-        
-        For i=0 To 7
-            If chr(pass(i)) <> password(i) Then
-                passwordScreen()
-            End If
-        Next i
-        
-        playGame()
-    End Sub
-#endif
 
 #ifdef REDEFINE_KEYS_ENABLED
     Function LeerTecla() As Uinteger
@@ -96,7 +66,7 @@ End Sub
     End Function
     
     Sub redefineKeys()
-        Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
+        clearScreen()
         
         #ifdef ENABLED_128k
             #ifdef TITLE_MUSIC_ENABLED
@@ -134,9 +104,33 @@ End Sub
         ' keyOption = ""
         
         Print AT 20,2;"Enter To Continue..."
-        Do
-        Loop Until MultiKeys(KEYENTER)
+        ' Do
+        ' Loop Until MultiKeys(KEYENTER)
+        pauseUntilPressEnter()
         
+        showMenu()
+    End Sub
+#endif
+
+#ifdef PASSWORD_ENABLED
+    Sub passwordScreen()
+        clearScreen()
+        Print AT 10, 10; "PASSWORD"
+        
+        dim pass(passwordLen) as ubyte
+        For i=0 To passwordLen - 1
+            While GetKeyScanCode()
+            Wend
+            pass(i) = GetKey
+            Print AT 12, 10 + i; chr(pass(i))
+        Next i
+        
+        For i=0 To passwordLen - 1
+            If pass(i) <> password(i) Then
+                passwordScreen()
+            End If
+        Next i
+
         showMenu()
     End Sub
 #endif
@@ -155,8 +149,9 @@ Sub playGame()
             PaginarMemoria(DATA_BANK)
             dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
             PaginarMemoria(0)
-            Do
-            Loop Until MultiKeys(KEYENTER)
+            ' Do
+            ' Loop Until MultiKeys(KEYENTER)
+            pauseUntilPressEnter()
         #endif
     #endif
     
@@ -282,8 +277,9 @@ Sub ending()
     #Else
         dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
     #endif
-    Do
-    Loop Until MultiKeys(KEYENTER)
+    ' Do
+    ' Loop Until MultiKeys(KEYENTER)
+    pauseUntilPressEnter()
     showMenu()
 End Sub
 
@@ -312,8 +308,9 @@ Sub gameOver()
         Print at 7, 12; "GAME OVER"
     #endif
     
-    Do
-    Loop Until MultiKeys(KEYENTER)
+    ' Do
+    ' Loop Until MultiKeys(KEYENTER)
+    pauseUntilPressEnter()
     showMenu()
 End Sub
 
