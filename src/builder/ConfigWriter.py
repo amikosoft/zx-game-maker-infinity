@@ -1,6 +1,6 @@
 
 from builder.Sizes import Sizes
-from builder.helper import getEnabled128K, getUseBreakableTile, musicExists, screenExists
+from builder.helper import getEnabled128K, getUseBreakableTile, musicExists, screenExists, getBulletDisableCollisions
 
 class ConfigWriter:
     def __init__(self, basicConfigPath, initialAddress, sizes: Sizes):
@@ -42,7 +42,7 @@ class ConfigWriter:
                     continue
                 currentAddress = self.__writeDeclarationAndIncrement(key, currentAddress)
 
-            if getUseBreakableTile():
+            if getUseBreakableTile() and not getBulletDisableCollisions():
                 self.__writeDeclarationAndIncrement(Sizes.BROKEN_TILES_DATA_STRING(), currentAddress)
     
     def __setFileHandler(self, fileHandler):
