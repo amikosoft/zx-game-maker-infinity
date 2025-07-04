@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="img/favicon.ico">
-        <title>Modo de juego - ZXGM Infinity Docs</title>
+        <title>Opciones genéricas - ZXGM Infinity Docs</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/fontawesome.min.css" rel="stylesheet">
         <link href="css/brands.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="visual-interface.html" class="dropdown-item">Interfaz</a>
+    <a href="visual-interface.html" class="dropdown-item">Interfaz y migración</a>
 </li>
                                 </ul>
                             </li>
@@ -51,11 +51,11 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="game-modes.html" class="dropdown-item active" aria-current="page">Modo de juego</a>
+    <a href="game-modes.html" class="dropdown-item">Modo de juego</a>
 </li>
                                     
 <li>
-    <a href="generic-options.html" class="dropdown-item">Opciones genéricas</a>
+    <a href="generic-options.html" class="dropdown-item active" aria-current="page">Opciones genéricas</a>
 </li>
                                     
 <li>
@@ -67,12 +67,12 @@
 
                     <ul class="nav navbar-nav ms-md-auto">
                             <li class="nav-item">
-                                <a rel="prev" href="visual-interface.html" class="nav-link">
+                                <a rel="prev" href="game-modes.html" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="generic-options.html" class="nav-link">
+                                <a rel="next" href="enemies.html" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -94,7 +94,7 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#configuracion-de-tipos-de-juego" class="nav-link">Configuración de tipos de juego</a>
+            <li class="nav-item" data-bs-level="1"><a href="#configuraciones-generales" class="nav-link">Configuraciones generales</a>
               <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="2"><a href="#configuracion-general-en-atributos-del-mapa-tiled" class="nav-link">Configuración general en atributos del mapa (tiled)</a>
               <ul class="nav flex-column">
@@ -107,38 +107,22 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="configuracion-de-tipos-de-juego">Configuración de tipos de juego</h1>
-<p>Toda la información sobre la personalización del comportamiento del juego</p>
+<h1 id="configuraciones-generales">Configuraciones generales</h1>
+<p>Aquí se incluye información de parámetros que no existen (en el momento de elaborar esto) en el proyecto original</p>
 <h2 id="configuracion-general-en-atributos-del-mapa-tiled">Configuración general en atributos del mapa (tiled)</h2>
-<h3 id="modo-de-visualizacion">Modo de visualización</h3>
-<p>La vista del juego se puede configurar de 2 maneras usando <strong>gameView</strong></p>
+<h3 id="animacion-de-la-bala">Animación de la bala</h3>
 <ul>
-<li><strong>side</strong> hará que tu juego sea un plataformas 2d con vista lateral</li>
-<li><strong>overhead</strong> indica al motor que use vista "cenital" para tu juego (tipo zelda)</li>
+<li><strong>bulletAnimation</strong> habilita la animación de la bala (sólo en modo side)</li>
+<li><strong>bulletType</strong> te permite poder seleccionar entre 2 tipos de disparo para tú personaje: <strong>bullet</strong> (clásico) o <strong>boomerang</strong></li>
 </ul>
-<p>Entre ambos juegos hay diferencias como el salto o el tipo de movimiento del personaje protagonista. El objetivo en ambos será el mismo.</p>
-<h3 id="modo-de-juego">Modo de juego</h3>
-<p>Además de cómo visualizar el juego se puede indicar la dinámica del mismo</p>
-<p><strong>arcadeMode</strong> permite activar dicho modo para nuestro juego. La dinámica del juego será un pelín distinta:</p>
+<p>Para modo <strong>bullet</strong>, para editar la animación se debe usar bullet_animated.zxp siguiendo estas sencillas instrucciones</p>
+<p><img alt="Bullet animation" src="imgs/bullet_animation_tile.png" /></p>
 <ul>
-<li>En este modo hay que "pasarse" cada pantalla para pasar a la siguiente, no se puede ir a la pantalla siguiente y volver a la anterior. Son independientes</li>
-<li>Para diseñar las pantallas en Tiled lo haremos una detras de otra en una sóla línea.</li>
-<li>Para superar una pantalla habrá que recoger todos los items y al hacerlo aparacerá la llave para pasar a la siguiente pantalla</li>
-<li>Se pueden añadir tantos items como se quiera en la pantalla.</li>
-<li>Tendremos que definir en cada pantalla donde aparece el personaje (mainCharacter)</li>
-<li>No es necesario definir suelo y paredes en la pantalla para limitar la misma, si el personaje atraviesa los límites, aparecerá en el lado opuesto.</li>
+<li>Las balas en azul corresponden a la animación de dirección derecha</li>
+<li>Las balas en rosa corresponden a la animación de dirección izquierda</li>
 </ul>
-<p><img alt="" src="images/arcade_mode.png" /></p>
-<p><strong>levelsMode</strong> indica al motor que debe comportarse como un juego por niveles. La dinámica del juego será la siguiente:</p>
-<ul>
-<li>En este modo hay que "pasarse" cada pantalla para pasar a la siguiente, no se puede ir a la pantalla siguiente y volver a la anterior. Son independientes</li>
-<li>Para diseñar las pantallas en Tiled lo haremos como en el modo normal sólo que cada fila de pantallas será un nivel.</li>
-<li>Para superar un nivel deberás coger una llave y abrir una puerta. El sitio donde esté da igual.</li>
-<li>El inicio del personaje (mainCharacter) se deberá hacer únicamente en la primera pantalla y será el mismo para todas por lo que hay que tener un hueco reservado para el inicio en todos los niveles</li>
-<li>En este modo si el personaje cae por abajo del nivel recibirá daño y rebotará.</li>
-<li>Por arriba no se podrá salir el personaje</li>
-<li>Por último, hay que tener en cuenta que tanto la primera pantalla como la última de cada nivel tienen que tener muros para que no se salga el personaje o fallará el juego (ya puedes hacer tu ghost'n'goblins)</li>
-</ul></div>
+<p>Para modo <strong>boomerang</strong> se usará siempre el fichero bullet.zxp independientemente si es vista <strong>side</strong> o <strong>overhead</strong></p>
+<p>Las balas de los enemigos no son animadas</p></div>
             </div>
         </div>
 

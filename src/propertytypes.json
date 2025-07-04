@@ -97,6 +97,17 @@
         "valuesAsFlags": false
     },
     {
+        "id": 10,
+        "name": "bulletType",
+        "storageType": "string",
+        "type": "enum",
+        "values": [
+            "bullet",
+            "boomerang"
+        ],
+        "valuesAsFlags": false
+    },
+    {
         "color": "#ffa0a0a4",
         "drawFill": true,
         "id": 2,
@@ -227,6 +238,12 @@
                 "name": "bulletAnimation",
                 "type": "bool",
                 "value": true
+            },
+            {
+                "name": "bulletType",
+                "propertyType": "bulletType",
+                "type": "string",
+                "value": "bullet"
             },
             {
                 "name": "gameName",
