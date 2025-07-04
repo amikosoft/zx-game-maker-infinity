@@ -8,6 +8,31 @@ sub pauseUntilPressEnter()
     Loop Until MultiKeys(KEYENTER)
 end sub
 
+Function pressingDown() As Ubyte
+    Return ((kempston = 0 And MultiKeys(keyArray(DOWN))) Or (kempston = 1 And (In(31) bAND %100)))
+End Function
+
+Function pressingUp() As Ubyte
+    Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
+End Function
+
+Function checkProtaTop() As Ubyte
+    If protaY < 2 Then
+        #ifdef ARCADE_MODE
+            protaY = 39
+        #Else
+            #ifdef LEVELS_MODE
+                protaY = 2
+            #Else
+                moveScreen = 8
+            #endif
+        #endif
+        Return 1
+    End If
+
+    return 0
+end Function
+
 sub decrementLife()
     if (currentLife = 0) then
         return
@@ -222,7 +247,6 @@ sub saveSprite(lin as ubyte, col as ubyte, tile as ubyte, directionRight as ubyt
     protaY = lin
     protaTile = tile
     protaDirection = directionRight
-    return
 end sub
 
 #ifdef SIDE_VIEW
@@ -234,61 +258,23 @@ end sub
     end sub
 #endif
 
-#ifdef INIT_TEXTS
-    sub showInitTexts(Text as String)
-        dim n as uByte
-        dim line = ""
-        dim word = ""
-        dim y = 1
-        dim x = 0
-        cls
-        for n=0 to len(Text)-1
-            let c = Text(n to n)
-            if c = " " or n = len(Text) - 1 then
-                if len(line + word) > 31 then
-                    print at y, 0; line
-                    beep .01,0
-                    let line = word
-                    if c = " " then
-                        let line = line + " "
-                    end if
-                    let y = y + 1
-                    let x = 0
-                else
-                    let line = line + word
-                    if c = " " then
-                        let line = line + " "
-                    end if
-                end if
-                let word = ""
-            else
-                let word = word + c
-            end if
-        next n
-        if line <> "" then
-            print at y, x; line
-        end if
-        while INKEY$<>"":wend
-            while INKEY$="":wend
-            end sub
-        #endif
-        
-        sub debugA(value as BYTE)
-            PRINT AT 0, 0; "----"
-            PRINT AT 0, 0; value
-        end sub
-        
-        sub debugB(value as BYTE)
-            PRINT AT 0, 5; "  "
-            PRINT AT 0, 5; value
-        end sub
-        
-        sub debugC(value as BYTE)
-            PRINT AT 0, 10; "  "
-            PRINT AT 0, 10; value
-        end sub
-        
-        ' sub debugD(value as UBYTE)
-        '     PRINT AT 18, 25; "  "
-        '     PRINT AT 18, 25; value
-        ' end sub
+
+sub debugA(value as BYTE)
+    PRINT AT 0, 0; "----"
+    PRINT AT 0, 0; value
+end sub
+
+sub debugB(value as BYTE)
+    PRINT AT 0, 5; "  "
+    PRINT AT 0, 5; value
+end sub
+
+sub debugC(value as BYTE)
+    PRINT AT 0, 10; "  "
+    PRINT AT 0, 10; value
+end sub
+
+' sub debugD(value as UBYTE)
+'     PRINT AT 18, 25; "  "
+'     PRINT AT 18, 25; value
+' end sub

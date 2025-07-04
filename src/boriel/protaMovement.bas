@@ -129,13 +129,13 @@ Function getNextFrameRunning() As Ubyte
     #endif
 End Function
 
-Function pressingUp() As Ubyte
-    Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
-End Function
+' Function pressingUp() As Ubyte
+'     Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
+' End Function
 
-Function pressingDown() As Ubyte
-    Return ((kempston = 0 And MultiKeys(keyArray(DOWN)) <> 0) Or (kempston = 1 And In(31) bAND %100 <> 0))
-End Function
+' Function pressingDown() As Ubyte
+'     Return ((kempston = 0 And MultiKeys(keyArray(DOWN)) <> 0) Or (kempston = 1 And In(31) bAND %100 <> 0))
+' End Function
 
 
 #ifdef SIDE_VIEW
@@ -155,26 +155,30 @@ End Function
                 Return
             End If
             
-            If protaY < 2 Then
-                #ifdef ARCADE_MODE
-                    protaY = 39
-                #Else
-                    #ifdef LEVELS_MODE
-                        protaY = 2
-                    #Else
-                        moveScreen = 8
-                    #endif
-                #endif
+            ' If protaY < 2 Then
+            '     #ifdef ARCADE_MODE
+            '         protaY = 39
+            '     #Else
+            '         #ifdef LEVELS_MODE
+            '             protaY = 2
+            '         #Else
+            '             moveScreen = 8
+            '         #endif
+            '     #endif
+            '     jumpCurrentKey = jumpCurrentKey + 1
+            '     Return
+            ' End If
+            if checkProtaTop() Then
                 jumpCurrentKey = jumpCurrentKey + 1
                 Return
-            End If
+            End if
             
             If CheckCollision(protaX, protaY + jumpArray(jumpCurrentKey)) Then
-                If jumpArray(jumpCurrentKey) > 0 Then
-                    jumpCurrentKey = jumpStopValue
-                Else
+                ' If jumpArray(jumpCurrentKey) > 0 Then
+                '     jumpCurrentKey = jumpStopValue
+                ' Else
                     jumpCurrentKey = jumpCurrentKey + 1
-                End If
+                ' End If
                 Return
             End If
             
@@ -187,19 +191,22 @@ End Function
         Sub checkIsFlying()
             If jumpCurrentKey = jumpStopValue Then Return
             
-            If protaY < 2 Then
-                If jumpEnergy > 0 Then
-                    #ifdef ARCADE_MODE
-                        protaY = 39
-                    #Else
-                        #ifdef LEVELS_MODE
-                            protaY = 2
-                        #Else
-                            moveScreen = 8
-                        #endif
-                    #endif
-                End If
-            End If
+            ' If protaY < 2 Then
+            '     If jumpEnergy > 0 Then
+            '         #ifdef ARCADE_MODE
+            '             protaY = 39
+            '         #Else
+            '             #ifdef LEVELS_MODE
+            '                 protaY = 2
+            '             #Else
+            '                 moveScreen = 8
+            '             #endif
+            '         #endif
+            '     End If
+            ' End If
+            If jumpEnergy > 0 Then
+                checkProtaTop()
+            End if
             
             If pressingUp() And jumpEnergy > 0 Then
                 If Not CheckCollision(protaX, protaY - 1) Then
@@ -445,13 +452,18 @@ Sub upKey()
         End If
         If canMoveUp() Then
             saveSprite( protaY - 1, protaX, protaFrame + 1, 8)
-            If protaY < 2 Then
-                #ifdef LEVELS_MODE
-                    protaY = 2
-                #Else
-                    moveScreen = 8
-                #endif
-            End If
+            ' If protaY < 2 Then
+            '     #ifdef ARCADE_MODE
+            '         protaY = 39
+            '     #Else
+            '         #ifdef LEVELS_MODE
+            '             protaY = 2
+            '         #Else
+            '             moveScreen = 8
+            '         #endif
+            '     #endif
+            ' End If
+            checkProtaTop()
         End If
     #endif
 End Sub

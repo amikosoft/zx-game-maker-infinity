@@ -220,20 +220,28 @@ Sub moveEnemies()
                 ' Is a platform Not an enemy, only 2 frames, 1 direction
                 If tile < 16 Then
                     #ifdef SIDE_VIEW
-                        if landed Then
-                            If jumpCurrentKey = jumpStopValue and checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
-                                ' If verticalDirection Then
-                                If Not CheckCollision(protaX, protaY + verticalDirection) Then
-                                    protaY = enemyLin - 4
-                                End if
-                                ' If protaY < 2 Then moveScreen = 8
-                                ' End If
-                                
-                                If horizontalDirection Then
-                                    If Not CheckCollision(protaX + horizontalDirection, protaY) Then
-                                        protaX = protaX + horizontalDirection
+                        if jumpCurrentKey = jumpStopValue Then
+                            If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
+                                if enemySpeed = 3 and not verticalDirection and not horizontalDirection Then
+                                    if pressingDown() Then
+                                        If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLin = enemyLin - 1
+                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLin < 40 Then
+                                        enemyLin = enemyLin + 1
                                     End If
-                                End If
+                                    
+                                    enemyCol = protaX
+                                    protaY = enemyLin - 4
+                                Else
+                                    If Not CheckCollision(protaX, protaY + verticalDirection) Then
+                                        protaY = enemyLin - 4
+                                    End if
+                                    
+                                    If horizontalDirection Then
+                                        If Not CheckCollision(protaX + horizontalDirection, protaY) Then
+                                            protaX = protaX + horizontalDirection
+                                        End If
+                                    End If
+                                End if
                             End If
                         End if
                     #endif
