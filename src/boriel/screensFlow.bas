@@ -168,12 +168,6 @@ Sub playGame()
         currentScreen = INITIAL_SCREEN
     #endif
     
-    #ifdef INIT_TEXTS
-        For i=0 To 2
-            showInitTexts(initTexts(i))
-        Next i
-    #endif
-    
     #ifdef ENABLED_128k
         PaginarMemoria(DATA_BANK)
         dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
