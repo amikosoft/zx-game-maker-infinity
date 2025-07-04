@@ -11,7 +11,7 @@ from builder.helper import *
 class Builder:
     def execute(self):
         is128K = getEnabled128K()
-        useBreakableTile = getUseBreakableTile()
+        useBreakableTile = getUseBreakableTile() and not getBulletDisableCollisions
 
         ScreensCompressor().execute(is128K, screenExists("intro"), screenExists("gameover"))
         TilesGenerator().execute()
