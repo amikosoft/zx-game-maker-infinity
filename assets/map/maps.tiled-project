@@ -365,6 +365,11 @@
                     "value": 5
                 },
                 {
+                    "name": "platformMoveable",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "messagesEnabled",
                     "type": "bool",
                     "value": false

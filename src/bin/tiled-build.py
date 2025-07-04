@@ -159,6 +159,7 @@ messagesEnabled = 0
 enemiesAlertDistance = 10
 bulletType = 'bullet'
 bulletDisableCollisions = False
+platformMoveable = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -299,6 +300,8 @@ if 'properties' in data:
             bulletType = property['value']
         elif property['name'] == 'bulletDisableCollisions':
             bulletDisableCollisions = property['value']    
+        elif property['name'] == 'platformMoveable':
+            platformMoveable = property['value']    
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -527,6 +530,9 @@ if bulletType == 'boomerang':
 if bulletDisableCollisions == False:
     useBreakableTile = 0
     configStr += "#define BULLET_COLLISIONS\n"
+
+if platformMoveable == True:
+    configStr += "#define PLATFORM_MOVEABLE\n"
 
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"

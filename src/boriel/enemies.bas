@@ -222,16 +222,28 @@ Sub moveEnemies()
                     #ifdef SIDE_VIEW
                         if jumpCurrentKey = jumpStopValue Then
                             If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
-                                if enemySpeed = 3 and not verticalDirection and not horizontalDirection Then
-                                    if pressingDown() Then
-                                        If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLin = enemyLin - 1
-                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLin < 40 Then
-                                        enemyLin = enemyLin + 1
-                                    End If
-                                    
-                                    enemyCol = protaX
-                                    protaY = enemyLin - 4
-                                Else
+                                #ifdef PLATFORM_MOVEABLE
+                                    if enemySpeed = 3 and not verticalDirection and not horizontalDirection Then
+                                        if pressingDown() Then
+                                            If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLin = enemyLin - 1
+                                        ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLin < 40 Then
+                                            enemyLin = enemyLin + 1
+                                        End If
+                                        
+                                        enemyCol = protaX
+                                        protaY = enemyLin - 4
+                                    Else
+                                        If Not CheckCollision(protaX, protaY + verticalDirection) Then
+                                            protaY = enemyLin - 4
+                                        End if
+                                        
+                                        If horizontalDirection Then
+                                            If Not CheckCollision(protaX + horizontalDirection, protaY) Then
+                                                protaX = protaX + horizontalDirection
+                                            End If
+                                        End If
+                                    End if
+                                #Else
                                     If Not CheckCollision(protaX, protaY + verticalDirection) Then
                                         protaY = enemyLin - 4
                                     End if
@@ -241,118 +253,118 @@ Sub moveEnemies()
                                             protaX = protaX + horizontalDirection
                                         End If
                                     End If
-                                End if
+                                #endif
                             End If
-                        End if
-                    #endif
-                Elseif horizontalDirection = -1 Then
-                    tile = tile + 16
-                End if
-                
-                If enemFrame Then
-                    tile = tile + 1
-                End If
-                
-                ' se guarda el estado final del enemigo
-                'if enemyMode <> 2 And enemyMode <> 3 Then
-                decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = horizontalDirection
-                decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = verticalDirection
-                'End if
-                decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
-                decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
-                decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyMode
-                
-                enemySpriteTempTile(enemyId) = tile + 1
-                
-                #ifdef BULLET_ENEMIES
-                    #ifndef BULLET_ENEMIES_MUST_LOOK
-                        if tile < 16 then Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
-                        #ifndef BULLET_ENEMIES_LOOK_AT
-                            Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
-                        #endif
-                    #else
+                        End If
+                    End if
+                #endif
+            Elseif horizontalDirection = -1 Then
+                tile = tile + 16
+            End if
+            
+            If enemFrame Then
+                tile = tile + 1
+            End If
+            
+            ' se guarda el estado final del enemigo
+            'if enemyMode <> 2 And enemyMode <> 3 Then
+            decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = horizontalDirection
+            decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = verticalDirection
+            'End if
+            decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
+            decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
+            decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyMode
+            
+            enemySpriteTempTile(enemyId) = tile + 1
+            
+            #ifdef BULLET_ENEMIES
+                #ifndef BULLET_ENEMIES_MUST_LOOK
+                    if tile < 16 then Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                    #ifndef BULLET_ENEMIES_LOOK_AT
                         Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
                     #endif
-                #Else
+                #else
                     Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
                 #endif
-                
-                if tile > 15 and Not invincible Then
-                    checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
-                    
-                    #ifdef BULLET_ENEMIES
-                        if enemyBulletPositionX = 0 and (tile mod 16) < BULLET_ENEMIES_RANGE then
-                            #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
-                                if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
-                                    #ifndef BULLET_ENEMIES_MUST_LOOK
-                                        #ifdef BULLET_ENEMIES_LOOK_AT
-                                            dim lookDirection as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
-                                        #endif
-                                        
-                                        if enemyCol < protaX Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
-                                        else
-                                            #ifdef BULLET_ENEMIES_LOOK_AT
-                                                lookDirection = lookDirection + 16
-                                            #endif
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
-                                        End if
-                                        
-                                        #ifdef BULLET_ENEMIES_LOOK_AT
-                                            Draw2x2Sprite(lookDirection, enemyCol, enemyLin)
-                                        #endif
-                                        
-                                        continue for
-                                    #else
-                                        if enemyCol < protaX and horizontalDirection = 1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
-                                            continue for
-                                        elseif enemyCol > protaX and horizontalDirection = -1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
-                                            continue for
-                                        end if
-                                    #endif
-                                End if
-                            #endif
-                            #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
-                                if enemyCol > (protaX-2) and enemyCol < (protaX+4) Then
-                                    #ifndef BULLET_ENEMIES_MUST_LOOK
-                                        #ifdef BULLET_ENEMIES_LOOK_AT
-                                            Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
-                                        #endif
-                                    #endif
-                                    
-                                    #ifndef BULLET_ENEMIES_MUST_LOOK
-                                        if enemyLin < protaY Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
-                                        else
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
-                                        end if
-                                        
-                                        continue for
-                                    #Else
-                                        if enemyLin < protaY and verticalDirection = 1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
-                                            continue for
-                                        elseif enemyLin > protaY and verticalDirection = -1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
-                                            continue for
-                                        end if
-                                    #endif
-                                end if
-                            #endif
-                        end if
-                    #endif
-                End if
+            #Else
+                Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+            #endif
+            
+            if tile > 15 and Not invincible Then
+                checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                 
                 #ifdef BULLET_ENEMIES
-                    #ifndef BULLET_ENEMIES_MUST_LOOK
-                        #ifdef BULLET_ENEMIES_LOOK_AT
-                            Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                    if enemyBulletPositionX = 0 and (tile mod 16) < BULLET_ENEMIES_RANGE then
+                        #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
+                            if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
+                                #ifndef BULLET_ENEMIES_MUST_LOOK
+                                    #ifdef BULLET_ENEMIES_LOOK_AT
+                                        dim lookDirection as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
+                                    #endif
+                                    
+                                    if enemyCol < protaX Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                    else
+                                        #ifdef BULLET_ENEMIES_LOOK_AT
+                                            lookDirection = lookDirection + 16
+                                        #endif
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
+                                    End if
+                                    
+                                    #ifdef BULLET_ENEMIES_LOOK_AT
+                                        Draw2x2Sprite(lookDirection, enemyCol, enemyLin)
+                                    #endif
+                                    
+                                    continue for
+                                #else
+                                    if enemyCol < protaX and horizontalDirection = 1 Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                        continue for
+                                    elseif enemyCol > protaX and horizontalDirection = -1 Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
+                                        continue for
+                                    end if
+                                #endif
+                            End if
                         #endif
+                        #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
+                            if enemyCol > (protaX-2) and enemyCol < (protaX+4) Then
+                                #ifndef BULLET_ENEMIES_MUST_LOOK
+                                    #ifdef BULLET_ENEMIES_LOOK_AT
+                                        Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                                    #endif
+                                #endif
+                                
+                                #ifndef BULLET_ENEMIES_MUST_LOOK
+                                    if enemyLin < protaY Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                    else
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
+                                    end if
+                                    
+                                    continue for
+                                #Else
+                                    if enemyLin < protaY and verticalDirection = 1 Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                        continue for
+                                    elseif enemyLin > protaY and verticalDirection = -1 Then
+                                        enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
+                                        continue for
+                                    end if
+                                #endif
+                            end if
+                        #endif
+                    end if
+                #endif
+            End if
+            
+            #ifdef BULLET_ENEMIES
+                #ifndef BULLET_ENEMIES_MUST_LOOK
+                    #ifdef BULLET_ENEMIES_LOOK_AT
+                        Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
                     #endif
                 #endif
-            End If
+            #endif
         Next enemyId
         
         firstTimeScreen = 0
