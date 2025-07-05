@@ -34,18 +34,19 @@ Function checkProtaTop() As Ubyte
 end Function
 
 sub decrementLife()
-    if (currentLife = 0) then
+    if not currentLife then
         return
     end if
     
+    invincible = INVINCIBLE_FRAMES
+
     #ifdef LIVES_MODE_ENABLED
         if currentLife > 1 then
             currentLife = currentLife - 1
             
-            invincible = INVINCIBLE_FRAMES
-            
             #ifdef LIVES_MODE_GRAVEYARD
-                saveSprite( protaY, protaX, 15, 0)
+                'saveSprite( protaY, protaX, 15, 0)
+                protaTile = 15
             #endif
             
             #ifdef LIVES_MODE_RESPAWN
@@ -57,8 +58,6 @@ sub decrementLife()
     #else
         if currentLife > DAMAGE_AMOUNT then
             currentLife = currentLife - DAMAGE_AMOUNT
-            
-            invincible = INVINCIBLE_FRAMES
         else
             currentLife = 0
         end if

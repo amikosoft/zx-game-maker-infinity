@@ -117,14 +117,14 @@ End Sub
                 
                 printLife()
                 BeepFX_Play(4)
-             #ifdef MESSAGES_ENABLED
-             Else
-                printMessage("Need keys", 2, 0)
-            #endif
+                #ifdef MESSAGES_ENABLED
+                Else
+                    printMessage("Need keys", 2, 0)
+                #endif
             End If
             Return 1
         End If
-
+        
         Return 0
     End Function
 #endif
@@ -262,7 +262,7 @@ Sub drawSprites()
         #ifdef LIVES_MODE_GRAVEYARD
             Draw2x2Sprite(protaTile, protaX, protaY)
         #else
-            If Not invincible Or invincible bAnd 2 Then
+            If not currentLife or Not invincible Or invincible bAnd 2 Then
                 Draw2x2Sprite(protaTile, protaX, protaY)
             End If
         #endif
