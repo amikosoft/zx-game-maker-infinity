@@ -219,8 +219,11 @@ Sub playGame()
             Let lastFrameTiles = framec
         End If
 
-        protaMovement()
-        checkDamageByTile()
+        If currentLife Then
+            protaMovement()
+            checkDamageByTile()
+        End if
+
         moveEnemies()
 
         #ifdef SHOOTING_ENABLED
@@ -247,14 +250,19 @@ Sub playGame()
             enemiesScreen = enemiesPerScreen(currentScreen)
         End If
         
-        If currentLife = 0 Then gameOver()
+        If currentLife = 0 and not invincible Then gameOver()
         
         If invincible Then
             invincible = invincible - 1
             
+            if not currentLife Then 
+                'saveSprite( protaY, protaX, 15, 0)
+                protaTile = 15
             #ifdef LIVES_MODE_GRAVEYARD
+            Else
                 if Not invincible Then saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
             #endif
+            End if
         End If
         
         #ifdef NEW_BEEPER_PLAYER
@@ -300,11 +308,13 @@ Sub gameOver()
             dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
             PaginarMemoria(0)
         #Else
-            saveSprite( protaY, protaX, 15, 0)
+            'saveSprite( protaY, protaX, 15, 0)
+            protaTile = 15
             Print AT 7, 12; "GAME OVER"
         #endif
     #Else
-        saveSprite( protaY, protaX, 15, 0)
+        ' saveSprite( protaY, protaX, 15, 0)
+        protaTile = 15
         Print at 7, 12; "GAME OVER"
     #endif
     

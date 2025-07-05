@@ -663,9 +663,11 @@ Sub protaMovement()
                 
                 If framec - lastFrameTiles = ANIMATE_PERIOD_TILE - 2 Then
                     If protaTile = 13 Then
-                        saveSprite( protaY, protaX, 14, protaDirection)
+                        'saveSprite( protaY, protaX, 14, protaDirection)
+                        protaTile = 14
                     Else
-                        saveSprite( protaY, protaX, 13, protaDirection)
+                        'saveSprite( protaY, protaX, 13, protaDirection)
+                        protaTile = 13
                     End If
                 End If
             End If

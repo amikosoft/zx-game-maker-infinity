@@ -114,14 +114,14 @@ End Sub
                 
                 printLife()
                 BeepFX_Play(4)
-             #ifdef MESSAGES_ENABLED
-             Else
-                printMessage("Need keys", 2, 0)
-            #endif
+                #ifdef MESSAGES_ENABLED
+                Else
+                    printMessage("Need keys", 2, 0)
+                #endif
             End If
             Return 1
         End If
-
+        
         Return 0
     End Function
 #endif
@@ -232,7 +232,7 @@ Sub moveToScreen(direction As Ubyte)
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
             
             #ifdef LIVES_MODE_ENABLED
-                protaXRespawn = protaX 
+                protaXRespawn = protaX
                 protaYRespawn = 0 + SCREEN_ADJUSTMENT
             #endif
         #endif
@@ -259,7 +259,7 @@ Sub drawSprites()
         #ifdef LIVES_MODE_GRAVEYARD
             Draw2x2Sprite(protaTile, protaX, protaY)
         #else
-            If Not invincible Or invincible bAnd 2 Then
+            If not currentLife or Not invincible Or invincible bAnd 2 Then
                 Draw2x2Sprite(protaTile, protaX, protaY)
             End If
         #endif
@@ -270,7 +270,7 @@ Sub drawSprites()
             Draw1x1Sprite(currentBulletSpriteId, bulletPositionX, bulletPositionY)
         End If
     #endif
-
+    
     #ifdef BULLET_ENEMIES
         If enemyBulletPositionX <> 0 Then
             Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBulletPositionX, enemyBulletPositionY)
