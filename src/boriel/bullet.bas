@@ -54,7 +54,7 @@ End Function
                     end if
                 End if
             else
-        #endif
+            #endif
             ' desplazamiento de bala
             if bulletDirection = BULLET_DIRECTION_RIGHT then
                 if bulletPositionX >= bulletEndPositionX then
@@ -142,19 +142,20 @@ End Function
             #ifdef BULLET_COLLISIONS
                 dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
                 if tile Then
+                    #ifdef USE_BREAKABLE_TILE
+                        checkAndRemoveBreakableTile(tile)
+                    #endif
+                    
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
                     #else
                         resetBullet(0)
                     #endif
                     
-                    #ifdef USE_BREAKABLE_TILE
-                        checkAndRemoveBreakableTile(tile)
-                    #endif
                 end if
             #endif
-        
-        #ifdef BULLET_BOOMERANG
+            
+            #ifdef BULLET_BOOMERANG
             End If
         #endif
     end sub

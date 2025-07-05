@@ -527,8 +527,9 @@ if bulletAnimation == 1:
 if bulletType == 'boomerang':
     configStr += "#define BULLET_BOOMERANG\n"
 
-if bulletDisableCollisions == False:
+if bulletDisableCollisions == True:
     useBreakableTile = 0
+else:
     configStr += "#define BULLET_COLLISIONS\n"
 
 if platformMoveable == True:
