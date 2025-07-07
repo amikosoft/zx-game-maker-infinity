@@ -249,6 +249,8 @@ sub damageEnemy(enemyToKill as Ubyte)
     
     decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
     if alive = 0 then
+        decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
+
         ' enemySpriteTempTile(enemyToKill) = 0
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
         
