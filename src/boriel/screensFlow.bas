@@ -210,13 +210,22 @@ Sub playGame()
         End If
         
         If framec - lastFrameEnemies >= ANIMATE_PERIOD_ENEMY Then
-            animateEnemies()
+            enemFrame = Not enemFrame
             Let lastFrameEnemies = framec
         End If
         
         If framec - lastFrameTiles >= ANIMATE_PERIOD_TILE Then
-            animateAnimatedTiles()
+            'animateAnimatedTiles()
             Let lastFrameTiles = framec
+            animatedFrame = Not animatedFrame
+
+            For i=0 To MAX_ANIMATED_TILES_PER_SCREEN:
+                dim animatedTileId as ubyte = animatedTilesInScreen(currentScreen, i, 0)
+                If animatedTileId Then
+                    Dim tile As Ubyte = animatedTileId + animatedFrame
+                    SetTile(tile, attrSet(tile), animatedTilesInScreen(currentScreen, i, 1), animatedTilesInScreen(currentScreen, i, 2))
+                End If
+            Next i
         End If
 
         If currentLife Then
@@ -414,7 +423,6 @@ Sub swapScreen()
         for texto=0 to AVAILABLE_ADVENTURES
             if textsCoord(texto, 0) = currentScreen Then 
                 currentScreenFirstText = texto
-                exit for
             end if
         next texto
     #endif
