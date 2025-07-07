@@ -84,6 +84,11 @@ def getUseBreakableTile():
         maps_json = json.load(f)
     return any(prop["name"] == "useBreakableTile" and prop["value"] for prop in maps_json["properties"])
 
+def getAdventureTexts():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return any(prop["name"] == "adventureTexts" and prop["value"] for prop in maps_json["properties"])
+
 def getEnemiesShoot():
     with open(OUTPUT_FOLDER + "maps.json", "r") as f:
         maps_json = json.load(f)

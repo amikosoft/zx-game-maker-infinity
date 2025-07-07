@@ -154,6 +154,11 @@
                     "value": 10
                 },
                 {
+                    "name": "adventureTexts",
+                    "type": "bool",
+                    "value": false
+                },    
+                {
                     "name": "animatePeriodEnemy",
                     "type": "int",
                     "value": 3

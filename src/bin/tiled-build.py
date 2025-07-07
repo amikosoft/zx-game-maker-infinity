@@ -160,6 +160,7 @@ enemiesAlertDistance = 10
 bulletType = 'bullet'
 bulletDisableCollisions = False
 platformMoveable = False
+adventureTexts = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -302,6 +303,8 @@ if 'properties' in data:
             bulletDisableCollisions = property['value']    
         elif property['name'] == 'platformMoveable':
             platformMoveable = property['value']    
+        elif property['name'] == 'adventureTexts':
+            adventureTexts = property['value']      
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -734,44 +737,44 @@ for layer in data['layers']:
                     if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
                         keys[str(screenId)] = [int(initialMainCharacterX), int(initialMainCharacterY)]
                 elif object['type'] == 'text':
-                    xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
-                    yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
-                    screenId = xScreenPosition + (yScreenPosition * mapCols)
-                    xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
-                    yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
+                    if adventureTexts == True:
+                        xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
+                        yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
+                        screenId = xScreenPosition + (yScreenPosition * mapCols)
+                        xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
+                        yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
 
-                    # print(object['properties'])
+                        # print(object['properties'])
 
-                    adventureState = 0
-                    adventureItem = None
-                    adventureText = ''
-                    for prop in range(len(object['properties'])):
-                        if object['properties'][prop]['name'] == 'es' or object['properties'][prop]['name'] == 'en':
-                            adventureText = object['properties'][prop]['value']
-                        elif object['properties'][prop]['name'] == 'itemAction':
-                            adventureItem = object['properties'][prop]['value']
-                        elif object['properties'][prop]['name'] == 'adventureState':
-                            isAdventure = True
-                            adventureState = object['properties'][prop]['value']
+                        adventureState = 0
+                        adventureItem = None
+                        adventureText = ''
+                        for prop in range(len(object['properties'])):
+                            if object['properties'][prop]['name'] == 'es' or object['properties'][prop]['name'] == 'en':
+                                adventureText = object['properties'][prop]['value']
+                            elif object['properties'][prop]['name'] == 'itemAction':
+                                adventureItem = object['properties'][prop]['value']
+                            elif object['properties'][prop]['name'] == 'adventureState':
+                                isAdventure = True
+                                adventureState = object['properties'][prop]['value']
 
-                            if adventureState > maxAdventureState:
-                                maxAdventureState = adventureState
+                                if adventureState > maxAdventureState:
+                                    maxAdventureState = adventureState
 
-                    if len(adventureText) >0:
-                        if adventureItem == None and adventureState == 0:
-                            print(adventureItem)
-                            print(adventureState)
-                            print(object['properties'])
-                            exitWithErrorMessage('Cannot set an item to text without adventure state')
-                        texts.append([str(screenId), str(xScreenPosition), str(yScreenPosition), adventureText, adventureItem, adventureState])
+                        if len(adventureText) >0:
+                            if adventureItem == None and adventureState == 0:
+                                print(adventureItem)
+                                print(adventureState)
+                                print(object['properties'])
+                                exitWithErrorMessage('Cannot set an item to text without adventure state')
+                            texts.append([str(screenId), str(xScreenPosition), str(yScreenPosition), adventureText, adventureItem, adventureState])
 
-                        if len(texts) > 250:
-                            exitWithErrorMessage('Total text messages cannot be higher than 250')
-                    
+                            if len(texts) > 250:
+                                exitWithErrorMessage('Total text messages cannot be higher than 250')
                 else:
                     exitWithErrorMessage('Unknown object type. Only "enemy", "text" or "mainCharacter" are allowed')   
 
-if len(texts) > 0:
+if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
 
     if isAdventure:

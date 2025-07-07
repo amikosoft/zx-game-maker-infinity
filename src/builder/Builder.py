@@ -12,13 +12,14 @@ class Builder:
     def execute(self):
         is128K = getEnabled128K()
         useBreakableTile = getUseBreakableTile() and not getBulletDisableCollisions
+        enableAdventureTexts = getAdventureTexts()
 
         ScreensCompressor().execute(is128K, screenExists("intro"), screenExists("gameover"))
         TilesGenerator().execute()
         SpritesGenerator().execute()
         ConvertZXPToGuSprites.convert()
-        BinaryFilesToTapMerger().execute(is128K, useBreakableTile)
-        sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile).execute()
+        BinaryFilesToTapMerger().execute(is128K, useBreakableTile, enableAdventureTexts)
+        sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile, enableAdventureTexts).execute()
         ChartGenerator().execute(sizes, is128K)
         ConfigWriter(OUTPUT_FOLDER + "config.bas", INITIAL_ADDRESS, sizes).execute()
 

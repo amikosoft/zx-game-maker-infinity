@@ -4,10 +4,11 @@ from builder.Sizes import Sizes
 from builder.helper import ASSETS_FOLDER, musicExists, screenExists
 
 class SizesGetter:
-    def __init__(self, outputFolder, is128k, useBreakableTile):
+    def __init__(self, outputFolder, is128k, useBreakableTile, enableAdventureTexts):
         self.outputFolder = outputFolder
         self.is128k = is128k
         self.useBreakableTile = useBreakableTile
+        self.adventureTexts = enableAdventureTexts
 
     def execute(self):
         sizes = Sizes()
@@ -29,8 +30,10 @@ class SizesGetter:
         sizes.SCREEN_OBJECTS_DATA = self.__getOutputFileSize("screenObjects.bin")
         sizes.SCREENS_WON_DATA = self.__getOutputFileSize("screensWon.bin")
         sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA = self.__getOutputFileSize("decompressedEnemiesScreen.bin")
-        sizes.TEXTS_COORD_DATA = self.__getOutputFileSize("textsCoord.bin")
-        sizes.TEXTS_DATA = self.__getOutputFileSize("texts.bin")
+        
+        if self.adventureTexts:
+            sizes.TEXTS_COORD_DATA = self.__getOutputFileSize("textsCoord.bin")
+            sizes.TEXTS_DATA = self.__getOutputFileSize("texts.bin")
         
         if self.useBreakableTile:
             sizes.BROKEN_TILES_DATA = self.__getOutputFileSize("brokenTiles.bin")

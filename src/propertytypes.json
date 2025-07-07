@@ -158,6 +158,11 @@
                 "value": 10
             },
             {
+                "name": "adventureTexts",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "arcadeMode",
                 "type": "bool",
                 "value": false
