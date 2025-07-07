@@ -173,7 +173,7 @@ End Function
             end if
             enemyBulletPositionX = enemyBulletPositionX + BULLET_ENEMIES_SPEED
         elseif enemyBulletDirection = BULLET_DIRECTION_LEFT then
-            if enemyBulletPositionX <= MAX_SCREEEN_LEFT then
+            if enemyBulletPositionX <= MAX_SCREEN_LEFT then
                 resetBullet(1)
                 return
             end if
@@ -249,7 +249,7 @@ sub damageEnemy(enemyToKill as Ubyte)
     
     decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
     if alive = 0 then
-        enemySpriteTempTile(enemyToKill) = 0
+        ' enemySpriteTempTile(enemyToKill) = 0
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
         
         BeepFX_Play(0)

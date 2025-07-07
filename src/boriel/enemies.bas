@@ -61,8 +61,6 @@
     dim enemiesFrame as ubyte = 0
 #endif
 
-dim firstTimeScreen as ubyte = 1
-
 Sub moveEnemies()
     If enemiesScreen Then
         #ifndef ENABLED_128
@@ -83,8 +81,6 @@ Sub moveEnemies()
                 End If
             #endif
             
-            if firstTimeScreen Then enemySpriteTempTile(enemyId) = tile + 1
-            
             ' Se comprueba si tiene colision de bala
             #ifdef SHOOTING_ENABLED
                 if enemyLive <> -100 and enemyLive > 0 then
@@ -103,15 +99,11 @@ Sub moveEnemies()
                 
                 #ifdef ENABLED_128
                     If (enemySpeed = 1 and (framec bAnd 3) <> 3) or (enemySpeed = 2 and (framec bAnd 1) = 1) Then
-                        Draw2x2Sprite(enemySpriteTempTile(enemyId), enemyCol, enemyLin)
-                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
-                        continue For
+                        GO TO EnemiesFinal
                     End If
                 #Else
                     If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
-                        Draw2x2Sprite(enemySpriteTempTile(enemyId), enemyCol, enemyLin)
-                        if tile > 15 and not invincible Then checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
-                        continue For
+                        GO TO EnemiesFinal
                     End If
                 #endif
                 
@@ -257,13 +249,9 @@ Sub moveEnemies()
                             End If
                         End If
                     #endif
-                Elseif horizontalDirection = -1 Then
-                    tile = tile + 16
+
                 End if
                 
-                If enemFrame Then
-                    tile = tile + 1
-                End If
                 
                 ' se guarda el estado final del enemigo
                 'if enemyMode <> 2 And enemyMode <> 3 Then
@@ -274,8 +262,16 @@ Sub moveEnemies()
                 decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
                 decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyMode
                 
-                enemySpriteTempTile(enemyId) = tile + 1
+                EnemiesFinal:
+
+                if tile > 15 and horizontalDirection = -1 Then
+                    tile = tile + 16
+                End if
                 
+                If enemFrame Then
+                    tile = tile + 1
+                End If
+
                 #ifdef BULLET_ENEMIES
                     #ifndef BULLET_ENEMIES_MUST_LOOK
                         if tile < 16 then Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
@@ -287,8 +283,9 @@ Sub moveEnemies()
                     #endif
                 #Else
                     Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
-                #endif
+                #endif     
                 
+
                 if tile > 15 and Not invincible Then
                     checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                     
