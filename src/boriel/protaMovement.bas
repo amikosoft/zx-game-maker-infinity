@@ -566,7 +566,9 @@ Sub fireKey()
             validaTexto(0)
         #endif
     #else
-        shoot()
+        #ifdef SHOOTING_ENABLED
+            shoot()
+        #endif
     #endif
 End Sub
 
