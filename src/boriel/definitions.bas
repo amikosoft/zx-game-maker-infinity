@@ -14,7 +14,7 @@ Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
 #ifdef OVERHEAD_VIEW
     Const BULLET_SPRITE_UP_ID As Ubyte = 51
     Const BULLET_SPRITE_DOWN_ID As Ubyte = 52
-
+    
     #ifdef BULLET_ENEMIES
         Const BULLET_SPRITE_ENEMY_ID As Ubyte = 53
     #endif
@@ -26,7 +26,7 @@ Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
         #ifdef BULLET_ENEMIES
             Const BULLET_SPRITE_ENEMY_ID As Ubyte = 53
         #endif
-    #else 
+    #else
         #ifdef BULLET_ENEMIES
             Const BULLET_SPRITE_ENEMY_ID As Ubyte = 51
         #endif
@@ -44,7 +44,7 @@ const BULLET_DIRECTION_UP = 8
 const BULLET_DIRECTION_DOWN = 2
 
 #ifdef BULLET_BOOMERANG
-const BULLET_DIRECTION_BOOMERANG = 10
+    const BULLET_DIRECTION_BOOMERANG = 10
 #endif
 
 #ifdef BULLET_ENEMIES
@@ -140,8 +140,12 @@ Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 Dim screensWon(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
 
-dim textsCoord(SCREENS_COUNT, 2, 2) as ubyte at TEXTS_COORD_DATA_ADDRESS
-dim textToDisplay(AVAILABLE_TEXTS, 45) as ubyte at TEXTS_DATA_ADDRESS
+#ifdef IN_GAME_TEXT_ENABLED
+    dim textsCoord(AVAILABLE_ADVENTURES, 5) as ubyte at TEXTS_COORD_DATA_ADDRESS
+    dim textToDisplay(AVAILABLE_TEXTS, 60) as ubyte at TEXTS_DATA_ADDRESS
+    dim currentAdventureState as ubyte = 0
+    dim currentScreenFirstText as ubyte = 0
+#endif
 
 #ifdef USE_BREAKABLE_TILE
     Dim brokenTiles(SCREENS_COUNT) As Ubyte at BROKEN_TILES_DATA_ADDRESS

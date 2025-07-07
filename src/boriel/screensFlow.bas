@@ -371,8 +371,18 @@ Sub resetValues()
         score = 0
     #endif
     
-    currentAmmo = INITIAL_AMMO
+    #ifdef AMMO_ENABLED
+        currentAmmo = INITIAL_AMMO
+    #endif
     
+    #ifdef IN_GAME_TEXT_ENABLED
+        #ifndef ARCADE_MODE
+            #ifdef IS_TEXT_ADVENTURE
+                currentAdventureState = 1
+            #endif
+        #endif
+    #endif
+
     redrawScreen()
     ' drawSprites()
 End Sub
@@ -397,5 +407,15 @@ Sub swapScreen()
             protaXRespawn = mainCharactersArray(currentScreen, 0)
             protaYRespawn = mainCharactersArray(currentScreen, 1)
         #endif
+    #endif
+
+     #ifdef IN_GAME_TEXT_ENABLED
+        'esto es para agilizar la busqueda de textos
+        for texto=0 to AVAILABLE_ADVENTURES
+            if textsCoord(texto, 0) = currentScreen Then 
+                currentScreenFirstText = texto
+                exit for
+            end if
+        next texto
     #endif
 End Sub

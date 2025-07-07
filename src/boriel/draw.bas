@@ -17,8 +17,9 @@ Sub mapDraw(force As Ubyte)
 End Sub
 
 Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
-    If tile < 1 Then 
-        if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+    if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+    If tile < 1 Then
+        ' if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
         Return
     End if
     
@@ -49,10 +50,12 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
         End If
     #endif
     
-    If tile < 187 Then
+    If tile < AMMO_TILE Then
         SetTile(tile, attrSet(tile), x, y)
         Return
     End If
+    
+    ' if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
     
     If tile = ITEM_TILE Then
         If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then

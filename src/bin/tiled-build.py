@@ -627,7 +627,10 @@ enemiesAnticlockwise = 0
 objects = {}
 keys = {}
 items = {}
-texts = {}
+
+texts = []
+isAdventure = False
+maxAdventureState = 0
 
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
@@ -737,40 +740,73 @@ for layer in data['layers']:
                     xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
                     yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
 
-                    if str(screenId) not in texts:
-                        texts[str(screenId)] = []
-                    texts[str(screenId)].append([str(xScreenPosition), str(yScreenPosition), object['properties'][0]['value']])
+                    # print(object['properties'])
+
+                    adventureState = 0
+                    adventureItem = None
+                    adventureText = ''
+                    for prop in range(len(object['properties'])):
+                        if object['properties'][prop]['name'] == 'es' or object['properties'][prop]['name'] == 'en':
+                            adventureText = object['properties'][prop]['value']
+                        elif object['properties'][prop]['name'] == 'itemAction':
+                            adventureItem = object['properties'][prop]['value']
+                        elif object['properties'][prop]['name'] == 'adventureState':
+                            isAdventure = True
+                            adventureState = object['properties'][prop]['value']
+
+                            if adventureState > maxAdventureState:
+                                maxAdventureState = adventureState
+
+                    if len(adventureText) >0:
+                        if adventureItem == None and adventureState == 0:
+                            print(adventureItem)
+                            print(adventureState)
+                            print(object['properties'])
+                            exitWithErrorMessage('Cannot set an item to text without adventure state')
+                        texts.append([str(screenId), str(xScreenPosition), str(yScreenPosition), adventureText, adventureItem, adventureState])
+
+                        if len(texts) > 250:
+                            exitWithErrorMessage('Total text messages cannot be higher than 250')
+                    
                 else:
                     exitWithErrorMessage('Unknown object type. Only "enemy", "text" or "mainCharacter" are allowed')   
 
 if len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
 
+    if isAdventure:
+        if maxAdventureState < 2:
+            exitWithErrorMessage('Max adventure state must be higher than 1. Current: ' + str(maxAdventureState))
+        
+        configStr += "#DEFINE IS_TEXT_ADVENTURE\n"
+        configStr += "const MAX_ADVENTURE_STATE as ubyte = " + str(maxAdventureState) + "\n"
+        
 # fill emty screen text with empty string
-for i in range(screensCount):
-    if str(i) not in texts:
-        texts[str(i)] = []
+# for i in range(screensCount):
+#     if str(i) not in texts:
+#         texts[str(i)] = []
     
-    print("Pantalla: " + str(i))
-    print(texts[str(i)])
+#     print("Pantalla: " + str(i))
+#     print(texts[str(i)])
 
-    while len(texts[str(i)]) < 3:
-        texts[str(i)].append(['0', '0', ''])
-        print('Hueco vacío')
-allTexts = []
+#     while len(texts[str(i)]) < 3:
+#         texts[str(i)].append(['0', '0', ''])
+#         print('Hueco vacío')
 
-with open("output/textsCoord.bin", "wb") as f:
-    for i in range(screensCount):
-        print("=========================")
-        print(texts[str(i)])
-        for itemText in texts[str(i)]:
-            print("texto: " + itemText[2])
-            if len(itemText[2]) > 0:
-                textoFinal = itemText[2]
-                # Truncar texto mayor de 45 caracteres
-                if len(textoFinal) > 45:
+    allTexts = []
+
+    with open("output/textsCoord.bin", "wb") as f:
+        for i in range(len(texts)):
+            print("=========================")
+            itemText = texts[i]
+            print(itemText)
+            print("texto: " + itemText[3])
+            if len(itemText[3]) > 0:
+                textoFinal = itemText[3]
+                # Truncar texto mayor de 60 caracteres
+                if len(textoFinal) > 60:
                     print("texto truncado")
-                    textoFinal = itemText[2][0:45]
+                    textoFinal = itemText[3][0:60]
 
                 posicion = -1
 
@@ -787,22 +823,52 @@ with open("output/textsCoord.bin", "wb") as f:
                     print("texto nuevo "+ textoFinal + " en posicion " + str(posicion))
                 
                 print(textoFinal)
-                f.write(bytearray([int(itemText[0]), int(itemText[1]), posicion]))
-            else:
-                print("sin texto")
-                f.write(bytearray([int(0), int(0), int(0)]))
+                f.write(bytearray([int(itemText[0]), int(itemText[1]), int(itemText[2]), posicion, int(itemText[4]), int(itemText[5])]))
+        # for i in range(screensCount):
+        #     print("=========================")
+        #     print(texts[str(i)])
+        #     for itemText in texts[str(i)]:
+        #         print("texto: " + itemText[2])
+        #         if len(itemText[2]) > 0:
+        #             textoFinal = itemText[2]
+        #             # Truncar texto mayor de 45 caracteres
+        #             if len(textoFinal) > 45:
+        #                 print("texto truncado")
+        #                 textoFinal = itemText[2][0:45]
 
-print("ALL TEXTS")
-with open("output/texts.bin", "wb") as f:
-    for i in allTexts:
-        print(i)
-        # if len(i > 20)
-        f.write(i.ljust(45, ' ').encode('ascii'))
-        f.write(b'\x00')
+        #             posicion = -1
 
-configStr += "const AVAILABLE_TEXTS as ubyte = " + str(len(allTexts)) + "\n"
+        #             for p, string in enumerate(allTexts):
+        #                 if string == textoFinal:
+        #                     print("texto existente "+ string + " en posicion " + str(p))
+        #                     posicion = p
+        #                     break
+                    
+        #             if posicion == -1:
+        #                 # Verificar que no exista ya el texto
+        #                 allTexts.append(textoFinal)
+        #                 posicion = int(len(allTexts)) - 1
+        #                 print("texto nuevo "+ textoFinal + " en posicion " + str(posicion))
+                    
+        #             print(textoFinal)
+        #             f.write(bytearray([int(itemText[0]), int(itemText[1]), posicion]))
+        #         else:
+        #             print("sin texto")
+        #             f.write(bytearray([int(0), int(0), int(0)]))
 
-print("ALL TEXTS LENGTH "+ str(len(allTexts)))
+    print("ALL TEXTS")
+    with open("output/texts.bin", "wb") as f:
+        for i in allTexts:
+            print(i)
+            # if len(i > 20)
+            f.write(i.ljust(60, '-').encode('ascii'))
+            f.write(b'\x00')
+
+    configStr += "const AVAILABLE_ADVENTURES as ubyte = " + str(len(texts) - 1) + "\n"
+    configStr += "const AVAILABLE_TEXTS as ubyte = " + str(len(allTexts) - 1) + "\n"
+
+    print("ALL ADVENTURES LENGTH "+ str(len(texts)))
+    print("ALL TEXTS LENGTH "+ str(len(allTexts)))
 
 if arcadeMode == 1: # Defino el array de posiciones iniciales del personaje principal
     configStr += "dim mainCharactersArray(" + str(screensCount - 1) + ", 1) as ubyte = { _\n"

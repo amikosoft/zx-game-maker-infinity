@@ -177,7 +177,7 @@ End Function
                 ' If jumpArray(jumpCurrentKey) > 0 Then
                 '     jumpCurrentKey = jumpStopValue
                 ' Else
-                    jumpCurrentKey = jumpCurrentKey + 1
+                jumpCurrentKey = jumpCurrentKey + 1
                 ' End If
                 Return
             End If
@@ -491,43 +491,82 @@ Sub downKey()
     #endif
 End Sub
 
-Function validaTexto() as ubyte
-    dim textFound as ubyte = 0
-    for texto=0 to 2
-        dim cordX as ubyte = textsCoord(currentScreen, texto, 0)
-        dim cordY as ubyte = textsCoord(currentScreen, texto, 1)
-        If (protaX-2) <= cordX And (protaX+6) >= cordX Then
-            If (protaY-2) <= cordY And (protaY+4) >= cordY Then
-                textFound = 1
-                
-                ' FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
-                
-                for fila=0 to 2
-                    for letra=0 to 14
-                        Print AT 5+fila, 10 + letra; Chr$(textToDisplay(textsCoord(currentScreen, texto, 2), (fila*15)+letra))
-                    Next letra
-                Next fila
-                
-                pauseUntilPressEnter()
-                
-                mapDraw(1)
-                ' for lin=0 to 2
-                '     for col=0 to 14
-                '         if not GetTile(10+col, 5+lin) Then SetTile(0, BACKGROUND_ATTRIBUTE, 10+col, 5+lin)
-                '     Next col
-                ' Next lin
-            End if
-        End If
-    Next texto
+#ifdef IN_GAME_TEXT_ENABLED
+    Sub muestraDialogo(texto as ubyte)
+        'FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+        
+        for fila=0 to 2
+            for letra=0 to 19
+                Print AT 5+fila, 6 + letra; Chr$(textToDisplay(textsCoord(texto, 3), (fila*20)+letra))
+            Next letra
+        Next fila
+        pauseUntilPressEnter()
+        mapDraw(1)
+    end sub
     
-    return textFound
-End Function
+    Function validaTexto(validateTile as ubyte) as ubyte
+        dim textFound as ubyte = 0
+        
+        #ifdef IS_TEXT_ADVENTURE
+            dim stateTmp as ubyte = currentAdventureState
+        #EndIf
+        
+        for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
+            if textsCoord(texto, 0) <> currentScreen Then exit for
+            dim cordX as ubyte = textsCoord(texto, 1)
+            dim cordY as ubyte = textsCoord(texto, 2)
+            If (protaX-1) <= cordX And (protaX+5) >= cordX Then
+                If (protaY-1) <= cordY And (protaY+5) >= cordY Then
+                    textFound = 1
+                    
+                    #ifdef IS_TEXT_ADVENTURE
+                        #ifndef ARCADE_MODE
+                            #ifndef LEVELS_MODE
+                                dim textState as ubyte = textsCoord(texto, 5)
+                                if not textState or textState = stateTmp Then
+                                    dim adventureAction as ubyte = textsCoord(texto, 4)
+                                    
+                                    if adventureAction then
+                                        if adventureAction = 1 Then
+                                            if textState = stateTmp Then
+                                                currentAdventureState = currentAdventureState + 1
+                                                
+                                                If currentAdventureState > MAX_ADVENTURE_STATE Then
+                                                    muestraDialogo(textsCoord(texto, 3))
+                                                    ending()
+                                                end if
+                                            End if
+                                        elseif validateTile <> adventureAction Then
+                                            textFound = 0
+                                        end if
+                                    end if
+                                    
+                                    if textFound Then muestraDialogo(textsCoord(texto, 3))
+                                else
+                                    textFound = 0
+                                end if
+                            #EndIf
+                        #EndIf
+                    #Else
+                        muestraDialogo(textsCoord(texto, 3))
+                    #EndIf
+                End If
+            End if
+        Next texto
+        
+        return textFound
+    End Function
+#endif
 
 Sub fireKey()
-    #ifdef SHOOTING_ENABLED
-        if not validaTexto() then shoot()
-    #Else
-        validaTexto()
+    #ifdef IN_GAME_TEXT_ENABLED
+        #ifdef SHOOTING_ENABLED
+            if not validaTexto(0) then shoot()
+        #Else
+            validaTexto(0)
+        #endif
+    #else
+        shoot()
     #endif
 End Sub
 
@@ -640,23 +679,45 @@ Sub checkObjectContact()
     Dim col As Ubyte = protaX >> 1
     Dim lin As Ubyte = protaY >> 1
     
-    If checkTileObject(GetTile(col, lin)) Then
-        FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin)
-        validaTexto()
-        Return
-    Elseif checkTileObject(GetTile(col + 1, lin))
-        FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin)
-        validaTexto()
-        Return
-    Elseif checkTileObject(GetTile(col, lin + 1))
-        FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin + 1)
-        validaTexto()
-        Return
-    Elseif checkTileObject(GetTile(col + 1, lin + 1))
-        FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin + 1)
-        validaTexto()
-        Return
-    End If
+    for c=0 to 1
+        for l=0 to 1
+            #ifdef IN_GAME_TEXT_ENABLED
+                dim tile = GetTile(col+c, lin+l)
+                
+                if checkTileObject(tile) then
+                    validaTexto(tile)
+                    FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                End if
+            #else
+                If checkTileObject(GetTile(col+c, lin+l)) Then
+                    FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                End if
+            #endif
+        next l
+    next c
+    
+    ' If checkTileObject(GetTile(col, lin)) Then
+    '     #ifdef IN_GAME_TEXT_ENABLED
+    '         validaTexto(GetTile(col, lin))
+    '     #endif
+    '     FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin)
+    
+    ' Elseif checkTileObject(GetTile(col + 1, lin))
+    '    #ifdef IN_GAME_TEXT_ENABLED
+    '         validaTexto(GetTile(col + 1, lin))
+    '     #endif
+    '     FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin)
+    '  Elseif checkTileObject(GetTile(col, lin + 1))
+    '     #ifdef IN_GAME_TEXT_ENABLED
+    '         validaTexto(GetTile(col, lin + 1))
+    '     #endif
+    '     FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin + 1)
+    ' Elseif checkTileObject(GetTile(col + 1, lin + 1))
+    '     #ifdef IN_GAME_TEXT_ENABLED
+    '         validaTexto(GetTile(col + 1, lin + 1))
+    '     #endif
+    '    FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin + 1)
+    '  End If
 End Sub
 
 
