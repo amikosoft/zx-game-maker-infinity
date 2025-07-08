@@ -182,6 +182,7 @@ Sub playGame()
         
         saveSprite( INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
     #endif
+    
     swapScreen()
     resetValues()
     
@@ -423,6 +424,7 @@ Sub swapScreen()
         for texto=0 to AVAILABLE_ADVENTURES
             if textsCoord(texto, 0) = currentScreen Then 
                 currentScreenFirstText = texto
+                Exit for
             end if
         next texto
     #endif

@@ -142,7 +142,7 @@ Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSE
 
 #ifdef IN_GAME_TEXT_ENABLED
     dim textsCoord(AVAILABLE_ADVENTURES, 5) as ubyte at TEXTS_COORD_DATA_ADDRESS
-    dim textToDisplay(AVAILABLE_TEXTS, 60) as ubyte at TEXTS_DATA_ADDRESS
+    dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS
     dim currentAdventureState as ubyte = 0
     dim currentScreenFirstText as ubyte = 0
 #endif

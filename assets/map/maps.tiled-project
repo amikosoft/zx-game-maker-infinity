@@ -119,6 +119,18 @@
             "valuesAsFlags": false
         },
         {
+            "id": 11,
+            "name": "adventureTextsLength",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "30",
+                "45",
+                "60"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -154,10 +166,21 @@
                     "value": 10
                 },
                 {
+                    "name": "adventureTextsLength",
+                    "propertyType": "adventureTextsLength",
+                    "type": "string",
+                    "value": "30"
+                },
+                {
                     "name": "adventureTexts",
                     "type": "bool",
                     "value": false
-                },    
+                },
+                {
+                    "name": "adventureTextsClearScreen",
+                    "type": "bool",
+                    "value": false
+                },  
                 {
                     "name": "animatePeriodEnemy",
                     "type": "int",

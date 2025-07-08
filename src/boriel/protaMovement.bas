@@ -492,13 +492,23 @@ Sub downKey()
 End Sub
 
 #ifdef IN_GAME_TEXT_ENABLED
-    Sub muestraDialogo(texto as ubyte)
-        'FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
-        
-        for fila=0 to 2
-            for letra=0 to 19
-                Print AT 5+fila, 6 + letra; Chr$(textToDisplay(textsCoord(texto, 3), (fila*20)+letra))
+    Sub muestraDialogo(texto as ubyte, tile as ubyte)
+        #ifdef FULLSCREEN_TEXTS
+            FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+
+            if tile > 1 Then SetTile(tile, attrSet(tile), 16, 4)
+        #EndIf
+
+        for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
+            for letra=0 to 14
+                #ifndef FULLSCREEN_TEXTS
+                    if tile > 1 and fila = 0 Then Print AT 5, 9 + letra; " "
+                #endif
+                Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textsCoord(texto, 3), (fila*15)+letra))
             Next letra
+            #ifndef FULLSCREEN_TEXTS
+                if tile > 1 Then SetTile(tile, attrSet(tile), 16, 5)
+            #endif
         Next fila
         pauseUntilPressEnter()
         mapDraw(1)
@@ -508,7 +518,7 @@ End Sub
         dim textFound as ubyte = 0
         
         #ifdef IS_TEXT_ADVENTURE
-            dim stateTmp as ubyte = currentAdventureState
+            dim adventureStateTmp as ubyte = currentAdventureState
         #EndIf
         
         for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
@@ -523,16 +533,19 @@ End Sub
                         #ifndef ARCADE_MODE
                             #ifndef LEVELS_MODE
                                 dim textState as ubyte = textsCoord(texto, 5)
-                                if not textState or textState = stateTmp Then
+                                
+                                if not textState or textState = adventureStateTmp Then
                                     dim adventureAction as ubyte = textsCoord(texto, 4)
                                     
                                     if adventureAction then
                                         if adventureAction = 1 Then
-                                            if textState = stateTmp Then
+                                            if textState = adventureStateTmp Then
                                                 currentAdventureState = currentAdventureState + 1
+
+                                                adventureAction = GetTile(cordX>>1, cordY>>1)
                                                 
                                                 If currentAdventureState > MAX_ADVENTURE_STATE Then
-                                                    muestraDialogo(textsCoord(texto, 3))
+                                                    muestraDialogo(textsCoord(texto, 3), adventureAction)
                                                     ending()
                                                 end if
                                             End if
@@ -541,14 +554,14 @@ End Sub
                                         end if
                                     end if
                                     
-                                    if textFound Then muestraDialogo(textsCoord(texto, 3))
+                                    if textFound Then muestraDialogo(textsCoord(texto, 3), adventureAction)
                                 else
                                     textFound = 0
                                 end if
                             #EndIf
                         #EndIf
                     #Else
-                        muestraDialogo(textsCoord(texto, 3))
+                        muestraDialogo(textsCoord(texto, 3), 0)
                     #EndIf
                 End If
             End if

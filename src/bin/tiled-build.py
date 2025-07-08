@@ -161,6 +161,8 @@ bulletType = 'bullet'
 bulletDisableCollisions = False
 platformMoveable = False
 adventureTexts = False
+adventureTextsLength = 30
+adventureTextsClearScreen = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -304,7 +306,11 @@ if 'properties' in data:
         elif property['name'] == 'platformMoveable':
             platformMoveable = property['value']    
         elif property['name'] == 'adventureTexts':
-            adventureTexts = property['value']      
+            adventureTexts = property['value']
+        elif property['name'] == 'adventureTextsLength':
+            adventureTextsLength = int(property['value'])
+        elif property['name'] == 'adventureTextsClearScreen':
+            adventureTextsClearScreen = property['value']
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -747,7 +753,7 @@ for layer in data['layers']:
                         # print(object['properties'])
 
                         adventureState = 0
-                        adventureItem = None
+                        adventureItem = 0
                         adventureText = ''
                         for prop in range(len(object['properties'])):
                             if object['properties'][prop]['name'] == 'es' or object['properties'][prop]['name'] == 'en':
@@ -762,7 +768,7 @@ for layer in data['layers']:
                                     maxAdventureState = adventureState
 
                         if len(adventureText) >0:
-                            if adventureItem == None and adventureState == 0:
+                            if adventureItem == 1 and adventureState == 0:
                                 print(adventureItem)
                                 print(adventureState)
                                 print(object['properties'])
@@ -777,39 +783,33 @@ for layer in data['layers']:
 if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
 
+    configStr += "const TEXTS_SIZE as ubyte = " + str(adventureTextsLength) + "\n"
+    
+    if adventureTextsClearScreen == True:
+        configStr += "#DEFINE FULLSCREEN_TEXTS\n"
+    
     if isAdventure:
         if maxAdventureState < 2:
             exitWithErrorMessage('Max adventure state must be higher than 1. Current: ' + str(maxAdventureState))
         
         configStr += "#DEFINE IS_TEXT_ADVENTURE\n"
         configStr += "const MAX_ADVENTURE_STATE as ubyte = " + str(maxAdventureState) + "\n"
-        
-# fill emty screen text with empty string
-# for i in range(screensCount):
-#     if str(i) not in texts:
-#         texts[str(i)] = []
-    
-#     print("Pantalla: " + str(i))
-#     print(texts[str(i)])
-
-#     while len(texts[str(i)]) < 3:
-#         texts[str(i)].append(['0', '0', ''])
-#         print('Hueco vacío')
 
     allTexts = []
 
     with open("output/textsCoord.bin", "wb") as f:
-        for i in range(len(texts)):
+        sortedTexts = sorted(texts, key=lambda texto: texto[0])
+        for i in range(len(sortedTexts)):
             print("=========================")
-            itemText = texts[i]
+            itemText = sortedTexts[i]
             print(itemText)
             print("texto: " + itemText[3])
             if len(itemText[3]) > 0:
                 textoFinal = itemText[3]
                 # Truncar texto mayor de 60 caracteres
-                if len(textoFinal) > 60:
+                if len(textoFinal) > adventureTextsLength:
                     print("texto truncado")
-                    textoFinal = itemText[3][0:60]
+                    textoFinal = itemText[3][0:adventureTextsLength]
 
                 posicion = -1
 
@@ -864,7 +864,7 @@ if adventureTexts and len(texts) > 0:
         for i in allTexts:
             print(i)
             # if len(i > 20)
-            f.write(i.ljust(60, ' ').encode('ascii'))
+            f.write(i.ljust(adventureTextsLength, '-').encode('ascii'))
             f.write(b'\x00')
 
     configStr += "const AVAILABLE_ADVENTURES as ubyte = " + str(len(texts) - 1) + "\n"
