@@ -20,7 +20,7 @@ class Builder:
         ConvertZXPToGuSprites.convert()
         BinaryFilesToTapMerger().execute(is128K, useBreakableTile, enableAdventureTexts)
         sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile, enableAdventureTexts).execute()
-        ChartGenerator().execute(sizes, is128K)
+        ChartGenerator().execute(sizes, is128K, enableAdventureTexts)
         ConfigWriter(OUTPUT_FOLDER + "config.bas", INITIAL_ADDRESS, sizes).execute()
 
         return sizes
