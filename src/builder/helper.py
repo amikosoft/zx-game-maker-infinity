@@ -19,6 +19,10 @@ MAP_FOLDER = str(Path(ASSETS_FOLDER + "map/")) + getOsSeparator()
 MAPS_FILE = str(Path(ASSETS_FOLDER + "map/maps.tmx"))
 MAPS_PROJECT = str(Path(ASSETS_FOLDER + "map/maps.tiled-project"))
 DIST_FOLDER = str(Path("../dist/")) + getOsSeparator()
+
+if not os.path.exists(DIST_FOLDER):
+    os.makedirs(DIST_FOLDER)
+
 INITIAL_ADDRESS = 49152
 MEMORY_BANK_SIZE = 16384
 

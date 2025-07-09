@@ -1,43 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="46">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="75">
  <editorsettings>
   <chunksize width="32" height="22"/>
  </editorsettings>
  <properties>
   <property name="128Kenabled" type="bool" value="true"/>
-  <property name="VTPLAYER_INIT" value="EFAD"/>
-  <property name="VTPLAYER_MUTE" value="EFB5"/>
-  <property name="VTPLAYER_NEXTNOTE" value="EFB2"/>
-  <property name="ammo" type="int" value="-1"/>
+  <property name="adventureTexts" type="bool" value="true"/>
+  <property name="adventureTextsClearScreen" type="bool" value="true"/>
+  <property name="adventureTextsLength" value="60"/>
+  <property name="ammo" type="int" value="100"/>
   <property name="animatePeriodMain" type="int" value="1"/>
   <property name="animatePeriodTile" type="int" value="10"/>
-  <property name="backgroundAttribute" type="int" value="7"/>
-  <property name="bulletDistance" type="int" value="0"/>
-  <property name="damageAmount" type="int" value="10"/>
-  <property name="enemiesAlertDistance" propertytype="enemiesAlertDistance" value="medium"/>
+  <property name="backgroundAttribute" type="int" value="71"/>
+  <property name="bulletAnimation" type="bool" value="true"/>
+  <property name="bulletDisableCollisions" type="bool" value="false"/>
+  <property name="bulletDistance" type="int" value="15"/>
+  <property name="bulletType" value="boomerang"/>
+  <property name="bulletsCollisionWithBullets" type="bool" value="true"/>
+  <property name="damageAmount" type="int" value="1"/>
+  <property name="enemiesAlertDistance" value="medium"/>
+  <property name="enemiesBulletCollision" type="bool" value="false"/>
   <property name="enemiesRespawn" type="bool" value="true"/>
+  <property name="enemiesShoot" type="int" value="0"/>
+  <property name="enemiesShootOnlyLookingPlayer" type="bool" value="false"/>
+  <property name="enemiesShootSpeed" value="slow"/>
+  <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
   <property name="gameName" value="Game Name"/>
-  <property name="goalItems" type="int" value="2"/>
+  <property name="gameView" propertytype="gameView" value="side"/>
+  <property name="goalItems" type="int" value="0"/>
   <property name="hiScore" type="bool" value="false"/>
   <property name="idleTime" type="int" value="30"/>
-  <property name="initialLife" type="int" value="50"/>
-  <property name="itemsCountdown" type="bool" value="true"/>
-  <property name="itemsEnabled" type="bool" value="true"/>
+  <property name="initialLife" type="int" value="10"/>
+  <property name="itemsCountdown" type="bool" value="false"/>
+  <property name="itemsEnabled" type="bool" value="false"/>
+  <property name="jumpOnEnemies" type="bool" value="true"/>
   <property name="jumpType" propertytype="jumpType" value="constant"/>
   <property name="keysEnabled" type="bool" value="true"/>
-  <property name="killJumpingOnTop" type="bool" value="true"/>
+  <property name="killJumpingOnTop" type="bool" value="false"/>
   <property name="levelsMode" type="bool" value="false"/>
   <property name="lifeAmount" type="int" value="5"/>
+  <property name="livesMode" propertytype="livesMode" value="instant respawn"/>
   <property name="mainCharacterExtraFrame" type="bool" value="true"/>
   <property name="maxAnimatedTilesPerScreen" type="int" value="10"/>
   <property name="maxEnemiesPerScreen" type="int" value="3"/>
-  <property name="messagesEnabled" type="bool" value="true"/>
-  <property name="musicEnabled" type="bool" value="false"/>
+  <property name="messagesEnabled" type="bool" value="false"/>
+  <property name="musicEnabled" type="bool" value="true"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
-  <property name="redefineKeysEnabled" type="bool" value="true"/>
+  <property name="password" value=""/>
+  <property name="platformMoveable" type="bool" value="true"/>
+  <property name="redefineKeysEnabled" type="bool" value="false"/>
   <property name="shooting" type="bool" value="true"/>
   <property name="shouldKillEnemies" type="bool" value="true"/>
   <property name="useBreakableTile" type="bool" value="true"/>
+  <property name="waitPressKeyAfterLoad" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="192" columns="32">
   <image source="tiles.png" width="256" height="48"/>
@@ -86,7 +101,7 @@
 3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-3,3,1,1,1,1,191,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+3,3,1,1,1,1,191,1,1,1,1,1,1,1,1,1,1,1,178,1,1,1,1,1,1,1,1,1,1,1,1,1,
 3,3,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
 </chunk>
    <chunk x="32" y="0" width="32" height="22">
@@ -124,16 +139,16 @@
 3,3,1,1,1,97,99,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,3,
 3,3,1,1,1,113,114,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
 3,3,1,1,1,145,146,1,1,1,1,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,1,1,1,1,3,
-3,3,1,1,1,177,178,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
-3,3,1,1,1,1,1,1,1,1,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
+3,3,1,1,1,177,178,1,1,1,120,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
+3,3,1,1,1,1,1,1,1,1,3,3,3,1,1,1,1,1,1,1,1,177,1,1,1,1,1,1,1,1,1,3,
 3,3,1,1,1,1,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,1,3,
 3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
-3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
+3,3,1,1,1,115,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
 3,3,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
 3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,1,1,1,1,1,77,78,1,1,1,1,1,3,
 3,3,1,1,1,63,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,109,110,1,1,1,1,1,3,
-3,3,1,1,1,63,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,141,142,1,1,1,63,1,189,
-3,3,1,1,1,63,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,190,1,1,173,174,1,188,1,63,1,189,
+3,3,1,1,1,63,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,141,142,1,1,1,1,1,189,
+3,3,1,1,1,63,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,190,1,1,173,174,1,188,1,1,1,189,
 4,4,4,4,4,4,129,129,129,129,129,129,129,129,129,167,167,167,167,4,4,4,4,4,4,4,4,4,4,4,4,4,
 36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36
 </chunk>
@@ -141,14 +156,14 @@
 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,64,1,1,1,1,1,1,1,1,1,3,3,
-3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,64,1,1,1,1,1,1,1,1,1,3,3,
-3,1,1,87,88,89,90,1,1,68,68,68,68,68,68,68,68,68,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,113,1,1,64,1,1,1,1,1,1,1,1,1,3,3,
+3,1,1,87,88,89,90,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
 3,1,1,119,120,121,122,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,151,152,153,154,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
-3,1,1,183,184,185,186,1,1,1,1,1,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,3,3,
+3,1,1,183,184,185,186,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,115,116,117,118,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,147,148,149,150,1,1,1,1,1,3,3,
-3,1,1,1,1,1,1,1,1,1,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
+3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
@@ -157,7 +172,7 @@
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,
 3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,68,3,3,3,68,1,1,1,1,3,3,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,68,1,1,1,68,1,1,1,1,3,3,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,68,1,1,1,68,1,1,1,1,3,3,
+1,1,1,113,1,1,192,1,1,1,1,1,1,1,1,1,1,1,1,1,1,68,1,1,1,68,1,1,1,1,3,3,
 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,129,129,4,4,4,4,
 36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36
 </chunk>
@@ -167,7 +182,7 @@
   <object id="12" name="enemy_2" type="enemy" gid="209" x="416" y="296" width="16" height="16">
    <properties>
     <property name="life" type="int" value="3"/>
-    <property name="mode" propertytype="enemyMovement" value="anticlockwise"/>
+    <property name="mode" value="anticlockwise"/>
     <property name="speed" type="int" propertytype="enemySpeed" value="0"/>
    </properties>
   </object>
@@ -185,7 +200,7 @@
    <point/>
   </object>
   <object id="19" name="enemy_5" type="enemy" gid="213" x="80" y="152" width="16" height="16"/>
-  <object id="20" x="144" y="152">
+  <object id="20" x="128" y="152">
    <properties>
     <property name="enemy" type="object" value="19"/>
    </properties>
@@ -193,7 +208,7 @@
   </object>
   <object id="30" gid="217" x="408" y="256" width="16" height="16">
    <properties>
-    <property name="mode" propertytype="enemyMovement" value="alert"/>
+    <property name="mode" value="alert"/>
     <property name="speed" type="int" propertytype="enemySpeed" value="1"/>
    </properties>
   </object>
@@ -206,7 +221,7 @@
   <object id="34" name="enemy1" gid="215" x="96" y="208" width="16" height="16">
    <properties>
     <property name="life" type="int" value="99"/>
-    <property name="mode" propertytype="enemyMovement" value="clockwise"/>
+    <property name="mode" value="clockwise"/>
    </properties>
   </object>
   <object id="35" name="enemy1end" x="128" y="232">
@@ -215,17 +230,11 @@
    </properties>
    <point/>
   </object>
-  <object id="36" name="platform_1" type="platform" gid="201" x="280" y="304" width="16" height="16"/>
-  <object id="37" name="platform_1_end" x="336" y="304">
-   <properties>
-    <property name="platform_1" type="object" value="36"/>
-   </properties>
-   <point/>
-  </object>
+  <object id="36" name="platform_1" type="platform" gid="201" x="328" y="320" width="16" height="16"/>
   <object id="38" name="gota1" gid="223" x="232" y="184" width="16" height="16">
    <properties>
     <property name="life" type="int" value="99"/>
-    <property name="mode" propertytype="enemyMovement" value="one direction"/>
+    <property name="mode" value="one direction"/>
     <property name="speed" type="int" propertytype="enemySpeed" value="1"/>
    </properties>
   </object>
@@ -235,19 +244,102 @@
    </properties>
    <point/>
   </object>
-  <object id="40" name="platform_1" type="platform" gid="201" x="264" y="48" width="16" height="16">
+  <object id="51" type="text" x="184" y="224">
    <properties>
-    <property name="mode" propertytype="enemyMovement" value="one direction"/>
-    <property name="speed" type="int" propertytype="enemySpeed" value="0"/>
-   </properties>
-  </object>
-  <object id="41" name="platform_1_end" x="480" y="48">
-   <properties>
-    <property name="platform_1" type="object" value="40"/>
+    <property name="es" value="Menudo tesoro"/>
+    <property name="itemAction" type="int" value="190"/>
    </properties>
    <point/>
   </object>
-  <object id="45" name="mainCharacter" type="mainCharacter" x="152" y="320">
+  <object id="53" type="text" x="152" y="192">
+   <properties>
+    <property name="es" value="Con esta llave puedes abrir   caminos. Usalo con cabeza"/>
+    <property name="itemAction" type="int" value="191"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="54" type="text" x="168" y="328">
+   <properties>
+    <property name="es" value="Nunca hubiera  dicho que comerplatanos fuera lo mio"/>
+    <property name="itemAction" type="int" value="189"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="58" type="text" x="216" y="328">
+   <properties>
+    <property name="es" value="Municion de    mentira"/>
+    <property name="itemAction" type="int" value="187"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="60" type="text" x="80" y="256">
+   <properties>
+    <property name="adventureState" type="int" value="2"/>
+    <property name="es" value="Ya decia yo que este cristal era bonito"/>
+    <property name="itemAction" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="62" name="1" type="text" x="40" y="288">
+   <properties>
+    <property name="adventureState" type="int" value="1"/>
+    <property name="es" value="Aqui comienza tu aventura"/>
+    <property name="itemAction" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="65" type="text" x="304" y="328">
+   <properties>
+    <property name="es" value="Alguien hoy no entra a casa"/>
+    <property name="itemAction" type="int" value="191"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="67" name="mainCharacter" type="mainCharacter" x="136" y="288">
+   <point/>
+  </object>
+  <object id="68" name="1" type="text" x="168" y="264">
+   <properties>
+    <property name="adventureState" type="int" value="3"/>
+    <property name="es" value="con esto y el otro lado no necesito mas"/>
+    <property name="itemAction" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="69" type="music2" x="312" y="296">
+   <point/>
+  </object>
+  <object id="70" type="music3" x="368" y="120">
+   <point/>
+  </object>
+  <object id="71" name="1" type="text" x="80" y="256">
+   <properties>
+    <property name="adventureState" type="int" value="1"/>
+    <property name="es" value="Que cristal mas bonito"/>
+    <property name="itemAction" type="int" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="72" name="1" type="text" x="144" y="160">
+   <properties>
+    <property name="adventureState" type="int" value="4"/>
+    <property name="es" value="pues ya tengo todo lo que queria"/>
+    <property name="itemAction" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="73" type="text" x="280" y="328">
+   <properties>
+    <property name="es" value="Instrucciones nube. Abajo para subir. "/>
+    <property name="itemAction" type="int" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="74" type="text" x="392" y="200">
+   <properties>
+    <property name="es" value="Anda pero si la musica ha cambiado"/>
+    <property name="itemAction" type="int" value="0"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

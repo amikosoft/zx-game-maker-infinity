@@ -541,11 +541,9 @@ End Sub
                                         if adventureAction = 1 Then
                                             if textState = adventureStateTmp Then
                                                 currentAdventureState = currentAdventureState + 1
-
-                                                adventureAction = GetTile(cordX>>1, cordY>>1)
                                                 
                                                 If currentAdventureState > MAX_ADVENTURE_STATE Then
-                                                    muestraDialogo(textsCoord(texto, 3), adventureAction)
+                                                    muestraDialogo(textsCoord(texto, 3), GetTile(cordX>>1, cordY>>1))
                                                     ending()
                                                 end if
                                             End if
@@ -554,7 +552,7 @@ End Sub
                                         end if
                                     end if
                                     
-                                    if textFound Then muestraDialogo(textsCoord(texto, 3), adventureAction)
+                                    if textFound Then muestraDialogo(textsCoord(texto, 3), GetTile(cordX>>1, cordY>>1))
                                 else
                                     textFound = 0
                                 end if

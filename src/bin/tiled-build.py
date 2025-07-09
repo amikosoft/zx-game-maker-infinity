@@ -863,7 +863,7 @@ if adventureTexts and len(texts) > 0:
         for i in allTexts:
             print(i)
             # if len(i > 20)
-            f.write(i.ljust(adventureTextsLength, '-').encode('ascii'))
+            f.write(i.ljust(adventureTextsLength, ' ').encode('ascii'))
             f.write(b'\x00')
 
     configStr += "const AVAILABLE_ADVENTURES as ubyte = " + str(len(texts) - 1) + "\n"
