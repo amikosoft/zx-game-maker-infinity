@@ -5,11 +5,12 @@ from builder.helper import ASSETS_FOLDER, BIN_FOLDER, OUTPUT_FOLDER, musicExists
 
 
 class SizesGetter:
-    def __init__(self, outputFolder, is128k, useBreakableTile, enableAdventureTexts):
+    def __init__(self, outputFolder, is128k, useBreakableTile, enableAdventureTexts, musicEnabled):
         self.outputFolder = outputFolder
         self.is128k = is128k
         self.useBreakableTile = useBreakableTile
         self.adventureTexts = enableAdventureTexts
+        self.musicEnabled = musicEnabled
 
     def execute(self):
         sizes = Sizes()
@@ -36,10 +37,14 @@ class SizesGetter:
             sizes.TEXTS_COORD_DATA = self.__getOutputFileSize("textsCoord.bin")
             sizes.TEXTS_DATA = self.__getOutputFileSize("texts.bin")
         
+        
         if self.useBreakableTile:
             sizes.BROKEN_TILES_DATA = self.__getOutputFileSize("brokenTiles.bin")
         
         if self.is128k:
+            if self.musicEnabled:
+                sizes.SCREEN_MUSIC_DATA = self.__getOutputFileSize("screenMusic.bin")
+        
             sizes.VTPLAYER = self.__getFileSize(BIN_FOLDER + "vtplayer.tap")
             sizes.MUSIC = self.__getFileSize(OUTPUT_FOLDER + "music.tap")
             sizes.MUSIC_TITLE = self.__getFileSize(OUTPUT_FOLDER + "music-title.tap") if musicExists("title") else 0

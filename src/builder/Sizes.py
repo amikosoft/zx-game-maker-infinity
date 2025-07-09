@@ -26,6 +26,7 @@ class Sizes:
         self.GAMEOVER_SCREEN = 0
         self.TEXTS_COORD_DATA = 0
         self.TEXTS_DATA = 0
+        self.SCREEN_MUSIC = 0
         self.MUSIC_TITLE = 0
         self.VTPLAYER = 0
         self.MUSIC_2 = 0
@@ -114,6 +115,10 @@ class Sizes:
         return "TEXTS_COORD_DATA"
     
     @staticmethod
+    def SCREEN_MUSIC_DATA_STRING():
+        return "SCREEN_MUSIC_DATA"
+
+    @staticmethod
     def BROKEN_TILES_DATA_STRING():
         return "BROKEN_TILES_DATA"
     
@@ -155,7 +160,7 @@ class Sizes:
     
     @staticmethod
     def getKeysToMemoryBank():
-        return ["BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "TEXTS", "TEXTS_COORD", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
+        return ["BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "TEXTS", "TEXTS_COORD", "SCREEN_MUSIC", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
     
     def printAllSizesByMemoryBankFor128(self):
 
@@ -170,6 +175,7 @@ class Sizes:
             self.ENEMIES_PER_SCREEN_INITIAL_DATA_STRING(),
             self.DECOMPRESSED_ENEMIES_SCREEN_DATA_STRING(),
             self.TEXTS_COORD_DATA_STRING(),
+            self.SCREEN_MUSIC_DATA_STRING(),
             self.TEXTS_DATA_STRING(),
             self.TILESET_DATA_STRING(),
             self.ATTR_DATA_STRING(),

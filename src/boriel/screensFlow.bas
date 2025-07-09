@@ -399,12 +399,10 @@ Sub resetValues()
         #endif
     #endif
 
-    #ifdef MUSIC_2_ENABLED
-        music2alreadyPlayed = 0
+    #ifdef MUSIC_ENABLED
+        musicPlayed = 0
     #endif
-    #ifdef MUSIC_3_ENABLED
-        music3alreadyPlayed = 0
-    #endif
+
 End Sub
 
 Sub swapScreen()
@@ -441,22 +439,29 @@ Sub swapScreen()
 
     #ifdef ENABLED_128k
         #ifdef MUSIC_ENABLED
-            #ifdef MUSIC_2_ENABLED
-                If currentScreen = MUSIC_2_SCREEN_ID Then
-                    'If music2alreadyPlayed = 0 Then
-                        VortexTracker_Play(MUSIC_2_ADDRESS)
-                        music2alreadyPlayed = 1
-                    'End If
-                End If
-            #endif
-            #ifdef MUSIC_3_ENABLED
-                If currentScreen = MUSIC_3_SCREEN_ID Then
-                    'If music3alreadyPlayed = 0 Then
-                        VortexTracker_Play(MUSIC_3_ADDRESS)
-                        music3alreadyPlayed = 1
-                    'End If
-                End If
-            #endif
+            dim newScreenMusic as ubyte = screenMusic(currentScreen)
+            if newScreenMusic <> 0  and newScreenMusic <> musicPlayed Then
+                musicPlayed = newScreenMusic
+                
+                #ifdef MUSIC_1_SELECTED
+                    if newScreenMusic = 1 Then VortexTracker_Play(MUSIC_ADDRESS)
+                #endif
+                #ifdef MUSIC_2_SELECTED
+                    if newScreenMusic = 2 Then VortexTracker_Play(MUSIC_2_ADDRESS)
+                #endif
+                #ifdef MUSIC_3_SELECTED
+                    if newScreenMusic = 3 Then VortexTracker_Play(MUSIC_3_ADDRESS)
+                #endif
+                #ifdef MUSIC_4_SELECTED
+                    if newScreenMusic = 4 Then VortexTracker_Play(MUSIC_TITLE_ADDRESS)
+                #endif
+                #ifdef MUSIC_5_SELECTED
+                    if newScreenMusic = 5 Then VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+                #endif
+                #ifdef MUSIC_6_SELECTED
+                    if newScreenMusic = 6 Then VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
+                #endif
+            End if
         #endif
     #endif
 

@@ -626,6 +626,11 @@ texts = []
 isAdventure = False
 maxAdventureState = 0
 
+# musics
+musicsSelected = [False,False,False,False,False,False,]
+
+musics = {}
+
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
         for object in layer['objects']:
@@ -760,14 +765,50 @@ for layer in data['layers']:
 
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
+                elif object['type'] == 'music1':
+                    musics[screenId] = [1]
+                    musicsSelected[0] = True
                 elif object['type'] == 'music2':
-                    configStr += "Const MUSIC_2_SCREEN_ID as Ubyte = " + str(screenId) + "\n"
-                    configStr += "Dim music2alreadyPlayed as Ubyte = 0\n"
+                    musics[screenId] = [2]
+                    musicsSelected[1] = True
                 elif object['type'] == 'music3':
-                    configStr += "Const MUSIC_3_SCREEN_ID as Ubyte = " + str(screenId) + "\n"
-                    configStr += "Dim music3alreadyPlayed as Ubyte = 0\n"
+                    musics[screenId] = [3]
+                    musicsSelected[2] = True
+                elif object['type'] == 'title':
+                    musics[screenId] = [4]
+                    musicsSelected[3] = True
+                elif object['type'] == 'ending':
+                    musics[screenId] = [5]
+                    musicsSelected[4] = True
+                elif object['type'] == 'gameover':
+                    musics[screenId] = [6]
+                    musicsSelected[5] = True
                 else:
                     exitWithErrorMessage('Unknown object type. Only "enemy", "text", "music2", "music3" or "mainCharacter" are allowed')   
+
+# CONTROL DE MUSICAS
+# if someMusicSelected == True:
+# configStr += "#DEFINE MUSIC_SELECTED\n"
+if musicEnabled == 1:
+    if musicsSelected[0] == True:
+        configStr += "#DEFINE MUSIC_1_SELECTED\n"
+    if musicsSelected[1] == True:
+        configStr += "#DEFINE MUSIC_2_SELECTED\n"
+    if musicsSelected[2] == True:
+        configStr += "#DEFINE MUSIC_3_SELECTED\n"
+    if musicsSelected[3] == True:
+        configStr += "#DEFINE MUSIC_4_SELECTED\n"
+    if musicsSelected[4] == True:
+        configStr += "#DEFINE MUSIC_5_SELECTED\n"
+    if musicsSelected[5] == True:
+        configStr += "#DEFINE MUSIC_6_SELECTED\n"
+
+    with open("output/screenMusic.bin", "wb") as f:
+        for screenId in range(screensCount):
+            if screenId in musics:
+                f.write(bytearray(musics[screenId]))
+            else:
+                f.write(bytearray([0]))
 
 if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
@@ -816,37 +857,6 @@ if adventureTexts and len(texts) > 0:
                 
                 print(textoFinal)
                 f.write(bytearray([int(itemText[0]), int(itemText[1]), int(itemText[2]), posicion, int(itemText[4]), int(itemText[5])]))
-        # for i in range(screensCount):
-        #     print("=========================")
-        #     print(texts[str(i)])
-        #     for itemText in texts[str(i)]:
-        #         print("texto: " + itemText[2])
-        #         if len(itemText[2]) > 0:
-        #             textoFinal = itemText[2]
-        #             # Truncar texto mayor de 45 caracteres
-        #             if len(textoFinal) > 45:
-        #                 print("texto truncado")
-        #                 textoFinal = itemText[2][0:45]
-
-        #             posicion = -1
-
-        #             for p, string in enumerate(allTexts):
-        #                 if string == textoFinal:
-        #                     print("texto existente "+ string + " en posicion " + str(p))
-        #                     posicion = p
-        #                     break
-                    
-        #             if posicion == -1:
-        #                 # Verificar que no exista ya el texto
-        #                 allTexts.append(textoFinal)
-        #                 posicion = int(len(allTexts)) - 1
-        #                 print("texto nuevo "+ textoFinal + " en posicion " + str(posicion))
-                    
-        #             print(textoFinal)
-        #             f.write(bytearray([int(itemText[0]), int(itemText[1]), posicion]))
-        #         else:
-        #             print("sin texto")
-        #             f.write(bytearray([int(0), int(0), int(0)]))
 
     print("ALL TEXTS")
     with open("output/texts.bin", "wb") as f:
@@ -862,6 +872,7 @@ if adventureTexts and len(texts) > 0:
     print("ALL ADVENTURES LENGTH "+ str(len(texts)))
     print("ALL TEXTS LENGTH "+ str(len(allTexts)))
 
+# OPTIMIZAR
 if arcadeMode == 1: # Defino el array de posiciones iniciales del personaje principal
     configStr += "dim mainCharactersArray(" + str(screensCount - 1) + ", 1) as ubyte = { _\n"
     for key in keys:
