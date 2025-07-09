@@ -137,8 +137,8 @@ Sub moveEnemies()
                     #ifdef ENEMIES_PURSUIT_ENABLED
                     ElseIf enemyMode < 4 Then
                         if invincible Then
-                            horizontalDirection = 0
-                            verticalDirection = 0
+                            horizontalDirection = Sgn(enemyColIni - enemyCol)
+                            verticalDirection = Sgn(enemyLinIni - enemyLin)
                         Else
                             horizontalDirection = Sgn(protaX - enemyCol)
                             verticalDirection = Sgn(protaY - enemyLin)
