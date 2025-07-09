@@ -85,10 +85,6 @@ shouldKillEnemies = 0
 enabled128K = 0
 hiScore = 0
 
-vtplayerInit = 'EFAD'
-vtplayerMute = 'EFB5'
-vtplayerNextNote = 'EFB2'
-
 initialScreen = 2
 initialMainCharacterX = 8
 initialMainCharacterY = 8
@@ -188,12 +184,6 @@ if 'properties' in data:
             enabled128K = 1 if property['value'] else 0
         elif property['name'] == 'hiScore':
             hiScore = 1 if property['value'] else 0
-        elif property['name'] == 'VTPLAYER_INIT':
-            vtplayerInit = property['value']
-        elif property['name'] == 'VTPLAYER_MUTE':
-            vtplayerMute = property['value']
-        elif property['name'] == 'VTPLAYER_NEXTNOTE':
-            vtplayerNextNote = property['value']
         elif property['name'] == 'maxEnemiesPerScreen':
             if property['value'] < 7:
                 maxEnemiesPerScreen = property['value']
@@ -368,11 +358,6 @@ configStr += "const DAMAGE_TILES_COUNT as ubyte = " + str(damageTilesCount) + "\
 
 if shooting == 1:
     configStr += "#DEFINE SHOOTING_ENABLED\n"
-
-if enabled128K == 1:
-    configStr += "#DEFINE VTPLAYER_INIT $" + str(vtplayerInit) + "\n"
-    configStr += "#DEFINE VTPLAYER_MUTE $" + str(vtplayerMute) + "\n"
-    configStr += "#DEFINE VTPLAYER_NEXTNOTE $" + str(vtplayerNextNote) + "\n\n"
 
 if newBeeperPlayer == 1:
     configStr += "#DEFINE NEW_BEEPER_PLAYER\n"
@@ -711,6 +696,10 @@ for layer in data['layers']:
     if layer['type'] == 'objectgroup':
         for object in layer['objects']:
             if 'point' in object and object['point'] == True:
+                xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
+                yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
+                screenId = xScreenPosition + (yScreenPosition * mapCols)
+                    
                 if object['type'] == '' and 'properties' in object:
                     objects[str(object['properties'][0]['value'])]['linEnd'] = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
                     objects[str(object['properties'][0]['value'])]['colEnd'] = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
@@ -730,9 +719,6 @@ for layer in data['layers']:
                             objects[str(object['properties'][0]['value'])]['linIni'] = linIni
 
                 elif object['type'] == 'mainCharacter':
-                    xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
-                    yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
-                    screenId = xScreenPosition + (yScreenPosition * mapCols)
                     initialScreen = screenId
                     initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
                     initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
@@ -744,9 +730,6 @@ for layer in data['layers']:
                         keys[str(screenId)] = [int(initialMainCharacterX), int(initialMainCharacterY)]
                 elif object['type'] == 'text':
                     if adventureTexts == True:
-                        xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
-                        yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
-                        screenId = xScreenPosition + (yScreenPosition * mapCols)
                         xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
                         yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
 
@@ -777,8 +760,14 @@ for layer in data['layers']:
 
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
+                elif object['type'] == 'music2':
+                    configStr += "Const MUSIC_2_SCREEN_ID as Ubyte = " + str(screenId) + "\n"
+                    configStr += "Dim music2alreadyPlayed as Ubyte = 0\n"
+                elif object['type'] == 'music3':
+                    configStr += "Const MUSIC_3_SCREEN_ID as Ubyte = " + str(screenId) + "\n"
+                    configStr += "Dim music3alreadyPlayed as Ubyte = 0\n"
                 else:
-                    exitWithErrorMessage('Unknown object type. Only "enemy", "text" or "mainCharacter" are allowed')   
+                    exitWithErrorMessage('Unknown object type. Only "enemy", "text", "music2", "music3" or "mainCharacter" are allowed')   
 
 if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"

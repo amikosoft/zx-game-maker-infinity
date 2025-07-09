@@ -11,11 +11,35 @@
     ],
     "propertyTypes": [
         {
+            "id": 7,
+            "name": "breakableTilesMode",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "disabled",
+                "all",
+                "individual"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 6,
+            "name": "enemyMovementTypes",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "default",
+                "noReturn"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "id": 3,
             "name": "enemySpeed",
             "storageType": "int",
             "type": "enum",
             "values": [
+                "0",
                 "1",
                 "2",
                 "3"
@@ -40,8 +64,7 @@
             "type": "enum",
             "values": [
                 "constant",
-                "accelerated",
-                "smooth"
+                "accelerated"
             ],
             "valuesAsFlags": false
         },
@@ -58,79 +81,6 @@
             "valuesAsFlags": false
         },
         {
-            "id": 6,
-            "name": "enemyMovement",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "normal",
-                "pursuit",
-                "alert",
-                "one direction",
-                "anticlockwise",
-                "clockwise"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 7,
-            "name": "enemiesAlertDistance",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "near",
-                "medium",
-                "far"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 8,
-            "name": "enemiesShootDirection",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "all",
-                "horizontal",
-                "vertical"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 9,
-            "name": "enemiesShootSpeed",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "slow",
-                "fast"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 10,
-            "name": "bulletType",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "bullet",
-                "boomerang"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 11,
-            "name": "adventureTextsLength",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "30",
-                "45",
-                "60"
-            ],
-            "valuesAsFlags": false
-        },
-        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -139,21 +89,6 @@
                     "name": "128Kenabled",
                     "type": "bool",
                     "value": false
-                },
-                {
-                    "name": "VTPLAYER_INIT",
-                    "type": "string",
-                    "value": "EFAD"
-                },
-                {
-                    "name": "VTPLAYER_MUTE",
-                    "type": "string",
-                    "value": "EFB5"
-                },
-                {
-                    "name": "VTPLAYER_NEXTNOTE",
-                    "type": "string",
-                    "value": "EFB2"
                 },
                 {
                     "name": "ammo",
@@ -165,22 +100,6 @@
                     "type": "int",
                     "value": 10
                 },
-                {
-                    "name": "adventureTextsLength",
-                    "propertyType": "adventureTextsLength",
-                    "type": "string",
-                    "value": "30"
-                },
-                {
-                    "name": "adventureTexts",
-                    "type": "bool",
-                    "value": false
-                },
-                {
-                    "name": "adventureTextsClearScreen",
-                    "type": "bool",
-                    "value": false
-                },  
                 {
                     "name": "animatePeriodEnemy",
                     "type": "int",
@@ -198,16 +117,6 @@
                 },
                 {
                     "name": "arcadeMode",
-                    "type": "bool",
-                    "value": false
-                },
-                {
-                    "name": "levelsMode",
-                    "type": "bool",
-                    "value": false
-                },
-                {
-                    "name": "livesMode",
                     "type": "bool",
                     "value": false
                 },
@@ -235,64 +144,6 @@
                     "name": "enemiesRespawn",
                     "type": "bool",
                     "value": true
-                },
-                {
-                    "name": "enemiesShoot",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "enemiesShootSpeed",
-                    "propertyType": "enemiesShootSpeed",
-                    "type": "string",
-                    "value": "fast"
-                },
-                {
-                    "name": "enemiesShootingLookAtPlayer",
-                    "type": "bool",
-                    "value": false
-                },
-                {
-                    "name": "enemiesShootOnlyLookingPlayer",
-                    "type": "bool",
-                    "value": false
-                },
-                {
-                    "name": "enemiesShootDirection",
-                    "propertyType": "enemiesShootDirection",
-                    "type": "string",
-                    "value": "all"
-                },
-                {
-                    "name": "enemiesBulletCollision",
-                    "type": "bool",
-                    "value": true
-                },
-                {
-                    "name": "enemiesPursuitCollide",
-                    "type": "bool",
-                    "value": true
-                },
-                {
-                    "name": "bulletsCollisionWithBullets",
-                    "type": "bool",
-                    "value": false
-                },
-                {
-                    "name": "bulletAnimation",
-                    "type": "bool",
-                    "value": true
-                },
-                {
-                    "name": "bulletType",
-                    "propertyType": "bulletType",
-                    "type": "string",
-                    "value": "bullet"
-                },
-                {
-                    "name": "bulletDisableCollisions",
-                    "type": "bool",
-                    "value": false
                 },
                 {
                     "name": "gameName",
@@ -349,17 +200,12 @@
                     "name": "jumpType",
                     "propertyType": "jumpType",
                     "type": "string",
-                    "value": "constant"
+                    "value": "accelerated"
                 },
                 {
                     "name": "keysEnabled",
                     "type": "bool",
                     "value": true
-                },
-                {
-                    "name": "jumpOnEnemies",
-                    "type": "bool",
-                    "value": false
                 },
                 {
                     "name": "killJumpingOnTop",
@@ -391,11 +237,6 @@
                     "name": "maxEnemiesPerScreen",
                     "type": "int",
                     "value": 5
-                },
-                {
-                    "name": "platformMoveable",
-                    "type": "bool",
-                    "value": false
                 },
                 {
                     "name": "messagesEnabled",
@@ -439,8 +280,9 @@
                 },
                 {
                     "name": "useBreakableTile",
-                    "type": "bool",
-                    "value": false
+                    "propertyType": "breakableTilesMode",
+                    "type": "string",
+                    "value": "disabled"
                 },
                 {
                     "name": "waitPressKeyAfterLoad",

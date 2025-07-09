@@ -7,6 +7,7 @@ from builder.SizesGetter import SizesGetter
 from builder.ChartGenerator import ChartGenerator
 from builder.ConfigWriter import ConfigWriter
 from builder.helper import *
+from builder.MusicSetup import MusicSetup
 
 class Builder:
     def execute(self):
@@ -17,6 +18,7 @@ class Builder:
         ScreensCompressor().execute(is128K, screenExists("intro"), screenExists("gameover"))
         TilesGenerator().execute()
         SpritesGenerator().execute()
+        MusicSetup().splitSongs()
         ConvertZXPToGuSprites.convert()
         BinaryFilesToTapMerger().execute(is128K, useBreakableTile, enableAdventureTexts)
         sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile, enableAdventureTexts).execute()

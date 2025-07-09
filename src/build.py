@@ -51,15 +51,41 @@ def tapsBuild():
             str(Path("output/main.tap")),
             str(Path(ASSETS_FOLDER + "fx/fx.tap")),
             str(Path("output/files.tap")),
-            str(Path(ASSETS_FOLDER + "music/title.tap")),
-            str(Path(ASSETS_FOLDER + "music/music.tap")),
+            str(Path(BIN_FOLDER + "vtplayer.tap")),
+            str(Path(OUTPUT_FOLDER + "music.tap")),
+            str(Path(OUTPUT_FOLDER + "music-title.tap")),
+            str(Path(OUTPUT_FOLDER + "music2.tap")),
+            str(Path(OUTPUT_FOLDER + "music3.tap")),
+            str(Path(OUTPUT_FOLDER + "music-ending.tap")),
+            str(Path(OUTPUT_FOLDER + "music-gameover.tap")),
             str(Path("output/title.tap")),
             str(Path("output/ending.tap")),
-            str(Path("output/hud.tap"))
+            str(Path("output/hud.tap")),
         ]
 
-        if not musicExists("title"):
-            input_files.remove(str(Path(ASSETS_FOLDER + "music/title.tap")))
+        if not getMusicEnabled():
+            input_files.remove(str(Path(BIN_FOLDER + "vtplayer.tap")))
+            input_files.remove(str(Path(OUTPUT_FOLDER + "music.tap")))
+            input_files.remove(str(Path(OUTPUT_FOLDER + "music-title.tap")))
+            input_files.remove(str(Path(OUTPUT_FOLDER + "music2.tap")))
+            input_files.remove(str(Path(OUTPUT_FOLDER + "music3.tap")))
+            input_files.remove(str(Path(OUTPUT_FOLDER + "music-ending.tap")))
+            input_files.remove(str(Path(OUTPUT_FOLDER + "music-gameover.tap")))
+        else:
+            if not musicExists("title"):
+                input_files.remove(str(Path(OUTPUT_FOLDER + "music-title.tap")))
+            
+            if not musicExists("music2"):
+                input_files.remove(str(Path(OUTPUT_FOLDER + "music2.tap")))
+
+            if not musicExists("music3"):
+                input_files.remove(str(Path(OUTPUT_FOLDER + "music3.tap")))
+            
+            if not musicExists("ending"):
+                input_files.remove(str(Path(OUTPUT_FOLDER + "music-ending.tap")))
+            
+            if not musicExists("gameover"):
+                input_files.remove(str(Path(OUTPUT_FOLDER + "music-gameover.tap")))
 
         if os.path.isfile("output/intro.scr.zx0"):
             runCommand("bin2tap " + str(Path("output/intro.scr.zx0")) + " " + str(Path("output/intro.tap")) + " 49152")
@@ -112,6 +138,7 @@ def build():
     print("=          ZXGM - Infinity                 =")
     print("============================================")
 
+    executeFunction(removeTempFiles, "Removing temporary files")
     executeFunction(tiledExport, "Exporting game from Tiled")
     executeFunction(tiledBuild, "Building Tiled maps")
     sizes = executeFunction(buildingFilesAndConfig, "Building files and config")

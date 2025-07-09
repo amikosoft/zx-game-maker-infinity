@@ -79,6 +79,11 @@ def getGameView():
         maps_json = json.load(f)
     return next((prop["value"] for prop in maps_json["properties"] if prop["name"] == "gameView"), 'side')
 
+def getMusicEnabled():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return any(prop["name"] == "musicEnabled" and prop["value"] for prop in maps_json["properties"])
+
 def getUseBreakableTile():
     with open(OUTPUT_FOLDER + "maps.json", "r") as f:
         maps_json = json.load(f)
