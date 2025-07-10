@@ -200,10 +200,13 @@ Sub moveToScreen(direction As Ubyte)
         saveSprite( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
         currentScreen = currentScreen + 1
         
-        #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = 0 + SCREEN_ADJUSTMENT
-            protaYRespawn = protaY
+        #ifndef CHECKPOINTS_ENABLED
+            #ifdef LIVES_MODE_ENABLED
+                protaXRespawn = 0 + SCREEN_ADJUSTMENT
+                protaYRespawn = protaY
+            #endif
         #endif
+        
     Elseif direction = 4 Then
         saveSprite( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
         currentScreen = currentScreen - 1
