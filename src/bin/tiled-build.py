@@ -784,7 +784,9 @@ for layer in data['layers']:
                     musics[screenId] = [6]
                     musicsSelected[5] = True
                 else:
-                    exitWithErrorMessage('Unknown object type. Only "enemy", "text", "music2", "music3" or "mainCharacter" are allowed')   
+                    print(object)
+                    errorMessage = 'Unknown object type. Only "enemy", "text", "title", "ending", "gameover", "music1", "music2", "music3" or "mainCharacter" are allowed. Found: ' + object['type']
+                    exitWithErrorMessage(errorMessage)   
 
 # CONTROL DE MUSICAS
 # if someMusicSelected == True:
