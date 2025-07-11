@@ -79,7 +79,9 @@ goalItems = 2
 damageAmount = 5
 lifeAmount = 5
 bulletDistance = 0
-enemiesRespawn = 0
+enemiesRespawn = True
+
+enemiesRespawnInScreen = False
 shooting = 1
 shouldKillEnemies = 0
 enabled128K = 0
@@ -175,7 +177,9 @@ if 'properties' in data:
         elif property['name'] == 'bulletDistance':
             bulletDistance = property['value']
         elif property['name'] == 'enemiesRespawn':
-            enemiesRespawn = 1 if property['value'] else 0
+            enemiesRespawn = property['value']
+        elif property['name'] == 'enemiesRespawnInScreen':
+            enemiesRespawnInScreen = property['value']
         elif property['name'] == 'shooting':
             shooting = 1 if property['value'] else 0
         elif property['name'] == 'shouldKillEnemies':
@@ -588,8 +592,11 @@ screenOffsets.append(currentOffset)
 if shouldKillEnemies == 1:
     configStr += "#DEFINE SHOULD_KILL_ENEMIES_ENABLED\n"
 
-if enemiesRespawn == 0:
+if enemiesRespawn == False:
     configStr += "#DEFINE ENEMIES_NOT_RESPAWN_ENABLED\n"
+
+if enemiesRespawnInScreen:
+    configStr += "#DEFINE ENEMIES_RESPAWN_IN_SCREEN_ENABLED\n"
 
 with open("output/screensWon.bin", "wb") as f:
     f.write(bytearray([0] * screensCount))
@@ -650,6 +657,11 @@ for layer in data['layers']:
                     'speed': '3',
                     'mode': '0'
                 }
+
+                print(objects[str(object['id'])])
+                # a las plataformas se le pone vida -100
+                if objects[str(object['id'])]['tile'] == "8":
+                    objects[str(object['id'])]['life'] = "-100"
 
                 if 'properties' in object and len(object['properties']) > 0:
                     for property in object['properties']:

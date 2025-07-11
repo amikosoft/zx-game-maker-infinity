@@ -77,7 +77,7 @@ Dim currentBulletSpriteId As Ubyte
 Dim enemiesScreen as Ubyte = 0
 
 Dim protaFrame As Ubyte = 0
-Dim enemFrame As Ubyte = 0
+dim enemiesFrame as ubyte = 0
 
 Dim kempston As Ubyte
 Dim keyOption As String
@@ -90,8 +90,8 @@ Dim framec As Ubyte AT 23672
     Dim lastFrameBeep As Ubyte = 0
 #endif
 
-Dim lastFrameProta As Ubyte = 0
-Dim lastFrameEnemies As Ubyte = 0
+' Dim lastFrameProta As Ubyte = 0
+' Dim lastFrameEnemies As Ubyte = 0
 Dim lastFrameTiles As Ubyte = 0
 
 Const INVINCIBLE_FRAMES As Ubyte = 25
@@ -140,7 +140,9 @@ Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 Dim screensWon(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
 
+#ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
 Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
+#endif
 
 #ifdef IN_GAME_TEXT_ENABLED
     dim textsCoord(AVAILABLE_ADVENTURES, 5) as ubyte at TEXTS_COORD_DATA_ADDRESS
@@ -157,11 +159,6 @@ Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
 #ifdef USE_BREAKABLE_TILE
     Dim brokenTiles(SCREENS_COUNT) As Ubyte at BROKEN_TILES_DATA_ADDRESS
 #endif
-
-Dim spritesSet(51) As Ubyte
-Dim spriteAddressIndex As Uinteger = 0
-
-Dim bullet(7) As Ubyte
 
 Const FIRST_RUNNING_PROTA_SPRITE_RIGHT As Ubyte = 1
 Const FIRST_RUNNING_PROTA_SPRITE_LEFT As Ubyte = 5

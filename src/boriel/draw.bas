@@ -283,18 +283,3 @@ Sub drawSprites()
     
     RenderFrame()
 End Sub
-
-' Sub animateEnemies()
-'     enemFrame = Not enemFrame
-' End Sub
-
-' Sub animateAnimatedTiles()
-'     For i=0 To MAX_ANIMATED_TILES_PER_SCREEN:
-'         dim animatedTileId as ubyte = animatedTilesInScreen(currentScreen, i, 0)
-'         If animatedTileId Then
-'             Dim tile As Ubyte = animatedTileId + animatedFrame
-'             SetTile(tile, attrSet(tile), animatedTilesInScreen(currentScreen, i, 1), animatedTilesInScreen(currentScreen, i, 2))
-'         End If
-'     Next i
-'     animatedFrame = Not animatedFrame
-' End Sub

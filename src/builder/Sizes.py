@@ -26,7 +26,7 @@ class Sizes:
         self.GAMEOVER_SCREEN = 0
         self.TEXTS_COORD_DATA = 0
         self.TEXTS_DATA = 0
-        self.SCREEN_MUSIC = 0
+        self.SCREEN_MUSIC_DATA = 0
         self.MUSIC_TITLE = 0
         self.VTPLAYER = 0
         self.MUSIC_2 = 0
@@ -160,7 +160,7 @@ class Sizes:
     
     @staticmethod
     def getKeysToMemoryBank():
-        return ["BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "TEXTS", "TEXTS_COORD", "SCREEN_MUSIC_DATA", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
+        return ["BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "TEXTS", "TEXTS_COORD", "SCREEN_MUSIC", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
     
     def printAllSizesByMemoryBankFor128(self, musicEnabled):
 

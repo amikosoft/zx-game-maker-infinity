@@ -217,6 +217,11 @@
                 "value": true
             },
             {
+                "name": "enemiesRespawnInScreen",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "enemiesShoot",
                 "type": "int",
                 "value": 0

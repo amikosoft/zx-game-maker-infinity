@@ -57,22 +57,21 @@
     end function
 #endif
 
-#ifndef ENABLED_128k
-    dim enemiesFrame as ubyte = 0
-#endif
+' dim enemiesFrame as ubyte = 0
 
 Sub moveEnemies()
+    enemiesFrame = enemiesFrame + 1
+    if enemiesFrame > 9 Then enemiesFrame = 1
+
     If enemiesScreen Then
-        #ifndef ENABLED_128k
-            enemiesFrame = enemiesFrame + 1
-            if enemiesFrame > 9 Then enemiesFrame = 1
-        #endif
         For enemyId=0 To enemiesScreen - 1
             Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE)
             
             If tile = 0 Then continue For
             
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
+            
+            If enemyLive = 0 Then continue For
             
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
                 If enemyLive < 1 And tile > 15 Then
@@ -86,32 +85,39 @@ Sub moveEnemies()
             Dim enemyColIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_INI)
             Dim enemyLinIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI)
             
-            if enemyLive > -100 and enemyLive < 0 then
-                enemyLive = enemyLive + 1
-                
-                if not enemyLive Then
-                    enemyLive = enemiesInitialLife(enemyId) 
-
+            #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+                if enemyLive > -100 and enemyLive < 1 then
+                    enemyLive = enemyLive + 1
+                    
+                    if not enemyLive Then
+                        enemyLive = enemiesInitialLife(enemyId)
+                    end if
+                    decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLive
+                    
                     if enemyMode = 2 Then
                         enemyCol = enemyColIni
                         enemyLin = enemyLinIni
+                        GO TO EnemiesFinal
                     End if
-                ' else
-                '     if enemyLive > -25 and framec bAnd 2 Then Draw2x2Sprite(tile + 1, enemyColIni, enemyLinIni)
-                end if
-                decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLive
-                GO TO EnemiesFinal
-            End if
-            
-            ' Se comprueba si tiene colision de bala
-            #ifdef SHOOTING_ENABLED
-                if bulletPositionX then
-                    if tile > 15 and enemyLive > 0 Then
+                    #ifdef SHOOTING_ENABLED
+                    Else
+                        ' Se comprueba si tiene colision de bala
+                        if bulletPositionX and enemyLive > 0 then
+                            if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
+                                enemyLive = enemyLive - 1
+                            End if
+                        End If
+                    #endif
+                End if
+            #else
+                ' Se comprueba si tiene colision de bala
+                #ifdef SHOOTING_ENABLED
+                    if bulletPositionX and enemyLive > 0 then
                         if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
                             enemyLive = enemyLive - 1
                         End if
-                    End if
-                End If
+                    End If
+                #endif
             #endif
             
             'In the Screen And still live
@@ -119,15 +125,15 @@ Sub moveEnemies()
             Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
             Dim horizontalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
             
-            #ifdef ENABLED_128k
-                If (enemySpeed = 1 and (framec bAnd 3) <> 3) or (enemySpeed = 2 and (framec bAnd 1) = 1) Then
-                    GO TO EnemiesFinal
-                End If
-            #Else
-                If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
-                    GO TO EnemiesFinal
-                End If
-            #endif
+            ' #ifdef ENABLED_128k
+            '     If (enemySpeed = 1 and (framec bAnd 3) <> 3) or (enemySpeed = 2 and (framec bAnd 1) = 1) Then
+            '         GO TO EnemiesFinal
+            '     End If
+            ' #Else
+            If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
+                GO TO EnemiesFinal
+            End If
+            ' #endif
             
             Dim enemyColEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_END)
             Dim enemyLinEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_END)
@@ -153,84 +159,84 @@ Sub moveEnemies()
                         End if
                     End if
                 #endif
-            #ifdef ENEMIES_PURSUIT_ENABLED
-            ElseIf enemyMode < 4 Then
-                if invincible Then
-                    horizontalDirection = Sgn(enemyColIni - enemyCol)
-                    verticalDirection = Sgn(enemyLinIni - enemyLin)
-                Else
-                    horizontalDirection = Sgn(protaX - enemyCol)
-                    verticalDirection = Sgn(protaY - enemyLin)
-                    
-                    #ifdef ENEMIES_PURSUIT_COLLIDE
-                        if CheckCollision(enemyCol + horizontalDirection, enemyLin) Then horizontalDirection = 0
-                        if CheckCollision(enemyCol, enemyLin + verticalDirection) Then verticalDirection = 0
-                    #endif
-                End if
-            #endif
-            #ifdef ENEMIES_ONE_DIRECTION_ENABLED
-            ElseIf enemyMode = 4 Then
-                If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
-                    enemyCol = enemyColIni
-                    enemyLin = enemyLinIni
-                End If
-            #endif
-            #ifdef ENEMIES_ANTICLOCKWISE_ENABLED
-            ElseIf enemyMode = 5 Then
-                If enemyColIni = enemyCol Then
-                    If enemyLinIni = enemyLin Then
-                        ' Esquina sup iz
-                        verticalDirection = 1
-                        horizontalDirection = 0
-                    Elseif enemyLinEnd = enemyLin Then
-                        ' Esquina inf iz
-                        horizontalDirection = 1
-                        verticalDirection = 0
+                #ifdef ENEMIES_PURSUIT_ENABLED
+                ElseIf enemyMode < 4 Then
+                    if invincible Then
+                        horizontalDirection = Sgn(enemyColIni - enemyCol)
+                        verticalDirection = Sgn(enemyLinIni - enemyLin)
+                    Else
+                        horizontalDirection = Sgn(protaX - enemyCol)
+                        verticalDirection = Sgn(protaY - enemyLin)
+                        
+                        #ifdef ENEMIES_PURSUIT_COLLIDE
+                            if CheckCollision(enemyCol + horizontalDirection, enemyLin) Then horizontalDirection = 0
+                            if CheckCollision(enemyCol, enemyLin + verticalDirection) Then verticalDirection = 0
+                        #endif
+                    End if
+                #endif
+                #ifdef ENEMIES_ONE_DIRECTION_ENABLED
+                ElseIf enemyMode = 4 Then
+                    If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
+                        enemyCol = enemyColIni
+                        enemyLin = enemyLinIni
                     End If
-                Elseif enemyColEnd = enemyCol Then
-                    If enemyLinEnd = enemyLin Then
-                        ' Esquina inf der
-                        verticalDirection = -1
-                        horizontalDirection = 0
-                    Elseif enemyLinIni = enemyLin Then
-                        ' Esquina sup der
-                        horizontalDirection = -1
-                        verticalDirection = 0
-                    End If
-                End if
-            #endif
-            #ifdef ENEMIES_CLOCKWISE_ENABLED
-            Elseif enemyMode = 6 Then
-                If enemyColIni = enemyCol Then
-                    If enemyLinIni = enemyLin Then
-                        ' Esquina sup iz
-                        verticalDirection = 0
-                        horizontalDirection = 1
-                    Elseif enemyLinEnd = enemyLin Then
-                        ' Esquina inf iz
-                        horizontalDirection = 0
-                        verticalDirection = -1
-                    End If
-                Elseif enemyColEnd = enemyCol Then
-                    If enemyLinEnd = enemyLin Then
-                        ' Esquina inf der
-                        verticalDirection = 0
-                        horizontalDirection = -1
-                    Elseif enemyLinIni = enemyLin Then
-                        ' Esquina sup der
-                        horizontalDirection = 0
-                        verticalDirection = 1
-                    End If
-                End if
-            #endif
+                #endif
+                #ifdef ENEMIES_ANTICLOCKWISE_ENABLED
+                ElseIf enemyMode = 5 Then
+                    If enemyColIni = enemyCol Then
+                        If enemyLinIni = enemyLin Then
+                            ' Esquina sup iz
+                            verticalDirection = 1
+                            horizontalDirection = 0
+                        Elseif enemyLinEnd = enemyLin Then
+                            ' Esquina inf iz
+                            horizontalDirection = 1
+                            verticalDirection = 0
+                        End If
+                    Elseif enemyColEnd = enemyCol Then
+                        If enemyLinEnd = enemyLin Then
+                            ' Esquina inf der
+                            verticalDirection = -1
+                            horizontalDirection = 0
+                        Elseif enemyLinIni = enemyLin Then
+                            ' Esquina sup der
+                            horizontalDirection = -1
+                            verticalDirection = 0
+                        End If
+                    End if
+                #endif
+                #ifdef ENEMIES_CLOCKWISE_ENABLED
+                Elseif enemyMode = 6 Then
+                    If enemyColIni = enemyCol Then
+                        If enemyLinIni = enemyLin Then
+                            ' Esquina sup iz
+                            verticalDirection = 0
+                            horizontalDirection = 1
+                        Elseif enemyLinEnd = enemyLin Then
+                            ' Esquina inf iz
+                            horizontalDirection = 0
+                            verticalDirection = -1
+                        End If
+                    Elseif enemyColEnd = enemyCol Then
+                        If enemyLinEnd = enemyLin Then
+                            ' Esquina inf der
+                            verticalDirection = 0
+                            horizontalDirection = -1
+                        Elseif enemyLinIni = enemyLin Then
+                            ' Esquina sup der
+                            horizontalDirection = 0
+                            verticalDirection = 1
+                        End If
+                    End if
+                #endif
             End if
             
             enemyCol = enemyCol + horizontalDirection
             enemyLin = enemyLin + verticalDirection
             
             ' Is a platform Not an enemy, only 2 frames, 1 direction
-            If tile < 16 Then
-                #ifdef SIDE_VIEW
+            #ifdef SIDE_VIEW
+                If tile < 16 Then
                     if jumpCurrentKey = jumpStopValue Then
                         If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
                             #ifdef PLATFORM_MOVEABLE
@@ -267,9 +273,8 @@ Sub moveEnemies()
                             #endif
                         End If
                     End If
-                #endif
-                
-            End if
+                End if
+            #endif
             
             
             ' se guarda el estado final del enemigo
@@ -277,8 +282,6 @@ Sub moveEnemies()
             decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = horizontalDirection
             decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = verticalDirection
             'End if
-            ' decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
-            ' decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
             decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyMode
             
             EnemiesFinal:
@@ -286,13 +289,9 @@ Sub moveEnemies()
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
             
-            if tile > 15 and horizontalDirection = -1 Then
-                tile = tile + 16
-            End if
+            if tile > 15 and horizontalDirection = -1 Then tile = tile + 16
             
-            If enemFrame Then
-                tile = tile + 1
-            End If
+            If enemiesFrame > 4 Then tile = tile + 1
             
             If enemyLive = -100 or enemyLive > 0 Then
                 #ifdef BULLET_ENEMIES
@@ -384,10 +383,9 @@ Sub moveEnemies()
                         #endif
                     #endif
                 #endif
-            ElseIf enemyLive < 0 Then
-                if enemyLive > -25 and framec bAnd 2 Then Draw2x2Sprite(tile + 1, enemyColIni, enemyLinIni)
+            Else
+                if enemyLive > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
             End if
-            ' End if
         Next enemyId
     End if
 End Sub

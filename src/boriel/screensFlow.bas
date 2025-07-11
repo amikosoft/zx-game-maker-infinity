@@ -186,8 +186,8 @@ Sub playGame()
     resetValues()
     swapScreen()
     
-    Let lastFrameProta = framec
-    Let lastFrameEnemies = framec
+    ' Let lastFrameProta = framec
+    ' Let lastFrameEnemies = framec
     Let lastFrameTiles = framec
     
     #ifdef NEW_BEEPER_PLAYER
@@ -200,20 +200,23 @@ Sub playGame()
         Print AT 23, 20; "00000"
     #endif
     
-    enemiesScreen = enemiesPerScreen(currentScreen)
+    ' enemiesScreen = enemiesPerScreen(currentScreen)
 
     Do
         waitretrace
         
-        If framec - lastFrameProta >= ANIMATE_PERIOD_MAIN Then
+        ' If framec - lastFrameProta >= ANIMATE_PERIOD_MAIN Then
+        '     protaFrame = getNextFrameRunning()
+        '     Let lastFrameProta = framec
+        ' End If
+        If enemiesFrame band 1 Then
             protaFrame = getNextFrameRunning()
-            Let lastFrameProta = framec
-        End If
+        End if
         
-        If framec - lastFrameEnemies >= ANIMATE_PERIOD_ENEMY Then
-            enemFrame = Not enemFrame
-            Let lastFrameEnemies = framec
-        End If
+        ' If framec - lastFrameEnemies >= ANIMATE_PERIOD_ENEMY Then
+        '     enemFrame = Not enemFrame
+        '     Let lastFrameEnemies = framec
+        ' End If
         
         If framec - lastFrameTiles >= ANIMATE_PERIOD_TILE Then
             'animateAnimatedTiles()
@@ -257,7 +260,7 @@ Sub playGame()
         If moveScreen <> 0 Then
             moveToScreen(moveScreen)
             moveScreen = 0
-            enemiesScreen = enemiesPerScreen(currentScreen)
+            ' enemiesScreen = enemiesPerScreen(currentScreen)
         End If
         
         If currentLife = 0 and not invincible Then gameOver()
@@ -408,12 +411,16 @@ End Sub
 Sub swapScreen()
     dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), @decompressedMap)
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), @decompressedEnemiesScreen)
-
+    
+    enemiesScreen = enemiesPerScreen(currentScreen)
+    
+    #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
     If enemiesScreen Then
         For enemyId=0 To enemiesScreen - 1
             enemiesInitialLife(enemyId) = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
         Next enemyId
     End if
+    #endif
 
     #ifdef SHOOTING_ENABLED
         bulletPositionX = 0
