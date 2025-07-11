@@ -108,6 +108,18 @@
         "valuesAsFlags": false
     },
     {
+        "id": 11,
+        "name": "adventureTextsLength",
+        "storageType": "string",
+        "type": "enum",
+        "values": [
+            "30",
+            "45",
+            "60"
+        ],
+        "valuesAsFlags": false
+    },
+    {
         "color": "#ffa0a0a4",
         "drawFill": true,
         "id": 2,
@@ -116,21 +128,6 @@
                 "name": "128Kenabled",
                 "type": "bool",
                 "value": false
-            },
-            {
-                "name": "VTPLAYER_INIT",
-                "type": "string",
-                "value": "EFAD"
-            },
-            {
-                "name": "VTPLAYER_MUTE",
-                "type": "string",
-                "value": "EFB5"
-            },
-            {
-                "name": "VTPLAYER_NEXTNOTE",
-                "type": "string",
-                "value": "EFB2"
             },
             {
                 "name": "ammo",
@@ -157,6 +154,22 @@
                 "type": "int",
                 "value": 10
             },
+            {
+                "name": "adventureTexts",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "adventureTextsLength",
+                "propertyType": "adventureTextsLength",
+                "type": "string",
+                "value": "30"
+            },
+            {
+                "name": "adventureTextsClearScreen",
+                "type": "bool",
+                "value": false
+            },  
             {
                 "name": "arcadeMode",
                 "type": "bool",

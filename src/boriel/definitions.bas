@@ -140,11 +140,18 @@ Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 Dim screensWon(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
 
+Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
+
 #ifdef IN_GAME_TEXT_ENABLED
     dim textsCoord(AVAILABLE_ADVENTURES, 5) as ubyte at TEXTS_COORD_DATA_ADDRESS
-    dim textToDisplay(AVAILABLE_TEXTS, 60) as ubyte at TEXTS_DATA_ADDRESS
+    dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS
     dim currentAdventureState as ubyte = 0
     dim currentScreenFirstText as ubyte = 0
+#endif
+
+#ifdef MUSIC_ENABLED
+    Dim screenMusic(SCREENS_COUNT) As Ubyte at SCREEN_MUSIC_DATA_ADDRESS
+    Dim musicPlayed as Ubyte = 0
 #endif
 
 #ifdef USE_BREAKABLE_TILE

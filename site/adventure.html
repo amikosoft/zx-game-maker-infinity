@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="img/favicon.ico">
-        <title>Modo de juego - ZXGM Infinity Docs</title>
+        <title>Aventura gráfica - ZXGM Infinity Docs</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/fontawesome.min.css" rel="stylesheet">
         <link href="css/brands.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="game-modes.html" class="dropdown-item active" aria-current="page">Modo de juego</a>
+    <a href="game-modes.html" class="dropdown-item">Modo de juego</a>
 </li>
                                     
 <li>
@@ -63,7 +63,7 @@
 </li>
                                     
 <li>
-    <a href="adventure.html" class="dropdown-item">Aventura gráfica</a>
+    <a href="adventure.html" class="dropdown-item active" aria-current="page">Aventura gráfica</a>
 </li>
                                     
 <li>
@@ -75,12 +75,12 @@
 
                     <ul class="nav navbar-nav ms-md-auto">
                             <li class="nav-item">
-                                <a rel="prev" href="visual-interface.html" class="nav-link">
+                                <a rel="prev" href="enemies.html" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="generic-options.html" class="nav-link">
+                                <a rel="next" href="musics.html" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -102,9 +102,13 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#configuracion-de-tipos-de-juego" class="nav-link">Configuración de tipos de juego</a>
+            <li class="nav-item" data-bs-level="1"><a href="#configura-tu-aventura" class="nav-link">Configura tu aventura</a>
               <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="2"><a href="#configuracion-general-en-atributos-del-mapa-tiled" class="nav-link">Configuración general en atributos del mapa (tiled)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#configurando-el-comportamiento-de-los-textos-y-la-aventura" class="nav-link">Configurando el comportamiento de los textos y la aventura</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -115,38 +119,61 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="configuracion-de-tipos-de-juego">Configuración de tipos de juego</h1>
-<p>Toda la información sobre la personalización del comportamiento del juego</p>
+<h1 id="configura-tu-aventura">Configura tu aventura</h1>
+<p>Con la versión 2.0 del ZXGM Infinity puedes diseñar tu propia aventura gráfica!!!! </p>
+<p>O si no, puedes meter textos que ayuden al jugador para conocer bien el entorno y las mecánicas</p>
 <h2 id="configuracion-general-en-atributos-del-mapa-tiled">Configuración general en atributos del mapa (tiled)</h2>
-<h3 id="modo-de-visualizacion">Modo de visualización</h3>
-<p>La vista del juego se puede configurar de 2 maneras usando <strong>gameView</strong></p>
+<p>Con estos parámetros se activa y configura la aventura en tu juego:</p>
 <ul>
-<li><strong>side</strong> hará que tu juego sea un plataformas 2d con vista lateral</li>
-<li><strong>overhead</strong> indica al motor que use vista "cenital" para tu juego (tipo zelda)</li>
+<li>
+<p><strong>adventureTexts</strong> habilita la opción de tener textos habilitados para tu aventura</p>
+</li>
+<li>
+<p><strong>adventureTextsLength</strong> indica al compilador la longitud máxima que tendrán tus textos con el fin de optimizar mejor el espacio de tu juego.</p>
+</li>
 </ul>
-<p>Entre ambos juegos hay diferencias como el salto o el tipo de movimiento del personaje protagonista. El objetivo en ambos será el mismo.</p>
-<h3 id="modo-de-juego">Modo de juego</h3>
-<p>Además de cómo visualizar el juego se puede indicar la dinámica del mismo</p>
-<p><strong>arcadeMode</strong> permite activar dicho modo para nuestro juego. La dinámica del juego será un pelín distinta:</p>
+<p>Las longitudes son 30, 45 y 60. Hay que tener en cuenta que en el juego se mostrarán lineas de 15 caracteres por lo que mínimo serían 2 y máximo 4.</p>
 <ul>
-<li>En este modo hay que "pasarse" cada pantalla para pasar a la siguiente, no se puede ir a la pantalla siguiente y volver a la anterior. Son independientes</li>
-<li>Para diseñar las pantallas en Tiled lo haremos una detras de otra en una sóla línea.</li>
-<li>Para superar una pantalla habrá que recoger todos los items y al hacerlo aparacerá la llave para pasar a la siguiente pantalla</li>
-<li>Se pueden añadir tantos items como se quiera en la pantalla.</li>
-<li>Tendremos que definir en cada pantalla donde aparece el personaje (mainCharacter)</li>
-<li>No es necesario definir suelo y paredes en la pantalla para limitar la misma, si el personaje atraviesa los límites, aparecerá en el lado opuesto.</li>
+<li><strong>adventureTextsClearScreen</strong> con esto indicas al compilador que te muestre los textos sin limpiar la pantalla.</li>
 </ul>
-<p><img alt="" src="images/arcade_mode.png" /></p>
-<p><strong>levelsMode</strong> indica al motor que debe comportarse como un juego por niveles. La dinámica del juego será la siguiente:</p>
+<p>Siempre que esté así configurado, adjunto al texto se mostrará siempre el item/tile asociado.</p>
+<p>A tener en cuenta:</p>
 <ul>
-<li>En este modo hay que "pasarse" cada pantalla para pasar a la siguiente, no se puede ir a la pantalla siguiente y volver a la anterior. Son independientes</li>
-<li>Para diseñar las pantallas en Tiled lo haremos como en el modo normal sólo que cada fila de pantallas será un nivel.</li>
-<li>Para superar un nivel deberás coger una llave y abrir una puerta. El sitio donde esté da igual.</li>
-<li>El inicio del personaje (mainCharacter) se deberá hacer únicamente en la primera pantalla y será el mismo para todas por lo que hay que tener un hueco reservado para el inicio en todos los niveles</li>
-<li>En este modo si el personaje cae por abajo del nivel recibirá daño y rebotará.</li>
-<li>Por arriba no se podrá salir el personaje</li>
-<li>Por último, hay que tener en cuenta que tanto la primera pantalla como la última de cada nivel tienen que tener muros para que no se salga el personaje o fallará el juego (ya puedes hacer tu ghost'n'goblins)</li>
-</ul></div>
+<li>El total de textos que se pueden introducir son 250 (de momento, pero por dejar espacio y memoria disponible son los que hay ahora)</li>
+<li>Cada vez que se muestra un texto hay que pulsar intro para continuar.</li>
+<li>Para activar los textos hay 2 maneras: <ul>
+<li>asociándolo a un item especial del juego (llave, item, bala o vidas). Sólo se mostrará una vez, al coger el objeto.</li>
+<li>posándose en algún sitio donde haya un texto y pulsar disparo (hay que tener en cuenta esto para no poner enemigos cerca)</li>
+</ul>
+</li>
+</ul>
+<h2 id="configurando-el-comportamiento-de-los-textos-y-la-aventura">Configurando el comportamiento de los textos y la aventura</h2>
+<p>No hay límite de textos por pantalla (salvo el limite global) y para añadirlos sólo tienes que meter un "point" e indicar el type/class como "text".</p>
+<p>Para identificar donde hay un texto puede usarse un tile transpasable. Si coincide el punto de texto con la esquina superior izquierda del tile se mostrará junto al texto.</p>
+<p>Los textos de la aventura pueden ser de 2 tipos: relativos a la aventura (completándola se completa el juego) o meramente informativos.</p>
+<h3 id="atributos-de-los-textos">Atributos de los textos</h3>
+<p><img alt="Punto de aventura" src="imgs/aventura1.png" /></p>
+<p>Los puntos de texto tienen 3 atributos configurables:</p>
+<ul>
+<li>
+<p><strong>es</strong> o <strong>en</strong> aquí tendrás que introducir el texto a mostrar teniendo en cuenta tu configuración y que las lineas son de 15 caracteres (para que no se corten las palabras). Actualmente no está activo el multiidioma pero está preparado para cuando lo esté. Con una de estas de momento te tiene que valer.</p>
+</li>
+<li>
+<p><strong>adventureState</strong> sirve para conocer en qué punto de la aventura se debe mostrar este punto de texto permitiendo mostrar distintos textos en el mismo tile dependiendo del avance de tu aventura. Recordar que empieza por 1 y deben ser correlativos. Cogido el último habrás ganado. Activando esto puedes desactivar el objetivo de items, o subirlo para no alcanzarlo nunca, ya que puede ser confuso para el jugador.</p>
+</li>
+</ul>
+<p>Si no indicas ningún estado de aventura tus textos se usarán como información (y se liberará algo de espacio para tí en el juego)</p>
+<p>El modo aventura no es compatible con el modo arcade y de niveles, pero si los textos informativos.</p>
+<ul>
+<li><strong>itemAction</strong> valor numérico que indica al motor qué dependencia tiene este punto. Hay 3 modos de configurar:<ul>
+<li><strong>0</strong> indica que es un texto informativo y que puede ser consultado tantas veces como se desee.</li>
+<li><strong>1</strong> esta acción hace que tu aventura avance al siguiente estado. Es obligatorio indicar <em>adventureState</em> junto con este valor</li>
+<li><strong>id de item</strong> permite asociar un texto a un item especial para que, cuando el jugador lo coja le muestre un texto asociado al item y una vez cogido ya no se mostrará más (muy util como elemento introductorio). </li>
+</ul>
+</li>
+</ul>
+<p>El identificador del item lo puedes consultar pinchando en el selector de items. Te mostrará en el panel de propiedades de la izquierda el ID y ese número es el que debes poner</p>
+<p><img alt="Punto de aventura de item" src="imgs/aventuraItem.png" /></p></div>
             </div>
         </div>
 

@@ -256,8 +256,6 @@ Sub moveToScreen(direction As Ubyte)
     End If
     
     swapScreen()
-    ' removeScreenObjectFromBuffer()
-    redrawScreen()
 End Sub
 
 Sub drawSprites()

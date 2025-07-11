@@ -24,9 +24,15 @@ class Sizes:
         self.MUSIC = 0
         self.INTRO_SCREEN = 0
         self.GAMEOVER_SCREEN = 0
-        self.TITLE_MUSIC = 0
         self.TEXTS_COORD_DATA = 0
         self.TEXTS_DATA = 0
+        self.SCREEN_MUSIC = 0
+        self.MUSIC_TITLE = 0
+        self.VTPLAYER = 0
+        self.MUSIC_2 = 0
+        self.MUSIC_3 = 0
+        self.MUSIC_ENDING = 0
+        self.MUSIC_GAMEOVER = 0
         
     @staticmethod
     def BEEP_FX_STRING():
@@ -109,6 +115,10 @@ class Sizes:
         return "TEXTS_COORD_DATA"
     
     @staticmethod
+    def SCREEN_MUSIC_DATA_STRING():
+        return "SCREEN_MUSIC_DATA"
+
+    @staticmethod
     def BROKEN_TILES_DATA_STRING():
         return "BROKEN_TILES_DATA"
     
@@ -125,14 +135,34 @@ class Sizes:
         return "GAMEOVER_SCREEN"
     
     @staticmethod
-    def TITLE_MUSIC_STRING():
-        return "TITLE_MUSIC"
+    def MUSIC_TITLE_STRING():
+        return "MUSIC_TITLE"
+
+    @staticmethod
+    def VTPLAYER_STRING():
+        return "VTPLAYER"
+
+    @staticmethod
+    def MUSIC_2_STRING():
+        return "MUSIC_2"
+
+    @staticmethod
+    def MUSIC_3_STRING():
+        return "MUSIC_3"
+
+    @staticmethod
+    def MUSIC_ENDING_STRING():
+        return "MUSIC_ENDING"
+
+    @staticmethod
+    def MUSIC_GAMEOVER_STRING():
+        return "MUSIC_GAMEOVER"
     
     @staticmethod
     def getKeysToMemoryBank():
-        return ["BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "TITLE_MUSIC"]
+        return ["BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "TEXTS", "TEXTS_COORD", "SCREEN_MUSIC_DATA", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
     
-    def printAllSizesByMemoryBankFor128(self):
+    def printAllSizesByMemoryBankFor128(self, musicEnabled):
 
         self.__printSizesArraySum([
             self.MAPS_DATA_STRING(),
@@ -154,7 +184,12 @@ class Sizes:
         ], "0")
 
         self.__printSizesArraySum([self.TITLE_SCREEN_STRING(), self.ENDING_SCREEN_STRING(), self.HUD_SCREEN_STRING(), self.GAMEOVER_SCREEN_STRING(), self.INTRO_SCREEN_STRING()], "3")
-        self.__printSizesArraySum([self.TITLE_MUSIC_STRING(), self.MUSIC_STRING()], "4")
+        
+        if musicEnabled:
+            self.__printSizesArraySum([self.VTPLAYER_STRING(), self.MUSIC_TITLE_STRING(), self.MUSIC_STRING(), self.SCREEN_MUSIC_DATA_STRING(), self.MUSIC_2_STRING(), self.MUSIC_3_STRING(), self.MUSIC_ENDING_STRING(), self.MUSIC_GAMEOVER_STRING()], "4")
+        else:
+            self.__printSizesArraySum([self.VTPLAYER_STRING(), self.MUSIC_TITLE_STRING(), self.MUSIC_STRING()], "4")
+        
         self.__printSizesArraySum([self.BEEP_FX_STRING()], "6")
 
 

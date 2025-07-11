@@ -19,6 +19,10 @@ MAP_FOLDER = str(Path(ASSETS_FOLDER + "map/")) + getOsSeparator()
 MAPS_FILE = str(Path(ASSETS_FOLDER + "map/maps.tmx"))
 MAPS_PROJECT = str(Path(ASSETS_FOLDER + "map/maps.tiled-project"))
 DIST_FOLDER = str(Path("../dist/")) + getOsSeparator()
+
+if not os.path.exists(DIST_FOLDER):
+    os.makedirs(DIST_FOLDER)
+
 INITIAL_ADDRESS = 49152
 MEMORY_BANK_SIZE = 16384
 
@@ -79,10 +83,20 @@ def getGameView():
         maps_json = json.load(f)
     return next((prop["value"] for prop in maps_json["properties"] if prop["name"] == "gameView"), 'side')
 
+def getMusicEnabled():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return any(prop["name"] == "musicEnabled" and prop["value"] for prop in maps_json["properties"])
+
 def getUseBreakableTile():
     with open(OUTPUT_FOLDER + "maps.json", "r") as f:
         maps_json = json.load(f)
     return any(prop["name"] == "useBreakableTile" and prop["value"] for prop in maps_json["properties"])
+
+def getAdventureTexts():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return any(prop["name"] == "adventureTexts" and prop["value"] for prop in maps_json["properties"])
 
 def getEnemiesShoot():
     with open(OUTPUT_FOLDER + "maps.json", "r") as f:

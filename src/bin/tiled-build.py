@@ -85,10 +85,6 @@ shouldKillEnemies = 0
 enabled128K = 0
 hiScore = 0
 
-vtplayerInit = 'EFAD'
-vtplayerMute = 'EFB5'
-vtplayerNextNote = 'EFB2'
-
 initialScreen = 2
 initialMainCharacterX = 8
 initialMainCharacterY = 8
@@ -160,6 +156,9 @@ enemiesAlertDistance = 10
 bulletType = 'bullet'
 bulletDisableCollisions = False
 platformMoveable = False
+adventureTexts = False
+adventureTextsLength = 30
+adventureTextsClearScreen = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -185,12 +184,6 @@ if 'properties' in data:
             enabled128K = 1 if property['value'] else 0
         elif property['name'] == 'hiScore':
             hiScore = 1 if property['value'] else 0
-        elif property['name'] == 'VTPLAYER_INIT':
-            vtplayerInit = property['value']
-        elif property['name'] == 'VTPLAYER_MUTE':
-            vtplayerMute = property['value']
-        elif property['name'] == 'VTPLAYER_NEXTNOTE':
-            vtplayerNextNote = property['value']
         elif property['name'] == 'maxEnemiesPerScreen':
             if property['value'] < 7:
                 maxEnemiesPerScreen = property['value']
@@ -302,6 +295,12 @@ if 'properties' in data:
             bulletDisableCollisions = property['value']    
         elif property['name'] == 'platformMoveable':
             platformMoveable = property['value']    
+        elif property['name'] == 'adventureTexts':
+            adventureTexts = property['value']
+        elif property['name'] == 'adventureTextsLength':
+            adventureTextsLength = int(property['value'])
+        elif property['name'] == 'adventureTextsClearScreen':
+            adventureTextsClearScreen = property['value']
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -359,11 +358,6 @@ configStr += "const DAMAGE_TILES_COUNT as ubyte = " + str(damageTilesCount) + "\
 
 if shooting == 1:
     configStr += "#DEFINE SHOOTING_ENABLED\n"
-
-if enabled128K == 1:
-    configStr += "#DEFINE VTPLAYER_INIT $" + str(vtplayerInit) + "\n"
-    configStr += "#DEFINE VTPLAYER_MUTE $" + str(vtplayerMute) + "\n"
-    configStr += "#DEFINE VTPLAYER_NEXTNOTE $" + str(vtplayerNextNote) + "\n\n"
 
 if newBeeperPlayer == 1:
     configStr += "#DEFINE NEW_BEEPER_PLAYER\n"
@@ -632,6 +626,11 @@ texts = []
 isAdventure = False
 maxAdventureState = 0
 
+# musics
+musicsSelected = [False,False,False,False,False,False,]
+
+musics = {}
+
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
         for object in layer['objects']:
@@ -702,6 +701,10 @@ for layer in data['layers']:
     if layer['type'] == 'objectgroup':
         for object in layer['objects']:
             if 'point' in object and object['point'] == True:
+                xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
+                yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
+                screenId = xScreenPosition + (yScreenPosition * mapCols)
+                    
                 if object['type'] == '' and 'properties' in object:
                     objects[str(object['properties'][0]['value'])]['linEnd'] = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
                     objects[str(object['properties'][0]['value'])]['colEnd'] = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
@@ -721,9 +724,6 @@ for layer in data['layers']:
                             objects[str(object['properties'][0]['value'])]['linIni'] = linIni
 
                 elif object['type'] == 'mainCharacter':
-                    xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
-                    yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
-                    screenId = xScreenPosition + (yScreenPosition * mapCols)
                     initialScreen = screenId
                     initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
                     initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
@@ -734,79 +734,114 @@ for layer in data['layers']:
                     if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
                         keys[str(screenId)] = [int(initialMainCharacterX), int(initialMainCharacterY)]
                 elif object['type'] == 'text':
-                    xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
-                    yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
-                    screenId = xScreenPosition + (yScreenPosition * mapCols)
-                    xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
-                    yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
+                    if adventureTexts == True:
+                        xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
+                        yScreenPosition = int((object['y'] % (tileHeight * screenHeight))) // 4
 
-                    # print(object['properties'])
+                        # print(object['properties'])
 
-                    adventureState = 0
-                    adventureItem = None
-                    adventureText = ''
-                    for prop in range(len(object['properties'])):
-                        if object['properties'][prop]['name'] == 'es' or object['properties'][prop]['name'] == 'en':
-                            adventureText = object['properties'][prop]['value']
-                        elif object['properties'][prop]['name'] == 'itemAction':
-                            adventureItem = object['properties'][prop]['value']
-                        elif object['properties'][prop]['name'] == 'adventureState':
-                            isAdventure = True
-                            adventureState = object['properties'][prop]['value']
+                        adventureState = 0
+                        adventureItem = 0
+                        adventureText = ''
+                        for prop in range(len(object['properties'])):
+                            if object['properties'][prop]['name'] == 'es' or object['properties'][prop]['name'] == 'en':
+                                adventureText = object['properties'][prop]['value']
+                            elif object['properties'][prop]['name'] == 'itemAction':
+                                adventureItem = object['properties'][prop]['value']
+                            elif object['properties'][prop]['name'] == 'adventureState':
+                                isAdventure = True
+                                adventureState = object['properties'][prop]['value']
 
-                            if adventureState > maxAdventureState:
-                                maxAdventureState = adventureState
+                                if adventureState > maxAdventureState:
+                                    maxAdventureState = adventureState
 
-                    if len(adventureText) >0:
-                        if adventureItem == None and adventureState == 0:
-                            print(adventureItem)
-                            print(adventureState)
-                            print(object['properties'])
-                            exitWithErrorMessage('Cannot set an item to text without adventure state')
-                        texts.append([str(screenId), str(xScreenPosition), str(yScreenPosition), adventureText, adventureItem, adventureState])
+                        if len(adventureText) >0:
+                            if adventureItem == 1 and adventureState == 0:
+                                print(adventureItem)
+                                print(adventureState)
+                                print(object['properties'])
+                                exitWithErrorMessage('Cannot set an item to text without adventure state')
+                            texts.append([str(screenId), str(xScreenPosition), str(yScreenPosition), adventureText, adventureItem, adventureState])
 
-                        if len(texts) > 250:
-                            exitWithErrorMessage('Total text messages cannot be higher than 250')
-                    
+                            if len(texts) > 250:
+                                exitWithErrorMessage('Total text messages cannot be higher than 250')
+                elif object['type'] == 'music1':
+                    musics[screenId] = [1]
+                    musicsSelected[0] = True
+                elif object['type'] == 'music2':
+                    musics[screenId] = [2]
+                    musicsSelected[1] = True
+                elif object['type'] == 'music3':
+                    musics[screenId] = [3]
+                    musicsSelected[2] = True
+                elif object['type'] == 'title':
+                    musics[screenId] = [4]
+                    musicsSelected[3] = True
+                elif object['type'] == 'ending':
+                    musics[screenId] = [5]
+                    musicsSelected[4] = True
+                elif object['type'] == 'gameover':
+                    musics[screenId] = [6]
+                    musicsSelected[5] = True
                 else:
-                    exitWithErrorMessage('Unknown object type. Only "enemy", "text" or "mainCharacter" are allowed')   
+                    print(object)
+                    errorMessage = 'Unknown object type. Only "enemy", "text", "title", "ending", "gameover", "music1", "music2", "music3" or "mainCharacter" are allowed. Found: ' + object['type']
+                    exitWithErrorMessage(errorMessage)   
 
-if len(texts) > 0:
+# CONTROL DE MUSICAS
+# if someMusicSelected == True:
+# configStr += "#DEFINE MUSIC_SELECTED\n"
+if musicEnabled == 1:
+    if musicsSelected[0] == True:
+        configStr += "#DEFINE MUSIC_1_SELECTED\n"
+    if musicsSelected[1] == True:
+        configStr += "#DEFINE MUSIC_2_SELECTED\n"
+    if musicsSelected[2] == True:
+        configStr += "#DEFINE MUSIC_3_SELECTED\n"
+    if musicsSelected[3] == True:
+        configStr += "#DEFINE MUSIC_4_SELECTED\n"
+    if musicsSelected[4] == True:
+        configStr += "#DEFINE MUSIC_5_SELECTED\n"
+    if musicsSelected[5] == True:
+        configStr += "#DEFINE MUSIC_6_SELECTED\n"
+
+    with open("output/screenMusic.bin", "wb") as f:
+        for screenId in range(screensCount):
+            if screenId in musics:
+                f.write(bytearray(musics[screenId]))
+            else:
+                f.write(bytearray([0]))
+
+if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
 
+    configStr += "const TEXTS_SIZE as ubyte = " + str(adventureTextsLength) + "\n"
+    
+    if adventureTextsClearScreen == True:
+        configStr += "#DEFINE FULLSCREEN_TEXTS\n"
+    
     if isAdventure:
         if maxAdventureState < 2:
             exitWithErrorMessage('Max adventure state must be higher than 1. Current: ' + str(maxAdventureState))
         
         configStr += "#DEFINE IS_TEXT_ADVENTURE\n"
         configStr += "const MAX_ADVENTURE_STATE as ubyte = " + str(maxAdventureState) + "\n"
-        
-# fill emty screen text with empty string
-# for i in range(screensCount):
-#     if str(i) not in texts:
-#         texts[str(i)] = []
-    
-#     print("Pantalla: " + str(i))
-#     print(texts[str(i)])
-
-#     while len(texts[str(i)]) < 3:
-#         texts[str(i)].append(['0', '0', ''])
-#         print('Hueco vacío')
 
     allTexts = []
 
     with open("output/textsCoord.bin", "wb") as f:
-        for i in range(len(texts)):
+        sortedTexts = sorted(texts, key=lambda texto: texto[0])
+        for i in range(len(sortedTexts)):
             print("=========================")
-            itemText = texts[i]
+            itemText = sortedTexts[i]
             print(itemText)
             print("texto: " + itemText[3])
             if len(itemText[3]) > 0:
                 textoFinal = itemText[3]
                 # Truncar texto mayor de 60 caracteres
-                if len(textoFinal) > 60:
+                if len(textoFinal) > adventureTextsLength:
                     print("texto truncado")
-                    textoFinal = itemText[3][0:60]
+                    textoFinal = itemText[3][0:adventureTextsLength]
 
                 posicion = -1
 
@@ -824,44 +859,13 @@ if len(texts) > 0:
                 
                 print(textoFinal)
                 f.write(bytearray([int(itemText[0]), int(itemText[1]), int(itemText[2]), posicion, int(itemText[4]), int(itemText[5])]))
-        # for i in range(screensCount):
-        #     print("=========================")
-        #     print(texts[str(i)])
-        #     for itemText in texts[str(i)]:
-        #         print("texto: " + itemText[2])
-        #         if len(itemText[2]) > 0:
-        #             textoFinal = itemText[2]
-        #             # Truncar texto mayor de 45 caracteres
-        #             if len(textoFinal) > 45:
-        #                 print("texto truncado")
-        #                 textoFinal = itemText[2][0:45]
-
-        #             posicion = -1
-
-        #             for p, string in enumerate(allTexts):
-        #                 if string == textoFinal:
-        #                     print("texto existente "+ string + " en posicion " + str(p))
-        #                     posicion = p
-        #                     break
-                    
-        #             if posicion == -1:
-        #                 # Verificar que no exista ya el texto
-        #                 allTexts.append(textoFinal)
-        #                 posicion = int(len(allTexts)) - 1
-        #                 print("texto nuevo "+ textoFinal + " en posicion " + str(posicion))
-                    
-        #             print(textoFinal)
-        #             f.write(bytearray([int(itemText[0]), int(itemText[1]), posicion]))
-        #         else:
-        #             print("sin texto")
-        #             f.write(bytearray([int(0), int(0), int(0)]))
 
     print("ALL TEXTS")
     with open("output/texts.bin", "wb") as f:
         for i in allTexts:
             print(i)
             # if len(i > 20)
-            f.write(i.ljust(60, ' ').encode('ascii'))
+            f.write(i.ljust(adventureTextsLength, ' ').encode('ascii'))
             f.write(b'\x00')
 
     configStr += "const AVAILABLE_ADVENTURES as ubyte = " + str(len(texts) - 1) + "\n"
@@ -870,6 +874,7 @@ if len(texts) > 0:
     print("ALL ADVENTURES LENGTH "+ str(len(texts)))
     print("ALL TEXTS LENGTH "+ str(len(allTexts)))
 
+# OPTIMIZAR
 if arcadeMode == 1: # Defino el array de posiciones iniciales del personaje principal
     configStr += "dim mainCharactersArray(" + str(screensCount - 1) + ", 1) as ubyte = { _\n"
     for key in keys:

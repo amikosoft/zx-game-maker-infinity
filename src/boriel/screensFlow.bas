@@ -14,8 +14,10 @@ Sub showMenu()
         PaginarMemoria(DATA_BANK)
         dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
         PaginarMemoria(0)
-        #ifdef TITLE_MUSIC_ENABLED
-            VortexTracker_Inicializar(1)
+        #ifdef MUSIC_ENABLED
+            #ifdef MUSIC_TITLE_ENABLED
+                VortexTracker_Play(MUSIC_TITLE_ADDRESS)
+            #endif
         #endif
     #Else
         dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
@@ -68,9 +70,9 @@ End Sub
     Sub redefineKeys()
         clearScreen()
         
-        #ifdef ENABLED_128k
-            #ifdef TITLE_MUSIC_ENABLED
-                VortexTracker_Stop()
+        #ifdef MUSIC_ENABLED
+            #ifdef MUSIC_TITLE_ENABLED
+                ' VortexTracker_Stop()
             #endif
         #endif
         
@@ -139,18 +141,16 @@ Sub playGame()
     inMenu = 0
     
     #ifdef ENABLED_128k
-        #ifdef TITLE_MUSIC_ENABLED
-            VortexTracker_Stop()
+        #ifdef MUSIC_ENABLED
+            #ifdef MUSIC_TITLE_ENABLED
+                VortexTracker_Stop()
+            #endif
         #endif
-    #endif
-    
-    #ifdef ENABLED_128k
+        
         #ifdef INTRO_SCREEN_ENABLED
             PaginarMemoria(DATA_BANK)
             dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
             PaginarMemoria(0)
-            ' Do
-            ' Loop Until MultiKeys(KEYENTER)
             pauseUntilPressEnter()
         #endif
     #endif
@@ -168,7 +168,7 @@ Sub playGame()
         dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
         PaginarMemoria(0)
         #ifdef MUSIC_ENABLED
-            VortexTracker_Inicializar(1)
+            VortexTracker_Play(MUSIC_ADDRESS)
         #endif
     #Else
         dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
@@ -182,8 +182,9 @@ Sub playGame()
         
         saveSprite( INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
     #endif
-    swapScreen()
+    
     resetValues()
+    swapScreen()
     
     Let lastFrameProta = framec
     Let lastFrameEnemies = framec
@@ -285,8 +286,10 @@ End Sub
 
 Sub ending()
     #ifdef ENABLED_128k
-        #ifdef MUSIC_ENABLED
-            VortexTracker_Stop()
+        #ifdef MUSIC_ENDING_ENABLED
+            ' VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+        #else
+            ' VortexTracker_Stop()
         #endif
         PaginarMemoria(DATA_BANK)
         dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
@@ -303,7 +306,11 @@ End Sub
 Sub gameOver()
     #ifdef ENABLED_128k
         #ifdef MUSIC_ENABLED
-            VortexTracker_Stop()
+            #ifdef MUSIC_GAMEOVER_ENABLED
+                VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
+            #else
+                VortexTracker_Stop()
+            #endif
         #endif
     #endif
     
@@ -392,15 +399,22 @@ Sub resetValues()
         #endif
     #endif
 
-    redrawScreen()
-    ' drawSprites()
+    #ifdef MUSIC_ENABLED
+        musicPlayed = 0
+    #endif
+
 End Sub
 
 Sub swapScreen()
     dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), @decompressedMap)
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), @decompressedEnemiesScreen)
 
-    firstTimeScreen = 1
+    If enemiesScreen Then
+        For enemyId=0 To enemiesScreen - 1
+            enemiesInitialLife(enemyId) = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
+        Next enemyId
+    End if
+
     #ifdef SHOOTING_ENABLED
         bulletPositionX = 0
     #endif
@@ -423,7 +437,38 @@ Sub swapScreen()
         for texto=0 to AVAILABLE_ADVENTURES
             if textsCoord(texto, 0) = currentScreen Then 
                 currentScreenFirstText = texto
+                Exit for
             end if
         next texto
     #endif
+
+    #ifdef ENABLED_128k
+        #ifdef MUSIC_ENABLED
+            dim newScreenMusic as ubyte = screenMusic(currentScreen)
+            if newScreenMusic <> 0  and newScreenMusic <> musicPlayed Then
+                musicPlayed = newScreenMusic
+                
+                #ifdef MUSIC_1_SELECTED
+                    if newScreenMusic = 1 Then VortexTracker_Play(MUSIC_ADDRESS)
+                #endif
+                #ifdef MUSIC_2_SELECTED
+                    if newScreenMusic = 2 Then VortexTracker_Play(MUSIC_2_ADDRESS)
+                #endif
+                #ifdef MUSIC_3_SELECTED
+                    if newScreenMusic = 3 Then VortexTracker_Play(MUSIC_3_ADDRESS)
+                #endif
+                #ifdef MUSIC_4_SELECTED
+                    if newScreenMusic = 4 Then VortexTracker_Play(MUSIC_TITLE_ADDRESS)
+                #endif
+                #ifdef MUSIC_5_SELECTED
+                    if newScreenMusic = 5 Then VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+                #endif
+                #ifdef MUSIC_6_SELECTED
+                    if newScreenMusic = 6 Then VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
+                #endif
+            End if
+        #endif
+    #endif
+
+    redrawScreen()
 End Sub

@@ -296,7 +296,7 @@ def open_map_with_tiled():
 
 # Crear la ventana principal
 root = tk.Tk()
-root.title("ZXGM - Infinity")
+root.title("ZXGM - Infinity 2.0.0")
 root.geometry("600x750")
 root.resizable(True, True)
 
@@ -390,7 +390,7 @@ menu_bar.add_cascade(label="Memory Usage", menu=memory_menu)
 
 # Menú "Help"
 help_menu = tk.Menu(menu_bar, tearoff=0)
-infinity_docs_path = os.path.join(os.path.dirname(__file__), "site", "index.html")
+infinity_docs_path = os.path.join(os.path.dirname(__file__), "../site", "index.html")
 help_menu.add_command(label="Infinity Docs", command=lambda: webbrowser.open(infinity_docs_path))
 help_menu.add_command(label="ZXGM Documentation", command=lambda: webbrowser.open("https://gm.retrojuegos.org/"))
 help_menu.add_separator()
