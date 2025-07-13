@@ -57,24 +57,26 @@
     end function
 #endif
 
-' dim enemiesFrame as ubyte = 0
-
 Sub moveEnemies()
     enemiesFrame = enemiesFrame + 1
     if enemiesFrame > 9 Then enemiesFrame = 1
-
+    
     If enemiesScreen Then
         For enemyId=0 To enemiesScreen - 1
-            Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE)
+            Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
             
             If tile = 0 Then continue For
             
+            #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+            if firstTimeEnemiesScreen Then enemiesInitialLife(enemyId) = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
+            #EndIf
+
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             
             If enemyLive = 0 Then continue For
             
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                If enemyLive < 1 And tile > 15 Then
+                If enemyLive < 1 And tile > 16 Then
                     If screensWon(currentScreen) Then continue For
                 End If
             #endif
@@ -120,16 +122,10 @@ Sub moveEnemies()
                 #endif
             #endif
             
-            'In the Screen And still live
-            ' If enemyLive = -100 or enemyLive > 0 Then
+
             Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
             Dim horizontalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
-            
-            ' #ifdef ENABLED_128k
-            '     If (enemySpeed = 1 and (framec bAnd 3) <> 3) or (enemySpeed = 2 and (framec bAnd 1) = 1) Then
-            '         GO TO EnemiesFinal
-            '     End If
-            ' #Else
+
             If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
                 GO TO EnemiesFinal
             End If
@@ -151,6 +147,22 @@ Sub moveEnemies()
                         verticalDirection = verticalDirection * -1
                     End If
                 End If
+
+                #ifdef ENEMIES_NORMAL_COLLIDE
+                    dim counter as byte = 0
+                    while counter < 3 and CheckCollision(enemyCol + horizontalDirection, enemyLin + verticalDirection)
+                        if counter = 0 Then 
+                            horizontalDirection = horizontalDirection * -1
+                        Elseif counter = 1 Then
+                            horizontalDirection = horizontalDirection * -1 
+                            verticalDirection = verticalDirection * -1       
+                        Else
+                            horizontalDirection = horizontalDirection * -1       
+                        end if
+
+                        counter = counter +1
+                    Wend
+                #endif
                 
                 #ifdef ENEMIES_ALERT_ENABLED
                     If Not invincible And enemyMode = 1 Then
@@ -236,7 +248,7 @@ Sub moveEnemies()
             
             ' Is a platform Not an enemy, only 2 frames, 1 direction
             #ifdef SIDE_VIEW
-                If tile < 16 Then
+                If tile < 17 Then
                     if jumpCurrentKey = jumpStopValue Then
                         If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
                             #ifdef PLATFORM_MOVEABLE
@@ -289,26 +301,26 @@ Sub moveEnemies()
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
             
-            if tile > 15 and horizontalDirection = -1 Then tile = tile + 16
+            if tile > 16 and horizontalDirection = -1 Then tile = tile + 16
             
             If enemiesFrame > 4 Then tile = tile + 1
             
             If enemyLive = -100 or enemyLive > 0 Then
                 #ifdef BULLET_ENEMIES
                     #ifndef BULLET_ENEMIES_MUST_LOOK
-                        if tile < 16 then Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                        if tile < 17 then Draw2x2Sprite(tile, enemyCol, enemyLin)
                         #ifndef BULLET_ENEMIES_LOOK_AT
-                            Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                            Draw2x2Sprite(tile, enemyCol, enemyLin)
                         #endif
                     #else
-                        Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                        Draw2x2Sprite(tile, enemyCol, enemyLin)
                     #endif
                 #Else
-                    Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                    Draw2x2Sprite(tile, enemyCol, enemyLin)
                 #endif
                 
                 
-                if tile > 15 and Not invincible Then
+                if tile > 16 and Not invincible Then
                     checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                     
                     #ifdef BULLET_ENEMIES
@@ -349,7 +361,7 @@ Sub moveEnemies()
                                 if enemyCol > (protaX-2) and enemyCol < (protaX+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
                                         #ifdef BULLET_ENEMIES_LOOK_AT
-                                            Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                                            Draw2x2Sprite(tile, enemyCol, enemyLin)
                                         #endif
                                     #endif
                                     
@@ -379,14 +391,18 @@ Sub moveEnemies()
                 #ifdef BULLET_ENEMIES
                     #ifndef BULLET_ENEMIES_MUST_LOOK
                         #ifdef BULLET_ENEMIES_LOOK_AT
-                            Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                            Draw2x2Sprite(tile, enemyCol, enemyLin)
                         #endif
                     #endif
                 #endif
             Else
-                if enemyLive > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tile + 1, enemyCol, enemyLin)
+                if enemyLive > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tile, enemyCol, enemyLin)
             End if
         Next enemyId
+
+        #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+        firstTimeEnemiesScreen = 0
+        #endif
     End if
 End Sub
 

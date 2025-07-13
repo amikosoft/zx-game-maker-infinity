@@ -142,6 +142,7 @@ Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSE
 
 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
 Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
+dim firstTimeEnemiesScreen as ubyte = 1
 #endif
 
 #ifdef IN_GAME_TEXT_ENABLED

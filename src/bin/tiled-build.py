@@ -82,6 +82,7 @@ bulletDistance = 0
 enemiesRespawn = True
 
 enemiesRespawnInScreen = False
+enemiesNormalCollide = False
 shooting = 1
 shouldKillEnemies = 0
 enabled128K = 0
@@ -180,6 +181,8 @@ if 'properties' in data:
             enemiesRespawn = property['value']
         elif property['name'] == 'enemiesRespawnInScreen':
             enemiesRespawnInScreen = property['value']
+        elif property['name'] == 'enemiesNormalCollide':
+            enemiesNormalCollide = property['value']
         elif property['name'] == 'shooting':
             shooting = 1 if property['value'] else 0
         elif property['name'] == 'shouldKillEnemies':
@@ -597,6 +600,9 @@ if enemiesRespawn == False:
 
 if enemiesRespawnInScreen:
     configStr += "#DEFINE ENEMIES_RESPAWN_IN_SCREEN_ENABLED\n"
+
+if enemiesNormalCollide:
+    configStr += "#DEFINE ENEMIES_NORMAL_COLLIDE\n"
 
 with open("output/screensWon.bin", "wb") as f:
     f.write(bytearray([0] * screensCount))

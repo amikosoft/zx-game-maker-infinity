@@ -415,11 +415,7 @@ Sub swapScreen()
     enemiesScreen = enemiesPerScreen(currentScreen)
     
     #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-    If enemiesScreen Then
-        For enemyId=0 To enemiesScreen - 1
-            enemiesInitialLife(enemyId) = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
-        Next enemyId
-    End if
+        firstTimeEnemiesScreen = 1
     #endif
 
     #ifdef SHOOTING_ENABLED

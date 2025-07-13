@@ -211,6 +211,11 @@
                 "value": false
             },
             {
+                "name": "enemiesNormalCollide",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "enemiesShoot",
                 "type": "int",
                 "value": 0

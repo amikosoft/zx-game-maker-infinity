@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="82">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="87">
  <editorsettings>
   <chunksize width="32" height="22"/>
  </editorsettings>
@@ -12,19 +12,23 @@
   <property name="animatePeriodMain" type="int" value="1"/>
   <property name="animatePeriodTile" type="int" value="10"/>
   <property name="backgroundAttribute" type="int" value="71"/>
-  <property name="bulletAnimation" type="bool" value="true"/>
-  <property name="bulletDisableCollisions" type="bool" value="false"/>
+  <property name="bulletAnimation" type="bool" value="false"/>
+  <property name="bulletDisableCollisions" type="bool" value="true"/>
   <property name="bulletDistance" type="int" value="15"/>
   <property name="bulletType" value="boomerang"/>
-  <property name="bulletsCollisionWithBullets" type="bool" value="true"/>
+  <property name="bulletsCollisionWithBullets" type="bool" value="false"/>
   <property name="damageAmount" type="int" value="1"/>
   <property name="enemiesAlertDistance" value="medium"/>
-  <property name="enemiesBulletCollision" type="bool" value="false"/>
+  <property name="enemiesBulletCollision" type="bool" value="true"/>
+  <property name="enemiesNormalCollide" type="bool" value="false"/>
+  <property name="enemiesPursuitCollide" type="bool" value="true"/>
   <property name="enemiesRespawn" type="bool" value="true"/>
-  <property name="enemiesShoot" type="int" value="0"/>
+  <property name="enemiesRespawnInScreen" type="bool" value="false"/>
+  <property name="enemiesShoot" type="int" value="1"/>
+  <property name="enemiesShootDirection" propertytype="enemiesShootDirection" value="all"/>
   <property name="enemiesShootOnlyLookingPlayer" type="bool" value="false"/>
   <property name="enemiesShootSpeed" value="slow"/>
-  <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
+  <property name="enemiesShootingLookAtPlayer" type="bool" value="false"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="goalItems" type="int" value="0"/>
@@ -40,18 +44,18 @@
   <property name="levelsMode" type="bool" value="false"/>
   <property name="lifeAmount" type="int" value="5"/>
   <property name="livesMode" propertytype="livesMode" value="instant respawn"/>
-  <property name="mainCharacterExtraFrame" type="bool" value="true"/>
+  <property name="mainCharacterExtraFrame" type="bool" value="false"/>
   <property name="maxAnimatedTilesPerScreen" type="int" value="10"/>
   <property name="maxEnemiesPerScreen" type="int" value="3"/>
   <property name="messagesEnabled" type="bool" value="false"/>
-  <property name="musicEnabled" type="bool" value="false"/>
+  <property name="musicEnabled" type="bool" value="true"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
   <property name="password" value=""/>
-  <property name="platformMoveable" type="bool" value="true"/>
-  <property name="redefineKeysEnabled" type="bool" value="false"/>
+  <property name="platformMoveable" type="bool" value="false"/>
+  <property name="redefineKeysEnabled" type="bool" value="true"/>
   <property name="shooting" type="bool" value="true"/>
   <property name="shouldKillEnemies" type="bool" value="true"/>
-  <property name="useBreakableTile" type="bool" value="true"/>
+  <property name="useBreakableTile" type="bool" value="false"/>
   <property name="waitPressKeyAfterLoad" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="192" columns="32">
@@ -68,6 +72,8 @@
   <tile id="98" type="animated"/>
   <tile id="128" type="damage"/>
   <tile id="129" type="damage"/>
+  <tile id="130" type="damage"/>
+  <tile id="161" type="damage"/>
   <tile id="166" type="damage"/>
   <tile id="173" type="animated"/>
   <tile id="174" type="damage"/>
@@ -134,7 +140,7 @@
 40,41,1,1,1,1,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,
 41,40,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,149,1,1,149,1,1,1,1,1,1,1,1,1,41,40,
 40,41,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,148,1,192,148,1,1,1,1,1,1,1,1,1,40,41,
-41,40,1,1,124,125,1,1,114,1,1,1,1,1,1,1,1,20,21,21,22,1,1,1,1,1,1,1,1,1,41,40,
+41,40,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,20,21,21,22,1,1,1,1,1,1,1,1,1,41,40,
 40,41,1,1,1,124,125,1,114,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,40,41,
 41,40,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,40,
 40,41,1,1,1,1,1,1,115,1,1,1,1,1,52,52,1,1,1,1,1,1,1,191,1,1,1,1,1,1,40,41,
@@ -343,7 +349,7 @@
    </properties>
    <point/>
   </object>
-  <object id="81" name="mainCharacter" type="mainCharacter" x="280" y="304">
+  <object id="86" name="mainCharacter" type="mainCharacter" x="136" y="288">
    <point/>
   </object>
  </objectgroup>

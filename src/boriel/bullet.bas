@@ -50,6 +50,11 @@ End Function
                 if bulletPositionX >= protaX and bulletPositionX <= (protaX+4) Then
                     if bulletPositionY >= protaY and bulletPositionY <= (protaY+4) Then
                         resetBullet(0)
+                        
+                        #ifdef AMMO_ENABLED
+                            currentAmmo = currentAmmo + 1
+                            printLife()
+                        #endif
                         Return
                     end if
                 End if
@@ -166,31 +171,36 @@ End Function
         if enemyBulletPositionX = 0 then return
         
         ' desplazamiento de bala
-        if enemyBulletDirection = BULLET_DIRECTION_RIGHT then
-            if enemyBulletPositionX >= MAX_SCREEEN_RIGHT then
-                resetBullet(1)
-                return
+        #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
+            if enemyBulletDirection = BULLET_DIRECTION_RIGHT then
+                if enemyBulletPositionX >= MAX_SCREEEN_RIGHT then
+                    resetBullet(1)
+                    return
+                end if
+                enemyBulletPositionX = enemyBulletPositionX + BULLET_ENEMIES_SPEED
+            elseif enemyBulletDirection = BULLET_DIRECTION_LEFT then
+                if enemyBulletPositionX <= MAX_SCREEN_LEFT then
+                    resetBullet(1)
+                    return
+                end if
+                enemyBulletPositionX = enemyBulletPositionX - BULLET_ENEMIES_SPEED
             end if
-            enemyBulletPositionX = enemyBulletPositionX + BULLET_ENEMIES_SPEED
-        elseif enemyBulletDirection = BULLET_DIRECTION_LEFT then
-            if enemyBulletPositionX <= MAX_SCREEN_LEFT then
-                resetBullet(1)
-                return
+        #endif
+        #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
+            if enemyBulletDirection = BULLET_DIRECTION_DOWN then
+                if enemyBulletPositionY >= MAX_SCREEN_BOTTOM then
+                    resetBullet(1)
+                    return
+                end if
+                enemyBulletPositionY = enemyBulletPositionY + BULLET_ENEMIES_SPEED
+            elseif enemyBulletDirection = BULLET_DIRECTION_UP
+                if enemyBulletPositionY <= MAX_SCREEN_TOP then
+                    resetBullet(1)
+                    return
+                end if
+                enemyBulletPositionY = enemyBulletPositionY - BULLET_ENEMIES_SPEED
             end if
-            enemyBulletPositionX = enemyBulletPositionX - BULLET_ENEMIES_SPEED
-        elseif enemyBulletDirection = BULLET_DIRECTION_DOWN then
-            if enemyBulletPositionY >= MAX_SCREEN_BOTTOM then
-                resetBullet(1)
-                return
-            end if
-            enemyBulletPositionY = enemyBulletPositionY + BULLET_ENEMIES_SPEED
-        elseif enemyBulletDirection = BULLET_DIRECTION_UP
-            if enemyBulletPositionY <= MAX_SCREEN_TOP then
-                resetBullet(1)
-                return
-            end if
-            enemyBulletPositionY = enemyBulletPositionY - BULLET_ENEMIES_SPEED
-        end if
+        #endif
         
         #ifdef BULLET_ENEMIES_COLLIDE
             if checkBulletTileCollision(enemyBulletDirection, enemyBulletPositionX, enemyBulletPositionY) Then resetBullet(1)
@@ -250,7 +260,7 @@ sub damageEnemy(enemyToKill as Ubyte)
     decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
     if alive = 0 then
         decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
-
+        
         ' enemySpriteTempTile(enemyToKill) = 0
         Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
         
