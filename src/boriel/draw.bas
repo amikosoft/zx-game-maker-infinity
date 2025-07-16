@@ -234,7 +234,7 @@ Sub moveToScreen(direction As Ubyte)
                 protaYRespawn = INITIAL_MAIN_CHARACTER_Y
             End if
         #else
-            saveSprite( 0, protaX + SCREEN_ADJUSTMENT, protaTile, protaDirection)
+            saveSprite( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
             
             #ifdef LIVES_MODE_ENABLED
@@ -243,7 +243,7 @@ Sub moveToScreen(direction As Ubyte)
             #endif
         #endif
     Elseif direction = 8 Then
-        saveSprite( MAX_LINE, protaX, protaTile, protaDirection)
+        saveSprite( MAX_LINE - SCREEN_ADJUSTMENT, protaX, protaTile, protaDirection)
         #ifdef SIDE_VIEW
             jumpCurrentKey = 0
         #endif
