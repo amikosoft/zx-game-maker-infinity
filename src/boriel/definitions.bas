@@ -118,7 +118,10 @@ Dim inMenu As Ubyte = 1
 ' #ifdef SHOOTING_ENABLED
 '     Dim noKeyPressedForShoot As Ubyte = 1
 ' #endif
+
+#ifdef PLATFORM_MOVEABLE
 Dim downKeyPressed as Ubyte = 0
+#endif
 
 #ifdef ENABLED_128k
     #define DATA_BANK 4
