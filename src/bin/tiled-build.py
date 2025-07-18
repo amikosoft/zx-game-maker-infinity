@@ -107,6 +107,7 @@ gameView = 'side'
 
 jumpOnEnemies = 0
 killJumpingOnTop = 0
+laddersEnabled = False
 
 ammo = -1
 ammoIncrement = 10
@@ -318,6 +319,9 @@ if 'properties' in data:
             adventureTextsAcceptWithFire = property['value']
         elif property['name'] == 'adventureTextsHideTiles':
             adventureTextsHideTiles = property['value']
+        elif property['name'] == 'laddersEnabled':
+            laddersEnabled = property['value']
+        
         
 
 if len(damageTiles) == 0:
@@ -468,8 +472,11 @@ if redefineKeysEnabled == 1:
 if jetPackFuel > 0:
     configStr += "#DEFINE JETPACK_FUEL "  + str(jetPackFuel) + "\n"
 
-if mainCharacterExtraFrame == 1:
-    configStr += "#DEFINE MAIN_CHARACTER_EXTRA_FRAME\n"
+if laddersEnabled == True:
+    configStr += "#DEFINE LADDERS_ANIMATION_ENABLED\n"
+else:
+    if mainCharacterExtraFrame == 1:
+        configStr += "#DEFINE MAIN_CHARACTER_EXTRA_FRAME\n"
 
 if idleTime > 0:
     configStr += "#DEFINE IDLE_ENABLED\n"

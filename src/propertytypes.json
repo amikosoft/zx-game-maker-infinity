@@ -361,6 +361,11 @@
                 "value": false
             },
             {
+                "name": "laddersEnabled",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "lifeAmount",
                 "type": "int",
                 "value": 5

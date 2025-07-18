@@ -213,21 +213,23 @@ End Sub
 Sub moveToScreen(direction As Ubyte)
     ' removeAllObjects()
     If direction = 6 Then
-        saveSprite( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
+        'saveSprite( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
+        protaX = 0 + SCREEN_ADJUSTMENT
         currentScreen = currentScreen + 1
         
         #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = 0 + SCREEN_ADJUSTMENT
+            protaXRespawn = protaX
             protaYRespawn = protaY
         #endif
     Elseif direction = 4 Then
-        saveSprite( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
+        'saveSprite( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
+        protaX = 60 - SCREEN_ADJUSTMENT
         currentScreen = currentScreen - 1
         
-        #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = 60 - SCREEN_ADJUSTMENT
-            protaYRespawn = protaY
-        #endif
+        ' #ifdef LIVES_MODE_ENABLED
+        '     protaXRespawn = protaX
+        '     protaYRespawn = protaY
+        ' #endif
     Elseif direction = 2 Then
         #ifdef LEVELS_MODE
             currentLevel = currentLevel + 1
@@ -246,30 +248,38 @@ Sub moveToScreen(direction As Ubyte)
                 currentScreen = (currentLevel * MAP_SCREENS_WIDTH_COUNT )
                 protaX = INITIAL_MAIN_CHARACTER_X
                 protaY = INITIAL_MAIN_CHARACTER_Y
-                protaXRespawn = INITIAL_MAIN_CHARACTER_X
-                protaYRespawn = INITIAL_MAIN_CHARACTER_Y
+                ' protaXRespawn = INITIAL_MAIN_CHARACTER_X
+                ' protaYRespawn = INITIAL_MAIN_CHARACTER_Y
             End if
         #else
-            saveSprite( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
+            'saveSprite( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
+            protaY = 0+ SCREEN_ADJUSTMENT
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
             
-            #ifdef LIVES_MODE_ENABLED
-                protaXRespawn = protaX
-                protaYRespawn = 0 + SCREEN_ADJUSTMENT
-            #endif
+            ' #ifdef LIVES_MODE_ENABLED
+            '     protaXRespawn = protaX
+            '     protaYRespawn = protaY
+            ' #endif
         #endif
     Elseif direction = 8 Then
-        saveSprite( MAX_LINE - SCREEN_ADJUSTMENT, protaX, protaTile, protaDirection)
+        'saveSprite( MAX_LINE - SCREEN_ADJUSTMENT, protaX, protaTile, protaDirection)
+        protaY = MAX_LINE - SCREEN_ADJUSTMENT
+        
         #ifdef SIDE_VIEW
-            jumpCurrentKey = 0
+            if not landed Then jumpCurrentKey = 0
         #endif
         currentScreen = currentScreen - MAP_SCREENS_WIDTH_COUNT
         
-        #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = protaX
-            protaYRespawn = MAX_LINE - SCREEN_ADJUSTMENT
-        #endif
+        ' #ifdef LIVES_MODE_ENABLED
+        '     protaXRespawn = protaX
+        '     protaYRespawn = protaY
+        ' #endif
     End If
+    
+    #ifdef LIVES_MODE_ENABLED
+        protaXRespawn = protaX
+        protaYRespawn = protaY
+    #endif
     
     swapScreen()
 End Sub

@@ -31,6 +31,25 @@ Function canMoveUp() As Ubyte
     Return Not CheckCollision(protaX, protaY - 1)
 End Function
 
+#ifdef SIDE_VIEW
+    Function checkIsLadder(y as Ubyte, anim as Ubyte) as ubyte
+        for i=0 to 2
+            if CheckStaticPlatform(protaX+i, y) Then
+                if anim Then
+                    If protaTile = 3 Then
+                        protaTile = 7
+                    Else
+                        protaTile = 3
+                    End If
+                end if
+                return 1
+            End if
+        next i
+        
+        return 0
+    end function
+#endif
+
 Function canMoveDown() As Ubyte
     #ifdef ARCADE_MODE
         If protaY > 39 Then
@@ -46,9 +65,8 @@ Function canMoveDown() As Ubyte
     If CheckCollision(protaX, protaY + 1) Then Return 0
     #ifdef SIDE_VIEW
         If checkPlatformByXY(protaX, protaY + 4) Then Return 0
-        If CheckStaticPlatform(protaX, protaY + 4) Then Return 0
-        If CheckStaticPlatform(protaX + 1, protaY + 4) Then Return 0
-        If CheckStaticPlatform(protaX + 2, protaY + 4) Then Return 0
+        
+        if checkIsLadder(protaY + 4, 0) then return 0
     #endif
     Return 1
 End Function
@@ -415,24 +433,26 @@ End Sub
 
 Sub upKey()
     #ifdef SIDE_VIEW
-        jump()
+        #ifdef LADDERS_ANIMATION_ENABLED
+            If checkIsLadder(protaY + 3, 1) Then
+                checkProtaTop()
+                
+                if Not CheckCollision(protaX, protaY - 1) Then
+                    protaY = protaY - 1
+                End If
+            Else
+                jump()
+            End If
+        #Else
+            jump()
+        #endif
     #Else
         If protaDirection <> 8 Then
             protaFrame = 4
         End If
         If canMoveUp() Then
             saveSprite( protaY - 1, protaX, protaFrame + 1, 8)
-            ' If protaY < 2 Then
-            '     #ifdef ARCADE_MODE
-            '         protaY = 39
-            '     #Else
-            '         #ifdef LEVELS_MODE
-            '             protaY = 2
-            '         #Else
-            '             moveScreen = 8
-            '         #endif
-            '     #endif
-            ' End If
+            
             checkProtaTop()
         End If
     #endif
@@ -455,9 +475,15 @@ Sub downKey()
             End If
         End If
     #Else
-        If CheckStaticPlatform(protaX, protaY + 4) Or CheckStaticPlatform(protaX + 1, protaY + 4) Or CheckStaticPlatform(protaX + 2, protaY + 4) Then
-            protaY = protaY + 2
-        End If
+        #ifdef LADDERS_ANIMATION_ENABLED
+            If checkIsLadder(protaY + 4, 1) Then
+                protaY = protaY + 2
+            End If
+        #Else
+            If checkIsLadder(protaY + 4, 0) Then
+                protaY = protaY + 2
+            End If
+        #endif
     #endif
 End Sub
 
@@ -465,10 +491,10 @@ End Sub
     Sub muestraDialogo(texto as ubyte, tile as ubyte)
         #ifdef FULLSCREEN_TEXTS
             FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
-
+            
             if tile > 1 Then SetTile(tile, attrSet(tile), 16, 4)
         #EndIf
-
+        
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
             for letra=0 to 14
                 #ifndef FULLSCREEN_TEXTS
@@ -480,7 +506,7 @@ End Sub
                 if tile > 1 Then SetTile(tile, attrSet(tile), 16, 5)
             #endif
         Next fila
-
+        
         #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
             Do
             Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
