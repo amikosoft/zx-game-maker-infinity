@@ -14,14 +14,30 @@ Sub mapDraw(force As Ubyte)
             y = y + 1
         End If
     Next index
+    
+    #ifdef IN_GAME_TEXT_ENABLED
+        #ifdef IS_TEXT_ADVENTURE
+            #ifdef ADVENTURE_TEXTS_HIDE_TILES
+                for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
+                    if textsCoord(texto, 0) <> currentScreen Then exit for
+                    dim cordX as ubyte = textsCoord(texto, 1) >> 1
+                    dim cordY as ubyte = textsCoord(texto, 2) >> 1
+                    
+                    if GetTile(cordX, cordY) Then
+                        dim textState as ubyte = textsCoord(texto, 5)
+                        if textState and textState <> currentAdventureState Then
+                            SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
+                        End if
+                    End if
+                Next texto
+            #endif
+        #endif
+    #endif
 End Sub
 
 Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
     if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-    If tile < 1 Then
-        ' if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-        Return
-    End if
+    If tile < 1 Then Return
     
     #ifdef SHOULD_KILL_ENEMIES_ENABLED
         If tile = ENEMY_DOOR_TILE Then

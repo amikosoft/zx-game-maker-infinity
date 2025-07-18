@@ -187,6 +187,11 @@
                 "value": false
             },
             {
+                "name": "adventureTextsHideTiles",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "arcadeMode",
                 "type": "bool",
                 "value": false

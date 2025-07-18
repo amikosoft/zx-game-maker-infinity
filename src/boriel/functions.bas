@@ -202,29 +202,41 @@ end function
 #endif
 
 function CheckCollision(x as uByte, y as uByte) as uByte
-    Dim xIsEven as uByte = (x bAnd 1) = 0
-    Dim yIsEven as uByte = (y bAnd 1) = 0
+    ' Dim xIsEven as uByte = (x bAnd 1) = 0
+    ' Dim yIsEven as uByte = (y bAnd 1) = 0
     Dim col as uByte = x >> 1
     Dim lin as uByte = y >> 1
     
-    if isSolidTileByColLin(col, lin) then return 1
-    if isSolidTileByColLin(col + 1, lin) then return 1
-    if isSolidTileByColLin(col, lin + 1) then return 1
-    if isSolidTileByColLin(col + 1, lin + 1) then return 1
+    Dim maxCol as uByte = 1
+    Dim maxLin as uByte = 1
+
+    if (x bAnd 1) <> 0 Then maxCol = 2
+    if (y bAnd 1) <> 0 Then maxLin = 2
     
-    if not yIsEven then
-        if isSolidTileByColLin(col, lin + 2) then return 1
-        if isSolidTileByColLin(col + 1, lin + 2) then return 1
-    end if
+    for c=0 to maxCol
+        for l=0 to maxLin
+            if isSolidTileByColLin(col+c, lin+l) then return 1
+        next l
+    next c
+
+    ' if isSolidTileByColLin(col, lin) then return 1
+    ' if isSolidTileByColLin(col + 1, lin) then return 1
+    ' if isSolidTileByColLin(col, lin + 1) then return 1
+    ' if isSolidTileByColLin(col + 1, lin + 1) then return 1
     
-    if not xIsEven then
-        if isSolidTileByColLin(col + 2, lin) then return 1
-        if isSolidTileByColLin(col + 2, lin + 1) then return 1
-    end if
+    ' if not yIsEven then
+    '     if isSolidTileByColLin(col, lin + 2) then return 1
+    '     if isSolidTileByColLin(col + 1, lin + 2) then return 1
+    ' end if
     
-    if not xIsEven and not yIsEven then
-        if isSolidTileByColLin(col + 2, lin + 2) then return 1
-    end if
+    ' if not xIsEven then
+    '     if isSolidTileByColLin(col + 2, lin) then return 1
+    '     if isSolidTileByColLin(col + 2, lin + 1) then return 1
+    ' end if
+    
+    ' if not xIsEven and not yIsEven then
+    '     if isSolidTileByColLin(col + 2, lin + 2) then return 1
+    ' end if
     
     return 0
 end function

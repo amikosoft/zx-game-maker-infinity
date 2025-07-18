@@ -165,6 +165,7 @@ adventureTexts = False
 adventureTextsLength = 30
 adventureTextsClearScreen = False
 adventureTextsAcceptWithFire = False
+adventureTextsHideTiles = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -315,6 +316,9 @@ if 'properties' in data:
             adventureTextsClearScreen = property['value']
         elif property['name'] == 'adventureTextsAcceptWithFire':
             adventureTextsAcceptWithFire = property['value']
+        elif property['name'] == 'adventureTextsHideTiles':
+            adventureTextsHideTiles = property['value']
+        
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -851,6 +855,10 @@ if adventureTexts and len(texts) > 0:
     
     if adventureTextsAcceptWithFire == True:
         configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"
+
+    if adventureTextsHideTiles == True:
+        configStr += "#DEFINE ADVENTURE_TEXTS_HIDE_TILES\n"
+        
 
     if isAdventure:
         if maxAdventureState < 2:
