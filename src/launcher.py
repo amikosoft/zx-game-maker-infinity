@@ -296,7 +296,7 @@ def open_map_with_tiled():
 
 # Crear la ventana principal
 root = tk.Tk()
-root.title("ZXGM - Infinity 2.1.0")
+root.title("ZXGM - Infinity 2.2.0")
 root.geometry("600x750")
 root.resizable(True, True)
 

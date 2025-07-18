@@ -19,7 +19,7 @@
   <property name="bulletDisableCollisions" type="bool" value="false"/>
   <property name="bulletDistance" type="int" value="15"/>
   <property name="bulletType" value="boomerang"/>
-  <property name="bulletsCollisionWithBullets" type="bool" value="false"/>
+  <property name="bulletsCollisionWithBullets" type="bool" value="true"/>
   <property name="damageAmount" type="int" value="1"/>
   <property name="enemiesAlertDistance" value="medium"/>
   <property name="enemiesBulletCollision" type="bool" value="true"/>
