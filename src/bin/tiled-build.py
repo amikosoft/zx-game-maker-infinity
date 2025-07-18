@@ -117,6 +117,8 @@ ink = 7
 paper = 0
 border = 0
 
+borderDamageColor = 0
+
 keysEnabled = 1
 itemsEnabled = 1
 
@@ -228,6 +230,8 @@ if 'properties' in data:
             paper = property['value']
         elif property['name'] == 'border':
             border = property['value']
+        elif property['name'] == 'borderDamageColor':
+            borderDamageColor = property['value']
         elif property['name'] == 'waitPressKeyAfterLoad':
             waitPressKeyAfterLoad = 1 if property['value'] else 0
         elif property['name'] == 'keysEnabled':
@@ -442,6 +446,10 @@ if musicEnabled == 1:
 configStr += "const INK_VALUE as ubyte = " + str(ink) + "\n"
 configStr += "const PAPER_VALUE as ubyte = " + str(paper) + "\n"
 configStr += "const BORDER_VALUE as ubyte = " + str(border) + "\n"
+
+if str(border) != borderDamageColor:
+    configStr += "#DEFINE BORDER_DAMAGE_COLOR\n"
+    configStr += "const BORDER_DAMAGE_VALUE as ubyte = " + str(borderDamageColor) + "\n"
 
 if waitPressKeyAfterLoad == 1:
     configStr += "#DEFINE WAIT_PRESS_KEY_AFTER_LOAD\n"

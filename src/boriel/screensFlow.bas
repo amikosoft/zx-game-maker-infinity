@@ -268,6 +268,10 @@ Sub playGame()
         If invincible Then
             invincible = invincible - 1
             
+            #ifdef BORDER_DAMAGE_COLOR
+            if invincible < (INVINCIBLE_FRAMES - 5) Then Border BORDER_VALUE
+            #endif
+
             if not currentLife Then 
                 'saveSprite( protaY, protaX, 15, 0)
                 protaTile = 15

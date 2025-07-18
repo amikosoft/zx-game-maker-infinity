@@ -40,6 +40,10 @@ sub decrementLife()
     
     invincible = INVINCIBLE_FRAMES
 
+    #ifdef BORDER_DAMAGE_COLOR
+        Border BORDER_DAMAGE_VALUE
+    #endif
+
     #ifdef LIVES_MODE_ENABLED
         if currentLife > 1 then
             currentLife = currentLife - 1

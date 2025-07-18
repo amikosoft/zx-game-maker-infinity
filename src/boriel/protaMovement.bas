@@ -155,30 +155,13 @@ End Function
                 Return
             End If
             
-            ' If protaY < 2 Then
-            '     #ifdef ARCADE_MODE
-            '         protaY = 39
-            '     #Else
-            '         #ifdef LEVELS_MODE
-            '             protaY = 2
-            '         #Else
-            '             moveScreen = 8
-            '         #endif
-            '     #endif
-            '     jumpCurrentKey = jumpCurrentKey + 1
-            '     Return
-            ' End If
             if checkProtaTop() Then
                 jumpCurrentKey = jumpCurrentKey + 1
                 Return
             End if
             
             If CheckCollision(protaX, protaY + jumpArray(jumpCurrentKey)) Then
-                ' If jumpArray(jumpCurrentKey) > 0 Then
-                '     jumpCurrentKey = jumpStopValue
-                ' Else
                 jumpCurrentKey = jumpCurrentKey + 1
-                ' End If
                 Return
             End If
             
@@ -191,19 +174,6 @@ End Function
         Sub checkIsFlying()
             If jumpCurrentKey = jumpStopValue Then Return
             
-            ' If protaY < 2 Then
-            '     If jumpEnergy > 0 Then
-            '         #ifdef ARCADE_MODE
-            '             protaY = 39
-            '         #Else
-            '             #ifdef LEVELS_MODE
-            '                 protaY = 2
-            '             #Else
-            '                 moveScreen = 8
-            '             #endif
-            '         #endif
-            '     End If
-            ' End If
             If jumpEnergy > 0 Then
                 checkProtaTop()
             End if

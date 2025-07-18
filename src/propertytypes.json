@@ -191,6 +191,11 @@
                 "value": "0"
             },
             {
+                "name": "borderDamageColor",
+                "type": "string",
+                "value": "0"
+            },
+            {
                 "name": "bulletDistance",
                 "type": "int",
                 "value": 0
