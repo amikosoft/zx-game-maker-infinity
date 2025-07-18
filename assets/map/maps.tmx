@@ -26,12 +26,12 @@
   <property name="enemiesNormalCollide" type="bool" value="false"/>
   <property name="enemiesPursuitCollide" type="bool" value="true"/>
   <property name="enemiesRespawn" type="bool" value="true"/>
-  <property name="enemiesRespawnInScreen" type="bool" value="false"/>
+  <property name="enemiesRespawnInScreen" type="bool" value="true"/>
   <property name="enemiesShoot" type="int" value="1"/>
   <property name="enemiesShootDirection" propertytype="enemiesShootDirection" value="all"/>
   <property name="enemiesShootOnlyLookingPlayer" type="bool" value="false"/>
   <property name="enemiesShootSpeed" value="slow"/>
-  <property name="enemiesShootingLookAtPlayer" type="bool" value="false"/>
+  <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="goalItems" type="int" value="0"/>
@@ -43,7 +43,7 @@
   <property name="jumpOnEnemies" type="bool" value="true"/>
   <property name="jumpType" propertytype="jumpType" value="constant"/>
   <property name="keysEnabled" type="bool" value="true"/>
-  <property name="killJumpingOnTop" type="bool" value="false"/>
+  <property name="killJumpingOnTop" type="bool" value="true"/>
   <property name="laddersEnabled" type="bool" value="true"/>
   <property name="levelsMode" type="bool" value="false"/>
   <property name="lifeAmount" type="int" value="5"/>

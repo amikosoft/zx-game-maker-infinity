@@ -146,65 +146,46 @@ End Sub
         
         Return 0
     End Function
-#endif
-
-#ifdef KEYS_ENABLED
+    
     Function CheckDoor(x As Ubyte, y As Ubyte) As Ubyte
-        Dim xIsEven As Ubyte = (x bAnd 1) = 0
-        Dim yIsEven As Ubyte = (y bAnd 1) = 0
-        Dim col As Ubyte = x >> 1
-        Dim lin As Ubyte = y >> 1
-        ' Dim linMas1 As Ubyte = lin + 1
-        ' Dim colMas1 As Ubyte = col + 1
-        ' dim linMas2 As Ubyte = lin + 2
+        Dim col as uByte = x >> 1
+        Dim lin as uByte = y >> 1
         
-        ' If xIsEven And yIsEven Then
-        '     Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) _
-        '     Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1)
-        ' Elseif xIsEven And Not yIsEven Then
-        '     Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) _
-        '     Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1) _
-        '     Or checkTileIsDoor(col, lin + 2) Or checkTileIsDoor(col + 1, lin + 2)
-        ' Elseif Not xIsEven And yIsEven Then
-        '     Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) Or checkTileIsDoor(col + 2, lin) _
-        '     Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1) Or checkTileIsDoor(col + 2, lin + 1)
-        ' Elseif Not xIsEven And Not yIsEven Then
-        '     Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) Or checkTileIsDoor(col + 2, lin) _
-        '     Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1) Or checkTileIsDoor(col + 2, lin + 1) _
-        '     Or checkTileIsDoor(col, lin + 2) Or checkTileIsDoor(col + 1, lin + 2) Or checkTileIsDoor(col + 2, lin + 2)
-        ' End If
-        If xIsEven Then
-            if yIsEven Then
-                Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) _
-                Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1)
-            Else
-                Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) _
-                Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1) _
-                Or checkTileIsDoor(col, lin + 2) Or checkTileIsDoor(col + 1, lin + 2)
-            End if
-        Else
-            if yIsEven Then
-                Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) Or checkTileIsDoor(col + 2, lin) _
-                Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1) Or checkTileIsDoor(col + 2, lin + 1)
-            Else
-                Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) Or checkTileIsDoor(col + 2, lin) _
-                Or checkTileIsDoor(col, lisn + 1) Or checkTileIsDoor(col + 1, lin + 1) Or checkTileIsDoor(col + 2, lin + 1) _
-                Or checkTileIsDoor(col, lin + 2) Or checkTileIsDoor(col + 1, lin + 2) Or checkTileIsDoor(col + 2, lin + 2)
-            End If
-        End If
-        ' if checkTileIsDoor(col, lin) Or checkTileIsDoor(colMas1, lin) then return 1
-        ' if checkTileIsDoor(col, linMas1) Or checkTileIsDoor(colMas1, linMas1) then return 1
+        Dim maxCol as uByte = 1
+        Dim maxLin as uByte = 1
+        
+        if (x bAnd 1) <> 0 Then maxCol = 2
+        if (y bAnd 1) <> 0 Then maxLin = 2
+        
+        for c=0 to maxCol
+            for l=0 to maxLin
+                if checkTileIsDoor(col+c, lin+l) then return 1
+            next l
+        next c
+        
+        return 0
+        ' Dim xIsEven As Ubyte = (x bAnd 1) = 0
+        ' Dim yIsEven As Ubyte = (y bAnd 1) = 0
+        ' Dim col As Ubyte = x >> 1
+        ' Dim lin As Ubyte = y >> 1
+        
         ' If xIsEven Then
-        '     If Not yIsEven Then
-        '         Return checkTileIsDoor(col, linMas2) Or checkTileIsDoor(colMas1, linMas2)
+        '     if yIsEven Then
+        '         Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) _
+        '         Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1)
+        '     Else
+        '         Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) _
+        '         Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1) _
+        '         Or checkTileIsDoor(col, lin + 2) Or checkTileIsDoor(col + 1, lin + 2)
         '     End if
         ' Else
-        '     Dim colMas2 As Ubyte = col + 2
         '     if yIsEven Then
-        '         Return checkTileIsDoor(colMas2, lin) Or checkTileIsDoor(colMas2, linMas1)
+        '         Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) Or checkTileIsDoor(col + 2, lin) _
+        '         Or checkTileIsDoor(col, lin + 1) Or checkTileIsDoor(col + 1, lin + 1) Or checkTileIsDoor(col + 2, lin + 1)
         '     Else
-        '         Return checkTileIsDoor(colMas2, lin) Or checkTileIsDoor(colMas2, linMas1) _
-        '         Or checkTileIsDoor(col, linMas2) Or checkTileIsDoor(colMas1, linMas2) Or checkTileIsDoor(colMas2, linMas2)
+        '         Return checkTileIsDoor(col, lin) Or checkTileIsDoor(col + 1, lin) Or checkTileIsDoor(col + 2, lin) _
+        '         Or checkTileIsDoor(col, lisn + 1) Or checkTileIsDoor(col + 1, lin + 1) Or checkTileIsDoor(col + 2, lin + 1) _
+        '         Or checkTileIsDoor(col, lin + 2) Or checkTileIsDoor(col + 1, lin + 2) Or checkTileIsDoor(col + 2, lin + 2)
         '     End If
         ' End If
     End Function
