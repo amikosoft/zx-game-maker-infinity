@@ -164,6 +164,7 @@ platformMoveable = False
 adventureTexts = False
 adventureTextsLength = 30
 adventureTextsClearScreen = False
+adventureTextsAcceptWithFire = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -312,7 +313,9 @@ if 'properties' in data:
             adventureTextsLength = int(property['value'])
         elif property['name'] == 'adventureTextsClearScreen':
             adventureTextsClearScreen = property['value']
-        
+        elif property['name'] == 'adventureTextsAcceptWithFire':
+            adventureTextsAcceptWithFire = property['value']
+
 if len(damageTiles) == 0:
     damageTiles.append('0')
  
@@ -846,6 +849,9 @@ if adventureTexts and len(texts) > 0:
     if adventureTextsClearScreen == True:
         configStr += "#DEFINE FULLSCREEN_TEXTS\n"
     
+    if adventureTextsAcceptWithFire == True:
+        configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"
+
     if isAdventure:
         if maxAdventureState < 2:
             exitWithErrorMessage('Max adventure state must be higher than 1. Current: ' + str(maxAdventureState))

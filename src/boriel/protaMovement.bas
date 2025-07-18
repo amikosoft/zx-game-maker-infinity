@@ -480,7 +480,14 @@ End Sub
                 if tile > 1 Then SetTile(tile, attrSet(tile), 16, 5)
             #endif
         Next fila
-        pauseUntilPressEnter()
+
+        #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
+            Do
+            Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
+        #else
+            pauseUntilPressEnter()
+        #endif
+        
         mapDraw(1)
     end sub
     
@@ -498,10 +505,10 @@ End Sub
             If (protaX-1) <= cordX And (protaX+5) >= cordX Then
                 If (protaY-1) <= cordY And (protaY+5) >= cordY Then
                     textFound = 1
-                    
                     #ifdef IS_TEXT_ADVENTURE
                         #ifndef ARCADE_MODE
                             #ifndef LEVELS_MODE
+                                dim tileText as ubyte = GetTile(cordX>>1, cordY>>1)
                                 dim textState as ubyte = textsCoord(texto, 5)
                                 
                                 if not textState or textState = adventureStateTmp Then
@@ -513,7 +520,7 @@ End Sub
                                                 currentAdventureState = currentAdventureState + 1
                                                 
                                                 If currentAdventureState > MAX_ADVENTURE_STATE Then
-                                                    muestraDialogo(textsCoord(texto, 3), GetTile(cordX>>1, cordY>>1))
+                                                    muestraDialogo(textsCoord(texto, 3), tileText)
                                                     ending()
                                                 end if
                                             End if
@@ -522,14 +529,14 @@ End Sub
                                         end if
                                     end if
                                     
-                                    if textFound Then muestraDialogo(textsCoord(texto, 3), GetTile(cordX>>1, cordY>>1))
+                                    if textFound Then muestraDialogo(textsCoord(texto, 3), tileText)
                                 else
                                     textFound = 0
                                 end if
                             #EndIf
                         #EndIf
                     #Else
-                        muestraDialogo(textsCoord(texto, 3), 0)
+                        muestraDialogo(textsCoord(texto, 3), GetTile(cordX>>1, cordY>>1))
                     #EndIf
                 End If
             End if

@@ -16,6 +16,11 @@ Function pressingUp() As Ubyte
     Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
 End Function
 
+sub pauseUntilPressFire()
+    Do
+    Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
+End Sub
+
 Function checkProtaTop() As Ubyte
     If protaY < 2 Then
         #ifdef ARCADE_MODE
