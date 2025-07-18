@@ -253,7 +253,7 @@ Sub moveEnemies()
                         If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
                             #ifdef PLATFORM_MOVEABLE
                                 if enemySpeed = 3 and not verticalDirection and not horizontalDirection Then
-                                    if pressingDown() Then
+                                    if downKeyPressed Then
                                         If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLin = enemyLin - 1
                                     ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLin < 40 Then
                                         enemyLin = enemyLin + 1

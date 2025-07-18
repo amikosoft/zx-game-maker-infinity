@@ -115,9 +115,11 @@ Dim inMenu As Ubyte = 1
     Dim protaLoopCounter As Ubyte = 0
 #endif
 
-#ifdef SHOOTING_ENABLED
-    Dim noKeyPressedForShoot As Ubyte = 1
-#endif
+' #ifdef SHOOTING_ENABLED
+'     Dim noKeyPressedForShoot As Ubyte = 1
+' #endif
+Dim downKeyPressed as Ubyte = 0
+
 #ifdef ENABLED_128k
     #define DATA_BANK 4
     #define MUSIC_BANK 3

@@ -268,8 +268,8 @@ End Function
     End Sub
     
     Sub shoot()
-        If Not noKeyPressedForShoot Then Return
-        noKeyPressedForShoot = 0
+        ' If Not noKeyPressedForShoot Then Return
+        ' noKeyPressedForShoot = 0
         
         If bulletPositionX <> 0 Then Return
         
@@ -322,17 +322,17 @@ End Function
 
 #ifdef OVERHEAD_VIEW
     Sub shoot()
-        If Not noKeyPressedForShoot Then Return
+        ' If Not noKeyPressedForShoot Then Return
         
-        noKeyPressedForShoot = 0
+        ' noKeyPressedForShoot = 0
+        
+        If bulletPositionX <> 0 Then Return
         
         #ifdef AMMO_ENABLED
             If currentAmmo = 0 Then Return
             currentAmmo = currentAmmo - 1
             printLife()
         #endif
-        
-        If bulletPositionX <> 0 Then Return
         
         If protaDirection = 1 Then
             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
@@ -459,6 +459,10 @@ Sub upKey()
 End Sub
 
 Sub downKey()
+    #ifdef PLATFORM_MOVEABLE
+        downKeyPressed = 1
+    #endif
+    
     #ifdef OVERHEAD_VIEW
         If protaDirection <> 2 Then
             protaFrame = 6
@@ -587,6 +591,10 @@ Sub fireKey()
 End Sub
 
 Sub keyboardListen()
+    #ifdef PLATFORM_MOVEABLE
+        downKeyPressed = 0
+    #endif
+    
     If kempston Then
         Dim n As Ubyte = In(31)
         If n bAND %10 Then leftKey()
@@ -758,9 +766,9 @@ Sub protaMovement()
         If invincible Then Return
     #endif
     
-    If MultiKeys(keyArray(FIRE)) = 0 Then
-        noKeyPressedForShoot = 1
-    End If
+    ' If MultiKeys(keyArray(FIRE)) = 0 Then
+    '     noKeyPressedForShoot = 1
+    ' End If
     keyboardListen()
     checkObjectContact()
     

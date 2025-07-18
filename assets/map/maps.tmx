@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="91">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="92">
  <editorsettings>
   <chunksize width="32" height="22"/>
  </editorsettings>
@@ -55,7 +55,7 @@
   <property name="musicEnabled" type="bool" value="true"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
   <property name="password" value=""/>
-  <property name="platformMoveable" type="bool" value="false"/>
+  <property name="platformMoveable" type="bool" value="true"/>
   <property name="redefineKeysEnabled" type="bool" value="true"/>
   <property name="shooting" type="bool" value="true"/>
   <property name="shouldKillEnemies" type="bool" value="true"/>
@@ -351,5 +351,6 @@
   <object id="90" name="mainCharacter" type="mainCharacter" x="128" y="288">
    <point/>
   </object>
+  <object id="91" gid="201" x="312" y="320" width="16" height="16"/>
  </objectgroup>
 </map>
