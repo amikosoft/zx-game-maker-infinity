@@ -188,11 +188,11 @@ Sub playGame()
     
     ' Let lastFrameProta = framec
     ' Let lastFrameEnemies = framec
-    Let lastFrameTiles = framec
+    lastFrameTiles = 0
     
-    #ifdef NEW_BEEPER_PLAYER
-        Let lastFrameBeep = framec
-    #endif
+    ' #ifdef NEW_BEEPER_PLAYER
+    '     Let lastFrameBeep = framec
+    ' #endif
     
     #ifdef HISCORE_ENABLED
         Print AT 22, 20; "00000"
@@ -205,22 +205,13 @@ Sub playGame()
     Do
         waitretrace
         
-        ' If framec - lastFrameProta >= ANIMATE_PERIOD_MAIN Then
-        '     protaFrame = getNextFrameRunning()
-        '     Let lastFrameProta = framec
-        ' End If
         If enemiesFrame band 1 Then
             protaFrame = getNextFrameRunning()
         End if
         
-        ' If framec - lastFrameEnemies >= ANIMATE_PERIOD_ENEMY Then
-        '     enemFrame = Not enemFrame
-        '     Let lastFrameEnemies = framec
-        ' End If
-        
-        If framec - lastFrameTiles >= ANIMATE_PERIOD_TILE Then
-            'animateAnimatedTiles()
-            Let lastFrameTiles = framec
+        lastFrameTiles = lastFrameTiles + 1
+        If lastFrameTiles > ANIMATE_PERIOD_TILE Then
+            lastFrameTiles = 0
             animatedFrame = Not animatedFrame
 
             For i=0 To MAX_ANIMATED_TILES_PER_SCREEN:
@@ -283,10 +274,11 @@ Sub playGame()
         End If
         
         #ifdef NEW_BEEPER_PLAYER
-            If framec - lastFrameBeep >= BEEP_PERIOD Then
-                BeepFX_NextNote()
-                Let lastFrameBeep = framec
-            End If
+            ' If framec - lastFrameBeep >= BEEP_PERIOD Then
+            '     BeepFX_NextNote()
+            '     Let lastFrameBeep = framec
+            ' End If
+            BeepFX_NextNote()
         #endif
     Loop
 End Sub

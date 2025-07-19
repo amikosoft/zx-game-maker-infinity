@@ -85,10 +85,10 @@ Dim keyArray(4) As Uinteger
 
 Dim framec As Ubyte AT 23672
 
-#ifdef NEW_BEEPER_PLAYER
-    Const BEEP_PERIOD As Ubyte = 1
-    Dim lastFrameBeep As Ubyte = 0
-#endif
+' #ifdef NEW_BEEPER_PLAYER
+'     Const BEEP_PERIOD As Ubyte = 1
+'     Dim lastFrameBeep As Ubyte = 0
+' #endif
 
 ' Dim lastFrameProta As Ubyte = 0
 ' Dim lastFrameEnemies As Ubyte = 0
