@@ -105,7 +105,7 @@ Dim protaTile As Ubyte
 #ifdef LIVES_MODE_ENABLED
     dim protaXRespawn as ubyte
     dim protaYRespawn as ubyte
-
+    
     #ifdef CHECKPOINTS_ENABLED
         dim protaScreenRespawn as ubyte
     #endif
@@ -124,7 +124,7 @@ Dim inMenu As Ubyte = 1
 ' #endif
 
 #ifdef PLATFORM_MOVEABLE
-Dim downKeyPressed as Ubyte = 0
+    Dim downKeyPressed as Ubyte = 0
 #endif
 
 #ifdef ENABLED_128k
@@ -150,8 +150,8 @@ Dim screensWon(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
 
 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
-dim firstTimeEnemiesScreen as ubyte = 1
+    Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
+    dim firstTimeEnemiesScreen as ubyte = 1
 #endif
 
 #ifdef IN_GAME_TEXT_ENABLED

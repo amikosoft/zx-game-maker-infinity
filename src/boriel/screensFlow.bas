@@ -270,7 +270,8 @@ Sub playGame()
                 protaTile = 15
             #ifdef LIVES_MODE_GRAVEYARD
             Else
-                if Not invincible Then 
+                if Not invincible Then
+                    jumpCurrentKey = jumpStopValue
                     saveSprite(protaYRespawn, protaXRespawn, 1, protaDirection)
 
                     #ifndef ARCADE_MODE
