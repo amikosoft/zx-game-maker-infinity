@@ -662,6 +662,18 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
         BeepFX_Play(5)
         Return 1
+    #ifndef ARCADE_MODE
+        #ifdef CHECKPOINTS_ENABLED
+        ElseIf tile = FLAG_TILE Then            
+            #ifdef MESSAGES_ENABLED
+                if protaScreenRespawn <> currentScreen Then printMessage("CHECK!!! ", 4, 0)
+            #endif
+
+            protaXRespawn = protaX
+            protaYRespawn = protaY - 1
+            protaScreenRespawn = currentScreen
+        #endif
+    #endif
         #ifdef KEYS_ENABLED
         Elseif tile = KEY_TILE And screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
             #ifdef ARCADE_MODE

@@ -377,6 +377,11 @@
                 "value": "disabled"
             },
             {
+                "name": "checkpointsEnabled",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "mainCharacterExtraFrame",
                 "type": "bool",
                 "value": true

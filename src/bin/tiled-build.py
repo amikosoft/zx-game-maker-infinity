@@ -43,10 +43,13 @@ keyTile = 0
 itemTile = 0
 doorTile = 0
 lifeTile = 0
+flagTile = 0
 
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
+            if tile['type'] == 'flag':
+                flagTile = str(tile['id'])
             if tile['type'] == 'ammo':
                 ammoTile = str(tile['id'])
             if tile['type'] == 'key':
@@ -108,6 +111,8 @@ gameView = 'side'
 jumpOnEnemies = 0
 killJumpingOnTop = 0
 laddersEnabled = False
+
+checkpointsEnabled = False
 
 ammo = -1
 ammoIncrement = 10
@@ -321,6 +326,8 @@ if 'properties' in data:
             adventureTextsHideTiles = property['value']
         elif property['name'] == 'laddersEnabled':
             laddersEnabled = property['value']
+        elif property['name'] == 'checkpointsEnabled':
+            checkpointsEnabled = property['value']
         
         
 
@@ -340,15 +347,23 @@ configStr += "const MAX_LINE as ubyte = " + str(screenHeight * 2 - 4) + "\n"
 if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
     configStr += "#DEFINE LIVES_MODE_RESPAWN\n"
+
+    if checkpointsEnabled == True:
+        configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
 elif livesMode == 2:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
     configStr += "#DEFINE LIVES_MODE_GRAVEYARD\n"
+    if checkpointsEnabled == True:
+        configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
 else:
     configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
 
 configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
 configStr += "const BULLET_DISTANCE as ubyte = " + str(bulletDistance) + "\n"
 configStr += "const SHOULD_KILL_ENEMIES as ubyte = " + str(shouldKillEnemies) + "\n"
+
+configStr += "const FLAG_TILE as ubyte = " + flagTile + "\n"
+
 configStr += "const KEY_TILE as ubyte = " + keyTile + "\n"
 configStr += "const ITEM_TILE as ubyte = " + itemTile + "\n"
 configStr += "const DOOR_TILE as ubyte = " + doorTile + "\n"

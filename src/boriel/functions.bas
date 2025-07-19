@@ -59,6 +59,16 @@ sub decrementLife()
             #endif
             
             #ifdef LIVES_MODE_RESPAWN
+                #ifndef ARCADE_MODE
+                #ifdef CHECKPOINTS_ENABLED
+                    if currentScreen <> protaScreenRespawn Then
+                        currentScreen = protaScreenRespawn
+                        moveScreen = 1
+                    end if
+
+                    jumpCurrentKey = jumpStopValue
+                #endif
+                #endif
                 saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
             #endif
         else

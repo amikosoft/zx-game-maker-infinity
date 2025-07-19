@@ -105,6 +105,10 @@ Dim protaTile As Ubyte
 #ifdef LIVES_MODE_ENABLED
     dim protaXRespawn as ubyte
     dim protaYRespawn as ubyte
+
+    #ifdef CHECKPOINTS_ENABLED
+        dim protaScreenRespawn as ubyte
+    #endif
 #endif
 
 Dim animatedFrame As Ubyte = 1

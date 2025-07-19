@@ -198,10 +198,10 @@ Sub moveToScreen(direction As Ubyte)
         protaX = 0 + SCREEN_ADJUSTMENT
         currentScreen = currentScreen + 1
         
-        #ifdef LIVES_MODE_ENABLED
-            protaXRespawn = protaX
-            protaYRespawn = protaY
-        #endif
+        ' #ifdef LIVES_MODE_ENABLED
+        '     protaXRespawn = protaX
+        '     protaYRespawn = protaY
+        ' #endif
     Elseif direction = 4 Then
         'saveSprite( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
         protaX = 60 - SCREEN_ADJUSTMENT
@@ -229,8 +229,12 @@ Sub moveToScreen(direction As Ubyte)
                 currentScreen = (currentLevel * MAP_SCREENS_WIDTH_COUNT )
                 protaX = INITIAL_MAIN_CHARACTER_X
                 protaY = INITIAL_MAIN_CHARACTER_Y
-                ' protaXRespawn = INITIAL_MAIN_CHARACTER_X
-                ' protaYRespawn = INITIAL_MAIN_CHARACTER_Y
+
+                #ifdef CHECKPOINTS_ENABLED
+                    protaScreenRespawn = currentScreen
+                    protaXRespawn = INITIAL_MAIN_CHARACTER_X
+                    protaYRespawn = INITIAL_MAIN_CHARACTER_Y
+                #endif
             End if
         #else
             'saveSprite( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
@@ -258,11 +262,15 @@ Sub moveToScreen(direction As Ubyte)
     End If
     
     #ifdef LIVES_MODE_ENABLED
-        protaXRespawn = protaX
-        protaYRespawn = protaY
+        #ifndef CHECKPOINTS_ENABLED
+            protaXRespawn = protaX
+            protaYRespawn = protaY
+        #endif
     #endif
-    
+
     swapScreen()
+
+    moveScreen = 0
 End Sub
 
 Sub drawSprites()

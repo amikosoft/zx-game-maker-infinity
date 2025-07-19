@@ -178,9 +178,13 @@ Sub playGame()
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = INITIAL_MAIN_CHARACTER_X
             protaYRespawn = INITIAL_MAIN_CHARACTER_Y
-        #endif
-        
-        saveSprite( INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
+
+            #ifdef CHECKPOINTS_ENABLED
+                protaScreenRespawn = currentScreen
+            #endif
+        #endif    
+
+        saveSprite(INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
     #endif
     
     resetValues()
@@ -250,7 +254,6 @@ Sub playGame()
 
         If moveScreen <> 0 Then
             moveToScreen(moveScreen)
-            moveScreen = 0
             ' enemiesScreen = enemiesPerScreen(currentScreen)
         End If
         
@@ -264,20 +267,26 @@ Sub playGame()
             #endif
 
             if not currentLife Then 
-                'saveSprite( protaY, protaX, 15, 0)
                 protaTile = 15
             #ifdef LIVES_MODE_GRAVEYARD
             Else
-                if Not invincible Then saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
+                if Not invincible Then 
+                    saveSprite(protaYRespawn, protaXRespawn, 1, protaDirection)
+
+                    #ifndef ARCADE_MODE
+                    #ifdef CHECKPOINTS_ENABLED
+                        if currentScreen <> protaScreenRespawn Then
+                            currentScreen = protaScreenRespawn
+                            swapScreen()   
+                        end if     
+                    #endif
+                    #endif
+                End if
             #endif
             End if
         End If
         
         #ifdef NEW_BEEPER_PLAYER
-            ' If framec - lastFrameBeep >= BEEP_PERIOD Then
-            '     BeepFX_NextNote()
-            '     Let lastFrameBeep = framec
-            ' End If
             BeepFX_NextNote()
         #endif
     Loop
@@ -366,10 +375,10 @@ Sub resetValues()
         End If
     #endif
     
-    #ifdef LIVES_MODE_ENABLED
-        protaXRespawn = INITIAL_MAIN_CHARACTER_X
-        protaYRespawn = INITIAL_MAIN_CHARACTER_Y
-    #endif
+    ' #ifdef LIVES_MODE_ENABLED
+    '     protaXRespawn = INITIAL_MAIN_CHARACTER_X
+    '     protaYRespawn = INITIAL_MAIN_CHARACTER_Y
+    ' #endif
     
     ' removeScreenObjectFromBuffer()
     screenObjects = screenObjectsInitial
@@ -421,6 +430,7 @@ Sub swapScreen()
     #ifdef BULLET_ENEMIES
         enemyBulletPositionX = 0
     #endif
+    
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()
         saveSprite( mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
