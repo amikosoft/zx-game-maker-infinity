@@ -383,6 +383,11 @@
                 "value": 5
             },
             {
+                "name": "livesEnergy",
+                "type": "int",
+                "value": 5
+            },
+            {
                 "name": "livesMode",
                 "propertyType": "livesMode",
                 "type": "string",

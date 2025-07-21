@@ -70,7 +70,15 @@ Const DOWN As Ubyte = 3
 Const FIRE As Ubyte = 4
 
 Dim currentLife As Ubyte = 100
+
+#ifdef ENERGY_ENABLED
+Dim currentEnergy As Ubyte = INITIAL_ENERGY
+#endif
+
+#ifdef KEYS_ENABLED
 Dim currentKeys As Ubyte = 0
+#EndIf
+
 Dim moveScreen As Ubyte
 Dim currentScreen As Ubyte = 0
 Dim currentBulletSpriteId As Ubyte
@@ -83,7 +91,7 @@ Dim kempston As Ubyte
 Dim keyOption As String
 Dim keyArray(4) As Uinteger
 
-Dim framec As Ubyte AT 23672
+' Dim framec As Ubyte AT 23672
 
 ' #ifdef NEW_BEEPER_PLAYER
 '     Const BEEP_PERIOD As Ubyte = 1

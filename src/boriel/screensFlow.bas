@@ -270,8 +270,16 @@ Sub playGame()
                 protaTile = 15
             #ifdef LIVES_MODE_GRAVEYARD
             Else
+                #ifdef ENERGY_ENABLED
+                if not currentEnergy and not invincible Then
+                #Else
                 if Not invincible Then
+                #endif
                     jumpCurrentKey = jumpStopValue
+
+                    #ifdef ENERGY_ENABLED
+                    currentEnergy = INITIAL_ENERGY
+                    #endif
                     saveSprite(protaYRespawn, protaXRespawn, 1, protaDirection)
 
                     #ifndef ARCADE_MODE
@@ -360,7 +368,14 @@ Sub resetValues()
     invincible = 0
     
     currentLife = INITIAL_LIFE
-    currentKeys = 0
+
+    #ifdef ENERGY_ENABLED
+        currentEnergy = INITIAL_ENERGY
+    #endif
+
+    #ifdef KEYS_ENABLED
+        currentKeys = 0
+    #EndIf
     
     #ifdef LEVELS_MODE
         currentLevel = 0

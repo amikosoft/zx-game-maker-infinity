@@ -20,6 +20,7 @@
   <property name="bulletDistance" type="int" value="15"/>
   <property name="bulletType" value="boomerang"/>
   <property name="bulletsCollisionWithBullets" type="bool" value="true"/>
+  <property name="checkpointsEnabled" type="bool" value="true"/>
   <property name="damageAmount" type="int" value="1"/>
   <property name="enemiesAlertDistance" value="medium"/>
   <property name="enemiesBulletCollision" type="bool" value="true"/>
@@ -47,6 +48,7 @@
   <property name="laddersEnabled" type="bool" value="true"/>
   <property name="levelsMode" type="bool" value="false"/>
   <property name="lifeAmount" type="int" value="5"/>
+  <property name="livesEnergy" type="int" value="3"/>
   <property name="livesMode" propertytype="livesMode" value="instant respawn"/>
   <property name="mainCharacterExtraFrame" type="bool" value="false"/>
   <property name="maxAnimatedTilesPerScreen" type="int" value="10"/>

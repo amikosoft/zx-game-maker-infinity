@@ -775,7 +775,11 @@ End Sub
 
 Sub protaMovement()
     #ifdef LIVES_MODE_GRAVEYARD
-        If invincible Then Return
+        #ifdef ENERGY_ENABLED
+            if Not currentEnergy and invincible Then Return
+        #Else
+            If invincible Then Return
+        #endif
     #endif
     
     ' If MultiKeys(keyArray(FIRE)) = 0 Then

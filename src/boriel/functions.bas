@@ -39,9 +39,7 @@ Function checkProtaTop() As Ubyte
 end Function
 
 sub decrementLife()
-    if not currentLife then
-        return
-    end if
+    if not currentLife then return
     
     invincible = INVINCIBLE_FRAMES
 
@@ -50,30 +48,40 @@ sub decrementLife()
     #endif
 
     #ifdef LIVES_MODE_ENABLED
-        if currentLife > 1 then
-            currentLife = currentLife - 1
-            
-            #ifdef LIVES_MODE_GRAVEYARD
-                'saveSprite( protaY, protaX, 15, 0)
-                protaTile = 15
-            #endif
-            
-            #ifdef LIVES_MODE_RESPAWN
-                #ifndef ARCADE_MODE
-                #ifdef CHECKPOINTS_ENABLED
-                    if currentScreen <> protaScreenRespawn Then
-                        currentScreen = protaScreenRespawn
-                        moveScreen = 1
-                    end if
+        ' if currentLife > 1 then
+        #ifdef ENERGY_ENABLED
+            currentEnergy = currentEnergy - 1
+            printLife()
+            if currentEnergy Then return
 
-                    jumpCurrentKey = jumpStopValue
-                #endif
-                #endif
-                saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
+            #ifndef LIVES_MODE_GRAVEYARD
+                currentEnergy = INITIAL_ENERGY
+            #endif 
+        #endif
+        
+        currentLife = currentLife - 1
+        
+        #ifdef LIVES_MODE_GRAVEYARD
+            'saveSprite( protaY, protaX, 15, 0)
+            protaTile = 15
+        #endif
+        
+        #ifdef LIVES_MODE_RESPAWN
+            #ifndef ARCADE_MODE
+            #ifdef CHECKPOINTS_ENABLED
+                if currentScreen <> protaScreenRespawn Then
+                    currentScreen = protaScreenRespawn
+                    moveScreen = 1
+                end if
+
+                jumpCurrentKey = jumpStopValue
             #endif
-        else
-            currentLife = 0
-        end if
+            #endif
+            saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
+        #endif
+        ' else
+        '     currentLife = 0
+        ' end if
     #else
         if currentLife > DAMAGE_AMOUNT then
             currentLife = currentLife - DAMAGE_AMOUNT
@@ -88,6 +96,12 @@ end sub
 sub printLife()
     PRINT AT 22, 5; "   "
     PRINT AT 22, 5; currentLife
+    
+    #ifdef ENERGY_ENABLED
+        PRINT AT 23, 5; "   "
+        PRINT AT 23, 5; currentEnergy
+    #endif
+    
     #ifdef JETPACK_FUEL
         PRINT AT 23, 5; "   "
         PRINT AT 23, 5; jumpEnergy

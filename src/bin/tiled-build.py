@@ -152,6 +152,7 @@ jumpArrayCount = 6
 jumpArray = "{-2, -2, -2, -2, -2, 0}"
 
 livesMode = 0
+livesEnergy = 0
 
 enemiesShoot = 0
 enemiesShootDirection = 'all'
@@ -328,8 +329,8 @@ if 'properties' in data:
             laddersEnabled = property['value']
         elif property['name'] == 'checkpointsEnabled':
             checkpointsEnabled = property['value']
-        
-        
+        elif property['name'] == 'livesEnergy':
+            livesEnergy = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -348,6 +349,10 @@ if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
     configStr += "#DEFINE LIVES_MODE_RESPAWN\n"
 
+    if int(livesEnergy) > 0:
+        configStr += "#DEFINE ENERGY_ENABLED\n"
+        configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
+
     if checkpointsEnabled == True:
         configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
 elif livesMode == 2:
@@ -355,6 +360,10 @@ elif livesMode == 2:
     configStr += "#DEFINE LIVES_MODE_GRAVEYARD\n"
     if checkpointsEnabled == True:
         configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
+    
+    if int(livesEnergy) > 0:
+        configStr += "#DEFINE ENERGY_ENABLED\n"
+        configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
 else:
     configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
 

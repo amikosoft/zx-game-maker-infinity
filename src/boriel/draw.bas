@@ -198,20 +198,12 @@ Sub moveToScreen(direction As Ubyte)
         protaX = 0 + SCREEN_ADJUSTMENT
         currentScreen = currentScreen + 1
         
-<<<<<<< HEAD
-        ' #ifdef LIVES_MODE_ENABLED
-        '     protaXRespawn = protaX
-        '     protaYRespawn = protaY
-        ' #endif
-=======
-        #ifndef CHECKPOINTS_ENABLED
-            #ifdef LIVES_MODE_ENABLED
+        #ifdef LIVES_MODE_ENABLED
+            #ifndef CHECKPOINTS_ENABLED
                 protaXRespawn = 0 + SCREEN_ADJUSTMENT
                 protaYRespawn = protaY
             #endif
         #endif
-        
->>>>>>> checkpoints
     Elseif direction = 4 Then
         'saveSprite( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
         protaX = 60 - SCREEN_ADJUSTMENT
@@ -286,7 +278,13 @@ End Sub
 Sub drawSprites()
     If (protaY < 41) Then
         #ifdef LIVES_MODE_GRAVEYARD
-            Draw2x2Sprite(protaTile, protaX, protaY)
+            #ifdef ENERGY_ENABLED
+            If not currentEnergy or Not invincible Or invincible bAnd 2 Then
+                Draw2x2Sprite(protaTile, protaX, protaY)
+            End If
+            #else
+                Draw2x2Sprite(protaTile, protaX, protaY)
+            #endif
         #else
             If not currentLife or Not invincible Or invincible bAnd 2 Then
                 Draw2x2Sprite(protaTile, protaX, protaY)
