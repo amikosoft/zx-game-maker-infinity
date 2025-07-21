@@ -86,50 +86,84 @@ Sub moveEnemies()
             Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
             Dim enemyColIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_INI)
             Dim enemyLinIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI)
-            
-            #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-                if enemyLive > -100 and enemyLive < 1 then
-                    enemyLive = enemyLive + 1
-                    
-                    if not enemyLive Then
-                        enemyLive = enemiesInitialLife(enemyId)
+            Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
+
+            #ifdef ENEMIES_SLOW_DOWN
+                if enemyLive > -100 and enemyLive < 0 then
+                    if enemySpeed < 3 Then
+                        enemyLive = enemyLive + 1
+
+                        if not enemyLive Then
+                            enemySpeed = enemySpeed + 1
+                            decompressedEnemiesScreen(enemyId, ENEMY_SPEED) = enemySpeed
+                            if enemySpeed < 3 Then 
+                                enemyLive = -50
+                            Else
+                                enemyLive = 1
+                            end if
+                        end if
+
+                        decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLive
                     end if
-                    decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLive
-                    
-                    if enemyMode = 2 Then
-                        enemyCol = enemyColIni
-                        enemyLin = enemyLinIni
-                        GO TO EnemiesFinal
+
+                    ' siempre tiene que tener vida
+                    enemyLive = 1
+                end if
+
+                #ifdef SHOOTING_ENABLED
+                    if bulletPositionX then
+                        checkEnemyBullet(enemyId, enemyCol, enemyLin)
+                    End If
+                #endif
+            #else
+                #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+                    if enemyLive > -100 and enemyLive < 1 then
+                        enemyLive = enemyLive + 1
+                        
+                        if not enemyLive Then
+                            enemyLive = enemiesInitialLife(enemyId)
+                        end if
+                        decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLive
+                        
+                        if enemyMode = 2 Then
+                            enemyCol = enemyColIni
+                            enemyLin = enemyLinIni
+                            GO TO EnemiesFinal
+                        End if
+                        #ifdef SHOOTING_ENABLED
+                        Else
+                            ' Se comprueba si tiene colision de bala
+                            if bulletPositionX and enemyLive > 0 then
+                                if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
+                                    enemyLive = enemyLive - 1
+                                End if
+                            End If
+                        #endif
                     End if
+                #else
+                    ' Se comprueba si tiene colision de bala
                     #ifdef SHOOTING_ENABLED
-                    Else
-                        ' Se comprueba si tiene colision de bala
                         if bulletPositionX and enemyLive > 0 then
                             if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
                                 enemyLive = enemyLive - 1
                             End if
                         End If
                     #endif
-                End if
-            #else
-                ' Se comprueba si tiene colision de bala
-                #ifdef SHOOTING_ENABLED
-                    if bulletPositionX and enemyLive > 0 then
-                        if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
-                            enemyLive = enemyLive - 1
-                        End if
-                    End If
                 #endif
             #endif
             
-
-            Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
+            'Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
             Dim horizontalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
 
-            If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
-                GO TO EnemiesFinal
-            End If
-            ' #endif
+            #ifdef ENEMIES_SLOW_DOWN
+                If not enemySpeed or (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
+                    GO TO EnemiesFinal
+                End If
+            #else
+                If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
+                    GO TO EnemiesFinal
+                End If
+            #endif
             
             Dim enemyColEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_END)
             Dim enemyLinEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_END)
@@ -396,7 +430,13 @@ Sub moveEnemies()
                     #endif
                 #endif
             Else
-                if enemyLive > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tile, enemyCol, enemyLin)
+                ' #ifdef ENEMIES_SLOW_DOWN
+                '     Draw2x2Sprite(tile, enemyCol, enemyLin)
+                ' #else
+                    #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+                        if enemyLive > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tile, enemyCol, enemyLin)
+                    #endif
+                ' #endif
             End if
         Next enemyId
 

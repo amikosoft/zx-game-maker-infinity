@@ -226,6 +226,11 @@
                 "value": false
             },
             {
+                "name": "enemiesSlowDown",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "enemiesNormalCollide",
                 "type": "bool",
                 "value": false

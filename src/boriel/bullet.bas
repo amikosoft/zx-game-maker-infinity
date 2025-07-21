@@ -244,64 +244,76 @@ sub resetBullet(isEnemyBullet as ubyte)
 end sub
 
 sub damageEnemy(enemyToKill as Ubyte)
-    dim alive as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE)
-    if alive < 1 then return
-    
-    alive = alive - 1
-    
-    #ifdef HISCORE_ENABLED
-        score = score + 5
-        If score > hiScore Then
-            hiScore = score
-        End If
-        printLife()
-    #endif
-    
-    decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
-    if alive = 0 then
-        decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
-        
-        ' enemySpriteTempTile(enemyToKill) = 0
-        Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
-        
-        BeepFX_Play(0)
-        
-        ' si ambos estan definidos
-        #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-            #ifdef SHOULD_KILL_ENEMIES_ENABLED
-                if not screensWon(currentScreen) then
-                    if allEnemiesKilled() then
-                        screensWon(currentScreen) = 1
-                        removeTilesFromScreen(63)
-                    end if
-                end if
-            #endif
+    #ifdef ENEMIES_SLOW_DOWN
+        decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -50
+        decompressedEnemiesScreen(enemyToKill, ENEMY_SPEED) = 0
+
+        #ifdef HISCORE_ENABLED
+            score = score + 5
+            If score > hiScore Then
+                hiScore = score
+            End If
+            printLife()
         #endif
-        
-        ' si solo uno esta definido
-        #ifndef ENEMIES_NOT_RESPAWN_ENABLED
-            #ifdef SHOULD_KILL_ENEMIES_ENABLED
-                if not screensWon(currentScreen) then
-                    if allEnemiesKilled() then
-                        screensWon(currentScreen) = 1
-                        removeTilesFromScreen(63)
-                    end if
-                end if
-            #endif
-        #endif
-        
-        #ifndef SHOULD_KILL_ENEMIES_ENABLED
-            #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                if not screensWon(currentScreen) then
-                    if allEnemiesKilled() then
-                        screensWon(currentScreen) = 1
-                        removeTilesFromScreen(63)
-                    end if
-                end if
-            #endif
-        #endif
-    else
+
         BeepFX_Play(1)
-    end if
-    
+    #else 
+        dim alive as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE)
+        if alive < 1 then return
+        
+        alive = alive - 1
+        
+        #ifdef HISCORE_ENABLED
+            score = score + 5
+            If score > hiScore Then
+                hiScore = score
+            End If
+            printLife()
+        #endif
+        
+        decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
+        if alive = 0 then
+            ' enemySpriteTempTile(enemyToKill) = 0
+            decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
+            Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
+            BeepFX_Play(0)
+            
+            ' si ambos estan definidos
+            #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+                #ifdef SHOULD_KILL_ENEMIES_ENABLED
+                    if not screensWon(currentScreen) then
+                        if allEnemiesKilled() then
+                            screensWon(currentScreen) = 1
+                            removeTilesFromScreen(63)
+                        end if
+                    end if
+                #endif
+            #endif
+            
+            ' si solo uno esta definido
+            #ifndef ENEMIES_NOT_RESPAWN_ENABLED
+                #ifdef SHOULD_KILL_ENEMIES_ENABLED
+                    if not screensWon(currentScreen) then
+                        if allEnemiesKilled() then
+                            screensWon(currentScreen) = 1
+                            removeTilesFromScreen(63)
+                        end if
+                    end if
+                #endif
+            #endif
+            
+            #ifndef SHOULD_KILL_ENEMIES_ENABLED
+                #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+                    if not screensWon(currentScreen) then
+                        if allEnemiesKilled() then
+                            screensWon(currentScreen) = 1
+                            removeTilesFromScreen(63)
+                        end if
+                    end if
+                #endif
+            #endif
+        else
+            BeepFX_Play(1)
+        end if
+    #endif
 end sub

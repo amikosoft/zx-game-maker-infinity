@@ -84,6 +84,7 @@ lifeAmount = 5
 bulletDistance = 0
 enemiesRespawn = True
 
+enemiesSlowDown = False
 enemiesRespawnInScreen = False
 enemiesNormalCollide = False
 shooting = 1
@@ -192,6 +193,8 @@ if 'properties' in data:
             enemiesRespawn = property['value']
         elif property['name'] == 'enemiesRespawnInScreen':
             enemiesRespawnInScreen = property['value']
+        elif property['name'] == 'enemiesSlowDown':
+            enemiesSlowDown = property['value']
         elif property['name'] == 'enemiesNormalCollide':
             enemiesNormalCollide = property['value']
         elif property['name'] == 'shooting':
@@ -644,8 +647,11 @@ if shouldKillEnemies == 1:
 if enemiesRespawn == False:
     configStr += "#DEFINE ENEMIES_NOT_RESPAWN_ENABLED\n"
 
-if enemiesRespawnInScreen:
-    configStr += "#DEFINE ENEMIES_RESPAWN_IN_SCREEN_ENABLED\n"
+if enemiesSlowDown:
+    configStr += "#DEFINE ENEMIES_SLOW_DOWN\n"
+else:
+    if enemiesRespawnInScreen:
+        configStr += "#DEFINE ENEMIES_RESPAWN_IN_SCREEN_ENABLED\n"
 
 if enemiesNormalCollide:
     configStr += "#DEFINE ENEMIES_NORMAL_COLLIDE\n"
