@@ -275,8 +275,13 @@ sub damageEnemy(enemyToKill as Ubyte)
         if alive = 0 then
             ' enemySpriteTempTile(enemyToKill) = 0
             decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
-            Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
             BeepFX_Play(0)
+            
+            #ifdef GORE_ENABLED
+                drawBlood(decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL)>>1, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN)>>1)
+            #else
+                Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
+            #endif
             
             ' si ambos estan definidos
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED

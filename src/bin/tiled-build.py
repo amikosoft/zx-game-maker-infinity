@@ -44,12 +44,15 @@ itemTile = 0
 doorTile = 0
 lifeTile = 0
 flagTile = 0
+goreTile = 0
 
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
             if tile['type'] == 'flag':
                 flagTile = str(tile['id'])
+            if tile['type'] == 'gore':
+                goreTile = str(tile['id'])
             if tile['type'] == 'ammo':
                 ammoTile = str(tile['id'])
             if tile['type'] == 'key':
@@ -358,11 +361,13 @@ if livesMode == 1:
 
     if checkpointsEnabled == True:
         configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
+        configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
 elif livesMode == 2:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
     configStr += "#DEFINE LIVES_MODE_GRAVEYARD\n"
     if checkpointsEnabled == True:
         configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
+        configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
     
     if int(livesEnergy) > 0:
         configStr += "#DEFINE ENERGY_ENABLED\n"
@@ -374,7 +379,9 @@ configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
 configStr += "const BULLET_DISTANCE as ubyte = " + str(bulletDistance) + "\n"
 configStr += "const SHOULD_KILL_ENEMIES as ubyte = " + str(shouldKillEnemies) + "\n"
 
-configStr += "const FLAG_TILE as ubyte = " + flagTile + "\n"
+if int(goreTile) > 0:
+    configStr += "#DEFINE GORE_ENABLED\n"
+    configStr += "const GORE_TILE as ubyte = " + str(goreTile) + "\n"
 
 configStr += "const KEY_TILE as ubyte = " + keyTile + "\n"
 configStr += "const ITEM_TILE as ubyte = " + itemTile + "\n"
