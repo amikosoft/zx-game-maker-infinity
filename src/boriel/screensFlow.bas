@@ -309,11 +309,14 @@ End Sub
 
 Sub ending()
     #ifdef ENABLED_128k
-        #ifdef MUSIC_ENDING_ENABLED
-            VortexTracker_Play(MUSIC_ENDING_ADDRESS)
-        #else
-            VortexTracker_Stop()
+        #ifdef MUSIC_ENABLED
+            #ifdef MUSIC_ENDING_ENABLED
+                VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+            #else
+                VortexTracker_Stop()
+            #endif
         #endif
+
         PaginarMemoria(DATA_BANK)
         dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
         PaginarMemoria(0)
@@ -483,19 +486,29 @@ Sub swapScreen()
                     if newScreenMusic = 1 Then VortexTracker_Play(MUSIC_ADDRESS)
                 #endif
                 #ifdef MUSIC_2_SELECTED
-                    if newScreenMusic = 2 Then VortexTracker_Play(MUSIC_2_ADDRESS)
+                    #ifdef MUSIC_2_ENABLED
+                        if newScreenMusic = 2 Then VortexTracker_Play(MUSIC_2_ADDRESS)
+                    #endif
                 #endif
                 #ifdef MUSIC_3_SELECTED
-                    if newScreenMusic = 3 Then VortexTracker_Play(MUSIC_3_ADDRESS)
+                    #ifdef MUSIC_3_ENABLED
+                        if newScreenMusic = 3 Then VortexTracker_Play(MUSIC_3_ADDRESS)
+                    #endif
                 #endif
                 #ifdef MUSIC_4_SELECTED
-                    if newScreenMusic = 4 Then VortexTracker_Play(MUSIC_TITLE_ADDRESS)
+                    #ifdef MUSIC_TITLE_ENABLED
+                        if newScreenMusic = 4 Then VortexTracker_Play(MUSIC_TITLE_ADDRESS)
+                    #endif
                 #endif
                 #ifdef MUSIC_5_SELECTED
-                    if newScreenMusic = 5 Then VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+                    #ifdef MUSIC_ENDING_ENABLED
+                        if newScreenMusic = 5 Then VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+                    #endif
                 #endif
                 #ifdef MUSIC_6_SELECTED
-                    if newScreenMusic = 6 Then VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
+                    #ifdef MUSIC_GAMEOVER_ENABLED
+                        if newScreenMusic = 6 Then VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
+                    #endif
                 #endif
             End if
         #endif

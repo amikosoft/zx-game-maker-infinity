@@ -93,7 +93,8 @@ sub decrementLife()
                 jumpCurrentKey = jumpStopValue
             #endif
             #endif
-            saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
+
+            if currentLife Then saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
         #endif
 
         #ifdef ENERGY_ENABLED
