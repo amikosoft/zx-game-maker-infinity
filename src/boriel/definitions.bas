@@ -38,6 +38,8 @@ const MAX_SCREEN_LEFT as ubyte = 2
 const MAX_SCREEN_BOTTOM as ubyte = 40
 const MAX_SCREEN_TOP as ubyte = 2
 
+const MAX_GENERIC_TILE as ubyte = 187
+
 const BULLET_DIRECTION_LEFT = 0
 const BULLET_DIRECTION_RIGHT = 1
 const BULLET_DIRECTION_UP = 8
@@ -91,7 +93,7 @@ Dim kempston As Ubyte
 Dim keyOption As String
 Dim keyArray(4) As Uinteger
 
-' Dim framec As Ubyte AT 23672
+Dim framec As Ubyte AT 23672
 
 ' #ifdef NEW_BEEPER_PLAYER
 '     Const BEEP_PERIOD As Ubyte = 1

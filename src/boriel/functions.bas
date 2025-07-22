@@ -21,12 +21,12 @@ sub pauseUntilPressFire()
     Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
 End Sub
 
-#ifdef GORE_ENABLED
-sub drawBlood(tileX as ubyte, tileY as ubyte)
+#ifdef DROP_ENABLED
+sub drawDrop(tileX as ubyte, tileY as ubyte)
     for tx=0 to 1
         for ty=0 to 1
             if not GetTile(tileX + tx, tileY + ty) Then 
-                SetTileChecked(GORE_TILE, attrSet(GORE_TILE), tileX + tx, tileY + ty)
+                SetTileChecked(DROP_TILE, attrSet(DROP_TILE), tileX + tx, tileY + ty)
             end if
         next ty
     next tx
@@ -73,9 +73,9 @@ sub decrementLife()
         
         currentLife = currentLife - 1
         
-        #ifdef GORE_ENABLED
-            drawBlood(protaX>>1, protaY>>1)
-        #endif
+        ' #ifdef DROP_ENABLED
+        '     drawDrop(protaX>>1, protaY>>1)
+        ' #endif
 
         #ifdef LIVES_MODE_GRAVEYARD
             'saveSprite( protaY, protaX, 15, 0)

@@ -44,15 +44,16 @@ itemTile = 0
 doorTile = 0
 lifeTile = 0
 flagTile = 0
-goreTile = 0
+
+dropTile = 0
 
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
             if tile['type'] == 'flag':
                 flagTile = str(tile['id'])
-            if tile['type'] == 'gore':
-                goreTile = str(tile['id'])
+            # if tile['type'] == 'gore':
+            #     dropTile = str(tile['id'])
             if tile['type'] == 'ammo':
                 ammoTile = str(tile['id'])
             if tile['type'] == 'key':
@@ -92,6 +93,8 @@ enemiesRespawnInScreen = False
 enemiesNormalCollide = False
 shooting = 1
 shouldKillEnemies = 0
+
+shouldPickUpItems = False
 enabled128K = 0
 hiScore = 0
 
@@ -186,6 +189,8 @@ if 'properties' in data:
             goalItems = property['value']
         elif property['name'] == 'damageAmount':
             damageAmount = property['value']
+        elif property['name'] == 'dropTile':
+            dropTile = property['value']
         elif property['name'] == 'lifeAmount':
             lifeAmount = property['value']
         elif property['name'] == 'initialLife':
@@ -204,6 +209,8 @@ if 'properties' in data:
             shooting = 1 if property['value'] else 0
         elif property['name'] == 'shouldKillEnemies':
             shouldKillEnemies = 1 if property['value'] else 0
+        elif property['name'] == 'shouldPickUpItems':
+            shouldPickUpItems = property['value']
         elif property['name'] == '128Kenabled':
             enabled128K = 1 if property['value'] else 0
         elif property['name'] == 'hiScore':
@@ -377,11 +384,10 @@ else:
 
 configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
 configStr += "const BULLET_DISTANCE as ubyte = " + str(bulletDistance) + "\n"
-configStr += "const SHOULD_KILL_ENEMIES as ubyte = " + str(shouldKillEnemies) + "\n"
 
-if int(goreTile) > 0:
-    configStr += "#DEFINE GORE_ENABLED\n"
-    configStr += "const GORE_TILE as ubyte = " + str(goreTile) + "\n"
+if int(dropTile) > 0:
+    configStr += "#DEFINE DROP_ENABLED\n"
+    configStr += "const DROP_TILE as ubyte = " + str(dropTile) + "\n"
 
 configStr += "const KEY_TILE as ubyte = " + keyTile + "\n"
 configStr += "const ITEM_TILE as ubyte = " + itemTile + "\n"
@@ -648,8 +654,14 @@ currentOffset = 0
 screenOffsets = []
 screenOffsets.append(currentOffset)
 
-if shouldKillEnemies == 1:
+if shouldKillEnemies == 1 or shouldPickUpItems == True:
     configStr += "#DEFINE SHOULD_KILL_ENEMIES_ENABLED\n"
+
+    if shouldKillEnemies == 1:
+        configStr += "#DEFINE SHOULD_KILL_ENEMIES\n"
+
+    if shouldPickUpItems == True:
+        configStr += "#DEFINE SHOULD_PICKUP_ITEMS\n"
 
 if enemiesRespawn == False:
     configStr += "#DEFINE ENEMIES_NOT_RESPAWN_ENABLED\n"

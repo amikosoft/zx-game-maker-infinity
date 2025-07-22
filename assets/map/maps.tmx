@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="97">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="99">
  <editorsettings>
   <chunksize width="32" height="22"/>
  </editorsettings>
  <properties>
   <property name="128Kenabled" type="bool" value="true"/>
   <property name="adventureTexts" type="bool" value="true"/>
-  <property name="adventureTextsAcceptWithFire" type="bool" value="true"/>
+  <property name="adventureTextsAcceptWithFire" type="bool" value="false"/>
   <property name="adventureTextsClearScreen" type="bool" value="false"/>
   <property name="adventureTextsHideTiles" type="bool" value="true"/>
   <property name="adventureTextsLength" value="60"/>
@@ -22,6 +22,7 @@
   <property name="bulletsCollisionWithBullets" type="bool" value="true"/>
   <property name="checkpointsEnabled" type="bool" value="true"/>
   <property name="damageAmount" type="int" value="1"/>
+  <property name="dropTile" type="int" value="143"/>
   <property name="enemiesAlertDistance" value="medium"/>
   <property name="enemiesBulletCollision" type="bool" value="true"/>
   <property name="enemiesNormalCollide" type="bool" value="false"/>
@@ -32,14 +33,14 @@
   <property name="enemiesShootDirection" propertytype="enemiesShootDirection" value="all"/>
   <property name="enemiesShootOnlyLookingPlayer" type="bool" value="false"/>
   <property name="enemiesShootSpeed" value="slow"/>
-  <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
+  <property name="enemiesShootingLookAtPlayer" type="bool" value="false"/>
   <property name="enemiesSlowDown" type="bool" value="false"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="goalItems" type="int" value="0"/>
   <property name="hiScore" type="bool" value="false"/>
   <property name="idleTime" type="int" value="0"/>
-  <property name="initialLife" type="int" value="10"/>
+  <property name="initialLife" type="int" value="1"/>
   <property name="itemsCountdown" type="bool" value="false"/>
   <property name="itemsEnabled" type="bool" value="false"/>
   <property name="jumpOnEnemies" type="bool" value="true"/>
@@ -62,6 +63,7 @@
   <property name="redefineKeysEnabled" type="bool" value="true"/>
   <property name="shooting" type="bool" value="true"/>
   <property name="shouldKillEnemies" type="bool" value="true"/>
+  <property name="shouldPickUpItems" type="bool" value="true"/>
   <property name="useBreakableTile" type="bool" value="true"/>
   <property name="waitPressKeyAfterLoad" type="bool" value="false"/>
  </properties>
@@ -163,8 +165,8 @@
 41,40,1,1,1,52,52,52,52,1,1,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,41,40,
 40,41,1,1,1,1,1,1,1,1,1,1,124,125,1,1,52,52,52,1,1,1,1,1,1,1,1,1,1,1,40,41,
 41,40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,40,
-40,41,131,1,131,1,63,63,63,63,63,63,63,63,63,63,63,63,63,63,1,1,1,1,1,1,1,1,1,1,1,189,
-41,40,163,131,163,131,164,164,164,164,164,164,164,164,164,164,164,164,164,164,1,190,1,1,1,1,188,1,1,1,1,189,
+40,41,131,1,131,1,63,63,63,63,63,63,63,63,63,63,63,63,63,63,1,1,1,1,1,1,1,1,1,1,64,189,
+41,40,163,131,163,131,164,164,164,164,164,164,164,164,164,164,164,164,164,164,1,190,1,1,1,1,188,1,1,1,64,189,
 40,41,10,11,10,11,129,130,129,130,129,130,129,130,129,130,129,130,129,130,10,11,10,11,10,11,10,11,10,11,10,11,
 6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7
 </chunk>
@@ -353,13 +355,20 @@
    <point/>
   </object>
   <object id="91" gid="201" x="312" y="320" width="16" height="16"/>
-  <object id="93" name="mainCharacter" type="mainCharacter" x="128" y="288">
-   <point/>
-  </object>
   <object id="95" name="plataf1" gid="201" x="24" y="192" width="16" height="16"/>
   <object id="96" x="24" y="312">
    <properties>
     <property name="enemy" type="object" value="95"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="97" name="mainCharacter" type="mainCharacter" x="128" y="288">
+   <point/>
+  </object>
+  <object id="98" type="text" x="464" y="200">
+   <properties>
+    <property name="es" value="Cuando mueras  resucitas aqui"/>
+    <property name="itemAction" type="int" value="0"/>
    </properties>
    <point/>
   </object>

@@ -227,6 +227,11 @@
                 "value": 10
             },
             {
+                "name": "dropTile",
+                "type": "int",
+                "value": 0
+            },
+            {
                 "name": "enemiesRespawn",
                 "type": "bool",
                 "value": true
@@ -460,6 +465,11 @@
             },
             {
                 "name": "shouldKillEnemies",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "shouldPickUpItems",
                 "type": "bool",
                 "value": false
             },

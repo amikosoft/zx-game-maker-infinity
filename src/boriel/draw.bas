@@ -66,7 +66,7 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
         End If
     #endif
     
-    If tile < AMMO_TILE Then
+    If tile < MAX_GENERIC_TILE Then
         SetTile(tile, attrSet(tile), x, y)
         Return
     End If

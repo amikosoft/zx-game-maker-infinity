@@ -247,7 +247,7 @@ sub damageEnemy(enemyToKill as Ubyte)
     #ifdef ENEMIES_SLOW_DOWN
         decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -50
         decompressedEnemiesScreen(enemyToKill, ENEMY_SPEED) = 0
-
+        
         #ifdef HISCORE_ENABLED
             score = score + 5
             If score > hiScore Then
@@ -255,9 +255,9 @@ sub damageEnemy(enemyToKill as Ubyte)
             End If
             printLife()
         #endif
-
+        
         BeepFX_Play(1)
-    #else 
+    #else
         dim alive as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE)
         if alive < 1 then return
         
@@ -277,44 +277,54 @@ sub damageEnemy(enemyToKill as Ubyte)
             decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
             BeepFX_Play(0)
             
-            #ifdef GORE_ENABLED
-                drawBlood(decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL)>>1, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN)>>1)
+            #ifdef DROP_ENABLED
+                dim eneX as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL)
+                dim eneY as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN)
+                if enemiesFrame band 2 = 2 Then
+                    if DROP_TILE < MAX_GENERIC_TILE Then
+                        drawDrop(eneX>>1, eneY>>1)
+                    elseif not GetTile(eneX>>1, eneY>>1) Then
+                        SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX>>1, eneY>>1)
+                    End if
+                Else
+                    Draw2x2Sprite(BURST_SPRITE_ID, eneX, eneY)
+                End if
             #else
                 Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
             #endif
             
             ' si ambos estan definidos
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                #ifdef SHOULD_KILL_ENEMIES_ENABLED
-                    if not screensWon(currentScreen) then
+                #ifdef SHOULD_KILL_ENEMIES
+                    ' if not screensWon(currentScreen) then
                         if allEnemiesKilled() then
                             screensWon(currentScreen) = 1
                             removeTilesFromScreen(63)
                         end if
-                    end if
+                    ' end if
                 #endif
             #endif
             
             ' si solo uno esta definido
             #ifndef ENEMIES_NOT_RESPAWN_ENABLED
-                #ifdef SHOULD_KILL_ENEMIES_ENABLED
-                    if not screensWon(currentScreen) then
+                #ifdef SHOULD_KILL_ENEMIES
+                    ' if not screensWon(currentScreen) then
                         if allEnemiesKilled() then
                             screensWon(currentScreen) = 1
                             removeTilesFromScreen(63)
                         end if
-                    end if
+                    ' end if
                 #endif
             #endif
             
             #ifndef SHOULD_KILL_ENEMIES_ENABLED
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                    if not screensWon(currentScreen) then
+                    ' if not screensWon(currentScreen) then
                         if allEnemiesKilled() then
                             screensWon(currentScreen) = 1
                             removeTilesFromScreen(63)
                         end if
-                    end if
+                    ' end if
                 #endif
             #endif
         else

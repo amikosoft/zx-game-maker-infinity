@@ -496,18 +496,18 @@ End Sub
         #ifdef FULLSCREEN_TEXTS
             FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
             
-            if tile > 1 Then SetTile(tile, attrSet(tile), 16, 4)
+            SetTile(tile, attrSet(tile), 16, 4)
         #EndIf
         
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
             for letra=0 to 14
                 #ifndef FULLSCREEN_TEXTS
-                    if tile > 1 and fila = 0 Then Print AT 5, 9 + letra; " "
+                    if fila = 0 Then Print AT 5, 9 + letra; " "
                 #endif
                 Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textsCoord(texto, 3), (fila*15)+letra))
             Next letra
             #ifndef FULLSCREEN_TEXTS
-                if tile > 1 Then SetTile(tile, attrSet(tile), 16, 5)
+                SetTile(tile, attrSet(tile), 16, 5)
             #endif
         Next fila
         
@@ -532,42 +532,47 @@ End Sub
             if textsCoord(texto, 0) <> currentScreen Then exit for
             dim cordX as ubyte = textsCoord(texto, 1)
             dim cordY as ubyte = textsCoord(texto, 2)
+                   
             If (protaX-1) <= cordX And (protaX+5) >= cordX Then
                 If (protaY-1) <= cordY And (protaY+5) >= cordY Then
-                    textFound = 1
-                    #ifdef IS_TEXT_ADVENTURE
-                        #ifndef ARCADE_MODE
-                            #ifndef LEVELS_MODE
-                                dim tileText as ubyte = GetTile(cordX>>1, cordY>>1)
-                                dim textState as ubyte = textsCoord(texto, 5)
-                                
-                                if not textState or textState = adventureStateTmp Then
-                                    dim adventureAction as ubyte = textsCoord(texto, 4)
+                    dim tileText as ubyte = GetTile(cordX>>1, cordY>>1)
+                    
+                    if tileText Then
+                        textFound = 1
+                        
+                        #ifdef IS_TEXT_ADVENTURE
+                            #ifndef ARCADE_MODE
+                                #ifndef LEVELS_MODE
+                                    dim textState as ubyte = textsCoord(texto, 5)
                                     
-                                    if adventureAction then
-                                        if adventureAction = 1 Then
-                                            if textState = adventureStateTmp Then
-                                                currentAdventureState = currentAdventureState + 1
-                                                
-                                                If currentAdventureState > MAX_ADVENTURE_STATE Then
-                                                    muestraDialogo(textsCoord(texto, 3), tileText)
-                                                    ending()
-                                                end if
-                                            End if
-                                        elseif validateTile <> adventureAction Then
-                                            textFound = 0
+                                    if not textState or textState = adventureStateTmp Then
+                                        dim adventureAction as ubyte = textsCoord(texto, 4)
+                                        
+                                        if adventureAction then
+                                            if adventureAction = 1 Then
+                                                if textState = adventureStateTmp Then
+                                                    currentAdventureState = currentAdventureState + 1
+                                                    
+                                                    If currentAdventureState > MAX_ADVENTURE_STATE Then
+                                                        muestraDialogo(textsCoord(texto, 3), tileText)
+                                                        ending()
+                                                    end if
+                                                End if
+                                            elseif validateTile <> adventureAction Then
+                                                textFound = 0
+                                            end if
                                         end if
+                                        
+                                        if textFound Then muestraDialogo(textsCoord(texto, 3), tileText)
+                                    else
+                                        textFound = 0
                                     end if
-                                    
-                                    if textFound Then muestraDialogo(textsCoord(texto, 3), tileText)
-                                else
-                                    textFound = 0
-                                end if
+                                #EndIf
                             #EndIf
+                        #Else
+                            muestraDialogo(textsCoord(texto, 3), tileText)
                         #EndIf
-                    #Else
-                        muestraDialogo(textsCoord(texto, 3), GetTile(cordX>>1, cordY>>1))
-                    #EndIf
+                    end if
                 End If
             End if
         Next texto
@@ -632,10 +637,14 @@ End Sub
 
 Function checkTileObject(tile As Ubyte) As Ubyte
     If tile = ITEM_TILE Then
-        #ifndef ARCADE_MODE
-            If Not screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-                Return 0
-            End If
+        ' #ifndef ARCADE_MODE
+        '     If Not screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
+        '         Return 0
+        '     End If
+        ' #endif
+        #ifdef SHOULD_PICKUP_ITEMS
+            screensWon(currentScreen) = 1
+            removeTilesFromScreen(63)
         #endif
         currentItems = currentItems + ITEMS_INCREMENT
         #ifdef HISCORE_ENABLED
@@ -662,20 +671,20 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
         BeepFX_Play(5)
         Return 1
-    #ifndef ARCADE_MODE
-        #ifdef CHECKPOINTS_ENABLED
-        ElseIf tile = FLAG_TILE Then            
-            #ifdef MESSAGES_ENABLED
-                if protaScreenRespawn <> currentScreen Then printMessage("CHECK!!! ", 4, 0)
+        #ifndef ARCADE_MODE
+            #ifdef CHECKPOINTS_ENABLED
+            ElseIf tile = FLAG_TILE Then
+                #ifdef MESSAGES_ENABLED
+                    if protaScreenRespawn <> currentScreen Then printMessage("CHECK!!! ", 4, 0)
+                #endif
+                
+                protaXRespawn = protaX
+                protaYRespawn = protaY - 1
+                protaScreenRespawn = currentScreen
             #endif
-
-            protaXRespawn = protaX
-            protaYRespawn = protaY - 1
-            protaScreenRespawn = currentScreen
         #endif
-    #endif
         #ifdef KEYS_ENABLED
-        Elseif tile = KEY_TILE And screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
+        Elseif tile = KEY_TILE Then
             #ifdef ARCADE_MODE
                 If currentScreen = SCREENS_COUNT Then
                     ending()
@@ -693,14 +702,14 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             BeepFX_Play(3)
             Return 1
         #endif
-    Elseif tile = LIFE_TILE And screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
+    Elseif tile = LIFE_TILE Then
         currentLife = currentLife + LIFE_AMOUNT
         printLife()
         screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
         BeepFX_Play(6)
         Return 1
         #ifdef AMMO_ENABLED
-        Elseif tile = AMMO_TILE And screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
+        Elseif tile = AMMO_TILE Then
             currentAmmo = currentAmmo + AMMO_INCREMENT
             printLife()
             screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0

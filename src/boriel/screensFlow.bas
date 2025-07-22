@@ -310,9 +310,9 @@ End Sub
 Sub ending()
     #ifdef ENABLED_128k
         #ifdef MUSIC_ENDING_ENABLED
-            ' VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+            VortexTracker_Play(MUSIC_ENDING_ADDRESS)
         #else
-            ' VortexTracker_Stop()
+            VortexTracker_Stop()
         #endif
         PaginarMemoria(DATA_BANK)
         dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
