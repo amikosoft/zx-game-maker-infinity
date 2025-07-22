@@ -133,6 +133,7 @@ Dim inMenu As Ubyte = 1
 
 #ifdef PLATFORM_MOVEABLE
     Dim downKeyPressed as Ubyte = 0
+    Dim isOnPlatform as Ubyte = 0
 #endif
 
 #ifdef ENABLED_128k

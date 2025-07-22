@@ -63,8 +63,8 @@ sub decrementLife()
         ' if currentLife > 1 then
         #ifdef ENERGY_ENABLED
             currentEnergy = currentEnergy - 1
-            printLife()
-            if currentEnergy Then return
+
+            if not currentEnergy Then
 
             #ifndef LIVES_MODE_GRAVEYARD
                 currentEnergy = INITIAL_ENERGY
@@ -95,9 +95,10 @@ sub decrementLife()
             #endif
             saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
         #endif
-        ' else
-        '     currentLife = 0
-        ' end if
+
+        #ifdef ENERGY_ENABLED
+            end if
+        #endif
     #else
         if currentLife > DAMAGE_AMOUNT then
             currentLife = currentLife - DAMAGE_AMOUNT

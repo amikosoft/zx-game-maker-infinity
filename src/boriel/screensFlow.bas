@@ -209,10 +209,16 @@ Sub playGame()
     Do
         waitretrace
         
-        If enemiesFrame band 1 Then
-            protaFrame = getNextFrameRunning()
-        End if
-        
+        #ifdef PLATFORM_MOVEABLE
+            If not isOnPlatform and enemiesFrame band 1 Then
+                protaFrame = getNextFrameRunning()
+            End if
+        #else
+            If enemiesFrame band 1 Then
+                protaFrame = getNextFrameRunning()
+            End if
+        #EndIf
+
         lastFrameTiles = lastFrameTiles + 1
         If lastFrameTiles > ANIMATE_PERIOD_TILE Then
             lastFrameTiles = 0

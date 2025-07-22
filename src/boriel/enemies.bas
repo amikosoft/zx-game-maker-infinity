@@ -16,7 +16,7 @@
                 
                 If (protaX + 3) < enemyCol Or protaX > (enemyCol + 3) Then continue for
                 If protaY4 < enemyLin or protaY4 > (enemyLin + 1) Then continue For
-                
+
                 Return 1
             End If
         Next enemyId
@@ -58,6 +58,10 @@
 #endif
 
 Sub moveEnemies()
+    #ifdef PLATFORM_MOVEABLE
+        isOnPlatform = 0
+    #endif
+
     enemiesFrame = enemiesFrame + 1
     if enemiesFrame > 9 Then enemiesFrame = 1
     
@@ -295,6 +299,7 @@ Sub moveEnemies()
                                     
                                     enemyCol = protaX
                                     protaY = enemyLin - 4
+                                    isOnPlatform = tile
                                 Else
                                     If Not CheckCollision(protaX, protaY + verticalDirection) Then
                                         protaY = enemyLin - 4
