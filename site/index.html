@@ -1,182 +1,982 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
-        
-        
-        <link rel="shortcut icon" href="img/favicon.ico">
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="visual-interface.html">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
         <title>ZXGM Infinity Docs</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/fontawesome.min.css" rel="stylesheet">
-        <link href="css/brands.min.css" rel="stylesheet">
-        <link href="css/solid.min.css" rel="stylesheet">
-        <link href="css/v4-font-face.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
-        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
-        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script> 
-    </head>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.342714a4.min.css">
+      
+      
 
-    <body class="homepage">
-        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-            <div class="container">
-                <a class="navbar-brand" href="index.html">ZXGM Infinity Docs</a>
-                <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Expanded navigation -->
-                <div id="navbar-collapse" class="navbar-collapse collapse">
-                        <!-- Main navigation -->
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item">
-                                <a href="index.html" class="nav-link active" aria-current="page">Inicio</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Compilación</a>
-                                <ul class="dropdown-menu">
-                                    
-<li>
-    <a href="visual-interface.html" class="dropdown-item">Interfaz y migración</a>
-</li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Configuración</a>
-                                <ul class="dropdown-menu">
-                                    
-<li>
-    <a href="game-modes.html" class="dropdown-item">Modo de juego</a>
-</li>
-                                    
-<li>
-    <a href="generic-options.html" class="dropdown-item">Opciones genéricas</a>
-</li>
-                                    
-<li>
-    <a href="enemies.html" class="dropdown-item">Enemigos</a>
-</li>
-                                    
-<li>
-    <a href="adventure.html" class="dropdown-item">Aventura gráfica</a>
-</li>
-                                    
-<li>
-    <a href="musics.html" class="dropdown-item">Música</a>
-</li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                    <ul class="nav navbar-nav ms-md-auto">
-                            <li class="nav-item">
-                                <a rel="prev" class="nav-link disabled">
-                                    <i class="fa fa-arrow-left"></i> Previous
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" href="visual-interface.html" class="nav-link">
-                                    Next <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
-            <span class="fa fa-angle-down"></span>
-        </button>
-    </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
-        <ul class="nav flex-column">
-            
-            <li class="nav-item" data-bs-level="1"><a href="#zxgm-infinity" class="nav-link">ZXGM Infinity</a>
-              <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#manual-para-configurar-las-caracteristicas-de-infinity" class="nav-link">Manual para configurar las características de Infinity</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-              </ul>
-            </li>
-        </ul>
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#zxgm-infinity" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
-</div></div>
-                    <div class="col-md-9" role="main">
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="ZXGM Infinity Docs" class="md-header__button md-logo" aria-label="ZXGM Infinity Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZXGM Infinity Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Inicio
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="visual-interface.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Compilación
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="generic-options.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Configuración
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="ZXGM Infinity Docs" class="md-nav__button md-logo" aria-label="ZXGM Infinity Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ZXGM Infinity Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cosas-implementadas-en-infinity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cosas implementadas en Infinity
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="visual-interface.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    Compilación
+    
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="generic-options.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    Configuración
+    
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cosas-implementadas-en-infinity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cosas implementadas en Infinity
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
 
 <h1 id="zxgm-infinity">ZXGM Infinity</h1>
+<p>Manual para configurar las características de Infinity</p>
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
-<h2 id="manual-para-configurar-las-caracteristicas-de-infinity">Manual para configurar las características de Infinity</h2></div>
-            </div>
-        </div>
+<h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
+<ul>
+<li>Más movimientos de enemigos disponibles y configurables</li>
+<li>Nuevo modo de juego por niveles</li>
+<li>Los enemigos tienen la habilidad de disparar (con múltiples configuraciones)</li>
+<li>Las músicas pueden ser usadas tantas veces cómo se quiera</li>
+<li>Modo aventura gráfica: Textos interactivos en items tipo aventura gráfica con progresión de la aventura</li>
+<li>Nuevo tipo de disparo boomerang</li>
+<li>Animación de disparo del jugador</li>
+<li>Check points configurables in-game</li>
+<li>Velocidad del juego mejorada</li>
+<li>Más espacio disponible para desarrollar</li>
+<li>Modo de vidas con energía disponible</li>
+<li>Los enemigos pueden soltar drops</li>
+<li>Se pueden poner plataformas manejables por el jugador</li>
+<li>Posibilidad de quitar muros de enemigos cogiendo items</li>
+<li>Posibilidad de hacer colisionar balas de enemigos con player</li>
+<li>Posibilidad de deshabilitar la colisión de la bala del player</li>
+<li>Se permite saltar en los enemigos sin matarlos</li>
+<li>Posibilidad de indicar que los enemigos colisiones con el escenario</li>
+<li>Los enemigos pueden reaparecer en la pantalla</li>
+<li>
+<p>Se puede indicar que los enemigos se ralenticen en lugar de morir
+*</p>
+</li>
+<li>
+<p>Mucha corrección de bugs y optimización de código</p>
+</li>
+</ul>
+<!-- 
+[TOC]
 
-        <footer class="col-md-12">
-            <hr>
-            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
-        </footer>
-        <script src="js/bootstrap.bundle.min.js"></script>
-        <script>
-            var base_url = ".",
-                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
-        </script>
-        <script src="js/base.js"></script>
+# Interfaz visual y migración
 
-        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+Aquí encontrarás aquellos elementos diferenciadores sobre la versión oficial.
+
+## Build tiles+sprites
+
+Con esta acción podrás compilar tus tiles.zxp y sprites.zxp, sin necesidad de compilar el proyecto completo ni exportar en png, y así poder verlos en tu mapa (tiled)  
+
+![Build tiles+sprites](imgs/visual_interface.png)
+
+## Migración
+
+Si vienes de una versión anterior es recomendable seguir estos pasos:
+
+* Descargar la última versión del ZXGM Infinity e instalar en una carpeta nueva
+* Copiar la carpeta assets de tu proyecto original teniendo en cuenta lo siguiente:
+    * De la carpeta del mapa sólo hay que copiar los ficheros con extensión _.zxp_ y el _map.tmx_ para que te reconozca bien los nuevos parámetros de configuración introducidos
+* Lanzar una primera compilación para generar los png de tiles y todo para usar en tiled
+
+## Solución de problemas
+
+* Los usuarios de linux es posible que necesiten dar permisos de ejecución al compilado tras la primera instalación (dentro de la carpeta **dist**)
+
+## Documentación ZXGM oficial
+
+Puedes consultar el resto de opciones [aquí](https://gm.retrojuegos.org/mydoc_engine_use.html).
+
+
+# Configuración de tipos de juego
+
+Toda la información sobre la personalización del comportamiento del juego
+
+## Configuración general en atributos del mapa (tiled)
+
+### Modo de visualización
+
+La vista del juego se puede configurar de 2 maneras usando **gameView**
+
+* **side** hará que tu juego sea un plataformas 2d con vista lateral
+* **overhead** indica al motor que use vista "cenital" para tu juego (tipo zelda)
+
+Entre ambos juegos hay diferencias como el salto o el tipo de movimiento del personaje protagonista. El objetivo en ambos será el mismo.
+
+### Modo de juego
+
+Además de cómo visualizar el juego se puede indicar la dinámica del mismo
+
+**arcadeMode** permite activar dicho modo para nuestro juego. La dinámica del juego será un pelín distinta:
+
+* En este modo hay que "pasarse" cada pantalla para pasar a la siguiente, no se puede ir a la pantalla siguiente y volver a la anterior. Son independientes
+* Para diseñar las pantallas en Tiled lo haremos una detras de otra en una sóla línea.
+* Para superar una pantalla habrá que recoger todos los items y al hacerlo aparacerá la llave para pasar a la siguiente pantalla
+* Se pueden añadir tantos items como se quiera en la pantalla.
+* Tendremos que definir en cada pantalla donde aparece el personaje (mainCharacter)
+* No es necesario definir suelo y paredes en la pantalla para limitar la misma, si el personaje atraviesa los límites, aparecerá en el lado opuesto.
+
+![](images/arcade_mode.png)
+
+**levelsMode** indica al motor que debe comportarse como un juego por niveles. La dinámica del juego será la siguiente:
+
+* En este modo hay que "pasarse" cada pantalla para pasar a la siguiente, no se puede ir a la pantalla siguiente y volver a la anterior. Son independientes
+* Para diseñar las pantallas en Tiled lo haremos como en el modo normal sólo que cada fila de pantallas será un nivel.
+* Para superar un nivel deberás coger una llave y abrir una puerta. El sitio donde esté da igual.
+* El inicio del personaje (mainCharacter) se deberá hacer únicamente en la primera pantalla y será el mismo para todas por lo que hay que tener un hueco reservado para el inicio en todos los niveles
+* En este modo si el personaje cae por abajo del nivel recibirá daño y rebotará.
+* Por arriba no se podrá salir el personaje
+* Por último, hay que tener en cuenta que tanto la primera pantalla como la última de cada nivel tienen que tener muros para que no se salga el personaje o fallará el juego (ya puedes hacer tu ghost'n'goblins)
+
+
+
+
+
+# Configuraciones generales
+
+Aquí se incluye información de parámetros que no existen (en el momento de elaborar esto) en el proyecto original
+
+## Configuración original a tener en cuenta
+
+Ten en cuenta la configuración original antes de continuar [aquí](https://gm.retrojuegos.org/mydoc_tiled_general_configuration.html).
+
+## Configuración general en atributos del mapa (tiled)
+
+### Opciones genéricas
+
+* **borderDamageColor** valor numérico que si es distinto al atributo *border* hará que el borde se ponga de este color al recibir daño
+
+* **dropTile** configura aquí un id de tile (puedes consultarlo pinchando en un tile en Tiled) para que al morir los enemigos, en algunas ocasiones, liberen un item o pinten tiles. Si el id indicado corresponde con un item reservado del juego (llaves, items, balas, etc...) liberará sólo 1, de lo contrario pintará 4 (por ejemplo: si haces un tile de sangre, parecerá que el enemigo ha sido reventado contra el fondo)
+
+![Drop tile](imgs/droptile.png)
+
+* **checkpointsEnabled** permite revivir a tu personaje (en modo vidas) desde el último item de bandera (en tiles a la izquierda de la bala) por el que haya pasado el player
+
+* **shouldPickUpItems** habilita la posibilidad de que los bloques de enemigos (los que desaparecen al matar todos los enemigos) se quiten también al coger un item en pantalla. Puede usarse de manera independiente.
+
+### Comportamiento del personaje
+
+* **laddersEnabled** activando esta opción harás que el personaje suba escaleras (tiles transpasables) usando una animación de subir. La velocidad de subida será más lenta simulando la subida de escaleras. No afecta a la velocidad de bajada.
+
+La animación de subir usa el sprite usado para el *mainCharacterExtraFrame* por lo que se dicha opción se deshabilitará si se activa esta.
+
+### Plataformas controlables
+
+* **platformMoveable** habilita la opción de tener plataformas controladas por el jugador.
+
+Una vez activado, si configuras una plataforma móvil con los siguientes parámetros podrá ser controlada por el player al subirse encima pero no será capaz de moverse entre pantallas.
+
+Los parámetros son **velocidad normal o 3** y **sin desplazamiento horizontal o vertical**.
+
+Una vez el jugador se sitúe encima de la plataforma ésta caerá mientras que el jugador no pulse **dirección abajo**.
+
+Para salir de la plataforma se deberá de saltar y quedará inmóvil.
+
+### Animación de la bala
+
+* **bulletAnimation** habilita la animación de la bala (sólo en modo side)
+
+* **bulletDisableCollisions** permite que la bala de nuestro personaje atraviese paredes (esta opción deshabilita los bloques rompibles)
+
+* **bulletType** te permite poder seleccionar entre 2 tipos de disparo para tú personaje: **bullet** (clásico) o **boomerang**
+
+Para modo **bullet**, para editar la animación se debe usar bullet_animated.zxp siguiendo estas sencillas instrucciones
+
+![Bullet animation](imgs/bullet_animation_tile.png)
+
+* Las balas en azul corresponden a la animación de dirección derecha
+* Las balas en rosa corresponden a la animación de dirección izquierda
+
+Para modo **boomerang** se usará siempre el fichero bullet.zxp independientemente si es vista **side** o **overhead**
+
+Las balas de los enemigos no son animadas
+
+### Atributos que han dejado de tener utilidad
+
+* Tanto *animatePeriodEnemy* como *animatePeriodMain* no tienen efecto puesto que han sido eliminados y unificados.
+
+# Configuración de enemigos
+
+Toda la información sobre la personalización del comportamiento de enemigos
+
+## Configuración general en atributos del mapa (tiled)
+
+### Configuraciones generales
+
+* **jumpOnEnemies** permite hacer que tu personaje salte sobre los enemigos sin aplicar daño. Si activas **killJumpingOnTop** se anula esta.
+
+* **enemiesNormalCollide** habilita la colisión de enemigos con el escenario en modo normal (los que se mueven en diagonal)
+
+* **enemiesRespawnInScreen** activa el mecanismo por el cuál los enemigos resurgen después de matarlos. El enemigo se mostrará parpadeando breves momentos antes de aparecer.
+
+* **enemiesSlowDown** indica al motor que en lugar de morir los enemigos se ralentizen aumentando su velocidad de nuevo poco a poco hasta llegar al máximo de velocidad, que es 3. Ejemplo: Tienes un enemigo velocidad 1, lo ralentizas... a continuación se para unos instantes y empieza a acelerar hasta que llega a velocidad 3.
+
+### Distancia de enemigos en modo Alerta
+
+* **enemiesAlertDistance** permite indicar la distancia a la que etarán alerta los enemigos en este modo. Los valores son **near**, **medium** y **far**
+
+### Enemigos que disparan
+
+Con estas opciones podrás configurar qué enemigos te dispararán al tenerte en su linea de tiro.
+
+_NOTA_: Sólo puede haber un disparo enemigo a la vez por lo que el primero que te vea te disparará.
+
+Para habilitar este modo indicaremos en el atributo **enemiesShoot** un número del 1 al 8 que marcarán dentro de los sprites de enemigos quienes dispararán, siendo agrupadores entre ellos. 
+
+Esto quiere decir que si marco 3, todos los enemigos iguales o menores al grupo 3 te dispararán. Hay que tenerlo en cuenta al poner los sprites de enemigos que disparan primero
+
+![Enemies shoot configuration graph](imgs/enemies_shoot_index.png)
+
+**enemiesBulletCollision** permite indicar si las balas enemigas chocarán o no contra tiles no traspasables.
+
+**enemiesShootDirection** indica la dirección a la que dispararán los enemigos. Hay que tener en cuenta que, de momento, no distinguen si te están viendo o no, por lo que te dispararán por delante y por detrás así como arriba y abajo.
+
+**enemiesShootSpeed** cambia la velocidad de la bala de los enemigos entre _slow_ (lenta) y _fast_ (rápida)
+
+**enemiesShootingLookAtPlayer** activa la característica por la cual los enemigos te miran al dispararte aunque no te estén mirando
+
+**enemiesShootOnlyLookingPlayer** obliga a los enemigos a estar mirando al player para disparar
+
+**bulletsCollisionWithBullets** hará que las balas de los enemigos colisione con las tuyas
+
+![Enemies shoot direction](imgs/enemies_shoot_direction.png)
+
+Las opciones son **horizontal**, **vertical** o **all** (las 2 anteriores)
+
+Para configurar el sprite de bala tenemos el fichero bullet.zxp, bullet_animated.zxp y bullet_overhead.zxp
+
+![](imgs/bullet_overhead.png) ![](imgs/bullet_no_animation.png)
+
+### Comportamiento de enemigos perseguidores
+
+* **enemiesPursuitCollide** permite indicar si los enemigos que te persiguen atraviesan o no tiles no traspasables
+
+### Limitación
+
+Puedes añadir hasta **3 enemigos en cada pantalla** y configurar su movimiento.
+
+## Configuración individual de cada enemigo
+
+### Posición inicial
+
+Para ello deberás seleccionar la capa objects y arrastrar el 1er sprite del enemigo a posicionar donde quieras que aparezca inicialmente.
+
+Como truco, si pulsas la tecla Ctrl el enemigo se situará respetado la rejilla.
+
+En la propiedad **type** de este objeto deberás introducir el text **enemy**
+
+Es recomendable que le pongas un nombre al mismo para cuando referencies la posición final a este. E.g. enemy_1
+
+### Posición final
+
+* Haz clic en el botón **Insert point**.
+* Pon este punto donde quieras que pare el enemigo manteniendo la tecla Ctrl.
+* Añade a este punto una **propiedad personalizada** (custom property) **de tipo objeto** y selecciona el enemigo relacionado con este punto.
+
+![](images/enemy_movement.png)
+
+### Tipos de movimiento
+
+El enemigo permite múltiples tipos de movimiento:
+
+* **Horizontal**, el enemigo y su trayecto están a la misma altura.
+
+![](images/enemigos_movimiento_horizontal.png)
+
+* **Vertical**, el enemigo y su trayecto están en la misma vertical.
+
+![](images/enemigos_movimiento_vertical.png)
+
+* **Diagonal**, el enemigo y el punto final no están a la misma altura ni en la misma vertical.
+
+![](images/enemigos_movimiento_diagonal.png)
+
+* **Parado**, el enemigo está quieto sin moverse.
+
+### Modo de comportamiento
+
+Una vez elegido el movimiento se puede elegir el comportamiento. Esto se hace añadiedo al enemigo la propiedad **mode** del tipo **enemyMovement**
+
+![enemy modes variable](imgs/enemy_mode.png)
+![enemy modes](imgs/enemy_mode_options.png)
+
+* **Normal**, no altera el tipo de movimiento (por defecto)
+
+* **Alerta**, el enemigo está haciendo su movimiento configurado hasta que te acercas lo suficiente cuando el enemigo perseguirá al protagonista. Volverá a su estado inicial cuando entres de nuevo a la pantalla. Los enemigos no te perseguirán si estás invencible.
+
+* **Persecución** (ignorará el tipo de movimiento), el enemigo perseguirá al protagonista. Los enemigos no te perseguirán si estás invencible.
+
+* **Una dirección** (requiere un tipo de movimiento horizontal o vertical). el enemigo solo se moverá en una dirección y cuando llegue al final saldrá del mismo punto inicial. Hay que tener en cuenta en los sprites si la dirección es abajo o arriba. Para izquierda o derecha usará los habituales.
+
+* **Clockwise** (sentido agujas de reloj), el enemigo se moverá en el sentido de las agujas de un reloj formando un cuadrado, para ello requiere un tipo de movimiento diagonal para que se aprecie.
+
+* **Anticlockwise** (sentido contrario agujas de reloj), el enemigo se moverá en el sentido contrario de las agujas de un reloj formando un cuadrado, para ello requiere un tipo de movimiento diagonal para que se aprecie.
+
+_NOTA: todos aquellos modos de comportamiento que se usen en enemigos usarán espacio del motor y lo liberarán si ningún enemigo los usa_ 
+
+### Cantidad de vida
+
+Puedes asignarle la cantidad de vida que tiene cada enemigo, por ejemplo si le pones cantidad de vida 5 el protagonista le tendrá que disparar 5 veces para matarlo.
+
+Para ello solo tienes que añadir una propiedad personalizada **life** **de tipo int** con el valor de la vida. Si no la defines, por defecto, el enemigo tiene una unidad de vida.
+
+![](images/vida_enemigo.png)
+
+### Enemigos invencibles
+
+Para añadir enemigos invencibles solo tendras que ponerle en el atributo **life** el valor **99**.
+
+### Velocidad
+
+Puedes establecer la velocidad del enemigo, para ello solo tienes que añadir en el mismo una propiedad personalizada **speed** de tipo **enemySpeed** y seleccionar entre 1, 2 o 3 de más lento a más rápido. Si no añades la propiedad se establecerá a 3 como venía funcionando hasta ahora.
+
+1. El enemigo se moverá cada 4 frames.
+2. El enemigo se moverá cada 2 frames.
+3. El enemigo se moverá cada 1 frame (Opción por defecto).
+
+![](images/enemyspeed.png)
+
+
+
+# Configura tu aventura
+
+Con la versión 2.0 del ZXGM Infinity puedes diseñar tu propia aventura gráfica!!!! 
+
+O si no, puedes meter textos que ayuden al jugador para conocer bien el entorno y las mecánicas
+
+## Configuración general en atributos del mapa (tiled)
+
+Con estos parámetros se activa y configura la aventura en tu juego:
+
+* **adventureTexts** habilita la opción de tener textos habilitados para tu aventura
+
+* **adventureTextsLength** indica al compilador la longitud máxima que tendrán tus textos con el fin de optimizar mejor el espacio de tu juego.
+
+Las longitudes son 30, 45 y 60. Hay que tener en cuenta que en el juego se mostrarán lineas de 15 caracteres por lo que mínimo serían 2 y máximo 4.
+
+* **adventureTextsClearScreen** con esto indicas al compilador que te muestre los textos sin limpiar la pantalla.
+
+* **adventureTextsAcceptWithFire** habilita que los mensajes se acepten pulsando *disparo*
+
+* **adventureTextsHideTiles** esto indica al motor que oculte aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos
+
+Siempre que esté así configurado, adjunto al texto se mostrará siempre el item/tile asociado.
+
+A tener en cuenta:
+
+* El total de textos que se pueden introducir son 250 (de momento, pero por dejar espacio y memoria disponible son los que hay ahora)
+* Cada vez que se muestra un texto hay que pulsar intro para continuar.
+* Para activar los textos hay 2 maneras: 
+    * asociándolo a un item especial del juego (llave, item, bala o vidas). Sólo se mostrará una vez, al coger el objeto.
+    * posándose en algún sitio donde haya un texto y pulsar disparo (hay que tener en cuenta esto para no poner enemigos cerca)
+
+## Configurando el comportamiento de los textos y la aventura
+
+No hay límite de textos por pantalla (salvo el limite global) y para añadirlos sólo tienes que meter un "point" e indicar el type/class como "text".
+
+Para identificar donde hay un texto puede usarse un tile transpasable. Si coincide el punto de texto con la esquina superior izquierda del tile se mostrará junto al texto.
+
+Los textos de la aventura pueden ser de 2 tipos: relativos a la aventura (completándola se completa el juego) o meramente informativos.
+
+### Atributos de los textos
+
+![Punto de aventura](imgs/aventura1.png)
+
+Los puntos de texto tienen 3 atributos configurables:
+
+* **es** o **en** aquí tendrás que introducir el texto a mostrar teniendo en cuenta tu configuración y que las lineas son de 15 caracteres (para que no se corten las palabras). Actualmente no está activo el multiidioma pero está preparado para cuando lo esté. Con una de estas de momento te tiene que valer.
+
+* **adventureState** sirve para conocer en qué punto de la aventura se debe mostrar este punto de texto permitiendo mostrar distintos textos en el mismo tile dependiendo del avance de tu aventura. Recordar que empieza por 1 y deben ser correlativos. Cogido el último habrás ganado. Activando esto puedes desactivar el objetivo de items, o subirlo para no alcanzarlo nunca, ya que puede ser confuso para el jugador.
+
+Si no indicas ningún estado de aventura tus textos se usarán como información (y se liberará algo de espacio para tí en el juego)
+
+El modo aventura no es compatible con el modo arcade y de niveles, pero si los textos informativos.
+
+* **itemAction** valor numérico que indica al motor qué dependencia tiene este punto. Hay 3 modos de configurar:
+    * **0** indica que es un texto informativo y que puede ser consultado tantas veces como se desee.
+    * **1** esta acción hace que tu aventura avance al siguiente estado. Es obligatorio indicar *adventureState* junto con este valor
+    * **id de item** permite asociar un texto a un item especial para que, cuando el jugador lo coja le muestre un texto asociado al item y una vez cogido ya no se mostrará más (muy util como elemento introductorio). 
+
+El identificador del item lo puedes consultar pinchando en el selector de items. Te mostrará en el panel de propiedades de la izquierda el ID y ese número es el que debes poner
+
+![Punto de aventura de item](imgs/aventuraItem.png)
+
+
+
+
+# Música in-game por pantallas
+
+Con la última versión del motor ZXGM se ha liberado la posibilidad de meter múltiples canciones para tu juego.
+
+En Infinity funciona un poco distinto y aquí te lo explico. 
+
+## Configuración original a tener en cuenta
+
+Ten en cuenta la configuración original antes de continuar [aquí](https://gm.retrojuegos.org/mydoc_sound_music.html).
+
+## Configuración de un punto de música
+
+Para que la música cambie hay que añadir un punto (point) con el type/class **music2** o **music3** y no se podrá volver a reproducir de nuevo la anterior aunque vuelvas ni podrás usarlo más de una vez cada una. En Infinity es distinto pero no por eso peor.
+
+Aquí podrás configurar 1 cambio de música por pantalla, no haciendo el cambio si ya se está reproduciendo la misma canción.
+
+Por otro lado, se reproducirán las canciones tantas veces como cambien, permitiendo asignar canciones por ambientes y no por progreso.
+
+*Por ejemplo*: entras a una cueva y suena la canción de la cueva, en cuanto sales vuelves a la canción de la aventura principal.
+
+Por último pero no menos importante, en infinity puedes indicar que te ponga cualquiera de las canciones que tienes en tu juego (repetir es ahorrar).
+
+Tienes disponibles las siguientes opciones: 
+
+* **music1** tema principal de la aventura
+
+* **music2** tema auxiliar 1 
+
+* **music3** tema auxiliar 2
+
+* **title** canción del título del juego (que puede servir para el juego también)
+
+* **ending** canción para cuando ganas
+
+* **gameover** tema para cuando pierdes o para cuando no te gusta la pantalla
+
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
             </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">Keys</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="help shortcut"><kbd>?</kbd></td>
-                    <td>Open this help</td>
-                  </tr>
-                  <tr>
-                    <td class="next shortcut"><kbd>n</kbd></td>
-                    <td>Next page</td>
-                  </tr>
-                  <tr>
-                    <td class="prev shortcut"><kbd>p</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td class="search shortcut"><kbd>s</kbd></td>
-                    <td>Search</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
-    </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
 </div>
-
-    </body>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.prune", "navigation.indexes", "toc.follow", "navigation.top"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
 </html>
-
-<!--
-MkDocs version : 1.6.1
-Build Date UTC : 2025-07-22 08:25:29.203689+00:00
--->
