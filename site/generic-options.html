@@ -120,7 +120,21 @@
 <h2 id="configuracion-general-en-atributos-del-mapa-tiled">Configuración general en atributos del mapa (tiled)</h2>
 <h3 id="opciones-genericas">Opciones genéricas</h3>
 <ul>
-<li><strong>borderDamageColor</strong> valor numérico que si es distinto al atributo <em>border</em> hará que el borde se ponga de este color al recibir daño</li>
+<li>
+<p><strong>borderDamageColor</strong> valor numérico que si es distinto al atributo <em>border</em> hará que el borde se ponga de este color al recibir daño</p>
+</li>
+<li>
+<p><strong>dropTile</strong> configura aquí un id de tile (puedes consultarlo pinchando en un tile en Tiled) para que al morir los enemigos, en algunas ocasiones, liberen un item o pinten tiles. Si el id indicado corresponde con un item reservado del juego (llaves, items, balas, etc...) liberará sólo 1, de lo contrario pintará 4 (por ejemplo: si haces un tile de sangre, parecerá que el enemigo ha sido reventado contra el fondo)</p>
+</li>
+</ul>
+<p><img alt="Drop tile" src="imgs/droptile.png" /></p>
+<ul>
+<li>
+<p><strong>checkpointsEnabled</strong> permite revivir a tu personaje (en modo vidas) desde el último item de bandera (en tiles a la izquierda de la bala) por el que haya pasado el player</p>
+</li>
+<li>
+<p><strong>shouldPickUpItems</strong> habilita la posibilidad de que los bloques de enemigos (los que desaparecen al matar todos los enemigos) se quiten también al coger un item en pantalla. Puede usarse de manera independiente.</p>
+</li>
 </ul>
 <h3 id="comportamiento-del-personaje">Comportamiento del personaje</h3>
 <ul>
