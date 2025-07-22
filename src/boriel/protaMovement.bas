@@ -532,7 +532,7 @@ End Sub
             if textsCoord(texto, 0) <> currentScreen Then exit for
             dim cordX as ubyte = textsCoord(texto, 1)
             dim cordY as ubyte = textsCoord(texto, 2)
-                   
+            
             If (protaX-1) <= cordX And (protaX+5) >= cordX Then
                 If (protaY-1) <= cordY And (protaY+5) >= cordY Then
                     dim tileText as ubyte = GetTile(cordX>>1, cordY>>1)
@@ -675,7 +675,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             #ifdef CHECKPOINTS_ENABLED
             ElseIf tile = FLAG_TILE Then
                 #ifdef MESSAGES_ENABLED
-                    if protaScreenRespawn <> currentScreen Then printMessage("CHECK!!! ", 4, 0)
+                    if protaScreenRespawn <> currentScreen Then printMessage("CHECKED!!", 4, 0)
                 #endif
                 
                 protaXRespawn = protaX
