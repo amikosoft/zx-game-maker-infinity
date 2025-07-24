@@ -327,6 +327,11 @@
                 "value": 2
             },
             {
+                "name": "gravityLow",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "hiScore",
                 "type": "bool",
                 "value": false
@@ -366,6 +371,11 @@
                 "propertyType": "jumpType",
                 "type": "string",
                 "value": "constant"
+            },
+            {
+                "name": "jumpCancelAllowed",
+                "type": "bool",
+                "value": false
             },
             {
                 "name": "jumpDouble",

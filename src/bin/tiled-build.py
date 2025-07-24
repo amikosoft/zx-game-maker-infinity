@@ -154,9 +154,11 @@ levelsMode = 0
 
 jetPackFuel = 0
 
-gravitySpeed = 2
+gravityLow = False
 
 duobleJump = False
+jumpType = 'constant'
+jumpCancelAllowed = False
 jumpArrayCount = 6
 jumpArray = "{-2, -2, -2, -2, -2, 0}"
 
@@ -282,18 +284,23 @@ if 'properties' in data:
             levelsMode = 1 if property['value'] else 0
         elif property['name'] == 'jetPackFuel':
             jetPackFuel = property['value'] 
+        elif property['name'] == 'gravityLow':
+            gravityLow = property['value'] 
         elif property['name'] == 'jumpType':
-            if property['value'] == 'accelerated':
-                jumpArrayCount = 8
-                jumpArray = "{-2, -2, -2, -2, -2, 0, 0, 0}"
-            elif property['value'] == 'smooth':
-                jumpArrayCount = 8
-                jumpArray = "{-2, -2, -2, -2, -1, -1, 0, 0}"
-            elif property['value'] == 'mini':
-                jumpArrayCount = 5
-                jumpArray = "{-2, -2, -2, 0, 0}"
+            jumpType = property['value']
+            # if property['value'] == 'accelerated':
+            #     jumpArrayCount = 8
+            #     jumpArray = "{-2, -2, -2, -2, -2, 0, 0, 0}"
+            # elif property['value'] == 'smooth':
+            #     jumpArrayCount = 8
+            #     jumpArray = "{-2, -2, -2, -2, -1, -1, 0, 0}"
+            # elif property['value'] == 'mini':
+            #     jumpArrayCount = 5
+            #     jumpArray = "{-2, -2, -2, 0, 0}"
         elif property['name'] == 'jumpDouble':
-            duobleJump = True
+            duobleJump = property['value'] 
+        elif property['name'] == 'jumpCancelAllowed':
+            jumpCancelAllowed = property['value'] 
         elif property['name'] == 'livesMode':
             if property['value'] == 'instant respawn':
                 livesMode = 1
@@ -364,6 +371,39 @@ configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
 configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 configStr += "const MAX_LINE as ubyte = " + str(screenHeight * 2 - 4) + "\n"
+
+# si hay gravityLow el salto se pasa los -2 a -1
+if gravityLow == True:
+    configStr += "#DEFINE LOW_GRAVITY\n"
+
+if jumpType == 'constant':
+    if gravityLow == True:
+        jumpArrayCount = 12
+        jumpArray = "{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0}"
+    else:
+        jumpArrayCount = 6
+        jumpArray = "{-2, -2, -2, -2, -2, 0}"
+elif jumpType == 'accelerated':
+    if gravityLow == True:
+        jumpArrayCount = 14
+        jumpArray = "{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0}"
+    else:
+        jumpArrayCount = 8
+        jumpArray = "{-2, -2, -2, -2, -2, 0, 0, 0}"
+elif jumpType == 'smooth':
+    if gravityLow == True:
+        jumpArrayCount = 14
+        jumpArray = "{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0}"
+    else:
+        jumpArrayCount = 8
+        jumpArray = "{-2, -2, -2, -2, -1, -1, 0, 0}"
+elif jumpType == 'mini':
+    if gravityLow == True:
+        jumpArrayCount = 10
+        jumpArray = "{-1, -1, -1, -1, -1, -1, 0, 0, 0, 0}"
+    else:
+        jumpArrayCount = 5
+        jumpArray = "{-2, -2, -2, 0, 0}"
 
 if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
@@ -589,6 +629,9 @@ if duobleJump == True:
     configStr += "#define DOUBLE_JUMP\n"
     configStr += "Dim otherJump As Ubyte = 0\n"
 
+if jumpCancelAllowed == True:
+    configStr += "#define JUMP_CANCEL\n"
+    
 configStr += "    Const jumpStepsCount As Ubyte = " + str(jumpArrayCount) + "\n"
 configStr += "    Dim jumpArray(jumpStepsCount - 1) As Byte = " + jumpArray + "\n"
 configStr += "  #else\n"

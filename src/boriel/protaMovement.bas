@@ -167,23 +167,25 @@ End Function
     
     #ifndef JETPACK_FUEL
         Sub checkIsJumping()
-            If jumpCurrentKey >= jumpStopValue Then Return
-            If jumpCurrentKey >= jumpStepsCount - 1 Then
+            If jumpCurrentKey >= jumpStopValue or jumpCurrentKey >= jumpStepsCount - 1 Then
                 jumpCurrentKey = jumpStopValue
                 Return
             End If
             
-            if checkProtaTop() Then
+            if checkProtaTop() or CheckCollision(protaX, protaY + jumpArray(jumpCurrentKey)) Then
                 jumpCurrentKey = jumpCurrentKey + 1
                 Return
             End if
             
-            If CheckCollision(protaX, protaY + jumpArray(jumpCurrentKey)) Then
-                jumpCurrentKey = jumpCurrentKey + 1
-                Return
-            End If
+            ' If CheckCollision(protaX, protaY + jumpArray(jumpCurrentKey)) Then
+            '     jumpCurrentKey = jumpCurrentKey + 1
+            '     Return
+            ' End If
             
-            saveSprite( protaY + jumpArray(jumpCurrentKey), protaX, getNextFrameJumpingFalling(), protaDirection)
+            protaTile = getNextFrameJumpingFalling()
+            protaY = protaY + jumpArray(jumpCurrentKey)
+            ' saveSprite( protaY + jumpArray(jumpCurrentKey), protaX, getNextFrameJumpingFalling(), protaDirection)
+            
             jumpCurrentKey = jumpCurrentKey + 1
         End Sub
     #endif
@@ -258,10 +260,16 @@ End Function
                     moveScreen = 2
                 #endif
             Else
+                protaTile = getNextFrameJumpingFalling()
+                
                 #ifndef JETPACK_FUEL
-                    saveSprite( protaY + 2, protaX, getNextFrameJumpingFalling(), protaDirection)
+                    #ifndef LOW_GRAVITY
+                        protaY = protaY + 2
+                    #Else
+                        protaY = protaY + 1
+                    #endif
                 #Else
-                    saveSprite( protaY + 1, protaX, getNextFrameJumpingFalling(), protaDirection)
+                    protaY = protaY + 1
                 #endif
             End If
         End If
@@ -459,10 +467,6 @@ Sub upKey()
 End Sub
 
 Sub downKey()
-    #ifdef PLATFORM_MOVEABLE
-        downKeyPressed = 1
-    #endif
-    
     #ifdef OVERHEAD_VIEW
         If protaDirection <> 2 Then
             protaFrame = 6
@@ -479,6 +483,14 @@ Sub downKey()
             End If
         End If
     #Else
+        #ifdef JUMP_CANCEL
+            jumpCurrentKey = jumpStopValue
+        #endif
+        
+        #ifdef PLATFORM_MOVEABLE
+            downKeyPressed = 1
+        #endif
+        
         #ifdef LADDERS_ANIMATION_ENABLED
             If checkIsLadder(protaY + 4, 1) Then
                 protaY = protaY + 2
