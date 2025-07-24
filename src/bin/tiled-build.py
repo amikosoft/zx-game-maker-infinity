@@ -155,6 +155,8 @@ levelsMode = 0
 jetPackFuel = 0
 
 gravitySpeed = 2
+
+duobleJump = False
 jumpArrayCount = 6
 jumpArray = "{-2, -2, -2, -2, -2, 0}"
 
@@ -287,6 +289,11 @@ if 'properties' in data:
             elif property['value'] == 'smooth':
                 jumpArrayCount = 8
                 jumpArray = "{-2, -2, -2, -2, -1, -1, 0, 0}"
+            elif property['value'] == 'mini':
+                jumpArrayCount = 5
+                jumpArray = "{-2, -2, -2, 0, 0}"
+        elif property['name'] == 'jumpDouble':
+            duobleJump = True
         elif property['name'] == 'livesMode':
             if property['value'] == 'instant respawn':
                 livesMode = 1
@@ -577,6 +584,11 @@ configStr += "  Const jumpStopValue As Ubyte = 255\n"
 configStr += "  Dim landed As Ubyte = 1\n"
 configStr += "  Dim jumpCurrentKey As Ubyte = jumpStopValue\n"
 configStr += "  #ifndef JETPACK_FUEL\n"
+
+if duobleJump == True:
+    configStr += "#define DOUBLE_JUMP\n"
+    configStr += "Dim otherJump As Ubyte = 0\n"
+
 configStr += "    Const jumpStepsCount As Ubyte = " + str(jumpArrayCount) + "\n"
 configStr += "    Dim jumpArray(jumpStepsCount - 1) As Byte = " + jumpArray + "\n"
 configStr += "  #else\n"

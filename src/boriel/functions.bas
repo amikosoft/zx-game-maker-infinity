@@ -318,6 +318,13 @@ end sub
         if jumpCurrentKey = jumpStopValue and landed then
             landed = 0
             jumpCurrentKey = 0
+        #ifdef DOUBLE_JUMP
+            otherJump = 1
+        Elseif jumpCurrentKey > 2 And otherJump Then
+            otherJump = 0
+            landed = 0
+            jumpCurrentKey = 0
+        #endif
         end if
     end sub
 #endif

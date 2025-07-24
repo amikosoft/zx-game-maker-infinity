@@ -41,7 +41,8 @@
         "values": [
             "constant",
             "accelerated",
-            "smooth"
+            "smooth",
+            "mini"
         ],
         "valuesAsFlags": false
     },
@@ -365,6 +366,11 @@
                 "propertyType": "jumpType",
                 "type": "string",
                 "value": "constant"
+            },
+            {
+                "name": "jumpDouble",
+                "type": "bool",
+                "value": false
             },
             {
                 "name": "keysEnabled",
