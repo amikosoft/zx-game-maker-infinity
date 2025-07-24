@@ -495,6 +495,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#configuracion-de-salto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración de salto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#plataformas-controlables" class="md-nav__link">
     <span class="md-ellipsis">
       Plataformas controlables
@@ -698,6 +707,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#configuracion-de-salto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración de salto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#plataformas-controlables" class="md-nav__link">
     <span class="md-ellipsis">
       Plataformas controlables
@@ -759,6 +777,7 @@
 <p><strong>dropTile</strong> configura aquí un id de tile (puedes consultarlo pinchando en un tile en Tiled) para que al morir los enemigos, en algunas ocasiones, liberen un item o pinten tiles. Si el id indicado corresponde con un item reservado del juego (llaves, items, balas, etc...) liberará sólo 1, de lo contrario pintará 4 (por ejemplo: si haces un tile de sangre, parecerá que el enemigo ha sido reventado contra el fondo)</p>
 </li>
 </ul>
+<p><em>NOTA</em>: Sólo se soltarán drops si no hay ningún tile configurado en la zona de drop</p>
 <p><img alt="Drop tile" src="imgs/droptile.png" /></p>
 <ul>
 <li>
@@ -774,7 +793,24 @@
 </ul>
 <p>La animación de subir usa el sprite usado para el <em>mainCharacterExtraFrame</em> por lo que se dicha opción se deshabilitará si se activa esta.</p>
 <ul>
-<li><strong>livesEnergy</strong> añade energía a tu personaje para que la muerte no sea tan traumática</li>
+<li>
+<p><strong>livesEnergy</strong> añade energía a tu personaje para que la muerte no sea tan traumática</p>
+</li>
+<li>
+<p><strong>gravityLow</strong> configura el entorno con una gravedad más baja haciendo que el personaje flote</p>
+</li>
+</ul>
+<h3 id="configuracion-de-salto">Configuración de salto</h3>
+<ul>
+<li>
+<p><strong>jumpDouble</strong> permite tener un doble salto tras el primero (salto+suelto+salto) o un salto más largo (salto+no soltar)</p>
+</li>
+<li>
+<p><strong>jumpWall</strong> habilita el poder saltar apoyado contra una pared</p>
+</li>
+<li>
+<p><strong>jumpCancelAllowed</strong> esto permite al jugador cancelar el salto a la mitad pulsando "abajo"</p>
+</li>
 </ul>
 <h3 id="plataformas-controlables">Plataformas controlables</h3>
 <ul>

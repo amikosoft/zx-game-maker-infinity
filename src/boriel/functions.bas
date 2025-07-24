@@ -325,6 +325,17 @@ end sub
             landed = 0
             jumpCurrentKey = 0
         #endif
+        #ifdef WALL_JUMP
+        Elseif jumpCurrentKey > 2 Then
+            if CheckCollision(protaX - 1, protaY + 1) or CheckCollision(protaX + 1, protaY + 1) Then
+                landed = 0
+                jumpCurrentKey = 0
+
+                #ifdef DOUBLE_JUMP
+                    otherJump = 1
+                #endif
+            end if
+        #endif
         end if
     end sub
 #endif

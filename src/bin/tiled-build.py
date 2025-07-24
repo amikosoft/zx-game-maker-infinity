@@ -157,6 +157,7 @@ jetPackFuel = 0
 gravityLow = False
 
 duobleJump = False
+jumpWalls = False
 jumpType = 'constant'
 jumpCancelAllowed = False
 jumpArrayCount = 6
@@ -299,6 +300,8 @@ if 'properties' in data:
             #     jumpArray = "{-2, -2, -2, 0, 0}"
         elif property['name'] == 'jumpDouble':
             duobleJump = property['value'] 
+        elif property['name'] == 'jumpWalls':
+            jumpWalls = property['value'] 
         elif property['name'] == 'jumpCancelAllowed':
             jumpCancelAllowed = property['value'] 
         elif property['name'] == 'livesMode':
@@ -624,6 +627,9 @@ configStr += "  Const jumpStopValue As Ubyte = 255\n"
 configStr += "  Dim landed As Ubyte = 1\n"
 configStr += "  Dim jumpCurrentKey As Ubyte = jumpStopValue\n"
 configStr += "  #ifndef JETPACK_FUEL\n"
+
+if jumpWalls == True:
+    configStr += "#define WALL_JUMP\n"
 
 if duobleJump == True:
     configStr += "#define DOUBLE_JUMP\n"

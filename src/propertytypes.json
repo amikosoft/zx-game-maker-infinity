@@ -372,6 +372,11 @@
                 "value": false
             },
             {
+                "name": "jumpWalls",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "keysEnabled",
                 "type": "bool",
                 "value": true

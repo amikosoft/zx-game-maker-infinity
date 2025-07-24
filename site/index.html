@@ -621,6 +621,8 @@ Ten en cuenta la configuración original antes de continuar [aquí](https://gm.r
 
 * **dropTile** configura aquí un id de tile (puedes consultarlo pinchando en un tile en Tiled) para que al morir los enemigos, en algunas ocasiones, liberen un item o pinten tiles. Si el id indicado corresponde con un item reservado del juego (llaves, items, balas, etc...) liberará sólo 1, de lo contrario pintará 4 (por ejemplo: si haces un tile de sangre, parecerá que el enemigo ha sido reventado contra el fondo)
 
+*NOTA*: Sólo se soltarán drops si no hay ningún tile configurado en la zona de drop
+
 ![Drop tile](imgs/droptile.png)
 
 * **checkpointsEnabled** permite revivir a tu personaje (en modo vidas) desde el último item de bandera (en tiles a la izquierda de la bala) por el que haya pasado el player
@@ -634,6 +636,16 @@ Ten en cuenta la configuración original antes de continuar [aquí](https://gm.r
 La animación de subir usa el sprite usado para el *mainCharacterExtraFrame* por lo que se dicha opción se deshabilitará si se activa esta.
 
 * **livesEnergy** añade energía a tu personaje para que la muerte no sea tan traumática
+
+* **gravityLow** configura el entorno con una gravedad más baja haciendo que el personaje flote
+
+### Configuración de salto
+
+* **jumpDouble** permite tener un doble salto tras el primero (salto+suelto+salto) o un salto más largo (salto+no soltar)
+
+* **jumpWall** habilita el poder saltar apoyado contra una pared
+
+* **jumpCancelAllowed** esto permite al jugador cancelar el salto a la mitad pulsando "abajo"
 
 ### Plataformas controlables
 
