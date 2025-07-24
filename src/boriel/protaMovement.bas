@@ -731,11 +731,13 @@ Sub checkObjectContact()
                 
                 if checkTileObject(tile) then
                     validaTexto(tile)
-                    FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                    'FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                    SetTileChecked(0, BACKGROUND_ATTRIBUTE, col + c, lin + l)
                 End if
             #else
                 If checkTileObject(GetTile(col+c, lin+l)) Then
-                    FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                    'FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                    SetTileChecked(0, BACKGROUND_ATTRIBUTE, col + c, lin + l)
                 End if
             #endif
         next l
