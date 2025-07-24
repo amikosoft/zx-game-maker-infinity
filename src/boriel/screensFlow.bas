@@ -287,6 +287,7 @@ Sub playGame()
                     currentEnergy = INITIAL_ENERGY
                     #endif
                     saveSprite(protaYRespawn, protaXRespawn, 1, protaDirection)
+                    printLife()
 
                     #ifndef ARCADE_MODE
                     #ifdef CHECKPOINTS_ENABLED
