@@ -297,7 +297,7 @@
             {
                 "name": "bulletAnimation",
                 "type": "bool",
-                "value": true
+                "value": false
             },
             {
                 "name": "bulletDisableCollisions",
