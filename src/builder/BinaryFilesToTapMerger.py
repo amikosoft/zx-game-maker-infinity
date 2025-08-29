@@ -24,6 +24,7 @@ class BinaryFilesToTapMerger:
         input_files += [
             OUTPUT_FOLDER + "map.bin.zx0",
             OUTPUT_FOLDER + "enemies.bin.zx0",
+            # OUTPUT_FOLDER + "sprites.bin",
             OUTPUT_FOLDER + "tiles.bin",
             OUTPUT_FOLDER + "attrs.bin",
             OUTPUT_FOLDER + "objectsInScreen.bin",

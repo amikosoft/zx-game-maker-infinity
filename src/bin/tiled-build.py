@@ -186,6 +186,8 @@ adventureTextsClearScreen = False
 adventureTextsAcceptWithFire = False
 adventureTextsHideTiles = False
 
+unshiftedGraphics = False
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -361,6 +363,8 @@ if 'properties' in data:
             checkpointsEnabled = property['value']
         elif property['name'] == 'livesEnergy':
             livesEnergy = property['value']
+        elif property['name'] == 'graphicsModeUnshifted':
+            unshiftedGraphics = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -407,6 +411,9 @@ elif jumpType == 'mini':
     else:
         jumpArrayCount = 5
         jumpArray = "{-2, -2, -2, 0, 0}"
+
+if unshiftedGraphics:
+    configStr += "#DEFINE STORE_UNSHIFTED_SPRITES\n"
 
 if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"

@@ -40,6 +40,43 @@ class ConvertZXPToGuSprites:
         
         sprites.extend(ZXPToSpritesConversor.convert(str(Path(bulletFile)), bulletCount, 8, 8))  # Use extend instead of append
 
+        ConvertZXPToGuSprites.writeSimple(sprites)
+
         preshiftedSprites = ConvertZXPToGuSprites.preshiftSprites(sprites)
 
         PreshiftedSpritesWriter.write(preshiftedSprites, output_file)
+    
+    @staticmethod
+    def writeSimple(sprites):
+        if not sprites or not isinstance(sprites, list):
+            raise TypeError("sprites must be a non-empty list.")
+
+        with open('boriel/lib/sprites.bas', "w") as f:
+            f.write("'REM --SPRITE SECTION--\n\n")
+            f.write("asm\n\n")
+            f.write("SPRITE_BUFFER:\n")
+            
+            charsetOffsets = [0]
+            for spriteIdx, sprite in enumerate(sprites):
+                charset = CharSet.createFromSprite(sprite.data, sprite.width // 8, sprite.height // 8)
+                
+                f.write("\tDEFB ")
+                for idx, spriteData in enumerate(charset.Data):
+                    if idx > 0:
+                        f.write(',')
+                    f.write(str(spriteData).replace("[", "").replace("]", ""))
+                
+                charsetOffsets.append(charsetOffsets[spriteIdx] + (len(charset.Data)*8))
+                f.write('\n')
+            
+            f.write("SPRITE_INDEX:\n")
+            
+            for idx, sprite in enumerate(sprites):
+                f.write("\tDEFW (SPRITE_BUFFER + " + str(charsetOffsets[idx]) + ")\n")
+            
+            f.write("SPRITE_COUNT:\n")
+            f.write("\tDEFB " + str(len(sprites)) + "\n")
+
+            f.write("end asm\n")
+            
+            f.write("\n")

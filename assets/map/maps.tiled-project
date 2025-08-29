@@ -322,6 +322,11 @@
                 "value": "side"
             },
             {
+                "name": "graphicsModeUnshifted",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "goalItems",
                 "type": "int",
                 "value": 2

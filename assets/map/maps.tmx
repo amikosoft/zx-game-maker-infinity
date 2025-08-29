@@ -6,8 +6,8 @@
  <properties>
   <property name="128Kenabled" type="bool" value="true"/>
   <property name="adventureTexts" type="bool" value="true"/>
-  <property name="adventureTextsAcceptWithFire" type="bool" value="false"/>
-  <property name="adventureTextsClearScreen" type="bool" value="false"/>
+  <property name="adventureTextsAcceptWithFire" type="bool" value="true"/>
+  <property name="adventureTextsClearScreen" type="bool" value="true"/>
   <property name="adventureTextsHideTiles" type="bool" value="true"/>
   <property name="adventureTextsLength" value="60"/>
   <property name="ammo" type="int" value="100"/>
@@ -15,7 +15,7 @@
   <property name="animatePeriodTile" type="int" value="10"/>
   <property name="backgroundAttribute" type="int" value="71"/>
   <property name="borderDamageColor" value="3"/>
-  <property name="bulletAnimation" type="bool" value="false"/>
+  <property name="bulletAnimation" type="bool" value="true"/>
   <property name="bulletDisableCollisions" type="bool" value="false"/>
   <property name="bulletDistance" type="int" value="15"/>
   <property name="bulletType" value="boomerang"/>
@@ -31,31 +31,32 @@
   <property name="enemiesRespawnInScreen" type="bool" value="true"/>
   <property name="enemiesShoot" type="int" value="1"/>
   <property name="enemiesShootDirection" propertytype="enemiesShootDirection" value="all"/>
-  <property name="enemiesShootOnlyLookingPlayer" type="bool" value="false"/>
+  <property name="enemiesShootOnlyLookingPlayer" type="bool" value="true"/>
   <property name="enemiesShootSpeed" value="slow"/>
   <property name="enemiesShootingLookAtPlayer" type="bool" value="false"/>
   <property name="enemiesSlowDown" type="bool" value="false"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="goalItems" type="int" value="0"/>
-  <property name="hiScore" type="bool" value="false"/>
+  <property name="graphicsModeUnshifted" type="bool" value="true"/>
+  <property name="hiScore" type="bool" value="true"/>
   <property name="idleTime" type="int" value="0"/>
   <property name="initialLife" type="int" value="1"/>
-  <property name="itemsCountdown" type="bool" value="false"/>
-  <property name="itemsEnabled" type="bool" value="false"/>
+  <property name="itemsCountdown" type="bool" value="true"/>
+  <property name="itemsEnabled" type="bool" value="true"/>
   <property name="jumpOnEnemies" type="bool" value="true"/>
-  <property name="jumpType" propertytype="jumpType" value="constant"/>
+  <property name="jumpType" propertytype="jumpType" value="accelerated"/>
   <property name="keysEnabled" type="bool" value="true"/>
   <property name="killJumpingOnTop" type="bool" value="true"/>
   <property name="laddersEnabled" type="bool" value="true"/>
   <property name="levelsMode" type="bool" value="false"/>
   <property name="lifeAmount" type="int" value="5"/>
   <property name="livesEnergy" type="int" value="3"/>
-  <property name="livesMode" propertytype="livesMode" value="instant respawn"/>
+  <property name="livesMode" propertytype="livesMode" value="show graveyard"/>
   <property name="mainCharacterExtraFrame" type="bool" value="false"/>
   <property name="maxAnimatedTilesPerScreen" type="int" value="10"/>
   <property name="maxEnemiesPerScreen" type="int" value="3"/>
-  <property name="messagesEnabled" type="bool" value="false"/>
+  <property name="messagesEnabled" type="bool" value="true"/>
   <property name="musicEnabled" type="bool" value="true"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
   <property name="password" value=""/>
@@ -65,7 +66,7 @@
   <property name="shouldKillEnemies" type="bool" value="true"/>
   <property name="shouldPickUpItems" type="bool" value="true"/>
   <property name="useBreakableTile" type="bool" value="true"/>
-  <property name="waitPressKeyAfterLoad" type="bool" value="false"/>
+  <property name="waitPressKeyAfterLoad" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="192" columns="32">
   <image source="tiles.png" width="256" height="48"/>
