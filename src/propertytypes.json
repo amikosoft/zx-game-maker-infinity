@@ -170,7 +170,12 @@
                 "name": "adventureTextsClearScreen",
                 "type": "bool",
                 "value": false
-            },  
+            },
+            {
+                "name": "adventureTextsBackgroundColor",
+                "type": "int",
+                "value": 0
+            },
             {
                 "name": "adventureTextsAcceptWithFire",
                 "type": "bool",
@@ -410,6 +415,11 @@
                 "name": "lifeAmount",
                 "type": "int",
                 "value": 5
+            },
+            {
+                "name": "livesDeadBackgroundColor",
+                "type": "int",
+                "value": 0
             },
             {
                 "name": "livesEnergy",

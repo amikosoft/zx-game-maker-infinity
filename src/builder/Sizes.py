@@ -180,13 +180,15 @@ class Sizes:
             self.ATTR_DATA_STRING(),
             self.SCREEN_OBJECTS_INITIAL_DATA_STRING(),
             self.DAMAGE_TILES_DATA_STRING(),
-            self.ANIMATED_TILES_IN_SCREEN_DATA_STRING()
+            self.ANIMATED_TILES_IN_SCREEN_DATA_STRING(),
+            self.SCREEN_MUSIC_DATA_STRING(),
+            self.BROKEN_TILES_DATA_STRING()
         ], "0")
 
         self.__printSizesArraySum([self.TITLE_SCREEN_STRING(), self.ENDING_SCREEN_STRING(), self.HUD_SCREEN_STRING(), self.GAMEOVER_SCREEN_STRING(), self.INTRO_SCREEN_STRING()], "3")
         
         if musicEnabled:
-            self.__printSizesArraySum([self.VTPLAYER_STRING(), self.MUSIC_TITLE_STRING(), self.MUSIC_STRING(), self.SCREEN_MUSIC_DATA_STRING(), self.MUSIC_2_STRING(), self.MUSIC_3_STRING(), self.MUSIC_ENDING_STRING(), self.MUSIC_GAMEOVER_STRING()], "4")
+            self.__printSizesArraySum([self.VTPLAYER_STRING(), self.MUSIC_TITLE_STRING(), self.MUSIC_STRING(), self.MUSIC_2_STRING(), self.MUSIC_3_STRING(), self.MUSIC_ENDING_STRING(), self.MUSIC_GAMEOVER_STRING()], "4")
         else:
             self.__printSizesArraySum([self.VTPLAYER_STRING(), self.MUSIC_TITLE_STRING(), self.MUSIC_STRING()], "4")
         
@@ -215,6 +217,7 @@ class Sizes:
             self.TITLE_SCREEN_STRING(),
             self.ENDING_SCREEN_STRING(),
             self.HUD_SCREEN_STRING(),
+            self.BROKEN_TILES_DATA_STRING()
         ], "0")
 
     def __printSizesArraySum(self, sizesArray, name):

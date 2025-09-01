@@ -290,13 +290,16 @@ Sub playGame()
                     printLife()
 
                     #ifndef ARCADE_MODE
-                    #ifdef CHECKPOINTS_ENABLED
-                        if currentScreen <> protaScreenRespawn Then
-                            currentScreen = protaScreenRespawn
-                            swapScreen()   
-                        end if     
+                        #ifdef CHECKPOINTS_ENABLED
+                            ' if currentScreen <> protaScreenRespawn Then
+                                currentScreen = protaScreenRespawn
+                                ' swapScreen()   
+                            ' end if
+                        ' #Else
+                        #endif
                     #endif
-                    #endif
+
+                    swapScreen()   
                 End if
             #endif
             End if

@@ -35,6 +35,24 @@ Sub mapDraw(force As Ubyte)
     #endif
 End Sub
 
+Sub mapColor(color As Ubyte)
+    Dim index As Uinteger
+    Dim y, x As Ubyte
+    
+    x = 0
+    y = 0
+    
+    For index=0 To SCREEN_LENGTH
+        SetTileColor(x, y, color)
+        
+        x = x + 1
+        If x = screenWidth Then
+            x = 0
+            y = y + 1
+        End If
+    Next index
+End Sub
+
 Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
     if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
     If tile < 1 Then Return

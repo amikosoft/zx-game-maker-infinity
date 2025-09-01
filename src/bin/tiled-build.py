@@ -165,6 +165,7 @@ jumpArray = "{-2, -2, -2, -2, -2, 0}"
 
 livesMode = 0
 livesEnergy = 0
+livesDeadBackgroundColor = 0
 
 enemiesShoot = 0
 enemiesShootDirection = 'all'
@@ -185,6 +186,7 @@ adventureTextsLength = 30
 adventureTextsClearScreen = False
 adventureTextsAcceptWithFire = False
 adventureTextsHideTiles = False
+adventureTextsBackgroundColor = 0
 
 unshiftedGraphics = False
 
@@ -311,6 +313,10 @@ if 'properties' in data:
                 livesMode = 1
             elif property['value'] == 'show graveyard':
                 livesMode = 2
+        elif property['name'] == 'livesEnergy':
+            livesEnergy = property['value']
+        elif property['name'] == 'livesDeadBackgroundColor':
+            livesDeadBackgroundColor = property['value']
         elif property['name'] == 'messagesEnabled':
             messagesEnabled = 1 if property['value'] else 0
         elif property['name'] == 'enemiesAlertDistance':
@@ -351,6 +357,8 @@ if 'properties' in data:
             adventureTexts = property['value']
         elif property['name'] == 'adventureTextsLength':
             adventureTextsLength = int(property['value'])
+        elif property['name'] == 'adventureTextsBackgroundColor':
+            adventureTextsBackgroundColor = int(property['value'])
         elif property['name'] == 'adventureTextsClearScreen':
             adventureTextsClearScreen = property['value']
         elif property['name'] == 'adventureTextsAcceptWithFire':
@@ -361,8 +369,6 @@ if 'properties' in data:
             laddersEnabled = property['value']
         elif property['name'] == 'checkpointsEnabled':
             checkpointsEnabled = property['value']
-        elif property['name'] == 'livesEnergy':
-            livesEnergy = property['value']
         elif property['name'] == 'graphicsModeUnshifted':
             unshiftedGraphics = property['value']
 
@@ -436,6 +442,10 @@ elif livesMode == 2:
     if int(livesEnergy) > 0:
         configStr += "#DEFINE ENERGY_ENABLED\n"
         configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
+    
+    if livesDeadBackgroundColor > 0:
+        configStr += "#DEFINE MAP_COLOR_DEAD_ENABLED\n"
+        configStr += "const MAP_COLOR_DEAD_COLOR as ubyte = " + str(livesDeadBackgroundColor) + "\n"
 else:
     configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
 
@@ -974,8 +984,12 @@ if adventureTexts and len(texts) > 0:
 
     configStr += "const TEXTS_SIZE as ubyte = " + str(adventureTextsLength) + "\n"
     
-    if adventureTextsClearScreen == True:
-        configStr += "#DEFINE FULLSCREEN_TEXTS\n"
+    if adventureTextsBackgroundColor > 0:
+        configStr += "#DEFINE MAP_COLOR_TEXT_ENABLED\n"
+        configStr += "const MAP_COLOR_TEXT_COLOR as ubyte = " + str(adventureTextsBackgroundColor) + "\n"
+    else:
+        if adventureTextsClearScreen == True:
+            configStr += "#DEFINE FULLSCREEN_TEXTS\n"
     
     if adventureTextsAcceptWithFire == True:
         configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"

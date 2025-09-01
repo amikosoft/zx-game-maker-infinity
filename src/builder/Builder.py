@@ -12,7 +12,7 @@ from builder.MusicSetup import MusicSetup
 class Builder:
     def execute(self):
         is128K = getEnabled128K()
-        useBreakableTile = getUseBreakableTile() and not getBulletDisableCollisions
+        useBreakableTile = getUseBreakableTile() and not getBulletDisableCollisions()
         enableAdventureTexts = getAdventureTexts()
         musicEnabled = getMusicEnabled()
 
@@ -23,7 +23,7 @@ class Builder:
         ConvertZXPToGuSprites.convert()
         BinaryFilesToTapMerger().execute(is128K, useBreakableTile, enableAdventureTexts, musicEnabled)
         sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile, enableAdventureTexts, musicEnabled).execute()
-        ChartGenerator().execute(sizes, is128K, enableAdventureTexts, musicEnabled)
+        ChartGenerator().execute(sizes, is128K, enableAdventureTexts, musicEnabled, useBreakableTile)
         ConfigWriter(OUTPUT_FOLDER + "config.bas", INITIAL_ADDRESS, sizes).execute()
 
         return sizes

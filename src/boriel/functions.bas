@@ -80,6 +80,10 @@ sub decrementLife()
         #ifdef LIVES_MODE_GRAVEYARD
             'saveSprite( protaY, protaX, 15, 0)
             protaTile = 15
+
+            #ifdef MAP_COLOR_DEAD_ENABLED
+                mapColor(MAP_COLOR_DEAD_COLOR)
+            #endif
         #endif
         
         #ifdef LIVES_MODE_RESPAWN

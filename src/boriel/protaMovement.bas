@@ -509,6 +509,11 @@ End Sub
             FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
             
             SetTile(tile, attrSet(tile), 16, 4)
+        #else
+            #ifdef MAP_COLOR_TEXT_ENABLED
+                mapColor(MAP_COLOR_TEXT_COLOR)
+                SetTile(tile, attrSet(tile), 16, 4)
+            #EndIf
         #EndIf
         
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
@@ -519,7 +524,9 @@ End Sub
                 Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textsCoord(texto, 3), (fila*15)+letra))
             Next letra
             #ifndef FULLSCREEN_TEXTS
-                SetTile(tile, attrSet(tile), 16, 5)
+                #ifndef MAP_COLOR_TEXT_ENABLED
+                    SetTile(tile, attrSet(tile), 16, 5)
+                #endif
             #endif
         Next fila
         
@@ -715,7 +722,16 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             Return 1
         #endif
     Elseif tile = LIFE_TILE Then
-        currentLife = currentLife + LIFE_AMOUNT
+        #ifdef ENERGY_ENABLED
+            if currentEnergy = INITIAL_ENERGY Then
+                currentLife = currentLife + LIFE_AMOUNT
+            else
+                currentEnergy = INITIAL_ENERGY
+            End if
+        #else
+            currentLife = currentLife + LIFE_AMOUNT
+        #endif
+        
         printLife()
         screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
         BeepFX_Play(6)
