@@ -120,6 +120,8 @@ sub printLife()
     PRINT AT 22, 5; currentLife
     
     #ifdef ENERGY_ENABLED
+        ' if currentEnergy > INITIAL_ENERGY Then currentEnergy = INITIAL_ENERGY
+        
         PRINT AT 23, 5; "   "
         PRINT AT 23, 5; currentEnergy
     #endif

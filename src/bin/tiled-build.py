@@ -777,6 +777,9 @@ with open(outputDir + "screenOffsets.bin", "wb") as f:
 enemiesPursuit = 0
 enemiesAlert = 0
 enemiesOneDirection = 0
+enemiesTrap = 0
+enemiesTrapVertical = 0
+enemiesTrapHorizontal = 0
 enemiesClockwise = 0
 enemiesAnticlockwise = 0
 
@@ -845,7 +848,20 @@ for layer in data['layers']:
                             elif property['value'] == 'clockwise':
                                 objects[str(object['id'])]['mode'] = '6'
                                 enemiesClockwise = 1
-
+                            elif property['value'] == 'trap all directions':
+                                objects[str(object['id'])]['mode'] = '10'
+                                enemiesTrap = 1
+                                enemiesTrapVertical = 1
+                                enemiesTrapHorizontal = 1
+                            elif property['value'] == 'trap vertical':
+                                objects[str(object['id'])]['mode'] = '11'
+                                enemiesTrap = 1
+                                enemiesTrapVertical = 1
+                            elif property['value'] == 'trap horizontal':
+                                objects[str(object['id'])]['mode'] = '12'
+                                enemiesTrap = 1
+                                enemiesTrapHorizontal = 1
+                            
 if enemiesPursuit == 1:
     configStr += "#DEFINE ENEMIES_PURSUIT_ENABLED\n"
     if enemiesPursuitCollide == True:
@@ -854,6 +870,16 @@ if enemiesPursuit == 1:
 if enemiesAlert == 1:
     configStr += "#DEFINE ENEMIES_ALERT_ENABLED\n"
     configStr += "#DEFINE ENEMIES_ALERT_DISTANCE " + str(enemiesAlertDistance) + "\n"
+
+
+if enemiesTrap == 1:
+    configStr += "#DEFINE ENEMIES_TRAP_ENABLED\n"
+
+    if enemiesTrapVertical == 1:
+        configStr += "#DEFINE ENEMIES_TRAP_VERTICAL_ENABLED\n"
+
+    if enemiesTrapHorizontal == 1:
+        configStr += "#DEFINE ENEMIES_TRAP_HORIZONTAL_ENABLED\n"
 
 if enemiesOneDirection == 1:
     configStr += "#DEFINE ENEMIES_ONE_DIRECTION_ENABLED\n"
@@ -1106,7 +1132,7 @@ for layer in data['layers']:
                                 verticalDirection = '1'
                             else:
                                 verticalDirection = '0'
-                        elif enemy['mode'] == '5' or enemy['mode'] == '6':
+                        elif enemy['mode'] == '5' or enemy['mode'] == '6' or enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
                             horizontalDirection = '0'
                             verticalDirection = '0'
                         else:

@@ -158,7 +158,8 @@ Sub moveEnemies()
             
             'Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
             Dim horizontalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
-
+            Dim verticalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION)
+            
             #ifdef ENEMIES_SLOW_DOWN
                 If not enemySpeed or (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
                     GO TO EnemiesFinal
@@ -171,9 +172,8 @@ Sub moveEnemies()
             
             Dim enemyColEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_END)
             Dim enemyLinEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_END)
-            Dim verticalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION)
             
-            if enemyMode < 2 Then
+            if enemyMode < ENEMY_MODE_PURSUIT Then
                 If horizontalDirection Then
                     If enemyColIni = enemyCol Or enemyColEnd = enemyCol Then
                         horizontalDirection = horizontalDirection * -1
@@ -203,14 +203,14 @@ Sub moveEnemies()
                 #endif
                 
                 #ifdef ENEMIES_ALERT_ENABLED
-                    If Not invincible And enemyMode = 1 Then
+                    If Not invincible And enemyMode = ENEMY_MODE_ALERT Then
                         If Abs(protaX - enemyCol) < ENEMIES_ALERT_DISTANCE And Abs(protaY - enemyLin) < (ENEMIES_ALERT_DISTANCE * 2) Then
-                            enemyMode = 2
+                            enemyMode = ENEMY_MODE_PURSUIT
                         End if
                     End if
                 #endif
                 #ifdef ENEMIES_PURSUIT_ENABLED
-                ElseIf enemyMode < 4 Then
+                ElseIf enemyMode = ENEMY_MODE_PURSUIT Then
                     if invincible Then
                         horizontalDirection = Sgn(enemyColIni - enemyCol)
                         verticalDirection = Sgn(enemyLinIni - enemyLin)
@@ -224,15 +224,8 @@ Sub moveEnemies()
                         #endif
                     End if
                 #endif
-                #ifdef ENEMIES_ONE_DIRECTION_ENABLED
-                ElseIf enemyMode = 4 Then
-                    If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
-                        enemyCol = enemyColIni
-                        enemyLin = enemyLinIni
-                    End If
-                #endif
                 #ifdef ENEMIES_ANTICLOCKWISE_ENABLED
-                ElseIf enemyMode = 5 Then
+                ElseIf enemyMode = ENEMY_MODE_ANTICLOCKWISE Then
                     If enemyColIni = enemyCol Then
                         If enemyLinIni = enemyLin Then
                             ' Esquina sup iz
@@ -256,7 +249,7 @@ Sub moveEnemies()
                     End if
                 #endif
                 #ifdef ENEMIES_CLOCKWISE_ENABLED
-                Elseif enemyMode = 6 Then
+                Elseif enemyMode = ENEMY_MODE_CLOCKWISE Then
                     If enemyColIni = enemyCol Then
                         If enemyLinIni = enemyLin Then
                             ' Esquina sup iz
@@ -278,6 +271,38 @@ Sub moveEnemies()
                             verticalDirection = 1
                         End If
                     End if
+                #endif
+                #ifdef ENEMIES_ONE_DIRECTION_ENABLED
+                ElseIf enemyMode = ENEMY_MODE_ONEDIRECTION Then
+                    If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
+                        enemyCol = enemyColIni
+                        enemyLin = enemyLinIni
+                    End If
+                #endif
+                #ifdef ENEMIES_TRAP_ENABLED
+                ElseIf enemyMode >= ENEMY_MODE_TRAP_ALL Then
+                    If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
+                        enemyCol = enemyColIni
+                        enemyLin = enemyLinIni
+                        verticalDirection = 0
+                        horizontalDirection = 0
+                    ElseIf enemyColIni = enemyCol And enemyLinIni = enemyLin Then
+                        #ifdef ENEMIES_TRAP_VERTICAL_ENABLED
+                            if enemyCol = protaX Then
+                                if enemyMode <> ENEMY_MODE_TRAP_HORIZONAL Then
+                                    verticalDirection = Sgn(protaY - enemyLin)
+                                end if
+                            end if
+                        #endif
+                        
+                        #ifdef ENEMIES_TRAP_HORIZONTAL_ENABLED
+                            if enemyLin = protaY Then
+                                if enemyMode <> ENEMY_MODE_TRAP_VERTICAL Then
+                                    horizontalDirection = Sgn(protaX - enemyCol)
+                                end if
+                            end if
+                        #endif
+                    End If
                 #endif
             End if
             
@@ -339,7 +364,13 @@ Sub moveEnemies()
             
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
-            
+
+            #ifdef ENEMIES_TRAP_ENABLED
+            If enemyMode >= ENEMY_MODE_TRAP_ALL Then
+                if not horizontalDirection and not verticalDirection Then Continue For
+            End if
+            #endif
+
             if tile > 16 and horizontalDirection = -1 Then tile = tile + 16
             
             If enemiesFrame > 4 Then tile = tile + 1

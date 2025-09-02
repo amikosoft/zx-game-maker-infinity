@@ -69,7 +69,10 @@
             "alert",
             "one direction",
             "anticlockwise",
-            "clockwise"
+            "clockwise",
+            "trap all directions",
+            "trap vertical",
+            "trap horizontal"
         ],
         "valuesAsFlags": false
     },
