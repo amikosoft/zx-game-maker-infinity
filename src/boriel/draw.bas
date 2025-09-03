@@ -20,12 +20,16 @@ Sub mapDraw(force As Ubyte)
             #ifdef ADVENTURE_TEXTS_HIDE_TILES
                 for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
                     if textsCoord(texto, 0) <> currentScreen Then exit for
-                    dim cordX as ubyte = textsCoord(texto, 1) >> 1
-                    dim cordY as ubyte = textsCoord(texto, 2) >> 1
+                    dim textTile as ubyte = textsCoord(texto, 4)
+                    dim textState as ubyte = textsCoord(texto, 5)
                     
-                    if GetTile(cordX, cordY) Then
-                        dim textState as ubyte = textsCoord(texto, 5)
-                        if textState and textState <> currentAdventureState Then
+                    if textTile and textState Then
+                        dim cordX as ubyte = textsCoord(texto, 1) >> 1
+                        dim cordY as ubyte = textsCoord(texto, 2) >> 1
+                        
+                        if textState >= currentAdventureState Then
+                            SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
+                        Else
                             SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
                         End if
                     End if
@@ -57,75 +61,106 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
     if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
     If tile < 1 Then Return
     
-    #ifdef SHOULD_KILL_ENEMIES_ENABLED
+    If tile < MAX_GENERIC_TILE Then
         If tile = ENEMY_DOOR_TILE Then
-            If screensWon(currentScreen) Then
+            #ifdef SHOULD_KILL_ENEMIES_ENABLED
+                If screensWon(currentScreen) Then
+                    SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                Else
+                    SetTile(tile, attrSet(tile), x, y)
+                End If
+            #Else
                 SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-            Else
-                SetTile(tile, attrSet(tile), x, y)
-            End If
-            Return
-        End If
-    #Else
-        If tile = ENEMY_DOOR_TILE Then
-            SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-            Return
-        End If
-    #endif
-    
-    #ifdef USE_BREAKABLE_TILE
-        If tile = 62 Then
-            If brokenTiles(currentScreen) Then
-                SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-            Else
+            #endif
+            #ifdef KEYS_ENABLED
+            Elseif tile = DOOR_TILE
+                If screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) Then
+                    SetTile(tile, attrSet(tile), x, y)
+                End If
+            #endif
+            #ifdef USE_BREAKABLE_TILE
+            ElseIf tile = BREAKABLE_TILE Then
+                If brokenTiles(currentScreen) Then
+                    SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                Else
+                    SetTileChecked(tile, attrSet(tile), x, y)
+                End If
+            #endif
+        Else
+            SetTile(tile, attrSet(tile), x, y)
+        End if
+    Else
+        If tile = ITEM_TILE Then
+            If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
                 SetTileChecked(tile, attrSet(tile), x, y)
             End If
-            Return
+        Elseif tile = KEY_TILE
+            #ifdef ARCADE_MODE
+                currentScreenKeyX = x
+                currentScreenKeyY = y
+            #Else
+                If screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
+                    SetTileChecked(tile, attrSet(tile), x, y)
+                End If
+            #endif
+        Elseif tile = LIFE_TILE
+            If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
+                SetTileChecked(tile, attrSet(tile), x, y)
+            End If
+        Elseif tile = AMMO_TILE
+            If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
+                SetTileChecked(tile, attrSet(tile), x, y)
+            End If
         End If
-    #endif
-    
-    If tile < MAX_GENERIC_TILE Then
-        SetTile(tile, attrSet(tile), x, y)
-        Return
     End If
+    
+    ' #ifdef USE_BREAKABLE_TILE
+    '     If tile = BREAKABLE_TILE Then
+    '         If brokenTiles(currentScreen) Then
+    '             SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+    '         Else
+    '             SetTileChecked(tile, attrSet(tile), x, y)
+    '         End If
+    '         Return
+    '     End If
+    ' #endif
+    
+    ' If tile < MAX_GENERIC_TILE Then
+    '     SetTile(tile, attrSet(tile), x, y)
+    '     Return
+    ' End If
     
     ' if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
     
-    If tile = ITEM_TILE Then
-        If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-            SetTileChecked(tile, attrSet(tile), x, y)
-        End If
-    Elseif tile = KEY_TILE
-        #ifdef ARCADE_MODE
-            currentScreenKeyX = x
-            currentScreenKeyY = y
-        #Else
-            If screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
-                SetTileChecked(tile, attrSet(tile), x, y)
-            End If
-        #endif
-        #ifdef KEYS_ENABLED
-        Elseif tile = DOOR_TILE
-            If screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) Then
-                SetTile(tile, attrSet(tile), x, y)
-            End If
-        #endif
-    Elseif tile = LIFE_TILE
-        If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
-            SetTileChecked(tile, attrSet(tile), x, y)
-        End If
-    Elseif tile = AMMO_TILE
-        If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
-            SetTileChecked(tile, attrSet(tile), x, y)
-        End If
-    End If
+    ' If tile = ITEM_TILE Then
+    '     If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
+    '         SetTileChecked(tile, attrSet(tile), x, y)
+    '     End If
+    ' Elseif tile = KEY_TILE
+    '     #ifdef ARCADE_MODE
+    '         currentScreenKeyX = x
+    '         currentScreenKeyY = y
+    '     #Else
+    '         If screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
+    '             SetTileChecked(tile, attrSet(tile), x, y)
+    '         End If
+    '     #endif
+    ' Elseif tile = LIFE_TILE
+    '     If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
+    '         SetTileChecked(tile, attrSet(tile), x, y)
+    '     End If
+    ' Elseif tile = AMMO_TILE
+    '     If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
+    '         SetTileChecked(tile, attrSet(tile), x, y)
+    '     End If
+    ' End If
 End Sub
 
-#ifdef ARCADE_MODE
-    Sub drawKey()
-        SetTile(KEY_TILE, attrSet(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
-    End Sub
-#endif
+' #ifdef ARCADE_MODE
+'     Sub drawKey()
+'         SetTile(KEY_TILE, attrSet(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
+'     End Sub
+' #endif
 
 Sub redrawScreen()
     ' memset(22527,0,768)
@@ -249,7 +284,7 @@ Sub moveToScreen(direction As Ubyte)
                 currentScreen = (currentLevel * MAP_SCREENS_WIDTH_COUNT )
                 protaX = INITIAL_MAIN_CHARACTER_X
                 protaY = INITIAL_MAIN_CHARACTER_Y
-
+                
                 #ifdef CHECKPOINTS_ENABLED
                     protaScreenRespawn = currentScreen
                     protaXRespawn = INITIAL_MAIN_CHARACTER_X
@@ -287,9 +322,9 @@ Sub moveToScreen(direction As Ubyte)
             protaYRespawn = protaY
         #endif
     #endif
-
+    
     swapScreen()
-
+    
     moveScreen = 0
 End Sub
 
@@ -297,9 +332,9 @@ Sub drawSprites()
     If (protaY < 41) Then
         #ifdef LIVES_MODE_GRAVEYARD
             #ifdef ENERGY_ENABLED
-            If not currentEnergy or Not invincible Or invincible bAnd 2 Then
-                Draw2x2Sprite(protaTile, protaX, protaY)
-            End If
+                If not currentEnergy or Not invincible Or invincible bAnd 2 Then
+                    Draw2x2Sprite(protaTile, protaX, protaY)
+                End If
             #else
                 Draw2x2Sprite(protaTile, protaX, protaY)
             #endif

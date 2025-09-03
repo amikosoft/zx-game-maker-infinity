@@ -216,10 +216,10 @@ End Function
 
 #ifdef USE_BREAKABLE_TILE
     sub checkAndRemoveBreakableTile(tile as ubyte)
-        if tile = 62 then
+        if tile = BREAKABLE_TILE then
             brokenTiles(currentScreen) = 1
             BeepFX_Play(0)
-            removeTilesFromScreen(62)
+            removeTilesFromScreen(BREAKABLE_TILE)
         end if
     end sub
 #EndIf
@@ -299,7 +299,7 @@ sub damageEnemy(enemyToKill as Ubyte)
                     ' if not screensWon(currentScreen) then
                         if allEnemiesKilled() then
                             screensWon(currentScreen) = 1
-                            removeTilesFromScreen(63)
+                            removeTilesFromScreen(ENEMY_DOOR_TILE)
                         end if
                     ' end if
                 #endif
@@ -311,7 +311,7 @@ sub damageEnemy(enemyToKill as Ubyte)
                     ' if not screensWon(currentScreen) then
                         if allEnemiesKilled() then
                             screensWon(currentScreen) = 1
-                            removeTilesFromScreen(63)
+                            removeTilesFromScreen(ENEMY_DOOR_TILE)
                         end if
                     ' end if
                 #endif
@@ -322,7 +322,7 @@ sub damageEnemy(enemyToKill as Ubyte)
                     ' if not screensWon(currentScreen) then
                         if allEnemiesKilled() then
                             screensWon(currentScreen) = 1
-                            removeTilesFromScreen(63)
+                            removeTilesFromScreen(ENEMY_DOOR_TILE)
                         end if
                     ' end if
                 #endif

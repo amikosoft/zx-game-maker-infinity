@@ -203,14 +203,13 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     
     ' if tile < 1 then return 0
     
-    if tile < 1 or tile > 64 then 
-        #ifdef MESSAGES_ENABLED
-            If tile = ENEMY_DOOR_TILE Then
-                printMessage("Kill All!", 2, 0)
-            End If
-        #endif
-        return 0
-    End if
+    if tile < 1 or tile > ENEMY_DOOR_TILE then return 0
+    
+    #ifdef MESSAGES_ENABLED
+        If tile = ENEMY_DOOR_TILE Then
+            printMessage("Kill All!", 2, 0)
+        End If
+    #endif
     
     return tile
 end function
@@ -244,8 +243,8 @@ end function
         Dim lin as uByte = y >> 1
         
         dim tile as ubyte = GetTile(col, lin)
-        
-        if tile > 63 and tile < 80 then return 1
+
+        if tile > ENEMY_DOOR_TILE and tile < TRANSPASABLE_ITEMS then return 1
         
         return 0
     end function

@@ -565,21 +565,15 @@ End Sub
                                     dim textState as ubyte = textsCoord(texto, 5)
                                     
                                     if not textState or textState = adventureStateTmp Then
-                                        dim adventureAction as ubyte = textsCoord(texto, 4)
-                                        
-                                        if adventureAction then
-                                            if adventureAction = 1 Then
-                                                if textState = adventureStateTmp Then
-                                                    currentAdventureState = currentAdventureState + 1
-                                                    
-                                                    If currentAdventureState > MAX_ADVENTURE_STATE Then
-                                                        muestraDialogo(textsCoord(texto, 3), tileText)
-                                                        ending()
-                                                    end if
-                                                End if
-                                            elseif validateTile <> adventureAction Then
-                                                textFound = 0
-                                            end if
+                                        if textState and textState = adventureStateTmp Then
+                                            currentAdventureState = currentAdventureState + 1
+                                            
+                                            ' If currentAdventureState > MAX_ADVENTURE_STATE Then
+                                            '     muestraDialogo(textsCoord(texto, 3), tileText)
+                                            '     ending()
+                                            ' end if
+                                        elseif validateTile and validateTile <> tileText Then
+                                            textFound = 0
                                         end if
                                         
                                         if textFound Then muestraDialogo(textsCoord(texto, 3), tileText)
@@ -595,6 +589,17 @@ End Sub
                 End If
             End if
         Next texto
+        
+        #ifdef IS_TEXT_ADVENTURE
+            #ifndef ARCADE_MODE
+                #ifndef LEVELS_MODE
+                    If currentAdventureState > MAX_ADVENTURE_STATE Then
+                        ' muestraDialogo(textsCoord(texto, 3), tileText)
+                        ending()
+                    end if
+                #EndIf
+            #EndIf
+        #EndIf
         
         return textFound
     End Function
@@ -663,7 +668,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         ' #endif
         #ifdef SHOULD_PICKUP_ITEMS
             screensWon(currentScreen) = 1
-            removeTilesFromScreen(63)
+            removeTilesFromScreen(ENEMY_DOOR_TILE)
         #endif
         currentItems = currentItems + ITEMS_INCREMENT
         #ifdef HISCORE_ENABLED
@@ -678,7 +683,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         #endif
         #ifdef ARCADE_MODE
             If currentItems = itemsToFind Then
-                drawKey()
+                SetTile(KEY_TILE, attrSet(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
             End If
         #Else
             #ifndef LEVELS_MODE
@@ -733,6 +738,11 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         #endif
         
         printLife()
+        
+        #ifdef MESSAGES_ENABLED
+            printMessage("LIFE!!!  ", 2, 0)
+        #endif
+
         screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
         BeepFX_Play(6)
         Return 1
@@ -740,6 +750,11 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         Elseif tile = AMMO_TILE Then
             currentAmmo = currentAmmo + AMMO_INCREMENT
             printLife()
+        
+            #ifdef MESSAGES_ENABLED
+                printMessage("AMMO!!!  ", 2, 0)
+            #endif
+
             screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
             BeepFX_Play(6)
             Return 1

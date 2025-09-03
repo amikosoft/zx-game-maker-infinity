@@ -51,7 +51,7 @@ for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
             if tile['type'] == 'flag':
-                flagTile = str(tile['id'])
+                flagTile = tile['id']
             # if tile['type'] == 'gore':
             #     dropTile = str(tile['id'])
             if tile['type'] == 'ammo':
@@ -189,6 +189,7 @@ adventureTextsHideTiles = False
 adventureTextsBackgroundColor = 0
 
 unshiftedGraphics = False
+transpasableItems = 16
 
 if 'properties' in data:
     for property in data['properties']:
@@ -371,6 +372,8 @@ if 'properties' in data:
             checkpointsEnabled = property['value']
         elif property['name'] == 'graphicsModeUnshifted':
             unshiftedGraphics = property['value']
+        elif property['name'] == 'transpasableItems':
+            transpasableItems = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -384,6 +387,8 @@ configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
 configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 configStr += "const MAX_LINE as ubyte = " + str(screenHeight * 2 - 4) + "\n"
+
+configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(64+transpasableItems) + "\n"
 
 # si hay gravityLow el salto se pasa los -2 a -1
 if gravityLow == True:
@@ -420,6 +425,8 @@ elif jumpType == 'mini':
 
 if unshiftedGraphics:
     configStr += "#DEFINE STORE_UNSHIFTED_SPRITES\n"
+
+configStr += "const MAX_GENERIC_TILE as ubyte = " + str(flagTile + 1) + "\n"
 
 if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
@@ -958,7 +965,7 @@ for layer in data['layers']:
 
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
-                elif object['type'] == 'music1':
+                elif object['type'] == 'music1' or object['type'] == 'music':
                     musics[screenId] = [1]
                     musicsSelected[0] = True
                 elif object['type'] == 'music2':
@@ -1022,8 +1029,7 @@ if adventureTexts and len(texts) > 0:
 
     if adventureTextsHideTiles == True:
         configStr += "#DEFINE ADVENTURE_TEXTS_HIDE_TILES\n"
-        
-
+    
     if isAdventure:
         if maxAdventureState < 2:
             exitWithErrorMessage('Max adventure state must be higher than 1. Current: ' + str(maxAdventureState))
@@ -1034,7 +1040,8 @@ if adventureTexts and len(texts) > 0:
     allTexts = []
 
     with open("output/textsCoord.bin", "wb") as f:
-        sortedTexts = sorted(texts, key=lambda texto: texto[0])
+        sortedTexts = sorted(texts, key=lambda texto: texto[5])
+        sortedTexts = sorted(sortedTexts, key=lambda texto: texto[0])
         for i in range(len(sortedTexts)):
             print("=========================")
             itemText = sortedTexts[i]

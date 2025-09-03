@@ -281,12 +281,7 @@ Sub moveEnemies()
                 #endif
                 #ifdef ENEMIES_TRAP_ENABLED
                 ElseIf enemyMode >= ENEMY_MODE_TRAP_ALL Then
-                    If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
-                        enemyCol = enemyColIni
-                        enemyLin = enemyLinIni
-                        verticalDirection = 0
-                        horizontalDirection = 0
-                    ElseIf enemyColIni = enemyCol And enemyLinIni = enemyLin Then
+                    If enemyColIni = enemyCol And enemyLinIni = enemyLin Then
                         #ifdef ENEMIES_TRAP_VERTICAL_ENABLED
                             if enemyCol = protaX Then
                                 if enemyMode <> ENEMY_MODE_TRAP_HORIZONAL Then
@@ -302,6 +297,16 @@ Sub moveEnemies()
                                 end if
                             end if
                         #endif
+                    Elseif enemyLin = MAX_LINE or enemyLin = 0 or enemyCol = 60 or enemyCol = 0 Then
+                        enemyCol = enemyColIni
+                        enemyLin = enemyLinIni
+                        verticalDirection = 0
+                        horizontalDirection = 0               
+                    ' If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
+                    '     enemyCol = enemyColIni
+                    '     enemyLin = enemyLinIni
+                    '     verticalDirection = 0
+                    '     horizontalDirection = 0
                     End If
                 #endif
             End if
@@ -394,7 +399,7 @@ Sub moveEnemies()
                     checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                     
                     #ifdef BULLET_ENEMIES
-                        if enemyBulletPositionX = 0 and (tile mod 16) < BULLET_ENEMIES_RANGE then
+                        if enemyBulletPositionX = 0 and (tile mod 17) < BULLET_ENEMIES_RANGE then
                             #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
                                 if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK

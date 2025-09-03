@@ -37,7 +37,7 @@ def generateTilesPng(inFile, outFolder, extra=False):
     # Separar las líneas de bits y las líneas de colores
     bit_lines = lines[2:50]
     if extra:
-        bit_lines = lines[2:58]
+        bit_lines = lines[2:66]
 
     # coger el atributo que representa en hexadecimal flash, bright, paper y ink de cada caracter (8x8) de la imagen
     hexAttrs = []
@@ -45,7 +45,8 @@ def generateTilesPng(inFile, outFolder, extra=False):
     # guardar en color_lineas de la linea 52 a la 57
     color_lines = lines[51:58]
     if extra:
-        color_lines = lines[59:67]
+        # guardar en color_lineas de la linea 70 a la 75
+        color_lines = lines[67:76]
 
     # convertir cada valor de cada una de esas lineas que estan separados por un espacio de hexadecimal a decimal y guardarlo todo en el array attrs
     for line in color_lines:
@@ -80,7 +81,10 @@ def generateTilesPng(inFile, outFolder, extra=False):
             img.putpixel((x, y), colorBinary)
 
     # Guardar la imagen como PNG
-    img.save(str(Path(outFolder + "/tiles.png")))
+    if extra:
+        img.save(str(Path(outFolder + "/tiles_extra.png")))
+    else:
+        img.save(str(Path(outFolder + "/tiles.png")))
 
 def binaryToZxSpectrumColor(colorInt, bright):
     zxSpectrumColorsToRgb = {

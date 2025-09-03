@@ -38,7 +38,7 @@ const MAX_SCREEN_LEFT as ubyte = 2
 const MAX_SCREEN_BOTTOM as ubyte = 40
 const MAX_SCREEN_TOP as ubyte = 2
 
-const MAX_GENERIC_TILE as ubyte = 187
+' const MAX_GENERIC_TILE as ubyte = 188
 
 const BULLET_DIRECTION_LEFT = 0
 const BULLET_DIRECTION_RIGHT = 1
@@ -143,11 +143,12 @@ Dim inMenu As Ubyte = 1
     #define MUSIC_BANK 3
 #endif
 
-#ifdef SIDE_VIEW
-    Dim tileSet(192, 7) As Ubyte at TILESET_DATA_ADDRESS
-#Else
-    Dim tileSet(194, 7) As Ubyte at TILESET_DATA_ADDRESS
-#endif
+' #ifdef SIDE_VIEW
+'     Dim tileSet(192, 7) As Ubyte at TILESET_DATA_ADDRESS
+' #Else
+'     Dim tileSet(194, 7) As Ubyte at TILESET_DATA_ADDRESS
+' #endif
+Dim tileSet(191, 7) As Ubyte at TILESET_DATA_ADDRESS
 Dim attrSet(191) As Ubyte at ATTR_DATA_ADDRESS
 ' Dim sprites(47, 31) As Ubyte at SPRITES_DATA_ADDRESS
 Dim screenObjectsInitial(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
@@ -217,4 +218,5 @@ Const ENEMY_MODE_TRAP_HORIZONAL = 12
     Dim currentLevel As Ubyte = 0
 #endif
 
+Const BREAKABLE_TILE As Ubyte = 62
 Const ENEMY_DOOR_TILE As Ubyte = 63
