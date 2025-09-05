@@ -477,6 +477,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#configuracion-del-modo-de-tratamiento-de-graficos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración del módo de tratamiento de gráficos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#opciones-genericas" class="md-nav__link">
     <span class="md-ellipsis">
       Opciones genéricas
@@ -689,6 +698,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#configuracion-del-modo-de-tratamiento-de-graficos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración del módo de tratamiento de gráficos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#opciones-genericas" class="md-nav__link">
     <span class="md-ellipsis">
       Opciones genéricas
@@ -768,7 +786,18 @@
 <h2 id="configuracion-original-a-tener-en-cuenta">Configuración original a tener en cuenta</h2>
 <p>Ten en cuenta la configuración original antes de continuar <a href="https://gm.retrojuegos.org/mydoc_tiled_general_configuration.html">aquí</a>.</p>
 <h2 id="configuracion-general-en-atributos-del-mapa-tiled">Configuración general en atributos del mapa (tiled)</h2>
+<h3 id="configuracion-del-modo-de-tratamiento-de-graficos">Configuración del módo de tratamiento de gráficos</h3>
+<p>Con el parámetro <strong>graphicsModeUnshifted</strong> indicas al motor cómo debe tratar los gráficos al compilar y ejecutar tu juego.</p>
+<ul>
+<li><em>Desactivado</em> (preshifted sprites) el rendimiento del renderizado de objetos en pantalla mejorará a costa de perder espacio para funcionalidades.</li>
+<li><em>Activado</em> ganarás mucho más espacio para activar funcionalidades pero bajando el rendimiento en el renderizado.</li>
+</ul>
+<p>Es el developer el que debe valorar activar/desactivar esta opción en función de sus necesidades</p>
 <h3 id="opciones-genericas">Opciones genéricas</h3>
+<ul>
+<li><strong>transpasableItems</strong> esto indica al motor cuántos tiles traspasables quieres tener disponible en la zona dedicada.</li>
+</ul>
+<p>Hay que tener en cuenta que ahora los 2 primeros tiles (de momento) se usarán para las escaleras diagonales.</p>
 <ul>
 <li>
 <p><strong>borderDamageColor</strong> valor numérico que si es distinto al atributo <em>border</em> hará que el borde se ponga de este color al recibir daño</p>
@@ -795,6 +824,9 @@
 <ul>
 <li>
 <p><strong>livesEnergy</strong> añade energía a tu personaje para que la muerte no sea tan traumática</p>
+</li>
+<li>
+<p><strong>livesDeadBackgroundColor</strong> cambia el color del escenario cuando mueres (sólo en modo vidas con tumba "show graveyard")</p>
 </li>
 <li>
 <p><strong>gravityLow</strong> configura el entorno con una gravedad más baja haciendo que el personaje flote</p>

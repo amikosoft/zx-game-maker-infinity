@@ -689,20 +689,23 @@
 <p>Las longitudes son 30, 45 y 60. Hay que tener en cuenta que en el juego se mostrarán lineas de 15 caracteres por lo que mínimo serían 2 y máximo 4.</p>
 <ul>
 <li>
-<p><strong>adventureTextsClearScreen</strong> con esto indicas al compilador que te muestre los textos sin limpiar la pantalla.</p>
+<p><strong>adventureTextsClearScreen</strong> con esto indicas al compilador que te muestre los textos sin limpiar la pantalla</p>
 </li>
 <li>
 <p><strong>adventureTextsAcceptWithFire</strong> habilita que los mensajes se acepten pulsando <em>disparo</em></p>
 </li>
 <li>
-<p><strong>adventureTextsHideTiles</strong> esto indica al motor que oculte aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos</p>
+<p><strong>adventureTextsHideTiles</strong> esto indica al motor que oculte/muestre aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos. Activando esta opción, aquellos tiles configurados para el modo aventura se deben quitar del mapa y el motor se encargará de pintarlos, evitando el efecto <em>popping</em>.</p>
+</li>
+<li>
+<p><strong>adventureTextsBackgroundColor</strong> hace que al mostrar los mensajes al usuario se cambie el color de la pantalla al indicado aquí. Hay que tener en cuenta que habilitando este <em>adventureTextsClearScreen</em> no tiene efecto.</p>
 </li>
 </ul>
 <p>Siempre que esté así configurado, adjunto al texto se mostrará siempre el item/tile asociado.</p>
 <p>A tener en cuenta:</p>
 <ul>
 <li>El total de textos que se pueden introducir son 250 (de momento, pero por dejar espacio y memoria disponible son los que hay ahora)</li>
-<li>Cada vez que se muestra un texto hay que pulsar intro para continuar.</li>
+<li>Cada vez que se muestra un texto hay que pulsar intro o disparo para continuar.</li>
 <li>Para activar los textos hay 2 maneras: <ul>
 <li>asociándolo a un item especial del juego (llave, item, bala o vidas). Sólo se mostrará una vez, al coger el objeto.</li>
 <li>posándose en algún sitio donde haya un texto y pulsar disparo (hay que tener en cuenta esto para no poner enemigos cerca)</li>
@@ -721,16 +724,23 @@
 <p><strong>es</strong> o <strong>en</strong> aquí tendrás que introducir el texto a mostrar teniendo en cuenta tu configuración y que las lineas son de 15 caracteres (para que no se corten las palabras). Actualmente no está activo el multiidioma pero está preparado para cuando lo esté. Con una de estas de momento te tiene que valer.</p>
 </li>
 <li>
-<p><strong>adventureState</strong> sirve para conocer en qué punto de la aventura se debe mostrar este punto de texto permitiendo mostrar distintos textos en el mismo tile dependiendo del avance de tu aventura. Recordar que empieza por 1 y deben ser correlativos. Cogido el último habrás ganado. Activando esto puedes desactivar el objetivo de items, o subirlo para no alcanzarlo nunca, ya que puede ser confuso para el jugador.</p>
+<p><strong>adventureState</strong> sirve para conocer en qué punto de la aventura se debe mostrar este punto de texto permitiendo mostrar distintos textos en el mismo tile dependiendo del avance de tu aventura. Recordar que empieza por 1 y deben ser correlativos. Cogido el último habrás ganado. Activando esto puedes desactivar el objetivo de items, o subirlo (objetivo de items) para no alcanzarlo nunca, ya que puede ser confuso para el jugador.
+Otra alternativa es que esté oculto el úĺtimo item bajo el paraguas de tu aventura y sólo se muestre al seguir ciertas pistas.</p>
 </li>
 </ul>
 <p>Si no indicas ningún estado de aventura tus textos se usarán como información (y se liberará algo de espacio para tí en el juego)</p>
 <p>El modo aventura no es compatible con el modo arcade y de niveles, pero si los textos informativos.</p>
 <ul>
 <li><strong>itemAction</strong> valor numérico que indica al motor qué dependencia tiene este punto. Hay 3 modos de configurar:<ul>
-<li><strong>0</strong> indica que es un texto informativo y que puede ser consultado tantas veces como se desee.</li>
-<li><strong>1</strong> esta acción hace que tu aventura avance al siguiente estado. Es obligatorio indicar <em>adventureState</em> junto con este valor</li>
-<li><strong>id de item</strong> permite asociar un texto a un item especial para que, cuando el jugador lo coja le muestre un texto asociado al item y una vez cogido ya no se mostrará más (muy util como elemento introductorio). </li>
+<li><strong>0</strong> indica que es un texto informativo y que puede ser consultado tantas veces como se desee.<ul>
+<li>Usado junto con <em>adventureState</em> hace que el mensaje sólo se muestre en ese estado de la aventura pero sin avanzar (como pistas adicionales al estado actual)</li>
+</ul>
+</li>
+<li><strong>id de item</strong> permite asociar un texto a un item<ul>
+<li>Usado junto con <em>adventureState</em> permite al motor saber qué tile mostrar con el modo <em>adventureTextsHideTiles</em> además que será clave para avanzar al siguiente estado de la aventura</li>
+<li>Usado junto a un item especial mostrará un texto asociado automáticamente (muy útil para dar información contextual de para qué sirve o, si va asociado a un <em>adventureState</em>, para indicar que has conseguido el item correcto, obligando al player a cogerlos en un orden concreto)</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
