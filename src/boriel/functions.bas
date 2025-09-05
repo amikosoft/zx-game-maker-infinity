@@ -214,6 +214,15 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     return tile
 end function
 
+function isInStep(x as ubyte, y as ubyte) as ubyte
+    Dim col as uByte = x >> 1
+    Dim lin as uByte = y >> 1
+
+    if GetTile(col, lin) = 64 or GetTile(col, lin) = 65 then return 1
+    
+    return 0
+end function
+
 #ifdef ARCADE_MODE
     sub countItemsOnTheScreen()
         dim index, y, x as integer
@@ -244,7 +253,7 @@ end function
         
         dim tile as ubyte = GetTile(col, lin)
 
-        if tile > ENEMY_DOOR_TILE and tile < TRANSPASABLE_ITEMS then return 1
+        if tile > ENEMY_DOOR_TILE and tile < TRANSPASABLE_ITEMS then return tile
         
         return 0
     end function
@@ -259,8 +268,8 @@ function CheckCollision(x as uByte, y as uByte) as uByte
     Dim maxCol as uByte = 1
     Dim maxLin as uByte = 1
 
-    if (x bAnd 1) <> 0 Then maxCol = 2
-    if (y bAnd 1) <> 0 Then maxLin = 2
+    if (x bAnd 1) Then maxCol = 2
+    if (y bAnd 1) Then maxLin = 2
     
     for c=0 to maxCol
         for l=0 to maxLin

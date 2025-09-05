@@ -208,8 +208,8 @@ End Sub
         Dim maxCol as uByte = 1
         Dim maxLin as uByte = 1
         
-        if (x bAnd 1) <> 0 Then maxCol = 2
-        if (y bAnd 1) <> 0 Then maxLin = 2
+        if (x bAnd 1) Then maxCol = 2
+        if (y bAnd 1) Then maxLin = 2
         
         for c=0 to maxCol
             for l=0 to maxLin

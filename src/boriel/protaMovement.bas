@@ -34,16 +34,21 @@ End Function
 #ifdef SIDE_VIEW
     Function checkIsLadder(y as Ubyte, anim as Ubyte) as ubyte
         for i=0 to 2
-            if CheckStaticPlatform(protaX+i, y) Then
-                if anim Then
-                    If protaTile = 3 Then
-                        protaTile = 7
-                    Else
-                        protaTile = 3
-                    End If
-                end if
-                return 1
-            End if
+            #ifdef LADDERS_ANIMATION_ENABLED
+                dim tile as ubyte = CheckStaticPlatform(protaX+i, y)
+                if tile Then
+                    if anim and tile > 65 Then
+                        If protaTile = 3 Then
+                            protaTile = 7
+                        Else
+                            protaTile = 3
+                        End If
+                    end if
+                    return 1
+                End if
+            #else
+                if CheckStaticPlatform(protaX+i, y) Then return 1
+            #endif
         next i
         
         return 0
@@ -67,6 +72,8 @@ Function canMoveDown() As Ubyte
         If checkPlatformByXY(protaX, protaY + 4) Then Return 0
         
         if checkIsLadder(protaY + 4, 0) then return 0
+
+        ' if isInStep(protaX, protaY + 4, 1) then return 0
     #endif
     Return 1
 End Function
@@ -230,7 +237,7 @@ End Function
                     jumpEnergy = jumpStepsCount
                     printLife()
                 #endif
-                If protaY bAND 1 <> 0 Then
+                If protaY bAND 1 Then
                     ' saveSpriteLin(PROTA_SPRITE, protaY - 1)
                     protaY = protaY - 1
                 End If
@@ -417,8 +424,10 @@ Sub leftKey()
         #Else
             moveScreen = 4
         #endif
-    Elseif canMoveLeft()
-        saveSprite( protaY, protaX - 1, protaFrame + 1, 0)
+    Else
+        if isInStep(protaX-1, protaY + 3) then protaY = protaY - 1
+
+        if canMoveLeft() then saveSprite( protaY, protaX - 1, protaFrame + 1, 0)
     End If
 End Sub
 
@@ -434,8 +443,10 @@ Sub rightKey()
         #Else
             moveScreen = 6
         #endif
-    Elseif canMoveRight()
-        saveSprite( protaY, protaX + 1, protaFrame + 1, 1)
+    Else
+        if isInStep(protaX+3, protaY + 3) then protaY = protaY - 1
+
+        if canMoveRight() then saveSprite( protaY, protaX + 1, protaFrame + 1, 1)
     End If
 End Sub
 
@@ -491,15 +502,19 @@ Sub downKey()
             downKeyPressed = 1
         #endif
         
-        #ifdef LADDERS_ANIMATION_ENABLED
-            If checkIsLadder(protaY + 4, 1) Then
-                protaY = protaY + 2
-            End If
-        #Else
-            If checkIsLadder(protaY + 4, 0) Then
-                protaY = protaY + 2
-            End If
-        #endif
+        if protaY bAnd 1 Then protaY = protaY + 1
+
+        If not CheckCollision(protaX, protaY + 1) Then
+            #ifdef LADDERS_ANIMATION_ENABLED
+                If checkIsLadder(protaY + 4, 1) Then
+                    protaY = protaY + 2
+                End If
+            #Else
+                If checkIsLadder(protaY + 4, 0) Then
+                    protaY = protaY + 2
+                End If
+            #endif
+        end if
     #endif
 End Sub
 
