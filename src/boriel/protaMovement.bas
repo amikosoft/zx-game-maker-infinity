@@ -566,12 +566,9 @@ End Sub
                                     
                                     if not textState or textState = adventureStateTmp Then
                                         if textState and textState = adventureStateTmp Then
-                                            currentAdventureState = currentAdventureState + 1
-                                            
-                                            ' If currentAdventureState > MAX_ADVENTURE_STATE Then
-                                            '     muestraDialogo(textsCoord(texto, 3), tileText)
-                                            '     ending()
-                                            ' end if
+                                            if currentAdventureState = adventureStateTmp and textsCoord(texto, 4) Then
+                                                currentAdventureState = currentAdventureState + 1
+                                            End if
                                         elseif validateTile and validateTile <> tileText Then
                                             textFound = 0
                                         end if
@@ -594,7 +591,6 @@ End Sub
             #ifndef ARCADE_MODE
                 #ifndef LEVELS_MODE
                     If currentAdventureState > MAX_ADVENTURE_STATE Then
-                        ' muestraDialogo(textsCoord(texto, 3), tileText)
                         ending()
                     end if
                 #EndIf

@@ -20,15 +20,16 @@ Sub mapDraw(force As Ubyte)
             #ifdef ADVENTURE_TEXTS_HIDE_TILES
                 for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
                     if textsCoord(texto, 0) <> currentScreen Then exit for
-                    dim textTile as ubyte = textsCoord(texto, 4)
                     dim textState as ubyte = textsCoord(texto, 5)
                     
-                    if textTile and textState Then
+                    if textState Then
                         dim cordX as ubyte = textsCoord(texto, 1) >> 1
                         dim cordY as ubyte = textsCoord(texto, 2) >> 1
                         
                         if textState >= currentAdventureState Then
-                            SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
+                            dim textTile as ubyte = textsCoord(texto, 4)
+
+                            if textTile Then SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
                         Else
                             SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
                         End if

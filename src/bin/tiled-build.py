@@ -1059,7 +1059,7 @@ if adventureTexts and len(texts) > 0:
                 for p, string in enumerate(allTexts):
                     if string == textoFinal:
                         print("texto existente "+ string + " en posicion " + str(p))
-                        posicion = p
+                        posicion = p - 1
                         break
                 
                 if posicion == -1:

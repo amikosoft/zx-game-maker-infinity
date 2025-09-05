@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="123">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="125">
  <editorsettings>
   <chunksize width="32" height="22"/>
  </editorsettings>
@@ -61,7 +61,7 @@
   <property name="maxAnimatedTilesPerScreen" type="int" value="10"/>
   <property name="maxEnemiesPerScreen" type="int" value="3"/>
   <property name="messagesEnabled" type="bool" value="true"/>
-  <property name="musicEnabled" type="bool" value="true"/>
+  <property name="musicEnabled" type="bool" value="false"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
   <property name="password" value=""/>
   <property name="platformMoveable" type="bool" value="true"/>
@@ -296,7 +296,7 @@
   <object id="68" name="1" type="text" x="168" y="264">
    <properties>
     <property name="adventureState" type="int" value="1"/>
-    <property name="es" value="Esto me sirve  para tocar"/>
+    <property name="es" value="Esto me sirve  para tocar.    Faltan palos"/>
     <property name="itemAction" type="int" value="133"/>
    </properties>
    <point/>
@@ -343,8 +343,9 @@
   </object>
   <object id="78" name="1" type="text" x="168" y="264">
    <properties>
-    <property name="es" value="Este podria seryo en otra vida"/>
-    <property name="itemAction" type="int" value="0"/>
+    <property name="adventureState" type="int" value="4"/>
+    <property name="es" value="Vamos a tocar!!"/>
+    <property name="itemAction" type="int" value="133"/>
    </properties>
    <point/>
   </object>
@@ -374,14 +375,8 @@
   </object>
   <object id="108" name="1" type="text" x="144" y="240">
    <properties>
+    <property name="adventureState" type="int" value="0"/>
     <property name="es" value="Hola?          Hay alguien?   McFly McFly!!"/>
-    <property name="itemAction" type="int" value="133"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="109" name="1" type="text" x="80" y="256">
-   <properties>
-    <property name="es" value="Necesito algo  para tocar esto"/>
     <property name="itemAction" type="int" value="0"/>
    </properties>
    <point/>
@@ -397,6 +392,22 @@
   <object id="122" x="24" y="312">
    <properties>
     <property name="enemy" type="object" value="121"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="123" type="text" x="80" y="256">
+   <properties>
+    <property name="adventureState" type="int" value="1"/>
+    <property name="es" value="No se que hacercon esto.      Buscare algo   que aporrear"/>
+    <property name="itemAction" type="int" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="124" type="text" x="144" y="160">
+   <properties>
+    <property name="adventureState" type="int" value="1"/>
+    <property name="es" value="No se que hacercon esto.      Buscare algo   que aporrear"/>
+    <property name="itemAction" type="int" value="0"/>
    </properties>
    <point/>
   </object>
