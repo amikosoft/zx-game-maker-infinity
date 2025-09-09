@@ -822,6 +822,18 @@ Una vez elegido el movimiento se puede elegir el comportamiento. Esto se hace a�
 
 * **Anticlockwise** (sentido contrario agujas de reloj), el enemigo se moverá en el sentido contrario de las agujas de un reloj formando un cuadrado, para ello requiere un tipo de movimiento diagonal para que se aprecie.
 
+* **Trampa**. Los enemigos de este tipo quedarán ocultos a la vista del player. Una vez tiene enfilado al player (verticalmente, horizontalmente o ambos configurable) aparecerá disparado contra él.
+
+Para los enemigos de tipo trampa existe un parámetro adicional configurable por enemigo. Se trata del **trapContinousMode** del tipo *enemyTrapContinousMode*. Activando este atributo puedes hacer que tu enemigo trampa esté "disparándose" continuamente.
+
+![](images/enemyTrapContinousMode.png)
+
+Las opciones disponibles son:
+* **no** por lo que sólo se activará al enfilar (modo normal)
+* **horizontal** se dispara de manera horizontal (ambas direcciones) continuamente en la dirección del player
+* **vertical** se dispara de manera vertical (ambas direcciones) continuamente en la dirección del player
+* **all including diagonals** se dispara continuamente en todas las direcciones (hasta en diagonal) en la dirección del player
+
 _NOTA: todos aquellos modos de comportamiento que se usen en enemigos usarán espacio del motor y lo liberarán si ningún enemigo los usa_ 
 
 ### Cantidad de vida
