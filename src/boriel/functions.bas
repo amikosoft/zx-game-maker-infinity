@@ -205,6 +205,28 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     
     if tile < 1 or tile > ENEMY_DOOR_TILE then return 0
     
+    #ifdef KEYS_ENABLED
+    If tile = DOOR_TILE Then
+        If currentKeys Then
+            currentKeys = currentKeys - 1
+            
+            #ifdef LEVELS_MODE
+                moveScreen = 2
+            #Else
+                screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) = 0
+                removeTilesFromScreen(DOOR_TILE)
+            #endif
+            
+            printLife()
+            BeepFX_Play(4)
+            #ifdef MESSAGES_ENABLED
+            Else
+                printMessage("Need keys", 2, 0)
+            #endif
+        End If
+    End If
+    #endif
+
     #ifdef MESSAGES_ENABLED
         If tile = ENEMY_DOOR_TILE Then
             printMessage("Kill All!", 2, 0)

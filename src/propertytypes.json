@@ -124,6 +124,19 @@
         "valuesAsFlags": false
     },
     {
+        "id": 12,
+        "name": "enemyTrapContinousMode",
+        "storageType": "string",
+        "type": "enum",
+        "values": [
+            "no",
+            "horizontal",
+            "vertical",
+            "all including diagonals"
+        ],
+        "valuesAsFlags": false
+    },
+    {
         "color": "#ffa0a0a4",
         "drawFill": true,
         "id": 2,

@@ -474,14 +474,18 @@ configStr += "const ANIMATE_PERIOD_TILE as ubyte = " + str(animatePeriodTile) + 
 configStr += "const ITEMS_COUNTDOWN as ubyte = " + str(itemsCountdown) + "\n"
 configStr += "dim itemsToFind as ubyte = " + str(goalItems) + "\n"
 if itemsCountdown == 1 and not arcadeMode:
+    if goalItems == 0:
+        exitWithErrorMessage("Items goal must be greater than 0 when items countdown is enabled")
     configStr += "const ITEMS_INCREMENT as ubyte = -1\n"
     configStr += "const GOAL_ITEMS as ubyte = 0 \n"
     configStr += "dim currentItems as ubyte = " + str(goalItems) + "\n"
 else:
+    if goalItems == 0 and not arcadeMode:
+        exitWithErrorMessage("Items goal must be greater than 0 when items countdown and arcadeMode are disabled")
+
     configStr += "const ITEMS_INCREMENT as ubyte = 1\n"
     configStr += "const GOAL_ITEMS as ubyte = " + str(goalItems) + "\n"
     configStr += "dim currentItems as ubyte = 0\n\n"
-
 
 # save damage tiles in file .bin instead variable
 with open("output/damageTiles.bin", "wb") as f:
@@ -820,7 +824,8 @@ for layer in data['layers']:
                     'tile': str(object['gid'] - spriteTileOffset),
                     'life': '1',
                     'speed': '3',
-                    'mode': '0'
+                    'mode': '0',
+                    'trapContinousMode': 'no'
                 }
 
                 print(objects[str(object['id'])])
@@ -838,6 +843,8 @@ for layer in data['layers']:
                         elif property['name'] == 'speed':
                             if property['value'] in [0, 1, 2]:
                                 objects[str(object['id'])]['speed'] = str(property['value'] + 1)
+                        elif property['name'] == 'trapContinousMode':
+                            objects[str(object['id'])]['trapContinousMode'] = str(property['value'])
                         elif property['name'] == 'mode':
                             if property['value'] == 'alert':
                                 objects[str(object['id'])]['mode'] = '1'
@@ -922,7 +929,6 @@ for layer in data['layers']:
                             linEnd = objects[str(object['properties'][0]['value'])]['linIni'] 
                             objects[str(object['properties'][0]['value'])]['linEnd'] = linEnd
                             objects[str(object['properties'][0]['value'])]['linIni'] = linIni
-
                 elif object['type'] == 'mainCharacter':
                     initialScreen = screenId
                     initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
@@ -1142,6 +1148,18 @@ for layer in data['layers']:
                         elif enemy['mode'] == '5' or enemy['mode'] == '6' or enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
                             horizontalDirection = '0'
                             verticalDirection = '0'
+
+                            if enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
+                                enemy['colEnd'] = "0"
+                                enemy['linEnd'] = "0"
+                                
+                                if enemy['trapContinousMode'] == 'horizontal':
+                                    enemy['colEnd'] = "1"
+                                elif enemy['trapContinousMode'] == 'vertical':
+                                    enemy['linEnd'] = "1"
+                                elif enemy['trapContinousMode'] == 'all including diagonals':
+                                    enemy['linEnd'] = "1"
+                                    enemy['colEnd'] = "1"
                         else:
                             if (int(enemy['colIni']) < int(enemy['colEnd'])):
                                 horizontalDirection = '1'

@@ -283,7 +283,7 @@ Sub moveEnemies()
                 ElseIf enemyMode >= ENEMY_MODE_TRAP_ALL Then
                     If enemyColIni = enemyCol And enemyLinIni = enemyLin Then
                         #ifdef ENEMIES_TRAP_VERTICAL_ENABLED
-                            if enemyCol = protaX Then
+                            if enemyCol = protaX or enemyLinEnd Then
                                 if enemyMode <> ENEMY_MODE_TRAP_HORIZONAL Then
                                     verticalDirection = Sgn(protaY - enemyLin)
                                 end if
@@ -291,7 +291,7 @@ Sub moveEnemies()
                         #endif
                         
                         #ifdef ENEMIES_TRAP_HORIZONTAL_ENABLED
-                            if enemyLin = protaY Then
+                            if enemyLin = protaY or enemyColEnd Then
                                 if enemyMode <> ENEMY_MODE_TRAP_VERTICAL Then
                                     horizontalDirection = Sgn(protaX - enemyCol)
                                 end if
@@ -301,13 +301,8 @@ Sub moveEnemies()
                         enemyCol = enemyColIni
                         enemyLin = enemyLinIni
                         verticalDirection = 0
-                        horizontalDirection = 0               
-                    ' If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
-                    '     enemyCol = enemyColIni
-                    '     enemyLin = enemyLinIni
-                    '     verticalDirection = 0
-                    '     horizontalDirection = 0
-                    End If
+                        horizontalDirection = 0
+                    End if
                 #endif
             End if
             

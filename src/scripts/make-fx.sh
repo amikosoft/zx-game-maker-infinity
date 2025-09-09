@@ -3,7 +3,7 @@
 if ! command -v pasmo &> /dev/null
 then
     echo "Pasmo no está instalado. Por favor, instala Pasmo antes de continuar."
-    read -p "Pulse una tecla para cerrar..."
+    # read -p "Pulse una tecla para cerrar..."
     exit 1
 fi
 

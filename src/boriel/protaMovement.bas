@@ -1,20 +1,10 @@
-Function canMoveLeft() As Ubyte
-    #ifdef KEYS_ENABLED
-        If CheckDoor(protaX - 1, protaY) Then
-            Return 0
-        End If
-    #endif
-    Return Not CheckCollision(protaX - 1, protaY)
-End Function
+' Function canMoveLeft() As Ubyte
+'     Return Not CheckCollision(protaX - 1, protaY)
+' End Function
 
-Function canMoveRight() As Ubyte
-    #ifdef KEYS_ENABLED
-        If CheckDoor(protaX + 1, protaY) Then
-            Return 0
-        End If
-    #endif
-    Return Not CheckCollision(protaX + 1, protaY)
-End Function
+' Function canMoveRight() As Ubyte
+'     Return Not CheckCollision(protaX + 1, protaY)
+' End Function
 
 Function canMoveUp() As Ubyte
     #ifdef ARCADE_MODE
@@ -23,11 +13,11 @@ Function canMoveUp() As Ubyte
             Return 1
         End If
     #endif
-    #ifdef KEYS_ENABLED
-        If CheckDoor(protaX, protaY - 1) Then
-            Return 0
-        End If
-    #endif
+    ' #ifdef KEYS_ENABLED
+    '     If CheckDoor(protaX, protaY - 1) Then
+    '         Return 0
+    '     End If
+    ' #endif
     Return Not CheckCollision(protaX, protaY - 1)
 End Function
 
@@ -62,18 +52,11 @@ Function canMoveDown() As Ubyte
             Return 1
         End If
     #endif
-    #ifdef KEYS_ENABLED
-        If CheckDoor(protaX, protaY + 1) Then
-            Return 0
-        End If
-    #endif
     If CheckCollision(protaX, protaY + 1) Then Return 0
     #ifdef SIDE_VIEW
         If checkPlatformByXY(protaX, protaY + 4) Then Return 0
         
         if checkIsLadder(protaY + 4, 0) then return 0
-
-        ' if isInStep(protaX, protaY + 4, 1) then return 0
     #endif
     Return 1
 End Function
@@ -425,9 +408,13 @@ Sub leftKey()
             moveScreen = 4
         #endif
     Else
-        if isInStep(protaX-1, protaY + 3) then protaY = protaY - 1
-
-        if canMoveLeft() then saveSprite( protaY, protaX - 1, protaFrame + 1, 0)
+        if isInStep(protaX, protaY + 3) then 
+            protaY = protaY - 1
+        ' elseif isInStep(protaX + 4, protaY + 4) then
+        '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
+        end if
+        
+        if Not CheckCollision(protaX - 1, protaY) then saveSprite( protaY, protaX - 1, protaFrame + 1, 0)
     End If
 End Sub
 
@@ -444,9 +431,13 @@ Sub rightKey()
             moveScreen = 6
         #endif
     Else
-        if isInStep(protaX+3, protaY + 3) then protaY = protaY - 1
+        if isInStep(protaX+3, protaY + 3) then
+            protaY = protaY - 1
+        ' elseif isInStep(protaX+1, protaY + 4) then
+        '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
+        end if
 
-        if canMoveRight() then saveSprite( protaY, protaX + 1, protaFrame + 1, 1)
+        if Not CheckCollision(protaX + 1, protaY) then saveSprite( protaY, protaX + 1, protaFrame + 1, 1)
     End If
 End Sub
 
@@ -503,7 +494,7 @@ Sub downKey()
         #endif
         
         if protaY bAnd 1 Then protaY = protaY + 1
-
+        
         If not CheckCollision(protaX, protaY + 1) Then
             #ifdef LADDERS_ANIMATION_ENABLED
                 If checkIsLadder(protaY + 4, 1) Then
@@ -753,7 +744,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         #ifdef MESSAGES_ENABLED
             printMessage("LIFE!!!  ", 2, 0)
         #endif
-
+        
         screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
         BeepFX_Play(6)
         Return 1
@@ -761,11 +752,11 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         Elseif tile = AMMO_TILE Then
             currentAmmo = currentAmmo + AMMO_INCREMENT
             printLife()
-        
+            
             #ifdef MESSAGES_ENABLED
                 printMessage("AMMO!!!  ", 2, 0)
             #endif
-
+            
             screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
             BeepFX_Play(6)
             Return 1
