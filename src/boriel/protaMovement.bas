@@ -226,9 +226,11 @@ End Function
                 End If
                 'resetProtaSpriteToRunning()
                 if protaDirection then
-                    saveSprite(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_RIGHT, protaDirection)
+                    'saveSprite(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_RIGHT, protaDirection)
+                    protaTile = FIRST_RUNNING_PROTA_SPRITE_RIGHT
                 else
-                    saveSprite(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_LEFT, protaDirection)
+                    ' saveSprite(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_LEFT, protaDirection)
+                    protaTile = FIRST_RUNNING_PROTA_SPRITE_LEFT
                 end if
             End If
             Return 0
@@ -408,10 +410,10 @@ Sub leftKey()
             moveScreen = 4
         #endif
     Else
-        if isInStep(protaX, protaY + 3) then 
+        if isInStep(protaX, protaY + 3) then
             protaY = protaY - 1
-        ' elseif isInStep(protaX + 4, protaY + 4) then
-        '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
+            ' elseif isInStep(protaX + 4, protaY + 4) then
+            '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
         end if
         
         if Not CheckCollision(protaX - 1, protaY) then saveSprite( protaY, protaX - 1, protaFrame + 1, 0)
@@ -433,10 +435,10 @@ Sub rightKey()
     Else
         if isInStep(protaX+3, protaY + 3) then
             protaY = protaY - 1
-        ' elseif isInStep(protaX+1, protaY + 4) then
-        '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
+            ' elseif isInStep(protaX+1, protaY + 4) then
+            '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
         end if
-
+        
         if Not CheckCollision(protaX + 1, protaY) then saveSprite( protaY, protaX + 1, protaFrame + 1, 1)
     End If
 End Sub
@@ -512,7 +514,11 @@ End Sub
 #ifdef IN_GAME_TEXT_ENABLED
     Sub muestraDialogo(texto as ubyte, tile as ubyte)
         #ifdef FULLSCREEN_TEXTS
-            FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+            #ifdef SCREEN_ATTRIBUTES
+                FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
+            #else
+                FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+            #endif
             
             SetTile(tile, attrSet(tile), 16, 4)
         #else
@@ -696,7 +702,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         #endif
         screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
         BeepFX_Play(5)
-        Return 1
+        Return tile
         #ifndef ARCADE_MODE
             #ifdef CHECKPOINTS_ENABLED
             ElseIf tile = FLAG_TILE Then
@@ -726,7 +732,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             #endif
             screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
             BeepFX_Play(3)
-            Return 1
+            Return tile
         #endif
     Elseif tile = LIFE_TILE Then
         #ifdef ENERGY_ENABLED
@@ -747,7 +753,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         
         screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
         BeepFX_Play(6)
-        Return 1
+        Return tile
         #ifdef AMMO_ENABLED
         Elseif tile = AMMO_TILE Then
             currentAmmo = currentAmmo + AMMO_INCREMENT
@@ -759,7 +765,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             
             screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
             BeepFX_Play(6)
-            Return 1
+            Return tile
         #endif
     End If
     Return 0
@@ -776,40 +782,24 @@ Sub checkObjectContact()
                 
                 if checkTileObject(tile) then
                     validaTexto(tile)
-                    'FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
-                    SetTileChecked(0, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                    
+                    #ifdef SCREEN_ATTRIBUTES
+                        SetTileChecked(currentTileBackground, currentScreenBackground, col+c, lin+l)
+                    #else
+                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, col+c, lin+l)
+                    #endif
                 End if
             #else
                 If checkTileObject(GetTile(col+c, lin+l)) Then
-                    'FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + c, lin + l)
-                    SetTileChecked(0, BACKGROUND_ATTRIBUTE, col + c, lin + l)
+                    #ifdef SCREEN_ATTRIBUTES
+                        SetTileChecked(currentTileBackground, currentScreenBackground, col+c, lin+l)
+                    #else
+                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, col+c, lin+l)
+                    #endif
                 End if
             #endif
         next l
     next c
-    
-    ' If checkTileObject(GetTile(col, lin)) Then
-    '     #ifdef IN_GAME_TEXT_ENABLED
-    '         validaTexto(GetTile(col, lin))
-    '     #endif
-    '     FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin)
-    
-    ' Elseif checkTileObject(GetTile(col + 1, lin))
-    '    #ifdef IN_GAME_TEXT_ENABLED
-    '         validaTexto(GetTile(col + 1, lin))
-    '     #endif
-    '     FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin)
-    '  Elseif checkTileObject(GetTile(col, lin + 1))
-    '     #ifdef IN_GAME_TEXT_ENABLED
-    '         validaTexto(GetTile(col, lin + 1))
-    '     #endif
-    '     FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col, lin + 1)
-    ' Elseif checkTileObject(GetTile(col + 1, lin + 1))
-    '     #ifdef IN_GAME_TEXT_ENABLED
-    '         validaTexto(GetTile(col + 1, lin + 1))
-    '     #endif
-    '    FillWithTileChecked(0, 1, 1, BACKGROUND_ATTRIBUTE, col + 1, lin + 1)
-    '  End If
 End Sub
 
 

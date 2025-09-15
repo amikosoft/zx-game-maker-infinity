@@ -517,6 +517,10 @@ Sub swapScreen()
             End if
         #endif
     #endif
-
+    
+    #ifdef SCREEN_ATTRIBUTES
+        currentScreenBackground = screenAttributes(currentScreen, 0)
+        currentTileBackground = screenAttributes(currentScreen, 1)
+    #endif
     redrawScreen()
 End Sub

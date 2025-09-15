@@ -178,6 +178,13 @@ Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSE
     Dim musicPlayed as Ubyte = 0
 #endif
 
+#ifdef SCREEN_ATTRIBUTES
+    Dim screenAttributes(SCREENS_COUNT, 1) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
+    Dim currentScreenBackground as ubyte = 0
+    Dim currentTileBackground as ubyte = 0
+#endif
+
+
 #ifdef USE_BREAKABLE_TILE
     Dim brokenTiles(SCREENS_COUNT) As Ubyte at BROKEN_TILES_DATA_ADDRESS
 #endif

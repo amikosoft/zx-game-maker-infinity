@@ -25,9 +25,15 @@ End Sub
 sub drawDrop(tileX as ubyte, tileY as ubyte)
     for tx=0 to 1
         for ty=0 to 1
-            if not GetTile(tileX + tx, tileY + ty) Then 
-                SetTileChecked(DROP_TILE, attrSet(DROP_TILE), tileX + tx, tileY + ty)
-            end if
+            #ifdef SCREEN_ATTRIBUTES
+                if GetTile(tileX + tx, tileY + ty) = currentTileBackground Then 
+                    SetTileChecked(DROP_TILE, attrSet(DROP_TILE), tileX + tx, tileY + ty)
+                end if
+            #Else
+                if not GetTile(tileX + tx, tileY + ty) Then 
+                    SetTileChecked(DROP_TILE, attrSet(DROP_TILE), tileX + tx, tileY + ty)
+                end if
+            #endif
         next ty
     next tx
 end sub
@@ -330,7 +336,11 @@ sub removeTilesFromScreen(tile as ubyte)
     
     for index=0 to SCREEN_LENGTH
         if peek(@decompressedMap + index) - 1 = tile then
-            SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+            #ifdef SCREEN_ATTRIBUTES
+                SetTile(currentTileBackground, currentScreenBackground, x, y)
+            #else
+                SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+            #endif
         end if
         
         x = x + 1

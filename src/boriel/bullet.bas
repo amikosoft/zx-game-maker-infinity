@@ -278,17 +278,27 @@ sub damageEnemy(enemyToKill as Ubyte)
             BeepFX_Play(0)
             
             #ifdef DROP_ENABLED
-                dim eneX as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL)
-                dim eneY as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN)
+                dim eneX as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL) >> 1
+                dim eneY as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN) >> 1
+
                 if enemiesFrame band 2 = 2 Then
-                    if DROP_TILE < MAX_GENERIC_TILE Then
-                        drawDrop(eneX>>1, eneY>>1)
-                    elseif not GetTile(eneX>>1, eneY>>1) Then
-                        SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX>>1, eneY>>1)
-                    End if
-                Else
-                    Draw2x2Sprite(BURST_SPRITE_ID, eneX, eneY)
+                    #ifdef SCREEN_ATTRIBUTES
+                        if DROP_TILE < MAX_GENERIC_TILE Then
+                            drawDrop(eneX, eneY)
+                        elseif GetTile(eneX, eneY) = currentTileBackground Then
+                            SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
+                        End if
+                    #else
+                        if DROP_TILE < MAX_GENERIC_TILE Then
+                            drawDrop(eneX, eneY)
+                        elseif not GetTile(eneX, eneY) Then
+                            SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
+                        End if
+                    #endif
+                ' Else
+                '     Draw2x2Sprite(BURST_SPRITE_ID, eneX, eneY)
                 End if
+                Draw2x2Sprite(BURST_SPRITE_ID, eneX << 1, eneY << 1)
             #else
                 Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
             #endif
@@ -297,10 +307,10 @@ sub damageEnemy(enemyToKill as Ubyte)
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
                 #ifdef SHOULD_KILL_ENEMIES
                     ' if not screensWon(currentScreen) then
-                        if allEnemiesKilled() then
-                            screensWon(currentScreen) = 1
-                            removeTilesFromScreen(ENEMY_DOOR_TILE)
-                        end if
+                    if allEnemiesKilled() then
+                        screensWon(currentScreen) = 1
+                        removeTilesFromScreen(ENEMY_DOOR_TILE)
+                    end if
                     ' end if
                 #endif
             #endif
@@ -309,10 +319,10 @@ sub damageEnemy(enemyToKill as Ubyte)
             #ifndef ENEMIES_NOT_RESPAWN_ENABLED
                 #ifdef SHOULD_KILL_ENEMIES
                     ' if not screensWon(currentScreen) then
-                        if allEnemiesKilled() then
-                            screensWon(currentScreen) = 1
-                            removeTilesFromScreen(ENEMY_DOOR_TILE)
-                        end if
+                    if allEnemiesKilled() then
+                        screensWon(currentScreen) = 1
+                        removeTilesFromScreen(ENEMY_DOOR_TILE)
+                    end if
                     ' end if
                 #endif
             #endif
@@ -320,10 +330,10 @@ sub damageEnemy(enemyToKill as Ubyte)
             #ifndef SHOULD_KILL_ENEMIES_ENABLED
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
                     ' if not screensWon(currentScreen) then
-                        if allEnemiesKilled() then
-                            screensWon(currentScreen) = 1
-                            removeTilesFromScreen(ENEMY_DOOR_TILE)
-                        end if
+                    if allEnemiesKilled() then
+                        screensWon(currentScreen) = 1
+                        removeTilesFromScreen(ENEMY_DOOR_TILE)
+                    end if
                     ' end if
                 #endif
             #endif

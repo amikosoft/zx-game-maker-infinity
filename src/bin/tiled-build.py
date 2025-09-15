@@ -190,6 +190,7 @@ adventureTextsBackgroundColor = 0
 
 unshiftedGraphics = False
 transpasableItems = 16
+screenAttributesEnabled = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -374,6 +375,8 @@ if 'properties' in data:
             unshiftedGraphics = property['value']
         elif property['name'] == 'transpasableItems':
             transpasableItems = property['value']
+        elif property['name'] == 'screenAttributes':
+            screenAttributesEnabled = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -807,6 +810,10 @@ musicsSelected = [False,False,False,False,False,False,]
 
 musics = {}
 
+# screen attributes
+attributes = {}
+attributesSelected = False
+
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
         for object in layer['objects']:
@@ -971,27 +978,45 @@ for layer in data['layers']:
 
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
-                elif object['type'] == 'music1' or object['type'] == 'music':
-                    musics[screenId] = [1]
-                    musicsSelected[0] = True
-                elif object['type'] == 'music2':
-                    musics[screenId] = [2]
-                    musicsSelected[1] = True
-                elif object['type'] == 'music3':
-                    musics[screenId] = [3]
-                    musicsSelected[2] = True
-                elif object['type'] == 'title':
-                    musics[screenId] = [4]
-                    musicsSelected[3] = True
-                elif object['type'] == 'ending':
-                    musics[screenId] = [5]
-                    musicsSelected[4] = True
-                elif object['type'] == 'gameover':
-                    musics[screenId] = [6]
-                    musicsSelected[5] = True
+                elif object['type'] == 'screen_attributes':
+                    if not screenId in attributes:
+                        attributes[screenId] = {
+                            "background": int(backgroundAttribute),
+                            "border": int(border),
+                            "tile": 0
+                        }
+                    for prop in range(len(object['properties'])):
+                        if object['properties'][prop]['name'] == 'music':
+                            if object['properties'][prop]['value'] == 'music1' or object['properties'][prop]['value'] == 'music':
+                                musics[screenId] = [1]
+                                musicsSelected[0] = True
+                            elif object['properties'][prop]['value'] == 'music2':
+                                musics[screenId] = [2]
+                                musicsSelected[1] = True
+                            elif object['properties'][prop]['value'] == 'music3':
+                                musics[screenId] = [3]
+                                musicsSelected[2] = True
+                            elif object['properties'][prop]['value'] == 'title':
+                                musics[screenId] = [4]
+                                musicsSelected[3] = True
+                            elif object['properties'][prop]['value'] == 'ending':
+                                musics[screenId] = [5]
+                                musicsSelected[4] = True
+                            elif object['properties'][prop]['value'] == 'gameover':
+                                musics[screenId] = [6]
+                                musicsSelected[5] = True
+                        elif object['properties'][prop]['name'] == 'background':
+                            attributesSelected = True
+                            attributes[screenId]["background"] = int(object['properties'][prop]['value'])
+                        elif object['properties'][prop]['name'] == 'tile':
+                            attributesSelected = True
+                            attributes[screenId]["tile"] = int(object['properties'][prop]['value'])
+                        elif object['properties'][prop]['name'] == 'border':
+                            attributesSelected = True
+                            attributes[screenId]["border"] = int(object['properties'][prop]['value'])
                 else:
                     print(object)
-                    errorMessage = 'Unknown object type. Only "enemy", "text", "title", "ending", "gameover", "music1", "music2", "music3" or "mainCharacter" are allowed. Found: ' + object['type']
+                    errorMessage = 'Unknown object type. Only "enemy", "text", "screen_attributes" or "mainCharacter" are allowed. Found: ' + object['type']
                     exitWithErrorMessage(errorMessage)   
 
 # CONTROL DE MUSICAS
@@ -1017,6 +1042,20 @@ if musicEnabled == 1:
                 f.write(bytearray(musics[screenId]))
             else:
                 f.write(bytearray([0]))
+
+# Atributos por pantalla seleccionados
+if screenAttributesEnabled:
+    configStr += "#DEFINE SCREEN_ATTRIBUTES\n"
+    print("SCREEN_ATTRIBUTES\n")
+    with open("output/screenAttributes.bin", "wb") as f:
+        for screenId in range(screensCount):
+            print(screenId)
+            if screenId in attributes:
+                print(attributes[screenId])
+                print([attributes[screenId]['background'], attributes[screenId]['tile']])
+                f.write(bytearray([attributes[screenId]['background'], attributes[screenId]['tile']]))
+            else:
+                f.write(bytearray([backgroundAttribute, 0]))
 
 if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"

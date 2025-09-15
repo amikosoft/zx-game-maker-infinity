@@ -28,10 +28,14 @@ Sub mapDraw(force As Ubyte)
                         
                         if textState >= currentAdventureState Then
                             dim textTile as ubyte = textsCoord(texto, 4)
-
+                            
                             if textTile Then SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
                         Else
-                            SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
+                            #ifdef SCREEN_ATTRIBUTES
+                                SetTileChecked(currentTileBackground, currentScreenBackground, cordX, cordY)
+                            #else
+                                SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
+                            #endif
                         End if
                     End if
                 Next texto
@@ -59,19 +63,32 @@ Sub mapColor(color As Ubyte)
 End Sub
 
 Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
-    if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+    #ifdef SCREEN_ATTRIBUTES
+        if force then SetTile(currentTileBackground, currentScreenBackground, x, y)
+    #else
+        if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+    #endif
+    
     If tile < 1 Then Return
     
     If tile < MAX_GENERIC_TILE Then
         If tile = ENEMY_DOOR_TILE Then
             #ifdef SHOULD_KILL_ENEMIES_ENABLED
                 If screensWon(currentScreen) Then
-                    SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                    #ifdef SCREEN_ATTRIBUTES
+                        SetTile(currentTileBackground, currentScreenBackground, x, y)
+                    #else
+                        SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                    #endif
                 Else
                     SetTile(tile, attrSet(tile), x, y)
                 End If
             #Else
-                SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                #ifdef SCREEN_ATTRIBUTES
+                    SetTile(currentTileBackground, currentScreenBackground, x, y)
+                #else
+                    SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                #endif
             #endif
             #ifdef KEYS_ENABLED
             Elseif tile = DOOR_TILE
@@ -82,7 +99,11 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
             #ifdef USE_BREAKABLE_TILE
             ElseIf tile = BREAKABLE_TILE Then
                 If brokenTiles(currentScreen) Then
-                    SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                    #ifdef SCREEN_ATTRIBUTES
+                        SetTile(currentTileBackground, currentScreenBackground, x, y)
+                    #else
+                        SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                    #endif
                 Else
                     SetTileChecked(tile, attrSet(tile), x, y)
                 End If
@@ -168,7 +189,12 @@ Sub redrawScreen()
     ' CancelOps()
     ClearScreen(7, 0, 0) ' Modified For only cancelops And no clear Screen
     ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
-    FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+    #ifdef SCREEN_ATTRIBUTES
+        FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
+    #else
+        FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+    #endif
+    
     ' clearBox(0,0,120,112)
     mapDraw(0)
     printLife()

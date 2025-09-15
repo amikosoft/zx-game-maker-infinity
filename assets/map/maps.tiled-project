@@ -539,6 +539,11 @@
                 "name": "waitPressKeyAfterLoad",
                 "type": "bool",
                 "value": false
+            },
+            {
+                "name": "screenAttributes",
+                "type": "bool",
+                "value": false
             }
         ],
         "name": "ZXSpectrumGameMaker",
