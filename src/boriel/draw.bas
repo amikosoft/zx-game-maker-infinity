@@ -1,4 +1,4 @@
-Sub mapDraw(force As Ubyte)
+Sub mapDraw()
     Dim index As Uinteger
     Dim y, x As Ubyte
     
@@ -6,7 +6,7 @@ Sub mapDraw(force As Ubyte)
     y = 0
     
     For index=0 To SCREEN_LENGTH
-        drawTile(Peek(@decompressedMap + index) - 1, x, y, force)
+        drawTile(Peek(@decompressedMap + index) - 1, x, y)
         
         x = x + 1
         If x = screenWidth Then
@@ -62,11 +62,11 @@ Sub mapColor(color As Ubyte)
     Next index
 End Sub
 
-Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte,force As Ubyte)
+Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
     #ifdef SCREEN_ATTRIBUTES
-        if force then SetTile(currentTileBackground, currentScreenBackground, x, y)
+        SetTile(currentTileBackground, currentScreenBackground, x, y)
     #else
-        if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+        SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
     #endif
     
     If tile < 1 Then Return
@@ -185,26 +185,27 @@ End Sub
 ' #endif
 
 Sub redrawScreen()
-    ' memset(22527,0,768)
-    ' CancelOps()
     ClearScreen(7, 0, 0) ' Modified For only cancelops And no clear Screen
-    ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
-    #ifdef SCREEN_ATTRIBUTES
-        FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
-    #else
-        FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
-    #endif
+
+    ' #ifdef SCREEN_ATTRIBUTES
+    '     FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
+    ' #else
+    '     FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+    ' #endif
     
-    ' clearBox(0,0,120,112)
-    mapDraw(0)
-    printLife()
-    ' enemiesDraw(currentScreen)
+    mapDraw()
+
+    ' #ifdef HISCORE_ENABLED
+    '     Print AT 22, 20; "00000"
+    '     Print AT 23, 20; "00000"
+    ' #endif
+    
+    ' printLife()
 End Sub
 
 Sub moveToScreen(direction As Ubyte)
-    ' removeAllObjects()
     If direction = 6 Then
-        'saveSprite( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
+        'updateProtaData( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
         protaX = 0 + SCREEN_ADJUSTMENT
         currentScreen = currentScreen + 1
         
@@ -215,7 +216,7 @@ Sub moveToScreen(direction As Ubyte)
             #endif
         #endif
     Elseif direction = 4 Then
-        'saveSprite( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
+        'updateProtaData( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
         protaX = 60 - SCREEN_ADJUSTMENT
         currentScreen = currentScreen - 1
     Elseif direction = 2 Then
@@ -244,7 +245,7 @@ Sub moveToScreen(direction As Ubyte)
                 #endif
             End if
         #else
-            'saveSprite( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
+            'updateProtaData( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
             protaY = 0+ SCREEN_ADJUSTMENT
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
         #endif
@@ -264,7 +265,7 @@ Sub moveToScreen(direction As Ubyte)
         #endif
     #endif
     
-    swapScreen()
+    swapScreen(0)
     
     moveScreen = 0
 End Sub

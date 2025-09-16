@@ -192,6 +192,9 @@ unshiftedGraphics = False
 transpasableItems = 16
 screenAttributesEnabled = False
 
+playerReadyConfirmation = False
+fullChangeScreenAnimation = False
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -377,6 +380,10 @@ if 'properties' in data:
             transpasableItems = property['value']
         elif property['name'] == 'screenAttributes':
             screenAttributesEnabled = property['value']
+        elif property['name'] == 'playerReadyConfirmation':
+            playerReadyConfirmation = property['value']
+        elif property['name'] == 'fullChangeScreenAnimation':
+            fullChangeScreenAnimation = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -430,6 +437,12 @@ if unshiftedGraphics:
     configStr += "#DEFINE STORE_UNSHIFTED_SPRITES\n"
 
 configStr += "const MAX_GENERIC_TILE as ubyte = " + str(flagTile + 1) + "\n"
+
+if playerReadyConfirmation:
+    configStr += "#DEFINE PLAYER_READY_CONFIRMATION\n"
+
+if fullChangeScreenAnimation:
+    configStr += "#DEFINE FULL_SCREEN_CHANGE_ANIMATION\n"
 
 if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
@@ -1057,6 +1070,9 @@ if screenAttributesEnabled:
             else:
                 f.write(bytearray([backgroundAttribute, 0]))
 
+if adventureTextsAcceptWithFire == True:
+    configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"
+
 if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
 
@@ -1069,9 +1085,6 @@ if adventureTexts and len(texts) > 0:
         if adventureTextsClearScreen == True:
             configStr += "#DEFINE FULLSCREEN_TEXTS\n"
     
-    if adventureTextsAcceptWithFire == True:
-        configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"
-
     if adventureTextsHideTiles == True:
         configStr += "#DEFINE ADVENTURE_TEXTS_HIDE_TILES\n"
     

@@ -3,6 +3,16 @@ sub pauseUntilPressKey()
     while INKEY$="":wend
 end sub
 
+Sub loadScreen128(screen_address as Integer)
+    #ifdef ENABLED_128k
+        PaginarMemoria(DATA_BANK)
+        dzx0Standard(screen_address, $4000)
+        PaginarMemoria(0)
+    #else
+        dzx0Standard(screen_address, $4000)
+    #endif 
+end sub
+
 sub pauseUntilPressEnter()
     Do
     Loop Until MultiKeys(KEYENTER)
@@ -84,7 +94,7 @@ sub decrementLife()
         ' #endif
 
         #ifdef LIVES_MODE_GRAVEYARD
-            'saveSprite( protaY, protaX, 15, 0)
+            'updateProtaData( protaY, protaX, 15, 0)
             protaTile = 15
 
             #ifdef MAP_COLOR_DEAD_ENABLED
@@ -104,7 +114,7 @@ sub decrementLife()
             #endif
             #endif
 
-            if currentLife Then saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
+            if currentLife Then updateProtaData( protaYRespawn, protaXRespawn, 1, protaDirection)
         #endif
 
         #ifdef ENERGY_ENABLED
@@ -146,6 +156,8 @@ sub printLife()
         #endif
     #endif
     #ifdef HISCORE_ENABLED
+        ' Print AT 22, 20; "00000"
+        ' Print AT 23, 20; "00000"
         PRINT AT 22, 25 - LEN(STR$(hiScore)); hiScore
         PRINT AT 23, 25 - LEN(STR$(score)); score
     #endif
@@ -351,7 +363,7 @@ sub removeTilesFromScreen(tile as ubyte)
     next index
 end sub
 
-sub saveSprite(lin as ubyte, col as ubyte, tile as ubyte, directionRight as ubyte)
+sub updateProtaData(lin as ubyte, col as ubyte, tile as ubyte, directionRight as ubyte)
     ' if sprite = PROTA_SPRITE then
     protaX = col
     protaY = lin

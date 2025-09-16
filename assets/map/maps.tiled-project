@@ -544,6 +544,16 @@
                 "name": "screenAttributes",
                 "type": "bool",
                 "value": false
+            },
+            {
+                "name": "playerReadyConfirmation",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "fullChangeScreenAnimation",
+                "type": "bool",
+                "value": false
             }
         ],
         "name": "ZXSpectrumGameMaker",

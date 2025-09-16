@@ -174,7 +174,7 @@ End Function
             
             protaTile = getNextFrameJumpingFalling()
             protaY = protaY + jumpArray(jumpCurrentKey)
-            ' saveSprite( protaY + jumpArray(jumpCurrentKey), protaX, getNextFrameJumpingFalling(), protaDirection)
+            ' updateProtaData( protaY + jumpArray(jumpCurrentKey), protaX, getNextFrameJumpingFalling(), protaDirection)
             
             jumpCurrentKey = jumpCurrentKey + 1
         End Sub
@@ -190,7 +190,7 @@ End Function
             
             If pressingUp() And jumpEnergy > 0 Then
                 If Not CheckCollision(protaX, protaY - 1) Then
-                    saveSprite( protaY - 1, protaX, getNextFrameJumpingFalling(), protaDirection)
+                    updateProtaData( protaY - 1, protaX, getNextFrameJumpingFalling(), protaDirection)
                 End If
                 jumpCurrentKey = jumpCurrentKey + 1
                 jumpEnergy = jumpEnergy - 1
@@ -221,15 +221,15 @@ End Function
                     printLife()
                 #endif
                 If protaY bAND 1 Then
-                    ' saveSpriteLin(PROTA_SPRITE, protaY - 1)
+                    ' updateProtaDataLin(PROTA_SPRITE, protaY - 1)
                     protaY = protaY - 1
                 End If
                 'resetProtaSpriteToRunning()
                 if protaDirection then
-                    'saveSprite(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_RIGHT, protaDirection)
+                    'updateProtaData(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_RIGHT, protaDirection)
                     protaTile = FIRST_RUNNING_PROTA_SPRITE_RIGHT
                 else
-                    ' saveSprite(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_LEFT, protaDirection)
+                    ' updateProtaData(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_LEFT, protaDirection)
                     protaTile = FIRST_RUNNING_PROTA_SPRITE_LEFT
                 end if
             End If
@@ -282,7 +282,7 @@ End Function
         currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
         If protaDirection Then
             #ifdef IDLE_ENABLED
-                saveSprite( protaY, protaX, 1, 1)
+                updateProtaData( protaY, protaX, 1, 1)
             #endif
             
             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
@@ -298,7 +298,7 @@ End Function
             End If
         Elseif protaDirection = 0
             #ifdef IDLE_ENABLED
-                saveSprite( protaY, protaX, 5, 0)
+                updateProtaData( protaY, protaX, 5, 0)
             #endif
             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
             bulletPositionX = protaX
@@ -416,7 +416,7 @@ Sub leftKey()
             '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
         end if
         
-        if Not CheckCollision(protaX - 1, protaY) then saveSprite( protaY, protaX - 1, protaFrame + 1, 0)
+        if Not CheckCollision(protaX - 1, protaY) then updateProtaData( protaY, protaX - 1, protaFrame + 1, 0)
     End If
 End Sub
 
@@ -439,7 +439,7 @@ Sub rightKey()
             '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
         end if
         
-        if Not CheckCollision(protaX + 1, protaY) then saveSprite( protaY, protaX + 1, protaFrame + 1, 1)
+        if Not CheckCollision(protaX + 1, protaY) then updateProtaData( protaY, protaX + 1, protaFrame + 1, 1)
     End If
 End Sub
 
@@ -463,7 +463,7 @@ Sub upKey()
             protaFrame = 4
         End If
         If canMoveUp() Then
-            saveSprite( protaY - 1, protaX, protaFrame + 1, 8)
+            updateProtaData( protaY - 1, protaX, protaFrame + 1, 8)
             
             checkProtaTop()
         End If
@@ -483,7 +483,7 @@ Sub downKey()
                     #endif
                 #endif
             Else
-                saveSprite( protaY + 1, protaX, protaFrame + 1, 2)
+                updateProtaData( protaY + 1, protaX, protaFrame + 1, 2)
             End If
         End If
     #Else
@@ -543,13 +543,12 @@ End Sub
         Next fila
         
         #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
-            Do
-            Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
+            pauseUntilPressFire()
         #else
             pauseUntilPressEnter()
         #endif
         
-        mapDraw(1)
+        mapDraw()
     end sub
     
     Function validaTexto(validateTile as ubyte) as ubyte
