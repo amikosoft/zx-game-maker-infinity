@@ -102,7 +102,6 @@ Dim framec As Ubyte AT 23672
 
 ' Dim lastFrameProta As Ubyte = 0
 ' Dim lastFrameEnemies As Ubyte = 0
-Dim lastFrameTiles As Ubyte = 0
 
 Const INVINCIBLE_FRAMES As Ubyte = 25
 Dim invincible As Ubyte = 0
@@ -154,7 +153,6 @@ Dim attrSet(191) As Ubyte at ATTR_DATA_ADDRESS
 Dim screenObjectsInitial(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
 Dim screensOffsets(SCREENS_COUNT) As Uinteger at SCREEN_OFFSETS_DATA_ADDRESS
 Dim enemiesInScreenOffsets(SCREENS_COUNT) As Uinteger at ENEMIES_IN_SCREEN_OFFSETS_DATA_ADDRESS
-Dim animatedTilesInScreen(SCREENS_COUNT, MAX_ANIMATED_TILES_PER_SCREEN, 2) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
 Dim damageTiles(DAMAGE_TILES_COUNT) As Ubyte at DAMAGE_TILES_DATA_ADDRESS
 Dim enemiesPerScreen(SCREENS_COUNT) As byte at ENEMIES_PER_SCREEN_INITIAL_DATA_ADDRESS
 Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
@@ -164,6 +162,14 @@ Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSE
 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
     Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
     dim firstTimeEnemiesScreen as ubyte = 1
+#endif
+
+' Dim animatedTilesInScreen(SCREENS_COUNT, MAX_ANIMATED_TILES_PER_SCREEN, 2) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
+
+#ifdef ANIMATED_TILES_ENABLED
+    Dim animatedTilesPerScreen(ANIMATED_TILES_TOTAL, 3) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
+    dim firstTileInScreen as integer = 0
+    Dim lastFrameTiles As Ubyte = 0
 #endif
 
 #ifdef IN_GAME_TEXT_ENABLED

@@ -15,6 +15,13 @@ Sub mapDraw()
         End If
     Next index
     
+    #ifdef ANIMATED_TILES_ENABLED
+        For i=0 To ANIMATED_TILES_TOTAL
+            firstTileInScreen = i
+            if animatedTilesPerScreen(i, 0) = currentScreen Then Exit for
+        next i
+    #endif
+
     #ifdef IN_GAME_TEXT_ENABLED
         #ifdef IS_TEXT_ADVENTURE
             #ifdef ADVENTURE_TEXTS_HIDE_TILES

@@ -37,7 +37,9 @@ maxAnimatedTilesPerScreen = 6
 
 damageTiles = []
 animatedTilesIds = []
+animatedTilesPerScreen = []
 screenAnimatedTiles = defaultdict(dict)
+
 ammoTile = 0
 keyTile = 0
 itemTile = 0
@@ -392,8 +394,6 @@ damageTilesCount = len(damageTiles) - 1 if len(damageTiles) > 0 else 0
 animatedTilesIdsCount = len(animatedTilesIds) - 1 if len(animatedTilesIds) > 0 else 0
 
 configStr = "const MAX_ENEMIES_PER_SCREEN as ubyte = " + str(maxEnemiesPerScreen) + "\n"
-# configStr += "const MAX_ANIMATED_TILES_PER_SCREEN as ubyte = " + str(maxAnimatedTilesPerScreen - 1) + "\n"
-configStr += "#define MAX_ANIMATED_TILES_PER_SCREEN  " + str(maxAnimatedTilesPerScreen - 1) + "\n"
 configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
 configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
@@ -647,6 +647,7 @@ for layer in data['layers']:
 
                 if int(tile) in animatedTilesIds and len(screenAnimatedTiles[idx]) < maxAnimatedTilesPerScreen:
                     screenAnimatedTiles[idx].append([tile, mapX, mapY])
+                    animatedTilesPerScreen.append([idx, tile, mapX, mapY])
 
                 if tile == keyTile:
                     screenObjects[idx]['key'] = 1
@@ -738,20 +739,29 @@ with open("output/objectsInScreen.bin", "wb") as f:
     for screen in screenObjects:
         f.write(bytearray([screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo']]))
 
-for screen in screenAnimatedTiles:
-    for i in range(maxAnimatedTilesPerScreen - len(screenAnimatedTiles[screen])):
-        screenAnimatedTiles[screen].append([0, 0, 0])
 
-with open("output/animatedTilesInScreen.bin", "wb") as f:
-    for screen in screenAnimatedTiles:
-        for tile in screenAnimatedTiles[screen]:
-            f.write(bytearray([int(tile[0]), int(tile[1]), int(tile[2])]))
+# for screen in screenAnimatedTiles:
+#     for i in range(maxAnimatedTilesPerScreen - len(screenAnimatedTiles[screen])):
+#         screenAnimatedTiles[screen].append([0, 0, 0])
 
-# configStr += "dim screenObjectsInitial(" + str(screensCount - 1) + ", 3) as ubyte = { _\n"
-# for screen in screenObjects:
-#     configStr += '\t{' + str(screenObjects[screen]['item']) + ', ' + str(screenObjects[screen]['key']) + ', ' + str(screenObjects[screen]['door']) + ', ' + str(screenObjects[screen]['life']) + '}, _\n'
-# configStr = configStr[:-4]
-# configStr += " _\n}\n\n"
+# with open("output/animatedTilesInScreen.bin", "wb") as f:
+#     for screen in screenAnimatedTiles:
+#         for tile in screenAnimatedTiles[screen]:
+#             f.write(bytearray([int(tile[0]), int(tile[1]), int(tile[2])]))
+
+if maxAnimatedTilesPerScreen > 0:
+    configStr += "#define ANIMATED_TILES_ENABLED\n"
+    configStr += "#define ANIMATED_TILES_TOTAL " + str(len(animatedTilesPerScreen)) + "\n"
+    configStr += "#define MAX_ANIMATED_TILES_PER_SCREEN " + str(maxAnimatedTilesPerScreen) + "\n"
+    with open("output/animatedTilesInScreen.bin", "wb") as f:
+        for i in range(len(animatedTilesPerScreen)):
+            tile = animatedTilesPerScreen[i]
+            f.write(bytearray([int(tile[0]), int(tile[1]), int(tile[2]), int(tile[3])]))
+else:
+    # configStr += "const MAX_ANIMATED_TILES_PER_SCREEN as ubyte = " + str(maxAnimatedTilesPerScreen - 1) + "\n"
+    configStr += "#define MAX_ANIMATED_TILES_PER_SCREEN  " + str(maxAnimatedTilesPerScreen) + "\n"
+    with open("output/animatedTilesInScreen.bin", "wb") as f:
+        f.write(bytearray([]))
 
 configStr += "const SCREEN_LENGTH as uinteger = " + str(len(screens[0]) - 1) + "\n"
 configStr += "dim decompressedMap(SCREEN_LENGTH) as ubyte\n"

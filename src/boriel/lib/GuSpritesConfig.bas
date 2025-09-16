@@ -107,7 +107,7 @@
 'Maximum on-screen 1x2 sprites
 '#define ONSCREEN_1x2_SPRITES 4
 'Maximum on-screen 2x2 sprites
-#define ONSCREEN_2x2_SPRITES 4
+'#define ONSCREEN_2x2_SPRITES 4
 
 'If defined enables the tile system in its basic mode (tiles erased when sprite enters on it)
 #define ENABLE_TILES

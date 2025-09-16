@@ -222,20 +222,21 @@ Sub playGame()
             End if
         #EndIf
 
-        lastFrameTiles = lastFrameTiles + 1
-        If lastFrameTiles > ANIMATE_PERIOD_TILE Then
-            lastFrameTiles = 0
-            animatedFrame = Not animatedFrame
 
-            For i=0 To MAX_ANIMATED_TILES_PER_SCREEN:
-                dim animatedTileId as ubyte = animatedTilesInScreen(currentScreen, i, 0)
-                If animatedTileId Then
-                    Dim tile As Ubyte = animatedTileId + animatedFrame
-                    SetTile(tile, attrSet(tile), animatedTilesInScreen(currentScreen, i, 1), animatedTilesInScreen(currentScreen, i, 2))
-                    'SetTileAnimated(tile, attrSet(tile), animatedTilesInScreen(currentScreen, i, 1), animatedTilesInScreen(currentScreen, i, 2))
-                End If
-            Next i
-        End If
+        #ifdef ANIMATED_TILES_ENABLED
+            lastFrameTiles = lastFrameTiles + 1
+            If lastFrameTiles > ANIMATE_PERIOD_TILE Then
+                lastFrameTiles = 0
+                animatedFrame = Not animatedFrame
+
+                For i=firstTileInScreen To ANIMATED_TILES_TOTAL
+                    if i > ANIMATED_TILES_TOTAL or animatedTilesPerScreen(i, 0) <> currentScreen Then Exit for
+                    Dim tile As Ubyte = animatedTilesPerScreen(i, 1) + animatedFrame
+                    SetTile(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                    'SetTileAnimated(tile, attrSet(tile), animatedTilesPerScreen(currentScreen, i, 2), animatedTilesPerScreen(currentScreen, i, 3))
+                Next i
+            End If
+        #endif
 
         If currentLife Then
             protaMovement()
