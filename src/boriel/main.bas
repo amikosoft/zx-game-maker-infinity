@@ -15,6 +15,7 @@
 
 loadDataFromTape()
 
+#include "lib/GuSpritesConfig.bas"
 #include "lib/GuSprites.zxbas"
 ' #include "graphicsInitializer.bas"
 #include "beepFx.bas"

@@ -232,6 +232,7 @@ Sub playGame()
                 If animatedTileId Then
                     Dim tile As Ubyte = animatedTileId + animatedFrame
                     SetTile(tile, attrSet(tile), animatedTilesInScreen(currentScreen, i, 1), animatedTilesInScreen(currentScreen, i, 2))
+                    'SetTileAnimated(tile, attrSet(tile), animatedTilesInScreen(currentScreen, i, 1), animatedTilesInScreen(currentScreen, i, 2))
                 End If
             Next i
         End If
