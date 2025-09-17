@@ -203,7 +203,9 @@ Sub playGame()
     
     ' Let lastFrameProta = framec
     ' Let lastFrameEnemies = framec
-    lastFrameTiles = 0
+    #ifdef ANIMATED_TILES_ENABLED
+        lastFrameTiles = 0
+    #endif
     
     ' #ifdef NEW_BEEPER_PLAYER
     '     Let lastFrameBeep = framec
