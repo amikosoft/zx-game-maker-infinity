@@ -198,6 +198,27 @@ function allEnemiesKilled() as ubyte
     return 1
 end function
 
+Function tileAttrWithBackground(tile As Ubyte) As Ubyte
+    Dim attr As Ubyte = attrSet(tile)
+    
+    #ifdef SCREEN_ATTRIBUTES
+        Dim backgroundAttr as ubyte = currentScreenBackground
+    #else
+        Dim backgroundAttr as ubyte = BACKGROUND_ATTRIBUTE
+    #endif
+
+    ' Dim tinta As Ubyte = attr bAnd 7
+    ' Dim papelTile As Ubyte = (attr bAnd 56) / 8
+    Dim papelBack As Ubyte = (backgroundAttr bAnd 56) / 8
+    ' Dim brillo As Ubyte = (backgroundAttr bAnd 64) / 64
+    ' Dim parpadeo As Ubyte = (attr bAnd 128) / 128
+
+    ' Montar el atributo: papel, tinta, brillo, parpadeo
+    if ((attr bAnd 56) / 8) or tile <= ENEMY_DOOR_TILE or not papelBack Then return attr
+
+    Return (papelBack * 8) + (attr bAnd 7) + (((backgroundAttr bAnd 64) / 64) * 64) + (((attr bAnd 128) / 128) * 128)
+End Function
+
 function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     dim tile as ubyte = GetTile(col, lin)
     
@@ -205,6 +226,16 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     
     if tile < 1 or tile > ENEMY_DOOR_TILE then return 0
     
+    ' if tile = AUTOBREAKABLE_TILE or tile = (AUTOBREAKABLE_TILE + 1) Then
+    '     if timeToBreakTile then timeToBreakTile = timeToBreakTile - 1
+
+    '     if not timeToBreakTile Then
+    '         tile = tile + 1
+    '         if tile > (AUTOBREAKABLE_TILE + 1) Then
+
+    '         end if
+    '     end if
+    ' else
     #ifdef KEYS_ENABLED
     If tile = DOOR_TILE Then
         If currentKeys Then
@@ -232,6 +263,7 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
             printMessage("Kill All!", 2, 0)
         End If
     #endif
+    ' end if
     
     return tile
 end function
@@ -293,13 +325,38 @@ function CheckCollision(x as uByte, y as uByte) as uByte
     if (x bAnd 1) Then maxCol = 2
     if (y bAnd 1) Then maxLin = 2
     
+    lastTimeToBreakTile = timeToBreakTile
+    dim collision as ubyte = 0
     for c=0 to maxCol
         for l=0 to maxLin
-            if isSolidTileByColLin(col+c, lin+l) then return 1
+            dim tileFound as ubyte = isSolidTileByColLin(col+c, lin+l)
+            if tileFound = AUTOBREAKABLE_TILE or tileFound = (AUTOBREAKABLE_TILE + 1) Then
+                if timeToBreakTile > 0 and timeToBreakTile = lastTimeToBreakTile then 
+                    timeToBreakTile = timeToBreakTile - 1
+                end if
+
+                if not timeToBreakTile Then
+                    tileFound = tileFound + 1
+                    if tileFound > (AUTOBREAKABLE_TILE + 1) Then
+                        #ifdef SCREEN_ATTRIBUTES
+                            SetTile(currentTileBackground, currentScreenBackground, col+c, lin+l)
+                        #else
+                            SetTile(0, BACKGROUND_ATTRIBUTE, col+c, lin+l)
+                        #endif
+                    else
+                        debugA(1)
+                        SetTile(tileFound, tileAttrWithBackground(tileFound), col+c, lin+l)
+                    end if
+                end if
+            End if
+
+            if tileFound Then collision = tileFound
         next l
     next c
     
-    return 0
+    if not timeToBreakTile Then timeToBreakTile = AUTOBREAKABLE_TILE_FRAMES
+
+    return collision
 end function
 
 sub removeTilesFromScreen(tile as ubyte)
@@ -333,27 +390,6 @@ sub updateProtaData(lin as ubyte, col as ubyte, tile as ubyte, directionRight as
     protaTile = tile
     protaDirection = directionRight
 end sub
-
-Function tileAttrWithBackground(tile As Ubyte) As Ubyte
-    Dim attr As Ubyte = attrSet(tile)
-    
-    #ifdef SCREEN_ATTRIBUTES
-        Dim backgroundAttr as ubyte = currentScreenBackground
-    #else
-        Dim backgroundAttr as ubyte = BACKGROUND_ATTRIBUTE
-    #endif
-
-    ' Dim tinta As Ubyte = attr bAnd 7
-    ' Dim papelTile As Ubyte = (attr bAnd 56) / 8
-    Dim papelBack As Ubyte = (backgroundAttr bAnd 56) / 8
-    ' Dim brillo As Ubyte = (backgroundAttr bAnd 64) / 64
-    ' Dim parpadeo As Ubyte = (attr bAnd 128) / 128
-
-    ' Montar el atributo: papel, tinta, brillo, parpadeo
-    if ((attr bAnd 56) / 8) or tile <= ENEMY_DOOR_TILE or not papelBack Then return attr
-
-    Return (papelBack * 8) + (attr bAnd 7) + (((backgroundAttr bAnd 64) / 64) * 64) + (((attr bAnd 128) / 128) * 128)
-End Function
 
 #ifdef DROP_ENABLED
 sub drawDrop(tileX as ubyte, tileY as ubyte)

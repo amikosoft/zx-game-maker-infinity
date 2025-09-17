@@ -215,6 +215,8 @@ Sub playGame()
 
     Do
         waitretrace
+
+        debugB(timeToBreakTile)
         
         #ifdef PLATFORM_MOVEABLE
             If not isOnPlatform and enemiesFrame band 1 Then
@@ -467,6 +469,8 @@ Sub swapScreen(waitReady as ubyte)
         enemyBulletPositionX = 0
     #endif
     
+    timeToBreakTile = AUTOBREAKABLE_TILE_FRAMES
+
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()
         updateProtaData( mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
