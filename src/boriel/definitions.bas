@@ -38,7 +38,7 @@ const MAX_SCREEN_LEFT as ubyte = 2
 const MAX_SCREEN_BOTTOM as ubyte = 40
 const MAX_SCREEN_TOP as ubyte = 2
 
-const MAX_GENERIC_TILE as ubyte = 187
+' const MAX_GENERIC_TILE as ubyte = 188
 
 const BULLET_DIRECTION_LEFT = 0
 const BULLET_DIRECTION_RIGHT = 1
@@ -102,7 +102,6 @@ Dim framec As Ubyte AT 23672
 
 ' Dim lastFrameProta As Ubyte = 0
 ' Dim lastFrameEnemies As Ubyte = 0
-Dim lastFrameTiles As Ubyte = 0
 
 Const INVINCIBLE_FRAMES As Ubyte = 25
 Dim invincible As Ubyte = 0
@@ -143,17 +142,17 @@ Dim inMenu As Ubyte = 1
     #define MUSIC_BANK 3
 #endif
 
-#ifdef SIDE_VIEW
-    Dim tileSet(192, 7) As Ubyte at TILESET_DATA_ADDRESS
-#Else
-    Dim tileSet(194, 7) As Ubyte at TILESET_DATA_ADDRESS
-#endif
+' #ifdef SIDE_VIEW
+'     Dim tileSet(192, 7) As Ubyte at TILESET_DATA_ADDRESS
+' #Else
+'     Dim tileSet(194, 7) As Ubyte at TILESET_DATA_ADDRESS
+' #endif
+Dim tileSet(191, 7) As Ubyte at TILESET_DATA_ADDRESS
 Dim attrSet(191) As Ubyte at ATTR_DATA_ADDRESS
 ' Dim sprites(47, 31) As Ubyte at SPRITES_DATA_ADDRESS
 Dim screenObjectsInitial(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
 Dim screensOffsets(SCREENS_COUNT) As Uinteger at SCREEN_OFFSETS_DATA_ADDRESS
 Dim enemiesInScreenOffsets(SCREENS_COUNT) As Uinteger at ENEMIES_IN_SCREEN_OFFSETS_DATA_ADDRESS
-Dim animatedTilesInScreen(SCREENS_COUNT, MAX_ANIMATED_TILES_PER_SCREEN, 2) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
 Dim damageTiles(DAMAGE_TILES_COUNT) As Ubyte at DAMAGE_TILES_DATA_ADDRESS
 Dim enemiesPerScreen(SCREENS_COUNT) As byte at ENEMIES_PER_SCREEN_INITIAL_DATA_ADDRESS
 Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
@@ -163,6 +162,14 @@ Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSE
 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
     Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
     dim firstTimeEnemiesScreen as ubyte = 1
+#endif
+
+' Dim animatedTilesInScreen(SCREENS_COUNT, MAX_ANIMATED_TILES_PER_SCREEN, 2) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
+
+#ifdef ANIMATED_TILES_ENABLED
+    Dim animatedTilesPerScreen(ANIMATED_TILES_TOTAL, 3) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
+    dim firstTileInScreen as integer = 0
+    Dim lastFrameTiles As Ubyte = 0
 #endif
 
 #ifdef IN_GAME_TEXT_ENABLED
@@ -176,6 +183,13 @@ Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSE
     Dim screenMusic(SCREENS_COUNT) As Ubyte at SCREEN_MUSIC_DATA_ADDRESS
     Dim musicPlayed as Ubyte = 0
 #endif
+
+#ifdef SCREEN_ATTRIBUTES
+    Dim screenAttributes(SCREENS_COUNT, 1) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
+    Dim currentScreenBackground as ubyte = 0
+    Dim currentTileBackground as ubyte = 0
+#endif
+
 
 #ifdef USE_BREAKABLE_TILE
     Dim brokenTiles(SCREENS_COUNT) As Ubyte at BROKEN_TILES_DATA_ADDRESS
@@ -197,6 +211,17 @@ Const ENEMY_MODE As Ubyte = 9
 Const ENEMY_VERTICAL_DIRECTION As Ubyte = 10
 Const ENEMY_SPEED As Ubyte = 11
 
+Const ENEMY_MODE_NORMAL = 0
+Const ENEMY_MODE_ALERT = 1
+Const ENEMY_MODE_PURSUIT = 2
+Const ENEMY_MODE_ONEDIRECTION = 4
+Const ENEMY_MODE_ANTICLOCKWISE = 5
+Const ENEMY_MODE_CLOCKWISE = 6
+
+Const ENEMY_MODE_TRAP_ALL = 10
+Const ENEMY_MODE_TRAP_VERTICAL = 11
+Const ENEMY_MODE_TRAP_HORIZONAL = 12
+
 #ifdef ARCADE_MODE
     Dim currentScreenKeyX As Ubyte
     Dim currentScreenKeyY As Ubyte
@@ -206,4 +231,5 @@ Const ENEMY_SPEED As Ubyte = 11
     Dim currentLevel As Ubyte = 0
 #endif
 
+Const BREAKABLE_TILE As Ubyte = 62
 Const ENEMY_DOOR_TILE As Ubyte = 63

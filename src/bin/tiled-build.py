@@ -37,7 +37,9 @@ maxAnimatedTilesPerScreen = 6
 
 damageTiles = []
 animatedTilesIds = []
+animatedTilesPerScreen = []
 screenAnimatedTiles = defaultdict(dict)
+
 ammoTile = 0
 keyTile = 0
 itemTile = 0
@@ -51,7 +53,7 @@ for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
             if tile['type'] == 'flag':
-                flagTile = str(tile['id'])
+                flagTile = tile['id']
             # if tile['type'] == 'gore':
             #     dropTile = str(tile['id'])
             if tile['type'] == 'ammo':
@@ -165,6 +167,7 @@ jumpArray = "{-2, -2, -2, -2, -2, 0}"
 
 livesMode = 0
 livesEnergy = 0
+livesDeadBackgroundColor = 0
 
 enemiesShoot = 0
 enemiesShootDirection = 'all'
@@ -185,6 +188,14 @@ adventureTextsLength = 30
 adventureTextsClearScreen = False
 adventureTextsAcceptWithFire = False
 adventureTextsHideTiles = False
+adventureTextsBackgroundColor = 0
+
+unshiftedGraphics = False
+transpasableItems = 16
+screenAttributesEnabled = False
+
+playerReadyConfirmation = False
+fullChangeScreenAnimation = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -309,6 +320,10 @@ if 'properties' in data:
                 livesMode = 1
             elif property['value'] == 'show graveyard':
                 livesMode = 2
+        elif property['name'] == 'livesEnergy':
+            livesEnergy = property['value']
+        elif property['name'] == 'livesDeadBackgroundColor':
+            livesDeadBackgroundColor = property['value']
         elif property['name'] == 'messagesEnabled':
             messagesEnabled = 1 if property['value'] else 0
         elif property['name'] == 'enemiesAlertDistance':
@@ -349,6 +364,8 @@ if 'properties' in data:
             adventureTexts = property['value']
         elif property['name'] == 'adventureTextsLength':
             adventureTextsLength = int(property['value'])
+        elif property['name'] == 'adventureTextsBackgroundColor':
+            adventureTextsBackgroundColor = int(property['value'])
         elif property['name'] == 'adventureTextsClearScreen':
             adventureTextsClearScreen = property['value']
         elif property['name'] == 'adventureTextsAcceptWithFire':
@@ -359,8 +376,16 @@ if 'properties' in data:
             laddersEnabled = property['value']
         elif property['name'] == 'checkpointsEnabled':
             checkpointsEnabled = property['value']
-        elif property['name'] == 'livesEnergy':
-            livesEnergy = property['value']
+        elif property['name'] == 'graphicsModeUnshifted':
+            unshiftedGraphics = property['value']
+        elif property['name'] == 'transpasableItems':
+            transpasableItems = property['value']
+        elif property['name'] == 'screenAttributes':
+            screenAttributesEnabled = property['value']
+        elif property['name'] == 'playerReadyConfirmation':
+            playerReadyConfirmation = property['value']
+        elif property['name'] == 'fullChangeScreenAnimation':
+            fullChangeScreenAnimation = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -369,11 +394,12 @@ damageTilesCount = len(damageTiles) - 1 if len(damageTiles) > 0 else 0
 animatedTilesIdsCount = len(animatedTilesIds) - 1 if len(animatedTilesIds) > 0 else 0
 
 configStr = "const MAX_ENEMIES_PER_SCREEN as ubyte = " + str(maxEnemiesPerScreen) + "\n"
-configStr += "const MAX_ANIMATED_TILES_PER_SCREEN as ubyte = " + str(maxAnimatedTilesPerScreen - 1) + "\n"
 configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
 configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 configStr += "const MAX_LINE as ubyte = " + str(screenHeight * 2 - 4) + "\n"
+
+configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(64+transpasableItems) + "\n"
 
 # si hay gravityLow el salto se pasa los -2 a -1
 if gravityLow == True:
@@ -408,6 +434,17 @@ elif jumpType == 'mini':
         jumpArrayCount = 5
         jumpArray = "{-2, -2, -2, 0, 0}"
 
+if unshiftedGraphics:
+    configStr += "#DEFINE STORE_UNSHIFTED_SPRITES\n"
+
+configStr += "const MAX_GENERIC_TILE as ubyte = " + str(flagTile + 1) + "\n"
+
+if playerReadyConfirmation:
+    configStr += "#DEFINE PLAYER_READY_CONFIRMATION\n"
+
+if fullChangeScreenAnimation:
+    configStr += "#DEFINE FULL_SCREEN_CHANGE_ANIMATION\n"
+
 if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
     configStr += "#DEFINE LIVES_MODE_RESPAWN\n"
@@ -429,6 +466,10 @@ elif livesMode == 2:
     if int(livesEnergy) > 0:
         configStr += "#DEFINE ENERGY_ENABLED\n"
         configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
+    
+    if livesDeadBackgroundColor > 0:
+        configStr += "#DEFINE MAP_COLOR_DEAD_ENABLED\n"
+        configStr += "const MAP_COLOR_DEAD_COLOR as ubyte = " + str(livesDeadBackgroundColor) + "\n"
 else:
     configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
 
@@ -450,14 +491,18 @@ configStr += "const ANIMATE_PERIOD_TILE as ubyte = " + str(animatePeriodTile) + 
 configStr += "const ITEMS_COUNTDOWN as ubyte = " + str(itemsCountdown) + "\n"
 configStr += "dim itemsToFind as ubyte = " + str(goalItems) + "\n"
 if itemsCountdown == 1 and not arcadeMode:
+    if goalItems == 0:
+        exitWithErrorMessage("Items goal must be greater than 0 when items countdown is enabled")
     configStr += "const ITEMS_INCREMENT as ubyte = -1\n"
     configStr += "const GOAL_ITEMS as ubyte = 0 \n"
     configStr += "dim currentItems as ubyte = " + str(goalItems) + "\n"
 else:
+    if goalItems == 0 and not arcadeMode:
+        exitWithErrorMessage("Items goal must be greater than 0 when items countdown and arcadeMode are disabled")
+
     configStr += "const ITEMS_INCREMENT as ubyte = 1\n"
     configStr += "const GOAL_ITEMS as ubyte = " + str(goalItems) + "\n"
     configStr += "dim currentItems as ubyte = 0\n\n"
-
 
 # save damage tiles in file .bin instead variable
 with open("output/damageTiles.bin", "wb") as f:
@@ -602,6 +647,7 @@ for layer in data['layers']:
 
                 if int(tile) in animatedTilesIds and len(screenAnimatedTiles[idx]) < maxAnimatedTilesPerScreen:
                     screenAnimatedTiles[idx].append([tile, mapX, mapY])
+                    animatedTilesPerScreen.append([idx, tile, mapX, mapY])
 
                 if tile == keyTile:
                     screenObjects[idx]['key'] = 1
@@ -693,20 +739,29 @@ with open("output/objectsInScreen.bin", "wb") as f:
     for screen in screenObjects:
         f.write(bytearray([screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo']]))
 
-for screen in screenAnimatedTiles:
-    for i in range(maxAnimatedTilesPerScreen - len(screenAnimatedTiles[screen])):
-        screenAnimatedTiles[screen].append([0, 0, 0])
 
-with open("output/animatedTilesInScreen.bin", "wb") as f:
-    for screen in screenAnimatedTiles:
-        for tile in screenAnimatedTiles[screen]:
-            f.write(bytearray([int(tile[0]), int(tile[1]), int(tile[2])]))
+# for screen in screenAnimatedTiles:
+#     for i in range(maxAnimatedTilesPerScreen - len(screenAnimatedTiles[screen])):
+#         screenAnimatedTiles[screen].append([0, 0, 0])
 
-# configStr += "dim screenObjectsInitial(" + str(screensCount - 1) + ", 3) as ubyte = { _\n"
-# for screen in screenObjects:
-#     configStr += '\t{' + str(screenObjects[screen]['item']) + ', ' + str(screenObjects[screen]['key']) + ', ' + str(screenObjects[screen]['door']) + ', ' + str(screenObjects[screen]['life']) + '}, _\n'
-# configStr = configStr[:-4]
-# configStr += " _\n}\n\n"
+# with open("output/animatedTilesInScreen.bin", "wb") as f:
+#     for screen in screenAnimatedTiles:
+#         for tile in screenAnimatedTiles[screen]:
+#             f.write(bytearray([int(tile[0]), int(tile[1]), int(tile[2])]))
+
+if maxAnimatedTilesPerScreen > 0:
+    configStr += "#define ANIMATED_TILES_ENABLED\n"
+    configStr += "#define ANIMATED_TILES_TOTAL " + str(len(animatedTilesPerScreen)) + "\n"
+    configStr += "#define MAX_ANIMATED_TILES_PER_SCREEN " + str(maxAnimatedTilesPerScreen) + "\n"
+    with open("output/animatedTilesInScreen.bin", "wb") as f:
+        for i in range(len(animatedTilesPerScreen)):
+            tile = animatedTilesPerScreen[i]
+            f.write(bytearray([int(tile[0]), int(tile[1]), int(tile[2]), int(tile[3])]))
+else:
+    # configStr += "const MAX_ANIMATED_TILES_PER_SCREEN as ubyte = " + str(maxAnimatedTilesPerScreen - 1) + "\n"
+    configStr += "#define MAX_ANIMATED_TILES_PER_SCREEN  " + str(maxAnimatedTilesPerScreen) + "\n"
+    with open("output/animatedTilesInScreen.bin", "wb") as f:
+        f.write(bytearray([]))
 
 configStr += "const SCREEN_LENGTH as uinteger = " + str(len(screens[0]) - 1) + "\n"
 configStr += "dim decompressedMap(SCREEN_LENGTH) as ubyte\n"
@@ -760,6 +815,9 @@ with open(outputDir + "screenOffsets.bin", "wb") as f:
 enemiesPursuit = 0
 enemiesAlert = 0
 enemiesOneDirection = 0
+enemiesTrap = 0
+enemiesTrapVertical = 0
+enemiesTrapHorizontal = 0
 enemiesClockwise = 0
 enemiesAnticlockwise = 0
 
@@ -775,6 +833,10 @@ maxAdventureState = 0
 musicsSelected = [False,False,False,False,False,False,]
 
 musics = {}
+
+# screen attributes
+attributes = {}
+attributesSelected = False
 
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
@@ -793,7 +855,8 @@ for layer in data['layers']:
                     'tile': str(object['gid'] - spriteTileOffset),
                     'life': '1',
                     'speed': '3',
-                    'mode': '0'
+                    'mode': '0',
+                    'trapContinousMode': 'no'
                 }
 
                 print(objects[str(object['id'])])
@@ -811,6 +874,8 @@ for layer in data['layers']:
                         elif property['name'] == 'speed':
                             if property['value'] in [0, 1, 2]:
                                 objects[str(object['id'])]['speed'] = str(property['value'] + 1)
+                        elif property['name'] == 'trapContinousMode':
+                            objects[str(object['id'])]['trapContinousMode'] = str(property['value'])
                         elif property['name'] == 'mode':
                             if property['value'] == 'alert':
                                 objects[str(object['id'])]['mode'] = '1'
@@ -828,7 +893,20 @@ for layer in data['layers']:
                             elif property['value'] == 'clockwise':
                                 objects[str(object['id'])]['mode'] = '6'
                                 enemiesClockwise = 1
-
+                            elif property['value'] == 'trap all directions':
+                                objects[str(object['id'])]['mode'] = '10'
+                                enemiesTrap = 1
+                                enemiesTrapVertical = 1
+                                enemiesTrapHorizontal = 1
+                            elif property['value'] == 'trap vertical':
+                                objects[str(object['id'])]['mode'] = '11'
+                                enemiesTrap = 1
+                                enemiesTrapVertical = 1
+                            elif property['value'] == 'trap horizontal':
+                                objects[str(object['id'])]['mode'] = '12'
+                                enemiesTrap = 1
+                                enemiesTrapHorizontal = 1
+                            
 if enemiesPursuit == 1:
     configStr += "#DEFINE ENEMIES_PURSUIT_ENABLED\n"
     if enemiesPursuitCollide == True:
@@ -837,6 +915,16 @@ if enemiesPursuit == 1:
 if enemiesAlert == 1:
     configStr += "#DEFINE ENEMIES_ALERT_ENABLED\n"
     configStr += "#DEFINE ENEMIES_ALERT_DISTANCE " + str(enemiesAlertDistance) + "\n"
+
+
+if enemiesTrap == 1:
+    configStr += "#DEFINE ENEMIES_TRAP_ENABLED\n"
+
+    if enemiesTrapVertical == 1:
+        configStr += "#DEFINE ENEMIES_TRAP_VERTICAL_ENABLED\n"
+
+    if enemiesTrapHorizontal == 1:
+        configStr += "#DEFINE ENEMIES_TRAP_HORIZONTAL_ENABLED\n"
 
 if enemiesOneDirection == 1:
     configStr += "#DEFINE ENEMIES_ONE_DIRECTION_ENABLED\n"
@@ -872,7 +960,6 @@ for layer in data['layers']:
                             linEnd = objects[str(object['properties'][0]['value'])]['linIni'] 
                             objects[str(object['properties'][0]['value'])]['linEnd'] = linEnd
                             objects[str(object['properties'][0]['value'])]['linIni'] = linIni
-
                 elif object['type'] == 'mainCharacter':
                     initialScreen = screenId
                     initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
@@ -915,27 +1002,45 @@ for layer in data['layers']:
 
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
-                elif object['type'] == 'music1':
-                    musics[screenId] = [1]
-                    musicsSelected[0] = True
-                elif object['type'] == 'music2':
-                    musics[screenId] = [2]
-                    musicsSelected[1] = True
-                elif object['type'] == 'music3':
-                    musics[screenId] = [3]
-                    musicsSelected[2] = True
-                elif object['type'] == 'title':
-                    musics[screenId] = [4]
-                    musicsSelected[3] = True
-                elif object['type'] == 'ending':
-                    musics[screenId] = [5]
-                    musicsSelected[4] = True
-                elif object['type'] == 'gameover':
-                    musics[screenId] = [6]
-                    musicsSelected[5] = True
+                elif object['type'] == 'screen_attributes':
+                    if not screenId in attributes:
+                        attributes[screenId] = {
+                            "background": int(backgroundAttribute),
+                            "border": int(border),
+                            "tile": 0
+                        }
+                    for prop in range(len(object['properties'])):
+                        if object['properties'][prop]['name'] == 'music':
+                            if object['properties'][prop]['value'] == 'music1' or object['properties'][prop]['value'] == 'music':
+                                musics[screenId] = [1]
+                                musicsSelected[0] = True
+                            elif object['properties'][prop]['value'] == 'music2':
+                                musics[screenId] = [2]
+                                musicsSelected[1] = True
+                            elif object['properties'][prop]['value'] == 'music3':
+                                musics[screenId] = [3]
+                                musicsSelected[2] = True
+                            elif object['properties'][prop]['value'] == 'title':
+                                musics[screenId] = [4]
+                                musicsSelected[3] = True
+                            elif object['properties'][prop]['value'] == 'ending':
+                                musics[screenId] = [5]
+                                musicsSelected[4] = True
+                            elif object['properties'][prop]['value'] == 'gameover':
+                                musics[screenId] = [6]
+                                musicsSelected[5] = True
+                        elif object['properties'][prop]['name'] == 'background':
+                            attributesSelected = True
+                            attributes[screenId]["background"] = int(object['properties'][prop]['value'])
+                        elif object['properties'][prop]['name'] == 'tile':
+                            attributesSelected = True
+                            attributes[screenId]["tile"] = int(object['properties'][prop]['value'])
+                        elif object['properties'][prop]['name'] == 'border':
+                            attributesSelected = True
+                            attributes[screenId]["border"] = int(object['properties'][prop]['value'])
                 else:
                     print(object)
-                    errorMessage = 'Unknown object type. Only "enemy", "text", "title", "ending", "gameover", "music1", "music2", "music3" or "mainCharacter" are allowed. Found: ' + object['type']
+                    errorMessage = 'Unknown object type. Only "enemy", "text", "screen_attributes" or "mainCharacter" are allowed. Found: ' + object['type']
                     exitWithErrorMessage(errorMessage)   
 
 # CONTROL DE MUSICAS
@@ -962,21 +1067,38 @@ if musicEnabled == 1:
             else:
                 f.write(bytearray([0]))
 
+# Atributos por pantalla seleccionados
+if screenAttributesEnabled:
+    configStr += "#DEFINE SCREEN_ATTRIBUTES\n"
+    print("SCREEN_ATTRIBUTES\n")
+    with open("output/screenAttributes.bin", "wb") as f:
+        for screenId in range(screensCount):
+            print(screenId)
+            if screenId in attributes:
+                print(attributes[screenId])
+                print([attributes[screenId]['background'], attributes[screenId]['tile']])
+                f.write(bytearray([attributes[screenId]['background'], attributes[screenId]['tile']]))
+            else:
+                f.write(bytearray([backgroundAttribute, 0]))
+
+if adventureTextsAcceptWithFire == True:
+    configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"
+
 if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
 
     configStr += "const TEXTS_SIZE as ubyte = " + str(adventureTextsLength) + "\n"
     
-    if adventureTextsClearScreen == True:
-        configStr += "#DEFINE FULLSCREEN_TEXTS\n"
+    if adventureTextsBackgroundColor > 0:
+        configStr += "#DEFINE MAP_COLOR_TEXT_ENABLED\n"
+        configStr += "const MAP_COLOR_TEXT_COLOR as ubyte = " + str(adventureTextsBackgroundColor) + "\n"
+    else:
+        if adventureTextsClearScreen == True:
+            configStr += "#DEFINE FULLSCREEN_TEXTS\n"
     
-    if adventureTextsAcceptWithFire == True:
-        configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"
-
     if adventureTextsHideTiles == True:
         configStr += "#DEFINE ADVENTURE_TEXTS_HIDE_TILES\n"
-        
-
+    
     if isAdventure:
         if maxAdventureState < 2:
             exitWithErrorMessage('Max adventure state must be higher than 1. Current: ' + str(maxAdventureState))
@@ -987,7 +1109,8 @@ if adventureTexts and len(texts) > 0:
     allTexts = []
 
     with open("output/textsCoord.bin", "wb") as f:
-        sortedTexts = sorted(texts, key=lambda texto: texto[0])
+        sortedTexts = sorted(texts, key=lambda texto: texto[5])
+        sortedTexts = sorted(sortedTexts, key=lambda texto: texto[0])
         for i in range(len(sortedTexts)):
             print("=========================")
             itemText = sortedTexts[i]
@@ -1005,7 +1128,7 @@ if adventureTexts and len(texts) > 0:
                 for p, string in enumerate(allTexts):
                     if string == textoFinal:
                         print("texto existente "+ string + " en posicion " + str(p))
-                        posicion = p
+                        posicion = p - 1
                         break
                 
                 if posicion == -1:
@@ -1085,9 +1208,21 @@ for layer in data['layers']:
                                 verticalDirection = '1'
                             else:
                                 verticalDirection = '0'
-                        elif enemy['mode'] == '5' or enemy['mode'] == '6':
+                        elif enemy['mode'] == '5' or enemy['mode'] == '6' or enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
                             horizontalDirection = '0'
                             verticalDirection = '0'
+
+                            if enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
+                                enemy['colEnd'] = "0"
+                                enemy['linEnd'] = "0"
+                                
+                                if enemy['trapContinousMode'] == 'horizontal':
+                                    enemy['colEnd'] = "1"
+                                elif enemy['trapContinousMode'] == 'vertical':
+                                    enemy['linEnd'] = "1"
+                                elif enemy['trapContinousMode'] == 'all including diagonals':
+                                    enemy['linEnd'] = "1"
+                                    enemy['colEnd'] = "1"
                         else:
                             if (int(enemy['colIni']) < int(enemy['colEnd'])):
                                 horizontalDirection = '1'

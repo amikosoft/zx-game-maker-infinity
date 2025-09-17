@@ -3,6 +3,16 @@ sub pauseUntilPressKey()
     while INKEY$="":wend
 end sub
 
+Sub loadScreen128(screen_address as Integer)
+    #ifdef ENABLED_128k
+        PaginarMemoria(DATA_BANK)
+        dzx0Standard(screen_address, $4000)
+        PaginarMemoria(0)
+    #else
+        dzx0Standard(screen_address, $4000)
+    #endif 
+end sub
+
 sub pauseUntilPressEnter()
     Do
     Loop Until MultiKeys(KEYENTER)
@@ -20,18 +30,6 @@ sub pauseUntilPressFire()
     Do
     Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
 End Sub
-
-#ifdef DROP_ENABLED
-sub drawDrop(tileX as ubyte, tileY as ubyte)
-    for tx=0 to 1
-        for ty=0 to 1
-            if not GetTile(tileX + tx, tileY + ty) Then 
-                SetTileChecked(DROP_TILE, attrSet(DROP_TILE), tileX + tx, tileY + ty)
-            end if
-        next ty
-    next tx
-end sub
-#endif
 
 Function checkProtaTop() As Ubyte
     If protaY < 2 Then
@@ -78,8 +76,12 @@ sub decrementLife()
         ' #endif
 
         #ifdef LIVES_MODE_GRAVEYARD
-            'saveSprite( protaY, protaX, 15, 0)
+            'updateProtaData( protaY, protaX, 15, 0)
             protaTile = 15
+
+            #ifdef MAP_COLOR_DEAD_ENABLED
+                mapColor(MAP_COLOR_DEAD_COLOR)
+            #endif
         #endif
         
         #ifdef LIVES_MODE_RESPAWN
@@ -94,7 +96,7 @@ sub decrementLife()
             #endif
             #endif
 
-            if currentLife Then saveSprite( protaYRespawn, protaXRespawn, 1, protaDirection)
+            if currentLife Then updateProtaData( protaYRespawn, protaXRespawn, 1, protaDirection)
         #endif
 
         #ifdef ENERGY_ENABLED
@@ -116,6 +118,8 @@ sub printLife()
     PRINT AT 22, 5; currentLife
     
     #ifdef ENERGY_ENABLED
+        ' if currentEnergy > INITIAL_ENERGY Then currentEnergy = INITIAL_ENERGY
+        
         PRINT AT 23, 5; "   "
         PRINT AT 23, 5; currentEnergy
     #endif
@@ -134,6 +138,8 @@ sub printLife()
         #endif
     #endif
     #ifdef HISCORE_ENABLED
+        ' Print AT 22, 20; "00000"
+        ' Print AT 23, 20; "00000"
         PRINT AT 22, 25 - LEN(STR$(hiScore)); hiScore
         PRINT AT 23, 25 - LEN(STR$(score)); score
     #endif
@@ -197,16 +203,46 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     
     ' if tile < 1 then return 0
     
-    if tile < 1 or tile > 64 then 
-        #ifdef MESSAGES_ENABLED
-            If tile = ENEMY_DOOR_TILE Then
-                printMessage("Kill All!", 2, 0)
-            End If
-        #endif
-        return 0
-    End if
+    if tile < 1 or tile > ENEMY_DOOR_TILE then return 0
+    
+    #ifdef KEYS_ENABLED
+    If tile = DOOR_TILE Then
+        If currentKeys Then
+            currentKeys = currentKeys - 1
+            
+            #ifdef LEVELS_MODE
+                moveScreen = 2
+            #Else
+                screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) = 0
+                removeTilesFromScreen(DOOR_TILE)
+            #endif
+            
+            printLife()
+            BeepFX_Play(4)
+            #ifdef MESSAGES_ENABLED
+            Else
+                printMessage("Need keys", 2, 0)
+            #endif
+        End If
+    End If
+    #endif
+
+    #ifdef MESSAGES_ENABLED
+        If tile = ENEMY_DOOR_TILE Then
+            printMessage("Kill All!", 2, 0)
+        End If
+    #endif
     
     return tile
+end function
+
+function isInStep(x as ubyte, y as ubyte) as ubyte
+    Dim col as uByte = x >> 1
+    Dim lin as uByte = y >> 1
+
+    if GetTile(col, lin) = 64 or GetTile(col, lin) = 65 then return 1
+    
+    return 0
 end function
 
 #ifdef ARCADE_MODE
@@ -238,8 +274,8 @@ end function
         Dim lin as uByte = y >> 1
         
         dim tile as ubyte = GetTile(col, lin)
-        
-        if tile > 63 and tile < 80 then return 1
+
+        if tile > ENEMY_DOOR_TILE and tile < TRANSPASABLE_ITEMS then return tile
         
         return 0
     end function
@@ -254,33 +290,14 @@ function CheckCollision(x as uByte, y as uByte) as uByte
     Dim maxCol as uByte = 1
     Dim maxLin as uByte = 1
 
-    if (x bAnd 1) <> 0 Then maxCol = 2
-    if (y bAnd 1) <> 0 Then maxLin = 2
+    if (x bAnd 1) Then maxCol = 2
+    if (y bAnd 1) Then maxLin = 2
     
     for c=0 to maxCol
         for l=0 to maxLin
             if isSolidTileByColLin(col+c, lin+l) then return 1
         next l
     next c
-
-    ' if isSolidTileByColLin(col, lin) then return 1
-    ' if isSolidTileByColLin(col + 1, lin) then return 1
-    ' if isSolidTileByColLin(col, lin + 1) then return 1
-    ' if isSolidTileByColLin(col + 1, lin + 1) then return 1
-    
-    ' if not yIsEven then
-    '     if isSolidTileByColLin(col, lin + 2) then return 1
-    '     if isSolidTileByColLin(col + 1, lin + 2) then return 1
-    ' end if
-    
-    ' if not xIsEven then
-    '     if isSolidTileByColLin(col + 2, lin) then return 1
-    '     if isSolidTileByColLin(col + 2, lin + 1) then return 1
-    ' end if
-    
-    ' if not xIsEven and not yIsEven then
-    '     if isSolidTileByColLin(col + 2, lin + 2) then return 1
-    ' end if
     
     return 0
 end function
@@ -294,7 +311,11 @@ sub removeTilesFromScreen(tile as ubyte)
     
     for index=0 to SCREEN_LENGTH
         if peek(@decompressedMap + index) - 1 = tile then
-            SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+            #ifdef SCREEN_ATTRIBUTES
+                SetTile(currentTileBackground, currentScreenBackground, x, y)
+            #else
+                SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+            #endif
         end if
         
         x = x + 1
@@ -305,13 +326,52 @@ sub removeTilesFromScreen(tile as ubyte)
     next index
 end sub
 
-sub saveSprite(lin as ubyte, col as ubyte, tile as ubyte, directionRight as ubyte)
+sub updateProtaData(lin as ubyte, col as ubyte, tile as ubyte, directionRight as ubyte)
     ' if sprite = PROTA_SPRITE then
     protaX = col
     protaY = lin
     protaTile = tile
     protaDirection = directionRight
 end sub
+
+Function tileAttrWithBackground(tile As Ubyte) As Ubyte
+    Dim attr As Ubyte = attrSet(tile)
+    
+    #ifdef SCREEN_ATTRIBUTES
+        Dim backgroundAttr as ubyte = currentScreenBackground
+    #else
+        Dim backgroundAttr as ubyte = BACKGROUND_ATTRIBUTE
+    #endif
+
+    ' Dim tinta As Ubyte = attr bAnd 7
+    ' Dim papelTile As Ubyte = (attr bAnd 56) / 8
+    Dim papelBack As Ubyte = (backgroundAttr bAnd 56) / 8
+    ' Dim brillo As Ubyte = (backgroundAttr bAnd 64) / 64
+    ' Dim parpadeo As Ubyte = (attr bAnd 128) / 128
+
+    ' Montar el atributo: papel, tinta, brillo, parpadeo
+    if ((attr bAnd 56) / 8) or tile <= ENEMY_DOOR_TILE or not papelBack Then return attr
+
+    Return (papelBack * 8) + (attr bAnd 7) + (((backgroundAttr bAnd 64) / 64) * 64) + (((attr bAnd 128) / 128) * 128)
+End Function
+
+#ifdef DROP_ENABLED
+sub drawDrop(tileX as ubyte, tileY as ubyte)
+    for tx=0 to 1
+        for ty=0 to 1
+            #ifdef SCREEN_ATTRIBUTES
+                if GetTile(tileX + tx, tileY + ty) = currentTileBackground Then 
+                    SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tileX + tx, tileY + ty)
+                end if
+            #Else
+                if not GetTile(tileX + tx, tileY + ty) Then 
+                    SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tileX + tx, tileY + ty)
+                end if
+            #endif
+        next ty
+    next tx
+end sub
+#endif
 
 #ifdef SIDE_VIEW
     sub jump()

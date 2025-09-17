@@ -3,7 +3,7 @@ import os
 from builder.helper import *
 
 class BinaryFilesToTapMerger:
-    def execute(self, is128k, useBreakableTile, enableAdventureTexts, musicEnabled):
+    def execute(self, is128k, useBreakableTile, enableAdventureTexts, musicEnabled, screenAttrs):
         output_file = OUTPUT_FOLDER + "files.bin"
 
         if os.path.isfile(output_file):
@@ -24,6 +24,7 @@ class BinaryFilesToTapMerger:
         input_files += [
             OUTPUT_FOLDER + "map.bin.zx0",
             OUTPUT_FOLDER + "enemies.bin.zx0",
+            # OUTPUT_FOLDER + "sprites.bin",
             OUTPUT_FOLDER + "tiles.bin",
             OUTPUT_FOLDER + "attrs.bin",
             OUTPUT_FOLDER + "objectsInScreen.bin",
@@ -43,6 +44,9 @@ class BinaryFilesToTapMerger:
 
         if is128k and musicEnabled:
             input_files.append(OUTPUT_FOLDER + "screenMusic.bin")
+
+        if screenAttrs:
+            input_files.append(OUTPUT_FOLDER + "screenAttributes.bin")
 
         if useBreakableTile:
             input_files.append(OUTPUT_FOLDER + "brokenTiles.bin")

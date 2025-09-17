@@ -10,10 +10,12 @@ Sub showMenu()
     #endif
     inMenu = 1
     clearScreen()
+
     #ifdef ENABLED_128k
-        PaginarMemoria(DATA_BANK)
-        dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
-        PaginarMemoria(0)
+        ' PaginarMemoria(DATA_BANK)
+        ' dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
+        ' PaginarMemoria(0)
+        loadScreen128(TITLE_SCREEN_ADDRESS)
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_TITLE_ENABLED
                 VortexTracker_Play(MUSIC_TITLE_ADDRESS)
@@ -28,6 +30,7 @@ Sub showMenu()
         Print AT 0, 26; hiScore
     #endif
     
+    kempston = 0
     Do
         If MultiKeys(KEY1) Then
             If Not keyArray(LEFT) Then
@@ -148,9 +151,10 @@ Sub playGame()
         #endif
         
         #ifdef INTRO_SCREEN_ENABLED
-            PaginarMemoria(DATA_BANK)
-            dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
-            PaginarMemoria(0)
+            ' PaginarMemoria(DATA_BANK)
+            ' dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
+            ' PaginarMemoria(0)
+            loadScreen128(INTRO_SCREEN_ADDRESS)
             pauseUntilPressEnter()
         #endif
     #endif
@@ -164,16 +168,23 @@ Sub playGame()
     #endif
     
     #ifdef ENABLED_128k
-        PaginarMemoria(DATA_BANK)
-        dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
-        PaginarMemoria(0)
+        ' PaginarMemoria(DATA_BANK)
+        ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
+        ' PaginarMemoria(0)
+        #ifndef PLAYER_READY_CONFIRMATION
+            loadScreen128(HUD_SCREEN_ADDRESS)
+        #endif
+
         #ifdef MUSIC_ENABLED
             VortexTracker_Play(MUSIC_ADDRESS)
         #endif
     #Else
-        dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
+        #ifndef PLAYER_READY_CONFIRMATION
+            dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
+        #endif
     #endif
-    
+
+
     #ifndef ARCADE_MODE
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = INITIAL_MAIN_CHARACTER_X
@@ -184,25 +195,21 @@ Sub playGame()
             #endif
         #endif    
 
-        saveSprite(INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
+        updateProtaData(INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
     #endif
     
     resetValues()
-    swapScreen()
+    swapScreen(1)
     
     ' Let lastFrameProta = framec
     ' Let lastFrameEnemies = framec
-    lastFrameTiles = 0
+    #ifdef ANIMATED_TILES_ENABLED
+        lastFrameTiles = 0
+    #endif
     
     ' #ifdef NEW_BEEPER_PLAYER
     '     Let lastFrameBeep = framec
     ' #endif
-    
-    #ifdef HISCORE_ENABLED
-        Print AT 22, 20; "00000"
-        PRINT AT 22, 25 - LEN(STR$(hiScore)); hiScore
-        Print AT 23, 20; "00000"
-    #endif
     
     ' enemiesScreen = enemiesPerScreen(currentScreen)
 
@@ -219,19 +226,21 @@ Sub playGame()
             End if
         #EndIf
 
-        lastFrameTiles = lastFrameTiles + 1
-        If lastFrameTiles > ANIMATE_PERIOD_TILE Then
-            lastFrameTiles = 0
-            animatedFrame = Not animatedFrame
 
-            For i=0 To MAX_ANIMATED_TILES_PER_SCREEN:
-                dim animatedTileId as ubyte = animatedTilesInScreen(currentScreen, i, 0)
-                If animatedTileId Then
-                    Dim tile As Ubyte = animatedTileId + animatedFrame
-                    SetTile(tile, attrSet(tile), animatedTilesInScreen(currentScreen, i, 1), animatedTilesInScreen(currentScreen, i, 2))
-                End If
-            Next i
-        End If
+        #ifdef ANIMATED_TILES_ENABLED
+            lastFrameTiles = lastFrameTiles + 1
+            If lastFrameTiles > ANIMATE_PERIOD_TILE Then
+                lastFrameTiles = 0
+                animatedFrame = Not animatedFrame
+
+                For i=firstTileInScreen To ANIMATED_TILES_TOTAL
+                    if i > ANIMATED_TILES_TOTAL or animatedTilesPerScreen(i, 0) <> currentScreen Then Exit for
+                    Dim tile As Ubyte = animatedTilesPerScreen(i, 1) + animatedFrame
+                    'SetTile(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                    SetTileAnimated(tile, tileAttrWithBackground(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                Next i
+            End If
+        #endif
 
         If currentLife Then
             protaMovement()
@@ -286,17 +295,16 @@ Sub playGame()
                     #ifdef ENERGY_ENABLED
                     currentEnergy = INITIAL_ENERGY
                     #endif
-                    saveSprite(protaYRespawn, protaXRespawn, 1, protaDirection)
-                    printLife()
+                    updateProtaData(protaYRespawn, protaXRespawn, 1, protaDirection)
+                    ' printLife()
 
                     #ifndef ARCADE_MODE
-                    #ifdef CHECKPOINTS_ENABLED
-                        if currentScreen <> protaScreenRespawn Then
+                        #ifdef CHECKPOINTS_ENABLED
                             currentScreen = protaScreenRespawn
-                            swapScreen()   
-                        end if     
+                        #endif
                     #endif
-                    #endif
+
+                    swapScreen(1)   
                 End if
             #endif
             End if
@@ -318,9 +326,10 @@ Sub ending()
             #endif
         #endif
 
-        PaginarMemoria(DATA_BANK)
-        dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
-        PaginarMemoria(0)
+        ' PaginarMemoria(DATA_BANK)
+        ' dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
+        ' PaginarMemoria(0)
+        loadScreen128(ENDING_SCREEN_ADDRESS)
     #Else
         dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
     #endif
@@ -347,16 +356,17 @@ Sub gameOver()
     
     #ifdef ENABLED_128k
         #ifdef GAMEOVER_SCREEN_ENABLED
-            PaginarMemoria(DATA_BANK)
-            dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
-            PaginarMemoria(0)
+            ' PaginarMemoria(DATA_BANK)
+            ' dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
+            ' PaginarMemoria(0)
+            loadScreen128(GAMEOVER_SCREEN_ADDRESS)
         #Else
-            'saveSprite( protaY, protaX, 15, 0)
+            'updateProtaData( protaY, protaX, 15, 0)
             protaTile = 15
             Print AT 7, 12; "GAME OVER"
         #endif
     #Else
-        ' saveSprite( protaY, protaX, 15, 0)
+        ' updateProtaData( protaY, protaX, 15, 0)
         protaTile = 15
         Print at 7, 12; "GAME OVER"
     #endif
@@ -439,7 +449,7 @@ Sub resetValues()
 
 End Sub
 
-Sub swapScreen()
+Sub swapScreen(waitReady as ubyte)
     dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), @decompressedMap)
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), @decompressedEnemiesScreen)
     
@@ -459,7 +469,7 @@ Sub swapScreen()
     
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()
-        saveSprite( mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
+        updateProtaData( mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
         
         #ifdef LIVES_MODE_ENABLED
             protaXRespawn = mainCharactersArray(currentScreen, 0)
@@ -514,6 +524,53 @@ Sub swapScreen()
             End if
         #endif
     #endif
+    
+    #ifdef SCREEN_ATTRIBUTES
+        currentScreenBackground = screenAttributes(currentScreen, 0)
+        currentTileBackground = screenAttributes(currentScreen, 1)
+    #endif
 
-    redrawScreen()
+    #ifdef PLAYER_READY_CONFIRMATION
+        if waitReady Then
+            #ifdef ENABLED_128k
+                loadScreen128(HUD_SCREEN_ADDRESS)
+            #else
+                dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
+            #endif
+
+            #ifdef HISCORE_ENABLED
+                Print AT 22, 20; "00000"
+                Print AT 23, 20; "00000"
+            #endif
+            
+            printLife()
+
+            #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
+                pauseUntilPressFire()
+            #else
+                pauseUntilPressEnter()
+            #endif
+        end if 
+    #else
+        #ifdef HISCORE_ENABLED
+            Print AT 22, 20; "00000"
+            Print AT 23, 20; "00000"
+        #endif
+        
+        printLife()
+    #endif
+
+    asm
+    call CLEAR_SCREEN
+    end asm
+
+    #ifdef FULL_SCREEN_CHANGE_ANIMATION
+        #ifdef SCREEN_ATTRIBUTES
+            FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
+        #else
+            FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+        #endif
+    #endif
+
+    mapDraw()
 End Sub

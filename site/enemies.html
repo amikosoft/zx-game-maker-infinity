@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -696,6 +698,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="screen-attributes.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Propiedades de pantalla
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -980,7 +1005,17 @@
 <li>
 <p><strong>Anticlockwise</strong> (sentido contrario agujas de reloj), el enemigo se moverá en el sentido contrario de las agujas de un reloj formando un cuadrado, para ello requiere un tipo de movimiento diagonal para que se aprecie.</p>
 </li>
+<li>
+<p><strong>Trampa</strong>. Los enemigos de este tipo quedarán ocultos a la vista del player. Una vez tiene enfilado al player (verticalmente, horizontalmente o ambos configurable) aparecerá disparado contra él.</p>
+</li>
 </ul>
+<p>Para los enemigos de tipo trampa existe un parámetro adicional configurable por enemigo. Se trata del <strong>trapContinousMode</strong> del tipo <em>enemyTrapContinousMode</em>. Activando este atributo puedes hacer que tu enemigo trampa esté "disparándose" continuamente.</p>
+<p><img alt="" src="images/enemyTrapContinousMode.png" /></p>
+<p>Las opciones disponibles son:
+* <strong>no</strong> por lo que sólo se activará al enfilar (modo normal)
+* <strong>horizontal</strong> se dispara de manera horizontal (ambas direcciones) continuamente en la dirección del player
+* <strong>vertical</strong> se dispara de manera vertical (ambas direcciones) continuamente en la dirección del player
+* <strong>all including diagonals</strong> se dispara continuamente en todas las direcciones (hasta en diagonal) en la dirección del player</p>
 <p><em>NOTA: todos aquellos modos de comportamiento que se usen en enemigos usarán espacio del motor y lo liberarán si ningún enemigo los usa</em> </p>
 <h3 id="cantidad-de-vida">Cantidad de vida</h3>
 <p>Puedes asignarle la cantidad de vida que tiene cada enemigo, por ejemplo si le pones cantidad de vida 5 el protagonista le tendrá que disparar 5 veces para matarlo.</p>

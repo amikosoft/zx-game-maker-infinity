@@ -69,7 +69,10 @@
             "alert",
             "one direction",
             "anticlockwise",
-            "clockwise"
+            "clockwise",
+            "trap all directions",
+            "trap vertical",
+            "trap horizontal"
         ],
         "valuesAsFlags": false
     },
@@ -132,6 +135,19 @@
         "valuesAsFlags": false
     },
     {
+        "id": 12,
+        "name": "enemyTrapContinousMode",
+        "storageType": "string",
+        "type": "enum",
+        "values": [
+            "no",
+            "horizontal",
+            "vertical",
+            "all including diagonals"
+        ],
+        "valuesAsFlags": false
+    },
+    {
         "color": "#ffa0a0a4",
         "drawFill": true,
         "id": 2,
@@ -181,7 +197,12 @@
                 "name": "adventureTextsClearScreen",
                 "type": "bool",
                 "value": false
-            },  
+            },
+            {
+                "name": "adventureTextsBackgroundColor",
+                "type": "int",
+                "value": 0
+            },
             {
                 "name": "adventureTextsAcceptWithFire",
                 "type": "bool",
@@ -322,6 +343,11 @@
                 "value": "side"
             },
             {
+                "name": "graphicsModeUnshifted",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "goalItems",
                 "type": "int",
                 "value": 2
@@ -414,6 +440,11 @@
                 "value": 5
             },
             {
+                "name": "livesDeadBackgroundColor",
+                "type": "int",
+                "value": 0
+            },
+            {
                 "name": "livesEnergy",
                 "type": "int",
                 "value": 5
@@ -495,12 +526,32 @@
                 "value": false
             },
             {
+                "name": "transpasableItems",
+                "type": "int",
+                "value": 16
+            },
+            {
                 "name": "useBreakableTile",
                 "type": "bool",
                 "value": false
             },
             {
                 "name": "waitPressKeyAfterLoad",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "screenAttributes",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "playerReadyConfirmation",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "fullChangeScreenAnimation",
                 "type": "bool",
                 "value": false
             }

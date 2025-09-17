@@ -15,8 +15,9 @@
 
 loadDataFromTape()
 
+#include "lib/GuSpritesConfig.bas"
 #include "lib/GuSprites.zxbas"
-#include "graphicsInitializer.bas"
+' #include "graphicsInitializer.bas"
 #include "beepFx.bas"
 #include "functions.bas"
 
@@ -26,7 +27,9 @@ loadDataFromTape()
 #include "protaMovement.bas"
 #include "screensFlow.bas"
 
-initGraphics()
+'graphicsInitializer.bas
+InitGFXLib()
+SetTileset(@tileSet)
 
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
     If firstLoad Then

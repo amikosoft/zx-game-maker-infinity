@@ -407,6 +407,8 @@
       
         
       
+        
+      
     
     
     
@@ -527,7 +529,16 @@
 <p>Se puede indicar que los enemigos se ralenticen en lugar de morir</p>
 </li>
 <li>
-<p>Mucha corrección de bugs y optimización de código</p>
+<p>Selección de modo gráfico</p>
+</li>
+<li>Enemigos trampa</li>
+<li>Escaleras diagonales (de momento los 2 primeros tiles traspasables)</li>
+<li>Selección de número de tiles traspasables</li>
+<li>
+<p>Configuración de propiedades por pantalla</p>
+</li>
+<li>
+<p>Corrección de bugs y optimización de código/memoria</p>
 </li>
 </ul>
 <!-- 
@@ -545,12 +556,14 @@ Con esta acción podrás compilar tus tiles.zxp y sprites.zxp, sin necesidad de 
 
 ## Migración
 
-Si vienes de una versión anterior es recomendable seguir estos pasos:
+Si vienes de una versión anterior de v3 es recomendable seguir estos pasos:
 
 * Descargar la última versión del ZXGM Infinity e instalar en una carpeta nueva
 * Copiar la carpeta assets de tu proyecto original teniendo en cuenta lo siguiente:
     * De la carpeta del mapa sólo hay que copiar los ficheros con extensión _.zxp_ y el _map.tmx_ para que te reconozca bien los nuevos parámetros de configuración introducidos
 * Lanzar una primera compilación para generar los png de tiles y todo para usar en tiled
+
+Si vienes de v2 o ZXGM no hay migración.
 
 ## Solución de problemas
 
@@ -615,7 +628,20 @@ Ten en cuenta la configuración original antes de continuar [aquí](https://gm.r
 
 ## Configuración general en atributos del mapa (tiled)
 
+### Configuración del módo de tratamiento de gráficos
+
+Con el parámetro **graphicsModeUnshifted** indicas al motor cómo debe tratar los gráficos al compilar y ejecutar tu juego.
+
+* *Desactivado* (preshifted sprites) el rendimiento del renderizado de objetos en pantalla mejorará a costa de perder espacio para funcionalidades.
+* *Activado* ganarás mucho más espacio para activar funcionalidades pero bajando el rendimiento en el renderizado.
+
+Es el developer el que debe valorar activar/desactivar esta opción en función de sus necesidades
+
 ### Opciones genéricas
+
+* **transpasableItems** esto indica al motor cuántos tiles traspasables quieres tener disponible en la zona dedicada.
+
+Hay que tener en cuenta que ahora los 2 primeros tiles (de momento) se usarán para las escaleras diagonales.
 
 * **borderDamageColor** valor numérico que si es distinto al atributo *border* hará que el borde se ponga de este color al recibir daño
 
@@ -629,6 +655,15 @@ Ten en cuenta la configuración original antes de continuar [aquí](https://gm.r
 
 * **shouldPickUpItems** habilita la posibilidad de que los bloques de enemigos (los que desaparecen al matar todos los enemigos) se quiten también al coger un item en pantalla. Puede usarse de manera independiente.
 
+* **playerReadyConfirmation** permite al desarrollador usar la parte que no visible de la imagen del HUD (hud.scr) como mensaje de inicio de nueva vida entre muertes (requiere modo graveyard de vidas). Lo que hace es esperar antes de empezar tras morir a que el usuario pulse disparo o enter (según configures *adventureTextsAcceptWithFire*).
+En esa pantalla puedes meter información adicional como ayuda contextual, un mensaje de ánimo, etc etc... muy útil si quieres meter una pausa entre muertes para el player.
+
+* **fullChangeScreenAnimation** con esta opción cambias el modo en el que se repintan las nuevas pantallas. 
+*Desactivado* pintará el cambio de pantalla sobre la pantalla anterior haciéndo más rápido el cambio y parece una transición
+*Activado* limpia primero la pantalla y luego la nueva
+
+* **screenAttributes** habilita la configuración de parámetros por pantalla (ver [Screen attributes](screen-attributes.md))
+
 ### Comportamiento del personaje
 
 * **laddersEnabled** activando esta opción harás que el personaje suba escaleras (tiles transpasables) usando una animación de subir. La velocidad de subida será más lenta simulando la subida de escaleras. No afecta a la velocidad de bajada.
@@ -636,6 +671,8 @@ Ten en cuenta la configuración original antes de continuar [aquí](https://gm.r
 La animación de subir usa el sprite usado para el *mainCharacterExtraFrame* por lo que se dicha opción se deshabilitará si se activa esta.
 
 * **livesEnergy** añade energía a tu personaje para que la muerte no sea tan traumática
+
+* **livesDeadBackgroundColor** cambia el color del escenario cuando mueres (sólo en modo vidas con tumba "show graveyard")
 
 * **gravityLow** configura el entorno con una gravedad más baja haciendo que el personaje flote
 
@@ -799,6 +836,18 @@ Una vez elegido el movimiento se puede elegir el comportamiento. Esto se hace a�
 
 * **Anticlockwise** (sentido contrario agujas de reloj), el enemigo se moverá en el sentido contrario de las agujas de un reloj formando un cuadrado, para ello requiere un tipo de movimiento diagonal para que se aprecie.
 
+* **Trampa**. Los enemigos de este tipo quedarán ocultos a la vista del player. Una vez tiene enfilado al player (verticalmente, horizontalmente o ambos configurable) aparecerá disparado contra él.
+
+Para los enemigos de tipo trampa existe un parámetro adicional configurable por enemigo. Se trata del **trapContinousMode** del tipo *enemyTrapContinousMode*. Activando este atributo puedes hacer que tu enemigo trampa esté "disparándose" continuamente.
+
+![](images/enemyTrapContinousMode.png)
+
+Las opciones disponibles son:
+* **no** por lo que sólo se activará al enfilar (modo normal)
+* **horizontal** se dispara de manera horizontal (ambas direcciones) continuamente en la dirección del player
+* **vertical** se dispara de manera vertical (ambas direcciones) continuamente en la dirección del player
+* **all including diagonals** se dispara continuamente en todas las direcciones (hasta en diagonal) en la dirección del player
+
 _NOTA: todos aquellos modos de comportamiento que se usen en enemigos usarán espacio del motor y lo liberarán si ningún enemigo los usa_ 
 
 ### Cantidad de vida
@@ -827,7 +876,7 @@ Puedes establecer la velocidad del enemigo, para ello solo tienes que añadir en
 
 # Configura tu aventura
 
-Con la versión 2.0 del ZXGM Infinity puedes diseñar tu propia aventura gráfica!!!! 
+Con la versión 3.0 del ZXGM Infinity puedes diseñar tu propia aventura gráfica mejor que antes!!!! 
 
 O si no, puedes meter textos que ayuden al jugador para conocer bien el entorno y las mecánicas
 
@@ -841,18 +890,20 @@ Con estos parámetros se activa y configura la aventura en tu juego:
 
 Las longitudes son 30, 45 y 60. Hay que tener en cuenta que en el juego se mostrarán lineas de 15 caracteres por lo que mínimo serían 2 y máximo 4.
 
-* **adventureTextsClearScreen** con esto indicas al compilador que te muestre los textos sin limpiar la pantalla.
+* **adventureTextsClearScreen** con esto indicas al compilador que te muestre los textos sin limpiar la pantalla
 
 * **adventureTextsAcceptWithFire** habilita que los mensajes se acepten pulsando *disparo*
 
-* **adventureTextsHideTiles** esto indica al motor que oculte aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos
+* **adventureTextsHideTiles** esto indica al motor que oculte/muestre aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos. Activando esta opción, aquellos tiles configurados para el modo aventura se deben/pueden quitar del mapa y el motor se encargará de pintarlos, evitando el efecto *popping*.
+
+* **adventureTextsBackgroundColor** hace que al mostrar los mensajes al usuario se cambie el color de la pantalla al indicado aquí. Hay que tener en cuenta que habilitando este *adventureTextsClearScreen* no tiene efecto.
 
 Siempre que esté así configurado, adjunto al texto se mostrará siempre el item/tile asociado.
 
 A tener en cuenta:
 
 * El total de textos que se pueden introducir son 250 (de momento, pero por dejar espacio y memoria disponible son los que hay ahora)
-* Cada vez que se muestra un texto hay que pulsar intro para continuar.
+* Cada vez que se muestra un texto hay que pulsar intro o disparo para continuar.
 * Para activar los textos hay 2 maneras: 
     * asociándolo a un item especial del juego (llave, item, bala o vidas). Sólo se mostrará una vez, al coger el objeto.
     * posándose en algún sitio donde haya un texto y pulsar disparo (hay que tener en cuenta esto para no poner enemigos cerca)
@@ -873,7 +924,8 @@ Los puntos de texto tienen 3 atributos configurables:
 
 * **es** o **en** aquí tendrás que introducir el texto a mostrar teniendo en cuenta tu configuración y que las lineas son de 15 caracteres (para que no se corten las palabras). Actualmente no está activo el multiidioma pero está preparado para cuando lo esté. Con una de estas de momento te tiene que valer.
 
-* **adventureState** sirve para conocer en qué punto de la aventura se debe mostrar este punto de texto permitiendo mostrar distintos textos en el mismo tile dependiendo del avance de tu aventura. Recordar que empieza por 1 y deben ser correlativos. Cogido el último habrás ganado. Activando esto puedes desactivar el objetivo de items, o subirlo para no alcanzarlo nunca, ya que puede ser confuso para el jugador.
+* **adventureState** sirve para conocer en qué punto de la aventura se debe mostrar este punto de texto permitiendo mostrar distintos textos en el mismo tile dependiendo del avance de tu aventura. Recordar que empieza por 1 y deben ser correlativos. Cogido el último habrás ganado. Activando esto puedes desactivar el objetivo de items, o subirlo (objetivo de items) para no alcanzarlo nunca, ya que puede ser confuso para el jugador.
+Otra alternativa es que esté oculto el úĺtimo item bajo el paraguas de tu aventura y sólo se muestre al seguir ciertas pistas.
 
 Si no indicas ningún estado de aventura tus textos se usarán como información (y se liberará algo de espacio para tí en el juego)
 
@@ -881,8 +933,10 @@ El modo aventura no es compatible con el modo arcade y de niveles, pero si los t
 
 * **itemAction** valor numérico que indica al motor qué dependencia tiene este punto. Hay 3 modos de configurar:
     * **0** indica que es un texto informativo y que puede ser consultado tantas veces como se desee.
-    * **1** esta acción hace que tu aventura avance al siguiente estado. Es obligatorio indicar *adventureState* junto con este valor
-    * **id de item** permite asociar un texto a un item especial para que, cuando el jugador lo coja le muestre un texto asociado al item y una vez cogido ya no se mostrará más (muy util como elemento introductorio). 
+        * Usado junto con *adventureState* hace que el mensaje sólo se muestre en ese estado de la aventura pero sin avanzar (como pistas adicionales al estado actual)
+    * **id de item** permite asociar un texto a un item
+        * Usado junto con *adventureState* permite al motor saber qué tile mostrar con el modo *adventureTextsHideTiles* además que será clave para avanzar al siguiente estado de la aventura
+        * Usado junto a un item especial mostrará un texto asociado automáticamente (muy útil para dar información contextual de para qué sirve o, si va asociado a un *adventureState*, para indicar que has conseguido el item correcto, obligando al player a cogerlos en un orden concreto)
 
 El identificador del item lo puedes consultar pinchando en el selector de items. Te mostrará en el panel de propiedades de la izquierda el ID y ese número es el que debes poner
 
@@ -897,38 +951,7 @@ Con la última versión del motor ZXGM se ha liberado la posibilidad de meter m�
 
 En Infinity funciona un poco distinto y aquí te lo explico. 
 
-## Configuración original a tener en cuenta
-
-Ten en cuenta la configuración original antes de continuar [aquí](https://gm.retrojuegos.org/mydoc_sound_music.html).
-
-## Configuración de un punto de música
-
-Para que la música cambie hay que añadir un punto (point) con el type/class **music2** o **music3** y no se podrá volver a reproducir de nuevo la anterior aunque vuelvas ni podrás usarlo más de una vez cada una. En Infinity es distinto pero no por eso peor.
-
-Aquí podrás configurar 1 cambio de música por pantalla, no haciendo el cambio si ya se está reproduciendo la misma canción.
-
-Por otro lado, se reproducirán las canciones tantas veces como cambien, permitiendo asignar canciones por ambientes y no por progreso.
-
-*Por ejemplo*: entras a una cueva y suena la canción de la cueva, en cuanto sales vuelves a la canción de la aventura principal.
-
-Por último pero no menos importante, en infinity puedes indicar que te ponga cualquiera de las canciones que tienes en tu juego (repetir es ahorrar).
-
-Tienes disponibles las siguientes opciones: 
-
-* **music1** tema principal de la aventura
-
-* **music2** tema auxiliar 1 
-
-* **music3** tema auxiliar 2
-
-* **title** canción del título del juego (que puede servir para el juego también)
-
-* **ending** canción para cuando ganas
-
-* **gameover** tema para cuando pierdes o para cuando no te gusta la pantalla
-
-
- -->
+Visitar [Screen attributes](screen-attributes.md) -->
 
 
 

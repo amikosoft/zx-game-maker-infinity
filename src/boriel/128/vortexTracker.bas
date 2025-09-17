@@ -8,7 +8,7 @@ Sub VortexTracker_Init()
         di
     End Asm
     
-    IM2_Inicializar(@VortexTracker_NextNote)
+    IM2Start(@VortexTracker_NextNote)
     VortexTracker_Status = 0
     
     Asm
@@ -43,9 +43,7 @@ End Sub
 ' interrupciones. Si no usamos el gestor, se debe llamar a
 ' este método cada 20ms.
 Sub Fastcall VortexTracker_NextNote()
-    If VortexTracker_Status <> 1 Then Return
-    
-    callVtAddress($C005)
+    If VortexTracker_Status Then callVtAddress($C005)
 End Sub
 
 ' This Sub used PaginarMemoria previously, which included DI/EI.
