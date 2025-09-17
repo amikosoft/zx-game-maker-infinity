@@ -191,25 +191,6 @@ End Sub
 '     End Sub
 ' #endif
 
-Sub redrawScreen()
-    ClearScreen(7, 0, 0) ' Modified For only cancelops And no clear Screen
-
-    ' #ifdef SCREEN_ATTRIBUTES
-    '     FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
-    ' #else
-    '     FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
-    ' #endif
-    
-    mapDraw()
-
-    ' #ifdef HISCORE_ENABLED
-    '     Print AT 22, 20; "00000"
-    '     Print AT 23, 20; "00000"
-    ' #endif
-    
-    ' printLife()
-End Sub
-
 Sub moveToScreen(direction As Ubyte)
     If direction = 6 Then
         'updateProtaData( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)

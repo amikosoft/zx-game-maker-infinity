@@ -558,8 +558,9 @@ Sub swapScreen(waitReady as ubyte)
         printLife()
     #endif
 
-    'redrawScreen()
-    ClearScreen(7, 0, 0) ' Modified For only cancelops And no clear Screen
+    asm
+    call CLEAR_SCREEN
+    end asm
 
     #ifdef FULL_SCREEN_CHANGE_ANIMATION
         #ifdef SCREEN_ATTRIBUTES
