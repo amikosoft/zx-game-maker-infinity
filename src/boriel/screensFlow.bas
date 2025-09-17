@@ -10,6 +10,7 @@ Sub showMenu()
     #endif
     inMenu = 1
     clearScreen()
+
     #ifdef ENABLED_128k
         ' PaginarMemoria(DATA_BANK)
         ' dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
@@ -29,6 +30,7 @@ Sub showMenu()
         Print AT 0, 26; hiScore
     #endif
     
+    kempston = 0
     Do
         If MultiKeys(KEY1) Then
             If Not keyArray(LEFT) Then
@@ -232,8 +234,8 @@ Sub playGame()
                 For i=firstTileInScreen To ANIMATED_TILES_TOTAL
                     if i > ANIMATED_TILES_TOTAL or animatedTilesPerScreen(i, 0) <> currentScreen Then Exit for
                     Dim tile As Ubyte = animatedTilesPerScreen(i, 1) + animatedFrame
-                    SetTile(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
-                    'SetTileAnimated(tile, attrSet(tile), animatedTilesPerScreen(currentScreen, i, 2), animatedTilesPerScreen(currentScreen, i, 3))
+                    'SetTile(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                    SetTileAnimated(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                 Next i
             End If
         #endif
