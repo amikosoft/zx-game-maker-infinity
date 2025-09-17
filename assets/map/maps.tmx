@@ -62,7 +62,7 @@
   <property name="maxAnimatedTilesPerScreen" type="int" value="10"/>
   <property name="maxEnemiesPerScreen" type="int" value="3"/>
   <property name="messagesEnabled" type="bool" value="false"/>
-  <property name="musicEnabled" type="bool" value="true"/>
+  <property name="musicEnabled" type="bool" value="false"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
   <property name="password" value=""/>
   <property name="platformMoveable" type="bool" value="true"/>

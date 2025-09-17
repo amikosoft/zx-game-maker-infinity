@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -645,6 +647,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="screen-attributes.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Propiedades de pantalla
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -814,6 +839,18 @@
 </li>
 <li>
 <p><strong>shouldPickUpItems</strong> habilita la posibilidad de que los bloques de enemigos (los que desaparecen al matar todos los enemigos) se quiten también al coger un item en pantalla. Puede usarse de manera independiente.</p>
+</li>
+<li>
+<p><strong>playerReadyConfirmation</strong> permite al desarrollador usar la parte que no visible de la imagen del HUD (hud.scr) como mensaje de inicio de nueva vida entre muertes (requiere modo graveyard de vidas). Lo que hace es esperar antes de empezar tras morir a que el usuario pulse disparo o enter (según configures <em>adventureTextsAcceptWithFire</em>).
+En esa pantalla puedes meter información adicional como ayuda contextual, un mensaje de ánimo, etc etc... muy útil si quieres meter una pausa entre muertes para el player.</p>
+</li>
+<li>
+<p><strong>fullChangeScreenAnimation</strong> con esta opción cambias el modo en el que se repintan las nuevas pantallas. 
+<em>Desactivado</em> pintará el cambio de pantalla sobre la pantalla anterior haciéndo más rápido el cambio y parece una transición
+<em>Activado</em> limpia primero la pantalla y luego la nueva</p>
+</li>
+<li>
+<p><strong>screenAttributes</strong> habilita la configuración de parámetros por pantalla (ver <a href="screen-attributes.html">Screen attributes</a>)</p>
 </li>
 </ul>
 <h3 id="comportamiento-del-personaje">Comportamiento del personaje</h3>

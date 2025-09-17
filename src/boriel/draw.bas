@@ -88,7 +88,7 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
                         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
                     #endif
                 Else
-                    SetTile(tile, attrSet(tile), x, y)
+                    SetTile(tile, tileAttrWithBackground(tile), x, y)
                 End If
             #Else
                 #ifdef SCREEN_ATTRIBUTES
@@ -100,7 +100,7 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             #ifdef KEYS_ENABLED
             Elseif tile = DOOR_TILE
                 If screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) Then
-                    SetTile(tile, attrSet(tile), x, y)
+                    SetTile(tile, tileAttrWithBackground(tile), x, y)
                 End If
             #endif
             #ifdef USE_BREAKABLE_TILE
@@ -112,16 +112,16 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
                         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
                     #endif
                 Else
-                    SetTileChecked(tile, attrSet(tile), x, y)
+                    SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 End If
             #endif
         Else
-            SetTile(tile, attrSet(tile), x, y)
+            SetTile(tile, tileAttrWithBackground(tile), x, y)
         End if
     Else
         If tile = ITEM_TILE Then
             If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-                SetTileChecked(tile, attrSet(tile), x, y)
+                SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             End If
         Elseif tile = KEY_TILE
             #ifdef ARCADE_MODE
@@ -129,16 +129,16 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
                 currentScreenKeyY = y
             #Else
                 If screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
-                    SetTileChecked(tile, attrSet(tile), x, y)
+                    SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 End If
             #endif
         Elseif tile = LIFE_TILE
             If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
-                SetTileChecked(tile, attrSet(tile), x, y)
+                SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             End If
         Elseif tile = AMMO_TILE
             If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
-                SetTileChecked(tile, attrSet(tile), x, y)
+                SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             End If
         End If
     End If

@@ -31,24 +31,6 @@ sub pauseUntilPressFire()
     Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
 End Sub
 
-#ifdef DROP_ENABLED
-sub drawDrop(tileX as ubyte, tileY as ubyte)
-    for tx=0 to 1
-        for ty=0 to 1
-            #ifdef SCREEN_ATTRIBUTES
-                if GetTile(tileX + tx, tileY + ty) = currentTileBackground Then 
-                    SetTileChecked(DROP_TILE, attrSet(DROP_TILE), tileX + tx, tileY + ty)
-                end if
-            #Else
-                if not GetTile(tileX + tx, tileY + ty) Then 
-                    SetTileChecked(DROP_TILE, attrSet(DROP_TILE), tileX + tx, tileY + ty)
-                end if
-            #endif
-        next ty
-    next tx
-end sub
-#endif
-
 Function checkProtaTop() As Ubyte
     If protaY < 2 Then
         #ifdef ARCADE_MODE
@@ -316,25 +298,6 @@ function CheckCollision(x as uByte, y as uByte) as uByte
             if isSolidTileByColLin(col+c, lin+l) then return 1
         next l
     next c
-
-    ' if isSolidTileByColLin(col, lin) then return 1
-    ' if isSolidTileByColLin(col + 1, lin) then return 1
-    ' if isSolidTileByColLin(col, lin + 1) then return 1
-    ' if isSolidTileByColLin(col + 1, lin + 1) then return 1
-    
-    ' if not yIsEven then
-    '     if isSolidTileByColLin(col, lin + 2) then return 1
-    '     if isSolidTileByColLin(col + 1, lin + 2) then return 1
-    ' end if
-    
-    ' if not xIsEven then
-    '     if isSolidTileByColLin(col + 2, lin) then return 1
-    '     if isSolidTileByColLin(col + 2, lin + 1) then return 1
-    ' end if
-    
-    ' if not xIsEven and not yIsEven then
-    '     if isSolidTileByColLin(col + 2, lin + 2) then return 1
-    ' end if
     
     return 0
 end function
@@ -370,6 +333,45 @@ sub updateProtaData(lin as ubyte, col as ubyte, tile as ubyte, directionRight as
     protaTile = tile
     protaDirection = directionRight
 end sub
+
+Function tileAttrWithBackground(tile As Ubyte) As Ubyte
+    Dim attr As Ubyte = attrSet(tile)
+    
+    #ifdef SCREEN_ATTRIBUTES
+        Dim backgroundAttr as ubyte = currentScreenBackground
+    #else
+        Dim backgroundAttr as ubyte = BACKGROUND_ATTRIBUTE
+    #endif
+
+    ' Dim tinta As Ubyte = attr bAnd 7
+    ' Dim papelTile As Ubyte = (attr bAnd 56) / 8
+    Dim papelBack As Ubyte = (backgroundAttr bAnd 56) / 8
+    ' Dim brillo As Ubyte = (backgroundAttr bAnd 64) / 64
+    ' Dim parpadeo As Ubyte = (attr bAnd 128) / 128
+
+    ' Montar el atributo: papel, tinta, brillo, parpadeo
+    if ((attr bAnd 56) / 8) or tile <= ENEMY_DOOR_TILE or not papelBack Then return attr
+
+    Return (papelBack * 8) + (attr bAnd 7) + (((backgroundAttr bAnd 64) / 64) * 64) + (((attr bAnd 128) / 128) * 128)
+End Function
+
+#ifdef DROP_ENABLED
+sub drawDrop(tileX as ubyte, tileY as ubyte)
+    for tx=0 to 1
+        for ty=0 to 1
+            #ifdef SCREEN_ATTRIBUTES
+                if GetTile(tileX + tx, tileY + ty) = currentTileBackground Then 
+                    SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tileX + tx, tileY + ty)
+                end if
+            #Else
+                if not GetTile(tileX + tx, tileY + ty) Then 
+                    SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tileX + tx, tileY + ty)
+                end if
+            #endif
+        next ty
+    next tx
+end sub
+#endif
 
 #ifdef SIDE_VIEW
     sub jump()

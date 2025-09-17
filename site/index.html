@@ -407,6 +407,8 @@
       
         
       
+        
+      
     
     
     
@@ -531,11 +533,12 @@
 </li>
 <li>Enemigos trampa</li>
 <li>Escaleras diagonales (de momento los 2 primeros tiles traspasables)</li>
+<li>Selección de número de tiles traspasables</li>
 <li>
-<p>Selección de número de tiles traspasables</p>
+<p>Configuración de propiedades por pantalla</p>
 </li>
 <li>
-<p>Mucha corrección de bugs y optimización de código</p>
+<p>Corrección de bugs y optimización de código/memoria</p>
 </li>
 </ul>
 <!-- 
@@ -553,12 +556,14 @@ Con esta acción podrás compilar tus tiles.zxp y sprites.zxp, sin necesidad de 
 
 ## Migración
 
-Si vienes de una versión anterior es recomendable seguir estos pasos:
+Si vienes de una versión anterior de v3 es recomendable seguir estos pasos:
 
 * Descargar la última versión del ZXGM Infinity e instalar en una carpeta nueva
 * Copiar la carpeta assets de tu proyecto original teniendo en cuenta lo siguiente:
     * De la carpeta del mapa sólo hay que copiar los ficheros con extensión _.zxp_ y el _map.tmx_ para que te reconozca bien los nuevos parámetros de configuración introducidos
 * Lanzar una primera compilación para generar los png de tiles y todo para usar en tiled
+
+Si vienes de v2 o ZXGM no hay migración.
 
 ## Solución de problemas
 
@@ -649,6 +654,15 @@ Hay que tener en cuenta que ahora los 2 primeros tiles (de momento) se usarán p
 * **checkpointsEnabled** permite revivir a tu personaje (en modo vidas) desde el último item de bandera (en tiles a la izquierda de la bala) por el que haya pasado el player
 
 * **shouldPickUpItems** habilita la posibilidad de que los bloques de enemigos (los que desaparecen al matar todos los enemigos) se quiten también al coger un item en pantalla. Puede usarse de manera independiente.
+
+* **playerReadyConfirmation** permite al desarrollador usar la parte que no visible de la imagen del HUD (hud.scr) como mensaje de inicio de nueva vida entre muertes (requiere modo graveyard de vidas). Lo que hace es esperar antes de empezar tras morir a que el usuario pulse disparo o enter (según configures *adventureTextsAcceptWithFire*).
+En esa pantalla puedes meter información adicional como ayuda contextual, un mensaje de ánimo, etc etc... muy útil si quieres meter una pausa entre muertes para el player.
+
+* **fullChangeScreenAnimation** con esta opción cambias el modo en el que se repintan las nuevas pantallas. 
+*Desactivado* pintará el cambio de pantalla sobre la pantalla anterior haciéndo más rápido el cambio y parece una transición
+*Activado* limpia primero la pantalla y luego la nueva
+
+* **screenAttributes** habilita la configuración de parámetros por pantalla (ver [Screen attributes](screen-attributes.md))
 
 ### Comportamiento del personaje
 
@@ -862,7 +876,7 @@ Puedes establecer la velocidad del enemigo, para ello solo tienes que añadir en
 
 # Configura tu aventura
 
-Con la versión 2.0 del ZXGM Infinity puedes diseñar tu propia aventura gráfica!!!! 
+Con la versión 3.0 del ZXGM Infinity puedes diseñar tu propia aventura gráfica mejor que antes!!!! 
 
 O si no, puedes meter textos que ayuden al jugador para conocer bien el entorno y las mecánicas
 
@@ -880,7 +894,7 @@ Las longitudes son 30, 45 y 60. Hay que tener en cuenta que en el juego se mostr
 
 * **adventureTextsAcceptWithFire** habilita que los mensajes se acepten pulsando *disparo*
 
-* **adventureTextsHideTiles** esto indica al motor que oculte/muestre aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos. Activando esta opción, aquellos tiles configurados para el modo aventura se deben quitar del mapa y el motor se encargará de pintarlos, evitando el efecto *popping*.
+* **adventureTextsHideTiles** esto indica al motor que oculte/muestre aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos. Activando esta opción, aquellos tiles configurados para el modo aventura se deben/pueden quitar del mapa y el motor se encargará de pintarlos, evitando el efecto *popping*.
 
 * **adventureTextsBackgroundColor** hace que al mostrar los mensajes al usuario se cambie el color de la pantalla al indicado aquí. Hay que tener en cuenta que habilitando este *adventureTextsClearScreen* no tiene efecto.
 
@@ -937,38 +951,7 @@ Con la última versión del motor ZXGM se ha liberado la posibilidad de meter m�
 
 En Infinity funciona un poco distinto y aquí te lo explico. 
 
-## Configuración original a tener en cuenta
-
-Ten en cuenta la configuración original antes de continuar [aquí](https://gm.retrojuegos.org/mydoc_sound_music.html).
-
-## Configuración de un punto de música
-
-Para que la música cambie hay que añadir un punto (point) con el type/class **music2** o **music3** y no se podrá volver a reproducir de nuevo la anterior aunque vuelvas ni podrás usarlo más de una vez cada una. En Infinity es distinto pero no por eso peor.
-
-Aquí podrás configurar 1 cambio de música por pantalla, no haciendo el cambio si ya se está reproduciendo la misma canción.
-
-Por otro lado, se reproducirán las canciones tantas veces como cambien, permitiendo asignar canciones por ambientes y no por progreso.
-
-*Por ejemplo*: entras a una cueva y suena la canción de la cueva, en cuanto sales vuelves a la canción de la aventura principal.
-
-Por último pero no menos importante, en infinity puedes indicar que te ponga cualquiera de las canciones que tienes en tu juego (repetir es ahorrar).
-
-Tienes disponibles las siguientes opciones: 
-
-* **music1** tema principal de la aventura
-
-* **music2** tema auxiliar 1 
-
-* **music3** tema auxiliar 2
-
-* **title** canción del título del juego (que puede servir para el juego también)
-
-* **ending** canción para cuando ganas
-
-* **gameover** tema para cuando pierdes o para cuando no te gusta la pantalla
-
-
- -->
+Visitar [Screen attributes](screen-attributes.md) -->
 
 
 

@@ -237,7 +237,7 @@ Sub playGame()
                     if i > ANIMATED_TILES_TOTAL or animatedTilesPerScreen(i, 0) <> currentScreen Then Exit for
                     Dim tile As Ubyte = animatedTilesPerScreen(i, 1) + animatedFrame
                     'SetTile(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
-                    SetTileAnimated(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                    SetTileAnimated(tile, tileAttrWithBackground(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                 Next i
             End If
         #endif

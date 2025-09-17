@@ -286,13 +286,13 @@ sub damageEnemy(enemyToKill as Ubyte)
                         if DROP_TILE < MAX_GENERIC_TILE Then
                             drawDrop(eneX, eneY)
                         elseif GetTile(eneX, eneY) = currentTileBackground Then
-                            SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
+                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
                         End if
                     #else
                         if DROP_TILE < MAX_GENERIC_TILE Then
                             drawDrop(eneX, eneY)
                         elseif not GetTile(eneX, eneY) Then
-                            SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
+                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
                         End if
                     #endif
                 ' Else
