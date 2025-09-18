@@ -3,6 +3,12 @@
 #include <keys.bas>
 #include "definitions.bas"
 #include "dataLoader.bas"
+
+#include "texts.bas"
+
+#include "lib/GuSpritesConfig.bas"
+#include "lib/GuSprites.zxbas"
+
 #ifdef ENABLED_128k
     #include "128/im2.bas"
     #include "128/vortexTracker.bas"
@@ -15,8 +21,6 @@
 
 loadDataFromTape()
 
-#include "lib/GuSpritesConfig.bas"
-#include "lib/GuSprites.zxbas"
 ' #include "graphicsInitializer.bas"
 #include "beepFx.bas"
 #include "functions.bas"

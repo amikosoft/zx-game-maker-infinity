@@ -114,22 +114,22 @@ sub decrementLife()
 end sub
 
 sub printLife()
-    PRINT AT 22, 5; "   "
+    PRINT AT 22, 5; TEXT_3_SPACES
     PRINT AT 22, 5; currentLife
     
     #ifdef ENERGY_ENABLED
         ' if currentEnergy > INITIAL_ENERGY Then currentEnergy = INITIAL_ENERGY
         
-        PRINT AT 23, 5; "   "
+        PRINT AT 23, 5; TEXT_3_SPACES
         PRINT AT 23, 5; currentEnergy
     #endif
     
     #ifdef JETPACK_FUEL
-        PRINT AT 23, 5; "   "
+        PRINT AT 23, 5; TEXT_3_SPACES
         PRINT AT 23, 5; jumpEnergy
     #endif
     #ifdef AMMO_ENABLED
-        PRINT AT 22, 10; "   "
+        PRINT AT 22, 10; TEXT_3_SPACES
         PRINT AT 22, 10; currentAmmo
     #endif
     #ifndef ARCADE_MODE
@@ -145,13 +145,13 @@ sub printLife()
     #endif
     #ifndef ARCADE_MODE
         #ifdef ITEMS_ENABLED
-            PRINT AT 22, 30; "  "
+            PRINT AT 22, 30; TEXT_3_SPACES
             PRINT AT 22, 30; currentItems
         #endif
     #endif
     
     #ifdef LEVELS_MODE
-        PRINT AT 23, 10; "   "
+        PRINT AT 23, 10; TEXT_3_SPACES
         PRINT AT 23, 10; currentLevel + 1
     #endif
 end sub
@@ -168,7 +168,7 @@ end sub
         if messageLoopCounter Then
             messageLoopCounter = messageLoopCounter - 1
             If not messageLoopCounter Then
-                PRINT AT 22, 18; "         "
+                PRINT AT 22, 18; TEXT_EMPTY_STRING
             End If
         End if
     end sub
@@ -176,9 +176,7 @@ end sub
 
 function isADamageTile(x as ubyte, y as ubyte) as UBYTE
     for i = 0 to DAMAGE_TILES_COUNT
-        if peek(@damageTiles + i) = GetTile(x,y) then
-            return 1
-        end if
+        if peek(@damageTiles + i) = GetTile(x,y) then return 1
     next i
     return 0
 end function
@@ -226,12 +224,12 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     
     if tile < 1 or tile > ENEMY_DOOR_TILE then return 0
     
-    ' if tile = AUTOBREAKABLE_TILE or tile = (AUTOBREAKABLE_TILE + 1) Then
+    ' if tile = FADE_TILE or tile = (FADE_TILE + 1) Then
     '     if timeToBreakTile then timeToBreakTile = timeToBreakTile - 1
 
     '     if not timeToBreakTile Then
     '         tile = tile + 1
-    '         if tile > (AUTOBREAKABLE_TILE + 1) Then
+    '         if tile > (FADE_TILE + 1) Then
 
     '         end if
     '     end if
@@ -252,7 +250,7 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
             BeepFX_Play(4)
             #ifdef MESSAGES_ENABLED
             Else
-                printMessage("Need keys", 2, 0)
+                printMessage(TEXT_NEED_KEYS, 2, 0)
             #endif
         End If
     End If
@@ -260,7 +258,7 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
 
     #ifdef MESSAGES_ENABLED
         If tile = ENEMY_DOOR_TILE Then
-            printMessage("Kill All!", 2, 0)
+            printMessage(TEXT_KILL_ALL, 2, 0)
         End If
     #endif
     ' end if
@@ -313,6 +311,37 @@ end function
     end function
 #endif
 
+#ifdef FADE_TILES_ENABLED
+sub CheckAutoBreakableTile()
+    if not maxFadeTile then return 
+    Dim col as uByte = protaX >> 1
+    Dim lin as uByte = (protaY >> 1) + 2
+    
+    for c=col to (col+2)
+        dim tileFound as ubyte = isSolidTileByColLin(c, lin)
+        if tileFound = FADE_TILE or tileFound = FADE_TILE_END Then
+            for i = 0 to maxFadeTile - 1
+                dim tileStatus as ubyte = fadeTileStatus(i, 2)
+                if tileStatus and fadeTileStatus(i, 0) = c and fadeTileStatus(i, 1) = lin then 
+                    tileStatus = tileStatus - 1
+
+                    if not tileStatus then
+                        #ifdef SCREEN_ATTRIBUTES
+                            SetTile(currentTileBackground, currentScreenBackground, c, lin)
+                        #else
+                            SetTile(0, BACKGROUND_ATTRIBUTE, c, lin)
+                        #endif
+                    else if tileStatus < (FADE_TILE_FRAMES/3) and tileFound = FADE_TILE then
+                        SetTile(FADE_TILE_END, tileAttrWithBackground(FADE_TILE_END), c, lin)
+                    end if
+                    fadeTileStatus(i, 2) = tileStatus
+                end if
+            next i
+        End if
+    next c
+end sub
+#endif
+
 function CheckCollision(x as uByte, y as uByte) as uByte
     ' Dim xIsEven as uByte = (x bAnd 1) = 0
     ' Dim yIsEven as uByte = (y bAnd 1) = 0
@@ -325,38 +354,13 @@ function CheckCollision(x as uByte, y as uByte) as uByte
     if (x bAnd 1) Then maxCol = 2
     if (y bAnd 1) Then maxLin = 2
     
-    lastTimeToBreakTile = timeToBreakTile
-    dim collision as ubyte = 0
     for c=0 to maxCol
         for l=0 to maxLin
-            dim tileFound as ubyte = isSolidTileByColLin(col+c, lin+l)
-            if tileFound = AUTOBREAKABLE_TILE or tileFound = (AUTOBREAKABLE_TILE + 1) Then
-                if timeToBreakTile > 0 and timeToBreakTile = lastTimeToBreakTile then 
-                    timeToBreakTile = timeToBreakTile - 1
-                end if
-
-                if not timeToBreakTile Then
-                    tileFound = tileFound + 1
-                    if tileFound > (AUTOBREAKABLE_TILE + 1) Then
-                        #ifdef SCREEN_ATTRIBUTES
-                            SetTile(currentTileBackground, currentScreenBackground, col+c, lin+l)
-                        #else
-                            SetTile(0, BACKGROUND_ATTRIBUTE, col+c, lin+l)
-                        #endif
-                    else
-                        debugA(1)
-                        SetTile(tileFound, tileAttrWithBackground(tileFound), col+c, lin+l)
-                    end if
-                end if
-            End if
-
-            if tileFound Then collision = tileFound
+            if isSolidTileByColLin(col+c, lin+l) then return 1
         next l
     next c
     
-    if not timeToBreakTile Then timeToBreakTile = AUTOBREAKABLE_TILE_FRAMES
-
-    return collision
+    return 0
 end function
 
 sub removeTilesFromScreen(tile as ubyte)

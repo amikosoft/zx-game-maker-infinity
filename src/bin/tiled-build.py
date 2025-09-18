@@ -197,6 +197,9 @@ screenAttributesEnabled = False
 playerReadyConfirmation = False
 fullChangeScreenAnimation = False
 
+fadeTilesInScreenMax = 0
+fadeTilesFramesCount = 0
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -386,6 +389,10 @@ if 'properties' in data:
             playerReadyConfirmation = property['value']
         elif property['name'] == 'fullChangeScreenAnimation':
             fullChangeScreenAnimation = property['value']
+        elif property['name'] == 'fadeTilesInScreenMax':
+            fadeTilesInScreenMax = property['value']
+        elif property['name'] == 'fadeTilesFramesCount':
+            fadeTilesFramesCount = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -444,6 +451,18 @@ if playerReadyConfirmation:
 
 if fullChangeScreenAnimation:
     configStr += "#DEFINE FULL_SCREEN_CHANGE_ANIMATION\n"
+
+print(fadeTilesInScreenMax)
+print(fadeTilesFramesCount)
+
+if fadeTilesInScreenMax > 0 and fadeTilesFramesCount > 0:
+    
+    if fadeTilesFramesCount < 6:
+        fadeTilesFramesCount = 6
+    
+    configStr += "#DEFINE FADE_TILES_ENABLED\n"
+    configStr += "const FADE_TILE_FRAMES as ubyte = " + str(fadeTilesFramesCount) + "\n"
+    configStr += "const FADE_TILE_TOTAL as ubyte = " + str(fadeTilesInScreenMax) + "\n"
 
 if livesMode == 1:
     configStr += "#DEFINE LIVES_MODE_ENABLED\n"

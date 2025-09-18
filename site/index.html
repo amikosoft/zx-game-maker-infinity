@@ -664,6 +664,17 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 
 * **screenAttributes** habilita la configuración de parámetros por pantalla (ver [Screen attributes](screen-attributes.md))
 
+### Tiles desvanecidos (fade tiles)
+
+Con esto podrás activar la funcionalidad de los fade tiles que son aqueloos que al pisarlos se rompen con el tiempo.
+Si activas esta funcionalidad el tile 32 (más del 33% de energía) y 33 (menos del 33% de energía) quedan reservados para
+
+* **fadeTilesInScreenMax** indica cuántos fade tiles pueden haber en una pantalla (0 para desactivar)
+
+* **fadeTilesFramesCount** es el número de fotogramas que tienen que pasar para que se desvanezca. Cuando quede un 33% de esta cantidad el tile cambiará.
+
+![Fade tile](imgs/fade-tile.png)
+
 ### Comportamiento del personaje
 
 * **laddersEnabled** activando esta opción harás que el personaje suba escaleras (tiles transpasables) usando una animación de subir. La velocidad de subida será más lenta simulando la subida de escaleras. No afecta a la velocidad de bajada.

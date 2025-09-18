@@ -172,10 +172,12 @@ Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSE
     Dim lastFrameTiles As Ubyte = 0
 #endif
 
-const AUTOBREAKABLE_TILE as UByte = 32
-const AUTOBREAKABLE_TILE_FRAMES as UByte = 25
-Dim lastTimeToBreakTile as byte = AUTOBREAKABLE_TILE_FRAMES
-Dim timeToBreakTile as byte = AUTOBREAKABLE_TILE_FRAMES
+#ifdef FADE_TILES_ENABLED
+    const FADE_TILE as UByte = 32
+    const FADE_TILE_END as UByte = 33
+    Dim maxFadeTile as ubyte = 0
+    dim fadeTileStatus(FADE_TILE_TOTAL, 2) as ubyte 
+#endif
 
 #ifdef IN_GAME_TEXT_ENABLED
     dim textsCoord(AVAILABLE_ADVENTURES, 5) as ubyte at TEXTS_COORD_DATA_ADDRESS

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="133">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="134">
  <editorsettings>
   <chunksize width="32" height="22"/>
  </editorsettings>
@@ -27,7 +27,7 @@
   <property name="enemiesAlertDistance" value="medium"/>
   <property name="enemiesBulletCollision" type="bool" value="true"/>
   <property name="enemiesNormalCollide" type="bool" value="false"/>
-  <property name="enemiesPursuitCollide" type="bool" value="true"/>
+  <property name="enemiesPursuitCollide" type="bool" value="false"/>
   <property name="enemiesRespawn" type="bool" value="true"/>
   <property name="enemiesRespawnInScreen" type="bool" value="true"/>
   <property name="enemiesShoot" type="int" value="0"/>
@@ -36,18 +36,20 @@
   <property name="enemiesShootSpeed" value="slow"/>
   <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
   <property name="enemiesSlowDown" type="bool" value="false"/>
-  <property name="fullChangeScreenAnimation" type="bool" value="false"/>
+  <property name="fadeTilesFramesCount" type="int" value="10"/>
+  <property name="fadeTilesInScreenMax" type="int" value="5"/>
+  <property name="fullChangeScreenAnimation" type="bool" value="true"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="goalItems" type="int" value="5"/>
-  <property name="graphicsModeUnshifted" type="bool" value="true"/>
+  <property name="graphicsModeUnshifted" type="bool" value="false"/>
   <property name="hiScore" type="bool" value="false"/>
   <property name="idleTime" type="int" value="0"/>
   <property name="initialLife" type="int" value="1"/>
   <property name="itemsCountdown" type="bool" value="true"/>
   <property name="itemsEnabled" type="bool" value="true"/>
   <property name="jumpCancelAllowed" type="bool" value="false"/>
-  <property name="jumpDouble" type="bool" value="true"/>
+  <property name="jumpDouble" type="bool" value="false"/>
   <property name="jumpOnEnemies" type="bool" value="true"/>
   <property name="jumpType" propertytype="jumpType" value="accelerated"/>
   <property name="keysEnabled" type="bool" value="true"/>
@@ -59,10 +61,10 @@
   <property name="livesEnergy" type="int" value="3"/>
   <property name="livesMode" propertytype="livesMode" value="show graveyard"/>
   <property name="mainCharacterExtraFrame" type="bool" value="false"/>
-  <property name="maxAnimatedTilesPerScreen" type="int" value="10"/>
+  <property name="maxAnimatedTilesPerScreen" type="int" value="5"/>
   <property name="maxEnemiesPerScreen" type="int" value="3"/>
   <property name="messagesEnabled" type="bool" value="false"/>
-  <property name="musicEnabled" type="bool" value="false"/>
+  <property name="musicEnabled" type="bool" value="true"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
   <property name="password" value=""/>
   <property name="platformMoveable" type="bool" value="true"/>
@@ -142,12 +144,12 @@
 1,1,69,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,9,8,
 1,1,1,1,1,1,1,1,1,1,1,124,125,1,94,95,96,1,114,1,1,1,1,1,1,1,1,1,1,1,8,9,
 1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,9,8,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,158,159,1,1,115,1,1,1,1,69,1,1,1,1,1,1,8,9,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,158,159,1,1,115,1,1,1,1,33,1,1,1,1,1,1,8,9,
 1,1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,8,
-1,1,69,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,69,73,69,8,9,
-1,1,1,1,1,1,1,1,1,1,1,1,33,1,33,1,33,1,1,1,1,124,125,1,1,1,1,1,73,1,9,8,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,69,1,1,1,1,1,1,1,1,1,73,1,8,9,
-1,1,1,1,1,1,1,124,125,1,1,69,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,9,8,
+1,1,1,1,1,33,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,69,73,69,8,9,
+1,1,1,1,1,1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,73,1,9,8,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,1,73,1,8,9,
+1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,9,8,
 1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,8,9,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,9,8,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,8,9,
@@ -421,7 +423,7 @@
    </properties>
    <point/>
   </object>
-  <object id="132" name="mainCharacter" type="mainCharacter" x="480" y="56">
+  <object id="133" name="mainCharacter" type="mainCharacter" x="128" y="288">
    <point/>
   </object>
  </objectgroup>

@@ -26,7 +26,7 @@ Sub showMenu()
     #endif
     
     #ifdef HISCORE_ENABLED
-        Print AT 0, 22; "HI:"
+        Print AT 0, 22; TEXT_HI_SCORE
         Print AT 0, 26; hiScore
     #endif
     
@@ -79,36 +79,36 @@ End Sub
             #endif
         #endif
         
-        Print AT 5,5;"Press key For:";
+        Print AT 5,5;REDEFINE_PRESS_KEY_FOR
         
-        Print AT 8,10;"Left"
+        Print AT 8,10;REDEFINE_LEFT
         keyArray(LEFT) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 8,20; keyOption
         
-        Print AT 10,10;"Right"
+        Print AT 10,10;REDEFINE_RIGHT
         keyArray(RIGHT) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 10,20; keyOption
         
-        Print AT 12,10;"Up"
+        Print AT 12,10;REDEFINE_UP
         keyArray(UP) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 12,20; keyOption
         
-        Print AT 14,10;"Down"
+        Print AT 14,10;REDEFINE_DOWN
         keyArray(DOWN) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 14,20; keyOption
         
-        Print AT 16,10;"Fire"
+        Print AT 16,10;REDEFINE_FIRE
         keyArray(FIRE) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 16,20; keyOption
         '
         ' keyOption = ""
         
-        Print AT 20,2;"Enter To Continue..."
+        Print AT 20,2;GENERIC_ENTER_CONTINUE
         ' Do
         ' Loop Until MultiKeys(KEYENTER)
         pauseUntilPressEnter()
@@ -120,7 +120,7 @@ End Sub
 #ifdef PASSWORD_ENABLED
     Sub passwordScreen()
         clearScreen()
-        Print AT 10, 10; "PASSWORD"
+        Print AT 10, 10; TEXT_PASSWORD
         
         dim pass(passwordLen) as ubyte
         For i=0 To passwordLen - 1
@@ -216,8 +216,6 @@ Sub playGame()
     Do
         waitretrace
 
-        debugB(timeToBreakTile)
-        
         #ifdef PLATFORM_MOVEABLE
             If not isOnPlatform and enemiesFrame band 1 Then
                 protaFrame = getNextFrameRunning()
@@ -365,12 +363,12 @@ Sub gameOver()
         #Else
             'updateProtaData( protaY, protaX, 15, 0)
             protaTile = 15
-            Print AT 7, 12; "GAME OVER"
+            Print AT 7, 12; TEXT_GAME_OVER
         #endif
     #Else
         ' updateProtaData( protaY, protaX, 15, 0)
         protaTile = 15
-        Print at 7, 12; "GAME OVER"
+        Print at 7, 12; TEXT_GAME_OVER
     #endif
     
     ' Do
@@ -469,8 +467,6 @@ Sub swapScreen(waitReady as ubyte)
         enemyBulletPositionX = 0
     #endif
     
-    timeToBreakTile = AUTOBREAKABLE_TILE_FRAMES
-
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()
         updateProtaData( mainCharactersArray(currentScreen, 1), mainCharactersArray(currentScreen, 0), 1, 1)
@@ -543,8 +539,8 @@ Sub swapScreen(waitReady as ubyte)
             #endif
 
             #ifdef HISCORE_ENABLED
-                Print AT 22, 20; "00000"
-                Print AT 23, 20; "00000"
+                Print AT 22, 20; TEXT_HI_SCORE_ZERO
+                Print AT 23, 20; TEXT_HI_SCORE_ZERO
             #endif
             
             printLife()
@@ -557,8 +553,8 @@ Sub swapScreen(waitReady as ubyte)
         end if 
     #else
         #ifdef HISCORE_ENABLED
-            Print AT 22, 20; "00000"
-            Print AT 23, 20; "00000"
+            Print AT 22, 20; TEXT_HI_SCORE_ZERO
+            Print AT 23, 20; TEXT_HI_SCORE_ZERO
         #endif
         
         printLife()

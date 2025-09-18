@@ -5,8 +5,25 @@ Sub mapDraw()
     x = 0
     y = 0
     
+    #ifdef FADE_TILES_ENABLED
+    maxFadeTile = 0
+    #endif
+
     For index=0 To SCREEN_LENGTH
-        drawTile(Peek(@decompressedMap + index) - 1, x, y)
+        #ifdef FADE_TILES_ENABLED
+            dim nextTile as ubyte = Peek(@decompressedMap + index) - 1
+            
+            drawTile(nextTile, x, y)
+            
+            if maxFadeTile < FADE_TILE_TOTAL and (nextTile = FADE_TILE or nextTile = FADE_TILE_END) then
+                fadeTileStatus(maxFadeTile, 0) = x
+                fadeTileStatus(maxFadeTile, 1) = y
+                fadeTileStatus(maxFadeTile, 2) = FADE_TILE_FRAMES
+                maxFadeTile = maxFadeTile + 1
+            end if
+        #else
+            drawTile(Peek(@decompressedMap + index) - 1, x, y)
+        #endif
         
         x = x + 1
         If x = screenWidth Then
@@ -214,8 +231,8 @@ Sub moveToScreen(direction As Ubyte)
                 moveScreen = 0
                 ending()
             Else
-                Print AT 13,8;"LEVEL COMPLETE!!!"
-                Print AT 15,8;"PRESS ENTER..."
+                Print AT 13,8;TEXT_LEVEL_COMPLETE
+                Print AT 15,8;GENERIC_ENTER_CONTINUE
                 'Do
                 'Loop Until MultiKeys(KEYENTER)
                 pauseUntilPressEnter()

@@ -554,6 +554,16 @@
                 "name": "fullChangeScreenAnimation",
                 "type": "bool",
                 "value": false
+            },
+            {
+                "name": "fadeTilesInScreenMax",
+                "type": "int",
+                "value": 0
+            },
+            {
+                "name": "fadeTilesFramesCount",
+                "type": "int",
+                "value": 10
             }
         ],
         "name": "ZXSpectrumGameMaker",

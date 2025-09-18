@@ -32,9 +32,9 @@ def build():
     global totalExecutionTime
     totalExecutionTime = 0
 
-    print("============================================")
-    print("=          ZXGM - Infinity                 =")
-    print("============================================")
+    # print("============================================")
+    # print("=          ZXGM - Infinity                 =")
+    # print("============================================")
 
     executeFunction(buildingFilesAndConfig, "Building files and config")
     

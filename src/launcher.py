@@ -3,13 +3,25 @@ import platform
 import subprocess
 import sys
 
+version = "3.1.0"
+
+def printBanner():
+    output_text.insert(tk.END, f"\n")
+    
+    with open("infinitybanner.txt", "r") as f:
+        logo_string = f.readlines()
+
+        for textTmp, line in enumerate(logo_string):
+            output_text.insert(tk.END, f"{line}")
+    output_text.insert(tk.END, f"-= by Amikosoft =- Ver. {version}\n\n")
+
 def show_help_info():
     # Limpiar la ventana de salida
     output_text.delete(1.0, tk.END)
     
-    output_text.insert(tk.END, f"Welcome to ZXGM Infinity -= by Amikosoft =-\n")
-    
-    output_text.insert(tk.END, f"\nQuick info\n")
+    printBanner()
+
+    output_text.insert(tk.END, f"Quick info\n")
     
     output_text.insert(tk.END, f"\n- Game: (disabled while build is in progress)\n")
     output_text.insert(tk.END, f"\tPlay: run your last compilated version\n")
@@ -109,6 +121,8 @@ def run_script(script_name, extra_args=None):
             
             # Limpiar la ventana de salida
             output_text.delete(1.0, tk.END)
+
+            printBanner()
 
             # Detectar el sistema operativo y añadir la extensión adecuada
             if platform.system() == "Windows":
@@ -355,7 +369,7 @@ def open_map_with_tiled():
 
 # Crear la ventana principal
 root = tk.Tk()
-root.title("ZXGM - Infinity 3.0.0")
+root.title(f"ZXGM - Infinity v{version}")
 root.geometry("750x750")
 root.resizable(True, True)
 

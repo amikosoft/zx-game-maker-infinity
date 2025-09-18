@@ -16,12 +16,8 @@ Function checkBulletTileCollision(direction as ubyte, posx as ubyte, posy as uby
     
     dim tile as ubyte = isSolidTileByColLin(xToCheck >> 1, posy >> 1)
     
-    if tile then
-        return tile
-    else
-        tile = isSolidTileByColLin(xToCheck >> 1, (posy + 1) >> 1)
-        return tile
-    end if
+    if not tile then tile = isSolidTileByColLin(xToCheck >> 1, (posy + 1) >> 1)
+    return tile
 End Function
 
 #ifdef SHOOTING_ENABLED

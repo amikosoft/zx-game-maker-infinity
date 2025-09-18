@@ -134,9 +134,9 @@ def build():
     global totalExecutionTime
     totalExecutionTime = 0
 
-    print("============================================")
-    print("=          ZXGM - Infinity                 =")
-    print("============================================")
+    # print("============================================")
+    # print("=          ZXGM - Infinity                 =")
+    # print("============================================")
 
     executeFunction(removeTempFiles, "Removing temporary files")
     executeFunction(tiledExport, "Exporting game from Tiled")

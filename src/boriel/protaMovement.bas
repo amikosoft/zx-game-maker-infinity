@@ -194,7 +194,7 @@ End Function
                 End If
                 jumpCurrentKey = jumpCurrentKey + 1
                 jumpEnergy = jumpEnergy - 1
-                PRINT AT 23, 5; "   "
+                PRINT AT 23, 5; TEXT_3_SPACES
                 PRINT AT 23, 5; jumpEnergy
                 Return
             End If
@@ -264,6 +264,10 @@ End Function
                     protaY = protaY + 1
                 #endif
             End If
+        #ifdef FADE_TILES_ENABLED
+        Else
+            CheckAutoBreakableTile()
+        #endif
         End If
     End Sub
     
@@ -686,7 +690,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         #endif
         printLife()
         #ifdef MESSAGES_ENABLED
-            printMessage("NEW ITEM!", 4, 0)
+            printMessage(TEXT_NEW_ITEM, 4, 0)
         #endif
         #ifdef ARCADE_MODE
             If currentItems = itemsToFind Then
@@ -706,7 +710,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             #ifdef CHECKPOINTS_ENABLED
             ElseIf tile = FLAG_TILE Then
                 #ifdef MESSAGES_ENABLED
-                    if protaScreenRespawn <> currentScreen Then printMessage("CHECKED!!", 4, 0)
+                    if protaScreenRespawn <> currentScreen Then printMessage(TEXT_CHECK_POINT, 4, 0)
                 #endif
                 
                 protaXRespawn = protaX
@@ -727,7 +731,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             currentKeys = currentKeys + 1
             printLife()
             #ifdef MESSAGES_ENABLED
-                printMessage("KEY FOUND", 4, 0)
+                printMessage(TEXT_KEY_FOUND, 4, 0)
             #endif
             screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
             BeepFX_Play(3)
@@ -747,7 +751,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         printLife()
         
         #ifdef MESSAGES_ENABLED
-            printMessage("LIFE!!!  ", 2, 0)
+            printMessage(TEXT_LIFE, 2, 0)
         #endif
         
         screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
@@ -759,7 +763,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
             printLife()
             
             #ifdef MESSAGES_ENABLED
-                printMessage("AMMO!!!  ", 2, 0)
+                printMessage(TEXT_AMMO, 2, 0)
             #endif
             
             screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
@@ -774,26 +778,26 @@ Sub checkObjectContact()
     Dim col As Ubyte = protaX >> 1
     Dim lin As Ubyte = protaY >> 1
     
-    for c=0 to 1
-        for l=0 to 1
+    for c=col to (col+1)
+        for l=lin to (lin+1)
             #ifdef IN_GAME_TEXT_ENABLED
-                dim tile = GetTile(col+c, lin+l)
+                dim tile = GetTile(c, l)
                 
                 if checkTileObject(tile) then
                     validaTexto(tile)
                     
                     #ifdef SCREEN_ATTRIBUTES
-                        SetTileChecked(currentTileBackground, currentScreenBackground, col+c, lin+l)
+                        SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, col+c, lin+l)
+                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #else
-                If checkTileObject(GetTile(col+c, lin+l)) Then
+                If checkTileObject(GetTile(c, l)) Then
                     #ifdef SCREEN_ATTRIBUTES
-                        SetTileChecked(currentTileBackground, currentScreenBackground, col+c, lin+l)
+                        SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, col+c, lin+l)
+                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #endif
