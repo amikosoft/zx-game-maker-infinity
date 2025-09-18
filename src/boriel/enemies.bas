@@ -79,12 +79,14 @@ Sub moveEnemies()
             
             If enemyLive = 0 Then continue For
             
-            #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                If enemyLive < 1 And tile > 16 Then
-                    If screensWon(currentScreen) Then continue For
-                End If
+            #ifndef ENEMIES_SLOW_DOWN
+                #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+                    If enemyLive < 1 And tile > 16 Then
+                        If screensWon(currentScreen) Then continue For
+                    End If
+                #endif
             #endif
-            
+
             Dim enemyMode As Byte = decompressedEnemiesScreen(enemyId, ENEMY_MODE)
             Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
             Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
