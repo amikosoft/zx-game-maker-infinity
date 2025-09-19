@@ -26,8 +26,8 @@ loadDataFromTape()
 #include "beepFx.bas"
 #include "functions.bas"
 
-#include "enemies.bas"
 #include "bullet.bas"
+#include "enemies.bas"
 #include "draw.bas"
 #include "protaMovement.bas"
 #include "screensFlow.bas"

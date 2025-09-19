@@ -16,24 +16,9 @@ Function checkBulletTileCollision(direction as ubyte, posx as ubyte, posy as uby
     
     dim tile as ubyte = isSolidTileByColLin(xToCheck >> 1, posy >> 1)
     
-    if not tile then tile = isSolidTileByColLin(xToCheck >> 1, (posy + 1) >> 1)
+    if not tile then return isSolidTileByColLin(xToCheck >> 1, (posy + 1) >> 1)
     return tile
 End Function
-
-#ifdef SHOOTING_ENABLED
-    #ifdef BULLET_ENEMIES
-        #ifdef BULLET_COLLIDE_BULLET
-            Sub checkBulletsCollision()
-                if Not enemyBulletPositionX or not bulletPositionY Then Return
-                if (enemyBulletPositionY + 2) < bulletPositionY or enemyBulletPositionY  > (bulletPositionY + 2) then Return
-                if (enemyBulletPositionX + 2) < bulletPositionX or enemyBulletPositionX  > (bulletPositionX + 2) then Return
-                
-                resetBullet(0)
-                resetBullet(1)
-            End sub
-        #endif
-    #endif
-#endif
 
 #ifdef SHOOTING_ENABLED
     sub moveBullet()
@@ -45,7 +30,7 @@ End Function
                 bulletPositionY = bulletPositionY + (sgn((protaY+1) - bulletPositionY)*BULLET_SPEED)
                 if bulletPositionX >= protaX and bulletPositionX <= (protaX+4) Then
                     if bulletPositionY >= protaY and bulletPositionY <= (protaY+4) Then
-                        resetBullet(0)
+                        resetBullet()
                         
                         #ifdef AMMO_ENABLED
                             currentAmmo = currentAmmo + 1
@@ -62,7 +47,7 @@ End Function
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
                     #else
-                        resetBullet(0)
+                        resetBullet()
                         return
                     #endif
                 Else
@@ -85,7 +70,7 @@ End Function
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
                     #else
-                        resetBullet(0)
+                        resetBullet()
                         return
                     #endif
                 else
@@ -109,7 +94,7 @@ End Function
                         #ifdef BULLET_BOOMERANG
                             bulletDirection = BULLET_DIRECTION_BOOMERANG
                         #else
-                            resetBullet(0)
+                            resetBullet()
                             return
                         #endif
                     else
@@ -120,7 +105,7 @@ End Function
                         #ifdef BULLET_BOOMERANG
                             bulletDirection = BULLET_DIRECTION_BOOMERANG
                         #else
-                            resetBullet(0)
+                            resetBullet()
                             return
                         #endif
                     else
@@ -141,8 +126,7 @@ End Function
             #endif
             
             #ifdef BULLET_COLLISIONS
-                dim tile as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
-                if tile Then
+                if checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY) Then
                     #ifdef USE_BREAKABLE_TILE
                         checkAndRemoveBreakableTile(tile)
                     #endif
@@ -150,9 +134,8 @@ End Function
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
                     #else
-                        resetBullet(0)
+                        resetBullet()
                     #endif
-                    
                 end if
             #endif
             
@@ -163,51 +146,79 @@ End Function
 #endif
 
 #ifdef BULLET_ENEMIES
-    sub moveEnemyBullet()
-        if enemyBulletPositionX = 0 then return
+    Function moveEnemyBullet(bulletId as ubyte) as ubyte
+        Dim localBulletX as ubyte = enemyBullets(bulletId, 0)
+        if Not localBulletX Then Return 0
+                
+        Dim localBulletY as ubyte = enemyBullets(bulletId, 1)
+        Dim localBulletDirection as ubyte = enemyBullets(bulletId, 2)
         
         ' desplazamiento de bala
         #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
-            if enemyBulletDirection = BULLET_DIRECTION_RIGHT then
-                if enemyBulletPositionX >= MAX_SCREEEN_RIGHT then
-                    resetBullet(1)
-                    return
+            if localBulletDirection = BULLET_DIRECTION_RIGHT then
+                if localBulletX >= MAX_SCREEEN_RIGHT then
+                    enemyBullets(bulletId, 0) = 0
+                    return 0
                 end if
-                enemyBulletPositionX = enemyBulletPositionX + BULLET_ENEMIES_SPEED
-            elseif enemyBulletDirection = BULLET_DIRECTION_LEFT then
-                if enemyBulletPositionX <= MAX_SCREEN_LEFT then
-                    resetBullet(1)
-                    return
+                localBulletX = localBulletX + BULLET_ENEMIES_SPEED
+            elseif localBulletDirection = BULLET_DIRECTION_LEFT then
+                if localBulletX <= MAX_SCREEN_LEFT then
+                    enemyBullets(bulletId, 0) = 0
+                    return 0
                 end if
-                enemyBulletPositionX = enemyBulletPositionX - BULLET_ENEMIES_SPEED
+                localBulletX = localBulletX - BULLET_ENEMIES_SPEED
             end if
         #endif
         #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
-            if enemyBulletDirection = BULLET_DIRECTION_DOWN then
-                if enemyBulletPositionY >= MAX_SCREEN_BOTTOM then
-                    resetBullet(1)
-                    return
+            if localBulletDirection = BULLET_DIRECTION_DOWN then
+                if localBulletY >= MAX_SCREEN_BOTTOM then
+                    enemyBullets(bulletId, 0) = 0
+                    return 0
                 end if
-                enemyBulletPositionY = enemyBulletPositionY + BULLET_ENEMIES_SPEED
-            elseif enemyBulletDirection = BULLET_DIRECTION_UP
-                if enemyBulletPositionY <= MAX_SCREEN_TOP then
-                    resetBullet(1)
-                    return
+                localBulletY = localBulletY + BULLET_ENEMIES_SPEED
+            elseif localBulletDirection = BULLET_DIRECTION_UP
+                if localBulletY <= MAX_SCREEN_TOP then
+                    enemyBullets(bulletId, 0) = 0
+                    return 0
                 end if
-                enemyBulletPositionY = enemyBulletPositionY - BULLET_ENEMIES_SPEED
+                localBulletY = localBulletY - BULLET_ENEMIES_SPEED
             end if
         #endif
         
         #ifdef BULLET_ENEMIES_COLLIDE
-            if checkBulletTileCollision(enemyBulletDirection, enemyBulletPositionX, enemyBulletPositionY) Then resetBullet(1)
+            if checkBulletTileCollision(localBulletDirection, localBulletX, localBulletY) Then 
+                enemyBullets(bulletId, 0) = 0
+                return 0
+            end if
         #endIf
-        
+
+        enemyBullets(bulletId, 0) = localBulletX
+        enemyBullets(bulletId, 1) = localBulletY
+
+        #ifdef BULLET_COLLIDE_BULLET
+            if bulletPositionX then
+                dim bulletCollideBullet as ubyte = 1
+
+                if (localBulletY + 2) < bulletPositionY or localBulletY > (bulletPositionY + 2) then bulletCollideBullet = 0
+                if (localBulletX + 2) < bulletPositionX or localBulletX > (bulletPositionX + 2) then bulletCollideBullet = 0
+
+                if bulletCollideBullet Then
+                    enemyBullets(bulletId, 0) = 0
+                    resetBullet()
+                    return 0
+                end if
+            end if
+        #endif
+
         'colision con el player si es de enemigo
-        if (enemyBulletPositionX + 1) < protaX or enemyBulletPositionX > (protaX + 4) then Return
-        if (enemyBulletPositionY + 1) < protaY or enemyBulletPositionY > (protaY + 4) then Return
+        if (localBulletX + 1) < protaX or localBulletX > (protaX + 4) then Return 1
+        if (localBulletY + 1) < protaY or localBulletY > (protaY + 4) then Return 1
+
+        enemyBullets(bulletId, 0) = 0
         decrementLife()
-        resetBullet(1)
-    end sub
+
+        return 0
+    end function
 #endif
 
 #ifdef USE_BREAKABLE_TILE
@@ -220,23 +231,10 @@ End Function
     end sub
 #EndIf
 
-
-sub resetBullet(isEnemyBullet as ubyte)
-    #ifdef BULLET_ENEMIES
-        if isEnemyBullet Then
-            enemyBulletPositionX = 0
-            enemyBulletPositionY = 0
-            enemyBulletDirection = 0
-        Else
-            bulletPositionX = 0
-            bulletPositionY = 0
-            bulletDirection = 0
-        end if
-    #Else
-        bulletPositionX = 0
-        bulletPositionY = 0
-        bulletDirection = 0
-    #endif
+sub resetBullet()
+    bulletPositionX = 0
+    bulletPositionY = 0
+    bulletDirection = 0
 end sub
 
 sub damageEnemy(enemyToKill as Ubyte)

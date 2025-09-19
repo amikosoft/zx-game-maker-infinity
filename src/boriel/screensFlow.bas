@@ -253,17 +253,17 @@ Sub playGame()
             moveBullet()
         #endif
         
-        #ifdef BULLET_ENEMIES
-            moveEnemyBullet()
-        #endif
+        ' #ifdef BULLET_ENEMIES enemies
+        '     moveEnemyBullet()
+        ' #endif
 
-        #ifdef SHOOTING_ENABLED
-            #ifdef BULLET_ENEMIES
-                #ifdef BULLET_COLLIDE_BULLET
-                    checkBulletsCollision() 
-                #endif
-            #endif
-        #endif
+        ' #ifdef SHOOTING_ENABLED
+        '     #ifdef BULLET_ENEMIES
+        '         #ifdef BULLET_COLLIDE_BULLET
+        '             ' checkBulletsCollision() 
+        '         #endif
+        '     #endif
+        ' #endif
 
         drawSprites()
 
@@ -455,17 +455,17 @@ Sub swapScreen(waitReady as ubyte)
     
     enemiesScreen = enemiesPerScreen(currentScreen)
     
-    #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+    ' #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
         firstTimeEnemiesScreen = 1
-    #endif
+    ' #endif
 
     #ifdef SHOOTING_ENABLED
         bulletPositionX = 0
     #endif
 
-    #ifdef BULLET_ENEMIES
-        enemyBulletPositionX = 0
-    #endif
+    ' #ifdef BULLET_ENEMIES
+    '     enemyBulletPositionX = 0
+    ' #endif
     
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()

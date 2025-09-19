@@ -298,11 +298,11 @@ Sub drawSprites()
         End If
     #endif
     
-    #ifdef BULLET_ENEMIES
-        If enemyBulletPositionX <> 0 Then
-            Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBulletPositionX, enemyBulletPositionY)
-        End If
-    #endif
+    ' #ifdef BULLET_ENEMIES movido a enemies
+    '     If enemyBulletPositionX <> 0 Then
+    '         Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBulletPositionX, enemyBulletPositionY)
+    '     End If
+    ' #endif
     
     RenderFrame()
 End Sub

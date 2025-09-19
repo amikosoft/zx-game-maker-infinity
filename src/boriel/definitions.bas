@@ -50,9 +50,7 @@ const BULLET_DIRECTION_DOWN = 2
 #endif
 
 #ifdef BULLET_ENEMIES
-    dim enemyBulletPositionX as byte = 0
-    dim enemyBulletPositionY as byte = 0
-    dim enemyBulletDirection as byte = 0
+    Dim enemyBullets(MAX_ENEMIES_PER_SCREEN, 2) As Byte
 #endif
 
 #ifdef SHOOTING_ENABLED
@@ -159,9 +157,10 @@ Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 Dim screensWon(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
 
+dim firstTimeEnemiesScreen as ubyte = 1
+
 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
     Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
-    dim firstTimeEnemiesScreen as ubyte = 1
 #endif
 
 ' Dim animatedTilesInScreen(SCREENS_COUNT, MAX_ANIMATED_TILES_PER_SCREEN, 2) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS

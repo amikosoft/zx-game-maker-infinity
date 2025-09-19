@@ -26,22 +26,22 @@
 #endif
 
 #ifdef BULLET_ENEMIES
-    Sub enemyShoot(posX as ubyte, posY as ubyte, direction as byte)
+    Sub enemyShoot(bulletId as ubyte, posX as ubyte, posY as ubyte, direction as byte)
         If direction = BULLET_DIRECTION_RIGHT Then
-            enemyBulletPositionX = posX + 2
-            enemyBulletPositionY = posY + 1
+            enemyBullets(bulletId, 0) = posX + 2
+            enemyBullets(bulletId, 1) = posY + 1
         Elseif direction = BULLET_DIRECTION_LEFT
-            enemyBulletPositionX = posX
-            enemyBulletPositionY = posY + 1
+            enemyBullets(bulletId, 0) = posX
+            enemyBullets(bulletId, 1) = posY + 1
         Elseif direction = BULLET_DIRECTION_UP
-            enemyBulletPositionX = posX + 1
-            enemyBulletPositionY = posY + 1
+            enemyBullets(bulletId, 0) = posX + 1
+            enemyBullets(bulletId, 1) = posY + 1
         Else
-            enemyBulletPositionX = posX + 1
-            enemyBulletPositionY = posY + 2
+            enemyBullets(bulletId, 0) = posX + 1
+            enemyBullets(bulletId, 1) = posY + 2
         End If
         
-        enemyBulletDirection = direction
+        enemyBullets(bulletId, 2) = direction
         BeepFX_Play(2)
     End Sub
 #endif
@@ -51,7 +51,7 @@
         if (bulletPositionX + 1) < enemyCol or bulletPositionX > (enemyCol + 2) then return 0
         if (bulletPositionY + 1) < enemyLin or bulletPositionY > (enemyLin+2) then return 0
         
-        resetBullet(0)
+        resetBullet()
         damageEnemy(enemyId)
         return 1
     end function
@@ -67,13 +67,25 @@ Sub moveEnemies()
     
     If enemiesScreen Then
         For enemyId=0 To enemiesScreen - 1
+            if firstTimeEnemiesScreen Then 
+                #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+                    enemiesInitialLife(enemyId) = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
+                #EndIf
+
+                #ifdef BULLET_ENEMIES
+                    enemyBullets(enemyId, 0) = 0
+                #endif
+
+                continue For
+            end if
+            
             Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
             
             If tile = 0 Then continue For
-            
-            #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-            if firstTimeEnemiesScreen Then enemiesInitialLife(enemyId) = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
-            #EndIf
+
+            #ifdef BULLET_ENEMIES
+                if moveEnemyBullet(enemyId) Then Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBullets(enemyId, 0), enemyBullets(enemyId, 1))
+            #endif
 
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             
@@ -396,7 +408,7 @@ Sub moveEnemies()
                     checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
                     
                     #ifdef BULLET_ENEMIES
-                        if enemyBulletPositionX = 0 and (tile mod 17) < BULLET_ENEMIES_RANGE then
+                        if not enemyBullets(enemyId, 0) and (tile mod 17) < BULLET_ENEMIES_RANGE then
                             #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
                                 if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
@@ -405,12 +417,12 @@ Sub moveEnemies()
                                         #endif
                                         
                                         if enemyCol < protaX Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
                                         else
                                             #ifdef BULLET_ENEMIES_LOOK_AT
                                                 lookDirection = lookDirection + 16
                                             #endif
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
                                         End if
                                         
                                         #ifdef BULLET_ENEMIES_LOOK_AT
@@ -420,10 +432,10 @@ Sub moveEnemies()
                                         continue for
                                     #else
                                         if enemyCol < protaX and horizontalDirection = 1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
                                             continue for
                                         elseif enemyCol > protaX and horizontalDirection = -1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
                                             continue for
                                         end if
                                     #endif
@@ -439,18 +451,18 @@ Sub moveEnemies()
                                     
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
                                         if enemyLin < protaY Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
                                         else
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_UP)
                                         end if
                                         
                                         continue for
                                     #Else
                                         if enemyLin < protaY and verticalDirection = 1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
                                             continue for
                                         elseif enemyLin > protaY and verticalDirection = -1 Then
-                                            enemyShoot(enemyCol, enemyLin, BULLET_DIRECTION_UP)
+                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_UP)
                                             continue for
                                         end if
                                     #endif
@@ -478,9 +490,9 @@ Sub moveEnemies()
             End if
         Next enemyId
 
-        #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+        ' #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
         firstTimeEnemiesScreen = 0
-        #endif
+        ' #endif
     End if
 End Sub
 
