@@ -1,6 +1,7 @@
 from pathlib import Path
 from builder import helper
 from builder.GenerateShiftedData import GenerateShiftedData
+from builder.GenerateUnshiftedData import GenerateUnshiftedData
 from builder.Charset import CharSet
 from builder.ZXPToSpritesConversor import ZXPToSpritesConversor
 from builder.PreshiftedSpritesWriter import PreshiftedSpritesWriter
@@ -14,6 +15,15 @@ class ConvertZXPToGuSprites:
             preshiftedSprites.append(GenerateShiftedData.generate(charset))
         
         return preshiftedSprites
+    
+    @staticmethod
+    def unshiftSprites(sprites):
+        unshiftedSprites = []
+        for sprite in sprites:
+            charset = CharSet.createFromSprite(sprite.data, sprite.width // 8, sprite.height // 8)
+            unshiftedSprites.append(GenerateUnshiftedData.generate(charset))
+        
+        return unshiftedSprites
     
     @staticmethod
     def convert():
@@ -40,11 +50,13 @@ class ConvertZXPToGuSprites:
         
         sprites.extend(ZXPToSpritesConversor.convert(str(Path(bulletFile)), bulletCount, 8, 8))  # Use extend instead of append
 
-        ConvertZXPToGuSprites.writeSimple(sprites)
+        # ConvertZXPToGuSprites.writeSimple(sprites)
 
         preshiftedSprites = ConvertZXPToGuSprites.preshiftSprites(sprites)
+        unshiftedSprites = ConvertZXPToGuSprites.unshiftSprites(sprites)
 
         PreshiftedSpritesWriter.write(preshiftedSprites, output_file)
+        PreshiftedSpritesWriter.write(unshiftedSprites, "boriel/lib/sprites.bas")
     
     @staticmethod
     def writeSimple(sprites):

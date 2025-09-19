@@ -6,22 +6,23 @@
 
 #include "texts.bas"
 
-#include "lib/GuSpritesConfig.bas"
-#include "lib/GuSprites.zxbas"
-
 #ifdef ENABLED_128k
     #include "128/im2.bas"
     #include "128/vortexTracker.bas"
     #include "128/functions.bas"
 
     #ifdef MUSIC_ENABLED
-        VortexTracker_Init()
+        ' VortexTracker_Init()
+        IM2Start(@VortexTracker_NextNote)
     #endif
 #endif
 
 loadDataFromTape()
 
 ' #include "graphicsInitializer.bas"
+#include "lib/GuSpritesConfig.bas"
+#include "lib/GuSprites.zxbas"
+
 #include "beepFx.bas"
 #include "functions.bas"
 
@@ -43,6 +44,8 @@ SetTileset(@tileSet)
         while INKEY$="":wend
     End If
 #endif
+
+waitretrace
 
 #ifdef PASSWORD_ENABLED
     passwordScreen()

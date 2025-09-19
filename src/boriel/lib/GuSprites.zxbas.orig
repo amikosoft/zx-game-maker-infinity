@@ -572,7 +572,14 @@ PROC
 LOCAL RENDER_LOOP, END_RENDER, RESTORE_STACK, STANDARD_OP, END_STANDARD_OP
 RENDER_FRAME:                                         ;TRASHES: BC, DE, HL, A
 
+#ifndef ENABLE_INTERRUPTS
+ei
+#endif
 halt
+#ifndef ENABLE_INTERRUPTS
+di
+#endif
+
 
 ld a, (CURRENT_DRAW_COUNT)
 cp 0

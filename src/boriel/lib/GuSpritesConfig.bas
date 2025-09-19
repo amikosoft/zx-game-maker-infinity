@@ -123,6 +123,6 @@
 
 'The lib by default disables interrupts, enabling this option
 'will reactivate them after each call to the lib
-#define ENABLE_INTERRUPTS
+' #define ENABLE_INTERRUPTS
 
 'END CONFIG DEFINES

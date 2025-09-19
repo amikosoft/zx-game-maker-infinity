@@ -214,7 +214,7 @@ Sub playGame()
     ' enemiesScreen = enemiesPerScreen(currentScreen)
 
     Do
-        waitretrace
+        ' waitretrace
 
         #ifdef PLATFORM_MOVEABLE
             If not isOnPlatform and enemiesFrame band 1 Then

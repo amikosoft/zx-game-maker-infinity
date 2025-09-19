@@ -212,7 +212,8 @@ Function tileAttrWithBackground(tile As Ubyte) As Ubyte
     ' Dim parpadeo As Ubyte = (attr bAnd 128) / 128
 
     ' Montar el atributo: papel, tinta, brillo, parpadeo
-    if ((attr bAnd 56) / 8) or tile <= ENEMY_DOOR_TILE or not papelBack Then return attr
+    'if ((attr bAnd 56) / 8) or tile <= ENEMY_DOOR_TILE or not papelBack Then return attr
+    if ((attr bAnd 56) / 8) or not papelBack Then return attr
 
     Return (papelBack * 8) + (attr bAnd 7) + (((backgroundAttr bAnd 64) / 64) * 64) + (((attr bAnd 128) / 128) * 128)
 End Function
