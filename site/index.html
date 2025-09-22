@@ -664,7 +664,19 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 
 * **screenAttributes** habilita la configuración de parámetros por pantalla (ver [Screen attributes](screen-attributes.md))
 
-### Tiles desvanecidos (fade tiles)
+### Idioma del juego
+
+Con infinity puedes generar tu juego en múltiples idiomas de manera sencilla y sin límite de idiomas.
+
+* **gameLanguage** indica al motor qué idioma debe tener en cuenta a la hora de compilar, tanto para textos del juego como los de la interfaz.
+
+Para configurar un idioma nuevo sólo tienes que ir a la carpeta *boriel/langs* y coger uno de los ficheros de idiomas existentes y copiarlo a otro nuevo. El nombre tiene que tener la siguiente extructura: 'lang_' + (tu código de idioma en minúsculas y sin espacios) + '.bas'.
+
+Siguiendo las pequeñas instrucciones del fichero podrás tener tus propios textos.
+
+Para los textos de aventura hay que meterles un atributo por cada idioma en el que quieras que aparezca. Por ejemplo, si vas a generar en inglés y español deberás tener los textos en el atributo 'es' y también en 'en'. Si no tienes el atributo correspondiente al idioma el texto no será incluído en el juego.
+
+### Tiles evanescentes (fade tiles)
 
 Con esto podrás activar la funcionalidad de los fade tiles que son aqueloos que al pisarlos se rompen con el tiempo.
 Si activas esta funcionalidad el tile 32 (más del 33% de energía) y 33 (menos del 33% de energía) quedan reservados para
@@ -933,7 +945,7 @@ Los textos de la aventura pueden ser de 2 tipos: relativos a la aventura (comple
 
 Los puntos de texto tienen 3 atributos configurables:
 
-* **es** o **en** aquí tendrás que introducir el texto a mostrar teniendo en cuenta tu configuración y que las lineas son de 15 caracteres (para que no se corten las palabras). Actualmente no está activo el multiidioma pero está preparado para cuando lo esté. Con una de estas de momento te tiene que valer.
+* **es** o **en** (lo configurado en el **gameLanguage**) aquí tendrás que introducir el texto a mostrar teniendo en cuenta tu configuración y que las lineas son de 15 caracteres (para que no se corten las palabras).
 
 * **adventureState** sirve para conocer en qué punto de la aventura se debe mostrar este punto de texto permitiendo mostrar distintos textos en el mismo tile dependiendo del avance de tu aventura. Recordar que empieza por 1 y deben ser correlativos. Cogido el último habrás ganado. Activando esto puedes desactivar el objetivo de items, o subirlo (objetivo de items) para no alcanzarlo nunca, ya que puede ser confuso para el jugador.
 Otra alternativa es que esté oculto el úĺtimo item bajo el paraguas de tu aventura y sólo se muestre al seguir ciertas pistas.

@@ -497,9 +497,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#tiles-desvanecidos-fade-tiles" class="md-nav__link">
+  <a href="#idioma-del-juego" class="md-nav__link">
     <span class="md-ellipsis">
-      Tiles desvanecidos (fade tiles)
+      Idioma del juego
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tiles-evanescentes-fade-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tiles evanescentes (fade tiles)
     </span>
   </a>
   
@@ -750,9 +759,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#tiles-desvanecidos-fade-tiles" class="md-nav__link">
+  <a href="#idioma-del-juego" class="md-nav__link">
     <span class="md-ellipsis">
-      Tiles desvanecidos (fade tiles)
+      Idioma del juego
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tiles-evanescentes-fade-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tiles evanescentes (fade tiles)
     </span>
   </a>
   
@@ -871,7 +889,15 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 <p><strong>screenAttributes</strong> habilita la configuración de parámetros por pantalla (ver <a href="screen-attributes.html">Screen attributes</a>)</p>
 </li>
 </ul>
-<h3 id="tiles-desvanecidos-fade-tiles">Tiles desvanecidos (fade tiles)</h3>
+<h3 id="idioma-del-juego">Idioma del juego</h3>
+<p>Con infinity puedes generar tu juego en múltiples idiomas de manera sencilla y sin límite de idiomas.</p>
+<ul>
+<li><strong>gameLanguage</strong> indica al motor qué idioma debe tener en cuenta a la hora de compilar, tanto para textos del juego como los de la interfaz.</li>
+</ul>
+<p>Para configurar un idioma nuevo sólo tienes que ir a la carpeta <em>boriel/langs</em> y coger uno de los ficheros de idiomas existentes y copiarlo a otro nuevo. El nombre tiene que tener la siguiente extructura: 'lang_' + (tu código de idioma en minúsculas y sin espacios) + '.bas'.</p>
+<p>Siguiendo las pequeñas instrucciones del fichero podrás tener tus propios textos.</p>
+<p>Para los textos de aventura hay que meterles un atributo por cada idioma en el que quieras que aparezca. Por ejemplo, si vas a generar en inglés y español deberás tener los textos en el atributo 'es' y también en 'en'. Si no tienes el atributo correspondiente al idioma el texto no será incluído en el juego.</p>
+<h3 id="tiles-evanescentes-fade-tiles">Tiles evanescentes (fade tiles)</h3>
 <p>Con esto podrás activar la funcionalidad de los fade tiles que son aqueloos que al pisarlos se rompen con el tiempo.
 Si activas esta funcionalidad el tile 32 (más del 33% de energía) y 33 (menos del 33% de energía) quedan reservados para</p>
 <ul>
