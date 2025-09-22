@@ -200,6 +200,8 @@ fullChangeScreenAnimation = False
 fadeTilesInScreenMax = 0
 fadeTilesFramesCount = 0
 
+gameLanguage = 'en'
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -393,7 +395,9 @@ if 'properties' in data:
             fadeTilesInScreenMax = property['value']
         elif property['name'] == 'fadeTilesFramesCount':
             fadeTilesFramesCount = property['value']
-
+        elif property['name'] == 'gameLanguage':
+            gameLanguage = property['value']
+        
 if len(damageTiles) == 0:
     damageTiles.append('0')
  
@@ -407,6 +411,13 @@ configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 configStr += "const MAX_LINE as ubyte = " + str(screenHeight * 2 - 4) + "\n"
 
 configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(64+transpasableItems) + "\n"
+
+# configStr += "#DEFINE GAME_LANGUAGE_" + gameLanguage.upper() + "\n"
+if not os.path.exists("boriel/langs/texts_" + gameLanguage.lower() + ".bas"):
+    print(f"No se encontró el fichero de idiomas: {gameLanguage.lower()}.bas")
+    sys.exit(1)
+
+configStr += '#include "../boriel/langs/texts_' + gameLanguage.lower() + '.bas"\n'
 
 # si hay gravityLow el salto se pasa los -2 a -1
 if gravityLow == True:
@@ -1000,7 +1011,7 @@ for layer in data['layers']:
                         adventureItem = 0
                         adventureText = ''
                         for prop in range(len(object['properties'])):
-                            if object['properties'][prop]['name'] == 'es' or object['properties'][prop]['name'] == 'en':
+                            if object['properties'][prop]['name'] == gameLanguage.lower():
                                 adventureText = object['properties'][prop]['value']
                             elif object['properties'][prop]['name'] == 'itemAction':
                                 adventureItem = object['properties'][prop]['value']

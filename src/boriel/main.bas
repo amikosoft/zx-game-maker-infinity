@@ -4,7 +4,11 @@
 #include "definitions.bas"
 #include "dataLoader.bas"
 
-#include "texts.bas"
+' #ifdef GAME_LANGUAGE_ES
+'     #include "texts_es.bas"
+' #Else
+'     #include "texts.bas"
+' #endif
 
 #ifdef ENABLED_128k
     #include "128/im2.bas"

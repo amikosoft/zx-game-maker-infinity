@@ -126,9 +126,10 @@ End Function
             #endif
             
             #ifdef BULLET_COLLISIONS
-                if checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY) Then
+                dim tileCollision as ubyte = checkBulletTileCollision(bulletDirection, bulletPositionX, bulletPositionY)
+                if tileCollision Then
                     #ifdef USE_BREAKABLE_TILE
-                        checkAndRemoveBreakableTile(tile)
+                        checkAndRemoveBreakableTile(tileCollision)
                     #endif
                     
                     #ifdef BULLET_BOOMERANG

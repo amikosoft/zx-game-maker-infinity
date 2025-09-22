@@ -557,6 +557,11 @@
                 "name": "fadeTilesFramesCount",
                 "type": "int",
                 "value": 10
+            },
+            {
+                "name": "gameLanguage",
+                "type": "string",
+                "value": "en"
             }
         ],
         "name": "ZXSpectrumGameMaker",
