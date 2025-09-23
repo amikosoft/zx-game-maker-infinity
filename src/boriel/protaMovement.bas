@@ -213,7 +213,7 @@ End Function
             #endif
             Return 1
         Else
-            If landed = 0 Then
+            If not landed Then
                 landed = 1
                 jumpCurrentKey = jumpStopValue
                 #ifdef JETPACK_FUEL
@@ -275,10 +275,10 @@ End Function
         ' If Not noKeyPressedForShoot Then Return
         ' noKeyPressedForShoot = 0
         
-        If bulletPositionX <> 0 Then Return
+        If bulletPositionX Then Return
         
         #ifdef AMMO_ENABLED
-            If currentAmmo = 0 Then Return
+            If not currentAmmo Then Return
             currentAmmo = currentAmmo - 1
             printLife()
         #endif
@@ -330,15 +330,20 @@ End Function
         
         ' noKeyPressedForShoot = 0
         
-        If bulletPositionX <> 0 Then Return
+        If bulletPositionX Then Return
         
         #ifdef AMMO_ENABLED
-            If currentAmmo = 0 Then Return
+            If not currentAmmo Then Return
             currentAmmo = currentAmmo - 1
             printLife()
         #endif
         
         If protaDirection = 1 Then
+             #ifdef IDLE_ENABLED
+                ' updateProtaData( protaY, protaX, 1, 1)
+                protaTile = 1
+            #endif
+
             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
             bulletPositionX = protaX + 2
             bulletPositionY = protaY + 1
@@ -352,6 +357,11 @@ End Function
                 bulletEndPositionX = MAX_SCREEEN_RIGHT
             End If
         Elseif protaDirection = 0
+            #ifdef IDLE_ENABLED
+                ' updateProtaData( protaY, protaX, 5, 0)
+                protaTile = 3
+            #endif
+
             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
             bulletPositionX = protaX
             bulletPositionY = protaY + 1
@@ -365,6 +375,11 @@ End Function
                 bulletEndPositionX = MAX_SCREEN_LEFT
             End If
         Elseif protaDirection = 8
+            #ifdef IDLE_ENABLED
+                ' updateProtaData( protaY, protaX, 5, 0)
+                protaTile = 5
+            #endif
+
             currentBulletSpriteId = BULLET_SPRITE_UP_ID
             bulletPositionX = protaX + 1
             bulletPositionY = protaY + 1
@@ -378,6 +393,11 @@ End Function
                 bulletEndPositionY = MAX_SCREEN_TOP
             End If
         Else
+            #ifdef IDLE_ENABLED
+                ' updateProtaData( protaY, protaX, 5, 0)
+                protaTile = 7
+            #endif
+            
             currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
             bulletPositionX = protaX + 1
             bulletPositionY = protaY + 2
@@ -414,11 +434,13 @@ Sub leftKey()
             moveScreen = 4
         #endif
     Else
-        if isInStep(protaX, protaY + 3) then
-            protaY = protaY - 1
-            ' elseif isInStep(protaX + 4, protaY + 4) then
-            '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
-        end if
+        #ifdef SIDE_VIEW
+            if isInStep(protaX, protaY + 3) then
+                protaY = protaY - 1
+                ' elseif isInStep(protaX + 4, protaY + 4) then
+                '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
+            end if
+        #endif
         
         if Not CheckCollision(protaX - 1, protaY) then updateProtaData( protaY, protaX - 1, protaFrame + 1, 0)
     End If
@@ -437,11 +459,13 @@ Sub rightKey()
             moveScreen = 6
         #endif
     Else
-        if isInStep(protaX+3, protaY + 3) then
-            protaY = protaY - 1
-            ' elseif isInStep(protaX+1, protaY + 4) then
-            '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
-        end if
+        #ifdef SIDE_VIEW
+            if isInStep(protaX+3, protaY + 3) then
+                protaY = protaY - 1
+                ' elseif isInStep(protaX+1, protaY + 4) then
+                '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
+            end if
+        #endif
         
         if Not CheckCollision(protaX + 1, protaY) then updateProtaData( protaY, protaX + 1, protaFrame + 1, 1)
     End If
@@ -642,31 +666,32 @@ Sub keyboardListen()
         If n bAND %1000 Then upKey()
         If n bAND %100 Then downKey()
         If n bAND %10000 Then fireKey()
-        #ifdef SIDE_VIEW
+        ' #ifdef SIDE_VIEW
             #ifdef IDLE_ENABLED
-                If n = 0 Then
+                If not n Then
                     If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
                 Else
                     protaLoopCounter = 0
                 End If
             #endif
-        #endif
+        ' #endif
     Else
-        If MultiKeys(keyArray(LEFT))<>0 Then leftKey()
-        If MultiKeys(keyArray(RIGHT))<>0 Then rightKey()
-        If MultiKeys(keyArray(UP))<>0 Then upKey()
-        If MultiKeys(keyArray(DOWN))<>0 Then downKey()
-        If MultiKeys(keyArray(FIRE))<>0 Then fireKey()
+        If MultiKeys(keyArray(LEFT)) Then leftKey()
+        If MultiKeys(keyArray(RIGHT)) Then rightKey()
+        If MultiKeys(keyArray(UP)) Then upKey()
+        If MultiKeys(keyArray(DOWN)) Then downKey()
+        If MultiKeys(keyArray(FIRE)) Then fireKey()
         
-        #ifdef SIDE_VIEW
+        ' #ifdef SIDE_VIEW
             #ifdef IDLE_ENABLED
-                If MultiKeys(keyArray(LEFT))=0 And MultiKeys(keyArray(RIGHT))=0 And MultiKeys(keyArray(UP))=0 And MultiKeys(keyArray(DOWN))=0 And MultiKeys(keyArray(FIRE))=0 Then
+                ' If not MultiKeys(keyArray(LEFT)) And not MultiKeys(keyArray(RIGHT)) And not MultiKeys(keyArray(UP)) And not MultiKeys(keyArray(DOWN))=0 And not MultiKeys(keyArray(FIRE)) Then
+                if not GetKeyScanCode() Then
                     If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
                 Else
                     protaLoopCounter = 0
                 End If
             #endif
-        #endif
+        ' #endif
     End If
 End Sub
 
@@ -850,6 +875,12 @@ Sub protaMovement()
                 If jumpCurrentKey <> jumpStopValue Then Return
                 If isFalling() Then Return
                 
+                protaTile = 13 + animatedFrame
+            End If
+        #endif
+    #else
+        #ifdef IDLE_ENABLED
+            If protaLoopCounter >= IDLE_TIME Then
                 protaTile = 13 + animatedFrame
             End If
         #endif
