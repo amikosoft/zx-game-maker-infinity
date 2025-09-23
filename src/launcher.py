@@ -8,11 +8,15 @@ version = "3.3.0"
 def printBanner():
     output_text.insert(tk.END, f"\n")
     
-    with open("infinitybanner.txt", "r") as f:
-        logo_string = f.readlines()
+    if platform.system() == "Windows":
+        output_text.insert(tk.END, f"····::::: ZX INFINITY :::::····\n")
+    elif platform.system() in ["Linux", "Darwin"]:
+        with open("infinitybanner.txt", "r") as f:
+            logo_string = f.readlines()
 
-        for textTmp, line in enumerate(logo_string):
-            output_text.insert(tk.END, f"{line}")
+            for textTmp, line in enumerate(logo_string):
+                output_text.insert(tk.END, f"{line}")
+    
     output_text.insert(tk.END, f"-= by Amikosoft =- Ver. {version}\n\n")
 
 def show_help_info():
