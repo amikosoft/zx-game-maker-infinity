@@ -22,7 +22,7 @@ End Function
 
 #ifdef SHOOTING_ENABLED
     sub moveBullet()
-        if bulletPositionX = 0 then return
+        if not bulletPositionX then return
         
         #ifdef BULLET_BOOMERANG
             if bulletDirection = BULLET_DIRECTION_BOOMERANG Then
@@ -267,7 +267,7 @@ sub damageEnemy(enemyToKill as Ubyte)
         #endif
         
         decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
-        if alive = 0 then
+        if not alive then
             ' enemySpriteTempTile(enemyToKill) = 0
             decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
             BeepFX_Play(0)

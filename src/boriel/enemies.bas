@@ -7,7 +7,7 @@
     End Function
     
     Function checkPlatformByXY(protaX As Ubyte, protaY4 As Ubyte) As Ubyte
-        If enemiesScreen = 0 Then Return 0
+        If not enemiesScreen Then Return 0
         
         For enemyId=0 To enemiesScreen - 1
             If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
@@ -81,7 +81,7 @@ Sub moveEnemies()
             
             Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
             
-            If tile = 0 Then continue For
+            If not tile Then continue For
 
             #ifdef BULLET_ENEMIES
                 if moveEnemyBullet(enemyId) Then Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBullets(enemyId, 0), enemyBullets(enemyId, 1))
@@ -89,7 +89,7 @@ Sub moveEnemies()
 
             Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             
-            If enemyLive = 0 Then continue For
+            If not enemyLive Then continue For
             
             #ifndef ENEMIES_SLOW_DOWN
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
@@ -203,7 +203,7 @@ Sub moveEnemies()
                 #ifdef ENEMIES_NORMAL_COLLIDE
                     dim counter as byte = 0
                     while counter < 3 and CheckCollision(enemyCol + horizontalDirection, enemyLin + verticalDirection)
-                        if counter = 0 Then 
+                        if not counter Then 
                             horizontalDirection = horizontalDirection * -1
                         Elseif counter = 1 Then
                             horizontalDirection = horizontalDirection * -1 
