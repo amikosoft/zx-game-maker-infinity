@@ -93,7 +93,7 @@ Sub moveEnemies()
             
             #ifndef ENEMIES_SLOW_DOWN
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                    If enemyLive < 1 And tile > 16 Then
+                    If enemyLive > 0 and tile > 16 Then
                         If screensWon(currentScreen) Then continue For
                     End If
                 #endif
@@ -231,12 +231,12 @@ Sub moveEnemies()
                     Else
                         horizontalDirection = Sgn(protaX - enemyCol)
                         verticalDirection = Sgn(protaY - enemyLin)
-                        
-                        #ifdef ENEMIES_PURSUIT_COLLIDE
-                            if CheckCollision(enemyCol + horizontalDirection, enemyLin) Then horizontalDirection = 0
-                            if CheckCollision(enemyCol, enemyLin + verticalDirection) Then verticalDirection = 0
-                        #endif
                     End if
+
+                    #ifdef ENEMIES_PURSUIT_COLLIDE
+                        if CheckCollision(enemyCol + horizontalDirection, enemyLin) Then horizontalDirection = 0
+                        if CheckCollision(enemyCol, enemyLin + verticalDirection) Then verticalDirection = 0
+                    #endif
                 #endif
                 #ifdef ENEMIES_ANTICLOCKWISE_ENABLED
                 ElseIf enemyMode = ENEMY_MODE_ANTICLOCKWISE Then

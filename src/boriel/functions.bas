@@ -185,14 +185,9 @@ function allEnemiesKilled() as ubyte
     if Not enemiesScreen then return 1
     
     for enemyId=0 TO enemiesScreen - 1
-        if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then
-            continue for
-        end if
-        if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) > 0 then
-            return 0
-        end if
+        if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then continue for
+        if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) > 0 then return 0
     next enemyId
-    
     return 1
 end function
 
