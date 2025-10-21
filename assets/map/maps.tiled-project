@@ -148,6 +148,19 @@
         "valuesAsFlags": false
     },
     {
+        "id": 13,
+        "name": "fontCustom",
+        "storageType": "string",
+        "type": "enum",
+        "values": [
+            "default",
+            "bold mayus",
+            "bold all",
+            "medieval"
+        ],
+        "valuesAsFlags": false
+    },
+    {
         "color": "#ffa0a0a4",
         "drawFill": true,
         "id": 2,
@@ -232,6 +245,12 @@
                 "name": "border",
                 "type": "string",
                 "value": "0"
+            },
+            {
+                "name": "fontCustom",
+                "propertyType": "fontCustom",
+                "type": "string",
+                "value": "default"
             },
             {
                 "name": "borderDamageColor",

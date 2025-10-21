@@ -28,6 +28,21 @@ loadDataFromTape()
 #include "lib/GuSprites.zxbas"
 
 #include "beepFx.bas"
+
+#ifdef CUSTOM_FONT_ENABLED
+    #ifdef CUSTOM_FONT_BOLD_ALL
+        #include "fnts/Glow.fnt.bas"
+    #endif
+    
+    #ifdef CUSTOM_FONT_BOLD_MAYUS
+        #include "fnts/Fuente.fnt.bas"
+    #endif
+    
+    #ifdef CUSTOM_FONT_MEDIEVAL
+        #include "fnts/Clasico.fnt.bas"
+    #endif
+#endif
+
 #include "functions.bas"
 
 #include "bullet.bas"
@@ -39,6 +54,20 @@ loadDataFromTape()
 'graphicsInitializer.bas
 InitGFXLib()
 SetTileset(@tileSet(0,0))
+
+#ifdef CUSTOM_FONT_ENABLED
+    #ifdef CUSTOM_FONT_BOLD_ALL
+        POKE UInteger 23606,@Glow(0,0)-256
+    #endif
+    
+    #ifdef CUSTOM_FONT_BOLD_MAYUS
+        POKE UInteger 23606,@Fuente(0,0)-256
+    #endif
+    
+    #ifdef CUSTOM_FONT_MEDIEVAL
+        POKE UInteger 23606,@Clasico(0,0)-256
+    #endif
+#endif
 
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
     If firstLoad Then

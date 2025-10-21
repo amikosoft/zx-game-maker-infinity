@@ -57,6 +57,10 @@
     end function
 #endif
 
+Dim enemyModeBucle, enemyColBucle, enemyLinBucle, enemyColIniBucle, enemyLinIniBucle, enemySpeedBucle, _ 
+    enemyLiveBucle, enemyColEndBucle, enemyLinEndBucle, horizontalDirectionBucle, verticalDirectionBucle, _
+    tileBucle As Byte
+
 Sub moveEnemies()
     #ifdef PLATFORM_MOVEABLE
         isOnPlatform = 0
@@ -79,81 +83,81 @@ Sub moveEnemies()
                 continue For
             end if
             
-            Dim tile As Byte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
+            tileBucle = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
             
-            If not tile Then continue For
+            If not tileBucle Then continue For
 
             #ifdef BULLET_ENEMIES
                 if moveEnemyBullet(enemyId) Then Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBullets(enemyId, 0), enemyBullets(enemyId, 1))
             #endif
 
-            Dim enemyLive As Byte = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
+            enemyLiveBucle = decompressedEnemiesScreen(enemyId, ENEMY_ALIVE)
             
-            If not enemyLive Then continue For
+            If not enemyLiveBucle Then continue For
             
             #ifndef ENEMIES_SLOW_DOWN
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                    If enemyLive > 0 and tile > 16 Then
+                    If enemyLiveBucle > 0 and tileBucle > 16 Then
                         If screensWon(currentScreen) Then continue For
                     End If
                 #endif
             #endif
 
-            Dim enemyMode As Byte = decompressedEnemiesScreen(enemyId, ENEMY_MODE)
-            Dim enemyCol As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
-            Dim enemyLin As Byte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
-            Dim enemyColIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_INI)
-            Dim enemyLinIni As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI)
-            Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
+            enemyModeBucle = decompressedEnemiesScreen(enemyId, ENEMY_MODE)
+            enemyColBucle = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
+            enemyLinBucle = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
+            enemyColIniBucle = decompressedEnemiesScreen(enemyId, ENEMY_COL_INI)
+            enemyLinIniBucle = decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI)
+            enemySpeedBucle = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
 
             #ifdef ENEMIES_SLOW_DOWN
-                if enemyLive > -100 and enemyLive < 0 then
-                    if enemySpeed < 3 Then
-                        enemyLive = enemyLive + 1
+                if enemyLiveBucle > -100 and enemyLiveBucle < 0 then
+                    if enemySpeedBucle < 3 Then
+                        enemyLiveBucle = enemyLiveBucle + 1
 
-                        if not enemyLive Then
-                            enemySpeed = enemySpeed + 1
-                            decompressedEnemiesScreen(enemyId, ENEMY_SPEED) = enemySpeed
-                            if enemySpeed < 3 Then 
-                                enemyLive = -50
+                        if not enemyLiveBucle Then
+                            enemySpeedBucle = enemySpeedBucle + 1
+                            decompressedEnemiesScreen(enemyId, ENEMY_SPEED) = enemySpeedBucle
+                            if enemySpeedBucle < 3 Then 
+                                enemyLiveBucle = -50
                             Else
-                                enemyLive = 1
+                                enemyLiveBucle = 1
                             end if
                         end if
 
-                        decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLive
+                        decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLiveBucle
                     end if
 
                     ' siempre tiene que tener vida
-                    enemyLive = 1
+                    enemyLiveBucle = 1
                 end if
 
                 #ifdef SHOOTING_ENABLED
                     if bulletPositionX then
-                        checkEnemyBullet(enemyId, enemyCol, enemyLin)
+                        checkEnemyBullet(enemyId, enemyColBucle, enemyLinBucle)
                     End If
                 #endif
             #else
                 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-                    if enemyLive > -100 and enemyLive < 1 then
-                        enemyLive = enemyLive + 1
+                    if enemyLiveBucle > -100 and enemyLiveBucle < 1 then
+                        enemyLiveBucle = enemyLiveBucle + 1
                         
-                        if not enemyLive Then
-                            enemyLive = enemiesInitialLife(enemyId)
+                        if not enemyLiveBucle Then
+                            enemyLiveBucle = enemiesInitialLife(enemyId)
                         end if
-                        decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLive
+                        decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLiveBucle
                         
-                        if enemyMode = 2 Then
-                            enemyCol = enemyColIni
-                            enemyLin = enemyLinIni
+                        if enemyModeBucle = 2 Then
+                            enemyColBucle = enemyColIniBucle
+                            enemyLinBucle = enemyLinIniBucle
                             GO TO EnemiesFinal
                         End if
                         #ifdef SHOOTING_ENABLED
                         Else
                             ' Se comprueba si tiene colision de bala
-                            if bulletPositionX and enemyLive > 0 then
-                                if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
-                                    enemyLive = enemyLive - 1
+                            if bulletPositionX and enemyLiveBucle > 0 then
+                                if checkEnemyBullet(enemyId, enemyColBucle, enemyLinBucle) Then
+                                    enemyLiveBucle = enemyLiveBucle - 1
                                 End if
                             End If
                         #endif
@@ -161,55 +165,55 @@ Sub moveEnemies()
                 #else
                     ' Se comprueba si tiene colision de bala
                     #ifdef SHOOTING_ENABLED
-                        if bulletPositionX and enemyLive > 0 then
-                            if checkEnemyBullet(enemyId, enemyCol, enemyLin) Then
-                                enemyLive = enemyLive - 1
+                        if bulletPositionX and enemyLiveBucle > 0 then
+                            if checkEnemyBullet(enemyId, enemyColBucle, enemyLinBucle) Then
+                                enemyLiveBucle = enemyLiveBucle - 1
                             End if
                         End If
                     #endif
                 #endif
             #endif
             
-            'Dim enemySpeed As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
-            Dim horizontalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
-            Dim verticalDirection As Byte = decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION)
+            'Dim enemySpeedBucle As Byte = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
+            horizontalDirectionBucle = decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION)
+            verticalDirectionBucle = decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION)
             
             #ifdef ENEMIES_SLOW_DOWN
-                If not enemySpeed or (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
+                If not enemySpeedBucle or (enemySpeedBucle = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeedBucle = 2 and (enemiesFrame bAnd 1) = 1) Then
                     GO TO EnemiesFinal
                 End If
             #else
-                If (enemySpeed = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeed = 2 and (enemiesFrame bAnd 1) = 1) Then
+                If (enemySpeedBucle = 1 and (enemiesFrame bAnd 3) <> 3) or (enemySpeedBucle = 2 and (enemiesFrame bAnd 1) = 1) Then
                     GO TO EnemiesFinal
                 End If
             #endif
             
-            Dim enemyColEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_COL_END)
-            Dim enemyLinEnd As Byte = decompressedEnemiesScreen(enemyId, ENEMY_LIN_END)
+            enemyColEndBucle = decompressedEnemiesScreen(enemyId, ENEMY_COL_END)
+            enemyLinEndBucle = decompressedEnemiesScreen(enemyId, ENEMY_LIN_END)
             
-            if enemyMode < ENEMY_MODE_PURSUIT Then
-                If horizontalDirection Then
-                    If enemyColIni = enemyCol Or enemyColEnd = enemyCol Then
-                        horizontalDirection = horizontalDirection * -1
+            if enemyModeBucle < ENEMY_MODE_PURSUIT Then
+                If horizontalDirectionBucle Then
+                    If enemyColIniBucle = enemyColBucle Or enemyColEndBucle = enemyColBucle Then
+                        horizontalDirectionBucle = horizontalDirectionBucle * -1
                     End If
                 End If
                 
-                If verticalDirection Then
-                    If enemyLinIni = enemyLin Or enemyLinEnd = enemyLin Then
-                        verticalDirection = verticalDirection * -1
+                If verticalDirectionBucle Then
+                    If enemyLinIniBucle = enemyLinBucle Or enemyLinEndBucle = enemyLinBucle Then
+                        verticalDirectionBucle = verticalDirectionBucle * -1
                     End If
                 End If
 
                 #ifdef ENEMIES_NORMAL_COLLIDE
                     dim counter as byte = 0
-                    while counter < 3 and CheckCollision(enemyCol + horizontalDirection, enemyLin + verticalDirection)
+                    while counter < 3 and CheckCollision(enemyColBucle + horizontalDirectionBucle, enemyLinBucle + verticalDirectionBucle)
                         if not counter Then 
-                            horizontalDirection = horizontalDirection * -1
+                            horizontalDirectionBucle = horizontalDirectionBucle * -1
                         Elseif counter = 1 Then
-                            horizontalDirection = horizontalDirection * -1 
-                            verticalDirection = verticalDirection * -1       
+                            horizontalDirectionBucle = horizontalDirectionBucle * -1 
+                            verticalDirectionBucle = verticalDirectionBucle * -1       
                         Else
-                            horizontalDirection = horizontalDirection * -1       
+                            horizontalDirectionBucle = horizontalDirectionBucle * -1       
                         end if
 
                         counter = counter +1
@@ -217,147 +221,147 @@ Sub moveEnemies()
                 #endif
                 
                 #ifdef ENEMIES_ALERT_ENABLED
-                    If Not invincible And enemyMode = ENEMY_MODE_ALERT Then
-                        If Abs(protaX - enemyCol) < ENEMIES_ALERT_DISTANCE And Abs(protaY - enemyLin) < (ENEMIES_ALERT_DISTANCE * 2) Then
-                            enemyMode = ENEMY_MODE_PURSUIT
+                    If Not invincible And enemyModeBucle = ENEMY_MODE_ALERT Then
+                        If Abs(protaX - enemyColBucle) < ENEMIES_ALERT_DISTANCE And Abs(protaY - enemyLinBucle) < (ENEMIES_ALERT_DISTANCE * 2) Then
+                            enemyModeBucle = ENEMY_MODE_PURSUIT
                         End if
                     End if
                 #endif
                 #ifdef ENEMIES_PURSUIT_ENABLED
-                ElseIf enemyMode = ENEMY_MODE_PURSUIT Then
+                ElseIf enemyModeBucle = ENEMY_MODE_PURSUIT Then
                     if invincible Then
-                        horizontalDirection = Sgn(enemyColIni - enemyCol)
-                        verticalDirection = Sgn(enemyLinIni - enemyLin)
+                        horizontalDirectionBucle = Sgn(enemyColIniBucle - enemyColBucle)
+                        verticalDirectionBucle = Sgn(enemyLinIniBucle - enemyLinBucle)
                     Else
-                        horizontalDirection = Sgn(protaX - enemyCol)
-                        verticalDirection = Sgn(protaY - enemyLin)
+                        horizontalDirectionBucle = Sgn(protaX - enemyColBucle)
+                        verticalDirectionBucle = Sgn(protaY - enemyLinBucle)
                     End if
 
                     #ifdef ENEMIES_PURSUIT_COLLIDE
-                        if CheckCollision(enemyCol + horizontalDirection, enemyLin) Then horizontalDirection = 0
-                        if CheckCollision(enemyCol, enemyLin + verticalDirection) Then verticalDirection = 0
+                        if CheckCollision(enemyColBucle + horizontalDirectionBucle, enemyLinBucle) Then horizontalDirectionBucle = 0
+                        if CheckCollision(enemyColBucle, enemyLinBucle + verticalDirectionBucle) Then verticalDirectionBucle = 0
                     #endif
                 #endif
                 #ifdef ENEMIES_ANTICLOCKWISE_ENABLED
-                ElseIf enemyMode = ENEMY_MODE_ANTICLOCKWISE Then
-                    If enemyColIni = enemyCol Then
-                        If enemyLinIni = enemyLin Then
+                ElseIf enemyModeBucle = ENEMY_MODE_ANTICLOCKWISE Then
+                    If enemyColIniBucle = enemyColBucle Then
+                        If enemyLinIniBucle = enemyLinBucle Then
                             ' Esquina sup iz
-                            verticalDirection = 1
-                            horizontalDirection = 0
-                        Elseif enemyLinEnd = enemyLin Then
+                            verticalDirectionBucle = 1
+                            horizontalDirectionBucle = 0
+                        Elseif enemyLinEndBucle = enemyLinBucle Then
                             ' Esquina inf iz
-                            horizontalDirection = 1
-                            verticalDirection = 0
+                            horizontalDirectionBucle = 1
+                            verticalDirectionBucle = 0
                         End If
-                    Elseif enemyColEnd = enemyCol Then
-                        If enemyLinEnd = enemyLin Then
+                    Elseif enemyColEndBucle = enemyColBucle Then
+                        If enemyLinEndBucle = enemyLinBucle Then
                             ' Esquina inf der
-                            verticalDirection = -1
-                            horizontalDirection = 0
-                        Elseif enemyLinIni = enemyLin Then
+                            verticalDirectionBucle = -1
+                            horizontalDirectionBucle = 0
+                        Elseif enemyLinIniBucle = enemyLinBucle Then
                             ' Esquina sup der
-                            horizontalDirection = -1
-                            verticalDirection = 0
+                            horizontalDirectionBucle = -1
+                            verticalDirectionBucle = 0
                         End If
                     End if
                 #endif
                 #ifdef ENEMIES_CLOCKWISE_ENABLED
-                Elseif enemyMode = ENEMY_MODE_CLOCKWISE Then
-                    If enemyColIni = enemyCol Then
-                        If enemyLinIni = enemyLin Then
+                Elseif enemyModeBucle = ENEMY_MODE_CLOCKWISE Then
+                    If enemyColIniBucle = enemyColBucle Then
+                        If enemyLinIniBucle = enemyLinBucle Then
                             ' Esquina sup iz
-                            verticalDirection = 0
-                            horizontalDirection = 1
-                        Elseif enemyLinEnd = enemyLin Then
+                            verticalDirectionBucle = 0
+                            horizontalDirectionBucle = 1
+                        Elseif enemyLinEndBucle = enemyLinBucle Then
                             ' Esquina inf iz
-                            horizontalDirection = 0
-                            verticalDirection = -1
+                            horizontalDirectionBucle = 0
+                            verticalDirectionBucle = -1
                         End If
-                    Elseif enemyColEnd = enemyCol Then
-                        If enemyLinEnd = enemyLin Then
+                    Elseif enemyColEndBucle = enemyColBucle Then
+                        If enemyLinEndBucle = enemyLinBucle Then
                             ' Esquina inf der
-                            verticalDirection = 0
-                            horizontalDirection = -1
-                        Elseif enemyLinIni = enemyLin Then
+                            verticalDirectionBucle = 0
+                            horizontalDirectionBucle = -1
+                        Elseif enemyLinIniBucle = enemyLinBucle Then
                             ' Esquina sup der
-                            horizontalDirection = 0
-                            verticalDirection = 1
+                            horizontalDirectionBucle = 0
+                            verticalDirectionBucle = 1
                         End If
                     End if
                 #endif
                 #ifdef ENEMIES_ONE_DIRECTION_ENABLED
-                ElseIf enemyMode = ENEMY_MODE_ONEDIRECTION Then
-                    If enemyColEnd = enemyCol And enemyLinEnd = enemyLin Then
-                        enemyCol = enemyColIni
-                        enemyLin = enemyLinIni
+                ElseIf enemyModeBucle = ENEMY_MODE_ONEDIRECTION Then
+                    If enemyColEndBucle = enemyColBucle And enemyLinEndBucle = enemyLinBucle Then
+                        enemyColBucle = enemyColIniBucle
+                        enemyLinBucle = enemyLinIniBucle
                     End If
                 #endif
                 #ifdef ENEMIES_TRAP_ENABLED
-                ElseIf enemyMode >= ENEMY_MODE_TRAP_ALL Then
-                    If enemyColIni = enemyCol And enemyLinIni = enemyLin Then
+                ElseIf enemyModeBucle >= ENEMY_MODE_TRAP_ALL Then
+                    If enemyColIniBucle = enemyColBucle And enemyLinIniBucle = enemyLinBucle Then
                         #ifdef ENEMIES_TRAP_VERTICAL_ENABLED
-                            if enemyCol = protaX or enemyLinEnd Then
-                                if enemyMode <> ENEMY_MODE_TRAP_HORIZONAL Then
-                                    verticalDirection = Sgn(protaY - enemyLin)
+                            if enemyColBucle = protaX or enemyLinEndBucle Then
+                                if enemyModeBucle <> ENEMY_MODE_TRAP_HORIZONAL Then
+                                    verticalDirectionBucle = Sgn(protaY - enemyLinBucle)
                                 end if
                             end if
                         #endif
                         
                         #ifdef ENEMIES_TRAP_HORIZONTAL_ENABLED
-                            if enemyLin = protaY or enemyColEnd Then
-                                if enemyMode <> ENEMY_MODE_TRAP_VERTICAL Then
-                                    horizontalDirection = Sgn(protaX - enemyCol)
+                            if enemyLinBucle = protaY or enemyColEndBucle Then
+                                if enemyModeBucle <> ENEMY_MODE_TRAP_VERTICAL Then
+                                    horizontalDirectionBucle = Sgn(protaX - enemyColBucle)
                                 end if
                             end if
                         #endif
-                    Elseif enemyLin = MAX_LINE or enemyLin = 0 or enemyCol = 60 or enemyCol = 0 Then
-                        enemyCol = enemyColIni
-                        enemyLin = enemyLinIni
-                        verticalDirection = 0
-                        horizontalDirection = 0
+                    Elseif enemyLinBucle = MAX_LINE or enemyLinBucle = 0 or enemyColBucle = 60 or enemyColBucle = 0 Then
+                        enemyColBucle = enemyColIniBucle
+                        enemyLinBucle = enemyLinIniBucle
+                        verticalDirectionBucle = 0
+                        horizontalDirectionBucle = 0
                     End if
                 #endif
             End if
             
-            enemyCol = enemyCol + horizontalDirection
-            enemyLin = enemyLin + verticalDirection
+            enemyColBucle = enemyColBucle + horizontalDirectionBucle
+            enemyLinBucle = enemyLinBucle + verticalDirectionBucle
             
             ' Is a platform Not an enemy, only 2 frames, 1 direction
             #ifdef SIDE_VIEW
-                If tile < 17 Then
+                If tileBucle < 17 Then
                     if jumpCurrentKey = jumpStopValue Then
-                        If checkPlatformHasProtaOnTop(enemyCol, enemyLin) Then
+                        If checkPlatformHasProtaOnTop(enemyColBucle, enemyLinBucle) Then
                             #ifdef PLATFORM_MOVEABLE
-                                if enemySpeed = 3 and not verticalDirection and not horizontalDirection Then
+                                if enemySpeedBucle = 3 and not verticalDirectionBucle and not horizontalDirectionBucle Then
                                     if downKeyPressed Then
-                                        If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLin = enemyLin - 1
-                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLin < 40 Then
-                                        enemyLin = enemyLin + 1
+                                        If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLinBucle = enemyLinBucle - 1
+                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < 40 Then
+                                        enemyLinBucle = enemyLinBucle + 1
                                     End If
                                     
-                                    enemyCol = protaX
-                                    protaY = enemyLin - 4
-                                    isOnPlatform = tile
+                                    enemyColBucle = protaX
+                                    protaY = enemyLinBucle - 4
+                                    isOnPlatform = tileBucle
                                 Else
-                                    If Not CheckCollision(protaX, protaY + verticalDirection) Then
-                                        protaY = enemyLin - 4
+                                    If Not CheckCollision(protaX, protaY + verticalDirectionBucle) Then
+                                        protaY = enemyLinBucle - 4
                                     End if
                                     
-                                    If horizontalDirection Then
-                                        If Not CheckCollision(protaX + horizontalDirection, protaY) Then
-                                            protaX = protaX + horizontalDirection
+                                    If horizontalDirectionBucle Then
+                                        If Not CheckCollision(protaX + horizontalDirectionBucle, protaY) Then
+                                            protaX = protaX + horizontalDirectionBucle
                                         End If
                                     End If
                                 End if
                             #Else
-                                If Not CheckCollision(protaX, protaY + verticalDirection) Then
-                                    protaY = enemyLin - 4
+                                If Not CheckCollision(protaX, protaY + verticalDirectionBucle) Then
+                                    protaY = enemyLinBucle - 4
                                 End if
                                 
-                                If horizontalDirection Then
-                                    If Not CheckCollision(protaX + horizontalDirection, protaY) Then
-                                        protaX = protaX + horizontalDirection
+                                If horizontalDirectionBucle Then
+                                    If Not CheckCollision(protaX + horizontalDirectionBucle, protaY) Then
+                                        protaX = protaX + horizontalDirectionBucle
                                     End If
                                 End If
                             #endif
@@ -368,101 +372,101 @@ Sub moveEnemies()
             
             
             ' se guarda el estado final del enemigo
-            'if enemyMode <> 2 And enemyMode <> 3 Then
-            decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = horizontalDirection
-            decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = verticalDirection
+            'if enemyModeBucle <> 2 And enemyModeBucle <> 3 Then
+            decompressedEnemiesScreen(enemyId, ENEMY_HORIZONTAL_DIRECTION) = horizontalDirectionBucle
+            decompressedEnemiesScreen(enemyId, ENEMY_VERTICAL_DIRECTION) = verticalDirectionBucle
             'End if
-            decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyMode
+            decompressedEnemiesScreen(enemyId, ENEMY_MODE) = enemyModeBucle
             
             EnemiesFinal:
             
-            decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyCol
-            decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLin
+            decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL) = enemyColBucle
+            decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLinBucle
 
             #ifdef ENEMIES_TRAP_ENABLED
-            If enemyMode >= ENEMY_MODE_TRAP_ALL Then
-                if not horizontalDirection and not verticalDirection Then Continue For
+            If enemyModeBucle >= ENEMY_MODE_TRAP_ALL Then
+                if not horizontalDirectionBucle and not verticalDirectionBucle Then Continue For
             End if
             #endif
 
-            if tile > 16 and horizontalDirection = -1 Then tile = tile + 16
+            if tileBucle > 16 and horizontalDirectionBucle = -1 Then tileBucle = tileBucle + 16
             
-            If enemiesFrame > 4 Then tile = tile + 1
+            If enemiesFrame > 4 Then tileBucle = tileBucle + 1
             
-            If enemyLive = -100 or enemyLive > 0 Then
+            If enemyLiveBucle = -100 or enemyLiveBucle > 0 Then
                 #ifdef BULLET_ENEMIES
                     #ifndef BULLET_ENEMIES_MUST_LOOK
-                        if tile < 17 then Draw2x2Sprite(tile, enemyCol, enemyLin)
+                        if tileBucle < 17 then Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                         #ifndef BULLET_ENEMIES_LOOK_AT
-                            Draw2x2Sprite(tile, enemyCol, enemyLin)
+                            Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                         #endif
                     #else
-                        Draw2x2Sprite(tile, enemyCol, enemyLin)
+                        Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                     #endif
                 #Else
-                    Draw2x2Sprite(tile, enemyCol, enemyLin)
+                    Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                 #endif
                 
                 
-                if tile > 16 and Not invincible Then
-                    checkProtaCollision(enemyId, enemyCol, enemyLin, enemyLive)
+                if tileBucle > 16 and Not invincible Then
+                    checkProtaCollision(enemyId, enemyColBucle, enemyLinBucle, enemyLiveBucle)
                     
                     #ifdef BULLET_ENEMIES
-                        if not enemyBullets(enemyId, 0) and (tile mod 17) < BULLET_ENEMIES_RANGE then
+                        if not enemyBullets(enemyId, 0) and (tileBucle mod 17) < BULLET_ENEMIES_RANGE then
                             #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
-                                if enemyLin > (protaY-2) and enemyLin < (protaY+4) Then
+                                if enemyLinBucle > (protaY-2) and enemyLinBucle < (protaY+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
                                         #ifdef BULLET_ENEMIES_LOOK_AT
                                             dim lookDirection as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
                                         #endif
                                         
-                                        if enemyCol < protaX Then
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                        if enemyColBucle < protaX Then
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_RIGHT)
                                         else
                                             #ifdef BULLET_ENEMIES_LOOK_AT
                                                 lookDirection = lookDirection + 16
                                             #endif
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_LEFT)
                                         End if
                                         
                                         #ifdef BULLET_ENEMIES_LOOK_AT
-                                            Draw2x2Sprite(lookDirection, enemyCol, enemyLin)
+                                            Draw2x2Sprite(lookDirection, enemyColBucle, enemyLinBucle)
                                         #endif
                                         
                                         continue for
                                     #else
-                                        if enemyCol < protaX and horizontalDirection = 1 Then
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_RIGHT)
+                                        if enemyColBucle < protaX and horizontalDirectionBucle = 1 Then
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_RIGHT)
                                             continue for
-                                        elseif enemyCol > protaX and horizontalDirection = -1 Then
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_LEFT)
+                                        elseif enemyColBucle > protaX and horizontalDirectionBucle = -1 Then
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_LEFT)
                                             continue for
                                         end if
                                     #endif
                                 End if
                             #endif
                             #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
-                                if enemyCol > (protaX-2) and enemyCol < (protaX+4) Then
+                                if enemyColBucle > (protaX-2) and enemyColBucle < (protaX+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
                                         #ifdef BULLET_ENEMIES_LOOK_AT
-                                            Draw2x2Sprite(tile, enemyCol, enemyLin)
+                                            Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                                         #endif
                                     #endif
                                     
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
-                                        if enemyLin < protaY Then
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                        if enemyLinBucle < protaY Then
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_DOWN)
                                         else
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_UP)
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_UP)
                                         end if
                                         
                                         continue for
                                     #Else
-                                        if enemyLin < protaY and verticalDirection = 1 Then
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_DOWN)
+                                        if enemyLinBucle < protaY and verticalDirectionBucle = 1 Then
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_DOWN)
                                             continue for
-                                        elseif enemyLin > protaY and verticalDirection = -1 Then
-                                            enemyShoot(enemyId,enemyCol, enemyLin, BULLET_DIRECTION_UP)
+                                        elseif enemyLinBucle > protaY and verticalDirectionBucle = -1 Then
+                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_UP)
                                             continue for
                                         end if
                                     #endif
@@ -475,16 +479,16 @@ Sub moveEnemies()
                 #ifdef BULLET_ENEMIES
                     #ifndef BULLET_ENEMIES_MUST_LOOK
                         #ifdef BULLET_ENEMIES_LOOK_AT
-                            Draw2x2Sprite(tile, enemyCol, enemyLin)
+                            Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                         #endif
                     #endif
                 #endif
             Else
                 ' #ifdef ENEMIES_SLOW_DOWN
-                '     Draw2x2Sprite(tile, enemyCol, enemyLin)
+                '     Draw2x2Sprite(tile, enemyColBucle, enemyLin)
                 ' #else
                     #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-                        if enemyLive > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tile, enemyCol, enemyLin)
+                        if enemyLiveBucle > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                     #endif
                 ' #endif
             End if

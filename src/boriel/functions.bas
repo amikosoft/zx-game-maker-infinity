@@ -50,6 +50,16 @@ Function checkProtaTop() As Ubyte
     return 0
 end Function
 
+' sub setFont(setCustom as ubyte = 0)
+'     if setCustom Then
+'         'POKE UInteger 23606,@Glow(0,0)-256
+'         'POKE UInteger 23606,@Fuente(0,0)-256
+'         POKE UInteger 23606,@Clasico(0,0)-256
+'     Else
+'         POKE UInteger 23606,0x3C00
+'     end if
+' end sub
+
 sub decrementLife()
     if not currentLife then return
     

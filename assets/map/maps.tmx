@@ -38,6 +38,7 @@
   <property name="enemiesSlowDown" type="bool" value="false"/>
   <property name="fadeTilesFramesCount" type="int" value="10"/>
   <property name="fadeTilesInScreenMax" type="int" value="5"/>
+  <property name="fontCustom" propertytype="fontCustom" value="default"/>
   <property name="fullChangeScreenAnimation" type="bool" value="true"/>
   <property name="gameLanguage" value="es"/>
   <property name="gameName" value="Game Name"/>

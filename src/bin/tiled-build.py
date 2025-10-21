@@ -202,6 +202,8 @@ fadeTilesFramesCount = 0
 
 gameLanguage = 'en'
 
+fontCustom = 'default'
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -397,7 +399,9 @@ if 'properties' in data:
             fadeTilesFramesCount = property['value']
         elif property['name'] == 'gameLanguage':
             gameLanguage = property['value']
-        
+        elif property['name'] == 'fontCustom':
+            fontCustom = property['value']
+
 if len(damageTiles) == 0:
     damageTiles.append('0')
  
@@ -820,6 +824,16 @@ else:
 
 if enemiesNormalCollide:
     configStr += "#DEFINE ENEMIES_NORMAL_COLLIDE\n"
+
+if fontCustom != 'default':
+    configStr += "#DEFINE CUSTOM_FONT_ENABLED\n"
+
+    if fontCustom == 'medieval':
+        configStr += "#DEFINE CUSTOM_FONT_MEDIEVAL\n"
+    elif fontCustom == 'bold mayus':
+        configStr += "#DEFINE CUSTOM_FONT_BOLD_MAYUS\n"
+    elif fontCustom == 'bold all':
+        configStr += "#DEFINE CUSTOM_FONT_BOLD_ALL\n"
 
 with open("output/screensWon.bin", "wb") as f:
     f.write(bytearray([0] * screensCount))
