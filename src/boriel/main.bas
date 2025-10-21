@@ -38,7 +38,7 @@ loadDataFromTape()
 
 'graphicsInitializer.bas
 InitGFXLib()
-SetTileset(@tileSet)
+SetTileset(@tileSet(0,0))
 
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
     If firstLoad Then

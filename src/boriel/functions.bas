@@ -1,3 +1,5 @@
+dim dmAddress as integer = arrayBasePtr(decompressedMap)
+
 sub pauseUntilPressKey()
     while INKEY$<>"":wend
     while INKEY$="":wend
@@ -174,9 +176,11 @@ end sub
     end sub
 #endif
 
+dim dtAddress as Integer = arrayBasePtr(damageTiles)
+
 function isADamageTile(x as ubyte, y as ubyte) as UBYTE
     for i = 0 to DAMAGE_TILES_COUNT
-        if peek(@damageTiles + i) = GetTile(x,y) then return 1
+        if peek(dtAddress + i) = GetTile(x,y) then return 1
     next i
     return 0
 end function
@@ -281,7 +285,7 @@ end function
         itemsToFind = 0
         currentItems = 0
         for index=0 to SCREEN_LENGTH
-            if peek(@decompressedMap + index) - 1 = ITEM_TILE then
+            if peek(dmAddress + index) - 1 = ITEM_TILE then
                 itemsToFind = itemsToFind + 1
             end if
             
@@ -367,7 +371,7 @@ sub removeTilesFromScreen(tile as ubyte)
     y = 0
     
     for index=0 to SCREEN_LENGTH
-        if peek(@decompressedMap + index) - 1 = tile then
+        if peek(dmAddress + index) - 1 = tile then
             #ifdef SCREEN_ATTRIBUTES
                 SetTile(currentTileBackground, currentScreenBackground, x, y)
             #else

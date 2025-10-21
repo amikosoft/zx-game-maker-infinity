@@ -448,8 +448,8 @@ Sub resetValues()
 End Sub
 
 Sub swapScreen(waitReady as ubyte)
-    dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), @decompressedMap)
-    dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), @decompressedEnemiesScreen)
+    dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), dmAddress)
+    dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), arrayBasePtr(decompressedEnemiesScreen))
     
     enemiesScreen = enemiesPerScreen(currentScreen)
     

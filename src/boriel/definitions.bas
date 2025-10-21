@@ -1,5 +1,7 @@
 #include "../output/config.bas"
 
+#define arrayBasePtr(x) (PEEK(Uinteger, @x + 2))
+
 ' #ifdef ENABLED_128k
 '     Dim isAmstrad As Ubyte = 0
 '     If Peek(23312) = 1
