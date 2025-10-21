@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 
-version = "3.3.0"
+version = "3.4.0"
 
 def printBanner():
     output_text.insert(tk.END, f"\n")

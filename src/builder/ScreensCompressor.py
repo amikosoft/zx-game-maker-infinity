@@ -18,4 +18,4 @@ class ScreensCompressor:
         shutil.copy(SCREENS_FOLDER + "loading.scr", OUTPUT_FOLDER + "loading.bin")
 
     def __compressScreen(self, screen_name):
-        runCommand(BIN_FOLDER + getZx0() + " -f " + SCREENS_FOLDER + screen_name + ".scr " + OUTPUT_FOLDER + screen_name + ".scr.zx0")
+        runCommand(BIN_FOLDER + getZx0() + " " + SCREENS_FOLDER + screen_name + ".scr " + OUTPUT_FOLDER + screen_name + ".scr.zx0")

@@ -28,9 +28,9 @@ MEMORY_BANK_SIZE = 16384
 
 def getZx0():
     if os.name == "nt":
-        return "zx0.exe"
+        return "salvador.exe"
     else:
-        return "zx0"
+        return "salvador"
 
 verbose = False
 
