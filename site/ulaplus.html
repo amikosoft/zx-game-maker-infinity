@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="ulaplus.html">
+        <link rel="prev" href="adventure.html">
       
       
-        <link rel="next" href="screen-attributes.html">
+        <link rel="next" href="musics.html">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Música - ZXGM Infinity Docs</title>
+        <title>ULA Plus - ZXGM Infinity Docs</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#musica-in-game-por-pantallas" class="md-skip">
+        <a href="#ula-plus-en-tu-juego" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Música
+              ULA Plus
             
           </span>
         </div>
@@ -501,29 +501,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="ulaplus.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    ULA Plus
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -536,7 +513,31 @@
         
       
       
-      <a href="musics.html" class="md-nav__link md-nav__link--active">
+      <a href="ulaplus.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    ULA Plus
+    
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="musics.html" class="md-nav__link">
         
   
   
@@ -547,7 +548,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -617,10 +617,32 @@
 
 
 
-<h1 id="musica-in-game-por-pantallas">Música in-game por pantallas</h1>
-<p>Con la última versión del motor ZXGM se ha liberado la posibilidad de meter múltiples canciones para tu juego.</p>
-<p>En Infinity funciona un poco distinto y aquí te lo explico. </p>
-<p>Visitar <a href="screen-attributes.html">Screen attributes</a></p>
+<h1 id="ula-plus-en-tu-juego">ULA Plus en tu juego</h1>
+<p>Para que tu juego haga uso de las virtudes ULA Plus deberás seguir los pasos enumerados a continuación:</p>
+<ul>
+<li>Verifica que tienes marcada la opción en tu mapa</li>
+</ul>
+<p><img alt="Parametro ulaplus" src="images/ulaplusconfig.png" /></p>
+<ul>
+<li>
+<p>Abre con ZXPaintbrush el fichero tiles.zxp de tu carpeta de assets/map en el proyecto</p>
+</li>
+<li>
+<p>Importa una paleta de colores ula+ y guarda el fichero</p>
+</li>
+</ul>
+<p>Con los pasos anteriores ya se generaría el juego usando esa paleta pero no verías en el Tiled los colores del ula+.</p>
+<p>A continuación se indica como configurar para verlos sin que afecte al juego:</p>
+<ul>
+<li>
+<p>Exporta la imagen en formato png con un nombre diferente a <em>tiles.png</em>, por ejemplo <em>tiles_ulaplus.png</em>, dentro de tu carpeta de assets/map en el proyecto</p>
+</li>
+<li>
+<p>Abre en tu editor de textos favorito el fichero map.tmlx y busca "tiles.png" dentro de él para sustituirlo e indicar el nuevo "tiles_ulaplus.png"</p>
+</li>
+</ul>
+<p><img alt="Nombre fichero ulaplus en map.tmx" src="images/ulaimagemap.png" /></p>
+<p>Una vez que guardes ya lo verás con tu configuración ula+ sin afectar a tu proyecto</p>
 
 
 

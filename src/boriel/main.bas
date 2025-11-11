@@ -69,6 +69,10 @@ SetTileset(@tileSet(0,0))
     #endif
 #endif
 
+#ifdef ULA_PLUS_VALIDATION
+    #include "../output/ulacolors.bas"
+#endif
+
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
     If firstLoad Then
         firstLoad = 0

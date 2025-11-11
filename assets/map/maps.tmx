@@ -77,6 +77,7 @@
   <property name="shouldKillEnemies" type="bool" value="true"/>
   <property name="shouldPickUpItems" type="bool" value="true"/>
   <property name="transpasableItems" type="int" value="16"/>
+  <property name="ulaPlusValidation" type="bool" value="true"/>
   <property name="useBreakableTile" type="bool" value="true"/>
   <property name="waitPressKeyAfterLoad" type="bool" value="true"/>
  </properties>

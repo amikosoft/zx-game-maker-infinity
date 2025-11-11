@@ -588,6 +588,11 @@
                 "name": "gameLanguage",
                 "type": "string",
                 "value": "en"
+            },
+            {
+                "name": "ulaPlusValidation",
+                "type": "bool",
+                "value": false
             }
         ],
         "name": "ZXSpectrumGameMaker",

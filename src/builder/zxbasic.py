@@ -52,8 +52,8 @@ def getTilesBas(inFile, outFolder, extra=False):
     # Separar las líneas de bits y las líneas de colores
     total_lines = 48
     if extra:
-        bit_lines = lines[:56]
-        total_lines = 56
+        bit_lines = lines[:64]
+        total_lines = 64
     else:
         bit_lines = lines[:48]
 
@@ -78,15 +78,41 @@ def getTilesBas(inFile, outFolder, extra=False):
     
     # guardar en color_lineas de la linea 52 a la 57
     color_lines = lines[49:56]
-    if total_lines == 56:
-        color_lines = lines[57:65]
+    ula_line = None
+
+    if total_lines == 64:
+        color_lines = lines[65:73]
+
+        if len(lines) > 73:
+            ula_line = lines[73]
+    else:
+        if len(lines) > 56:
+            ula_line = lines[56]
     
+    if ula_line != None:
+        # print(ula_line)
+        ula_colors = []
+
+        for ulacolor in ula_line.strip().split(" "):
+            ula_colors.append(int(ulacolor, 16))
+
+        # print(ula_colors)
+        with open(str(Path(outFolder + "/ulacolors.bas")), "w") as f:
+            f.write("OUT 48955,64: OUT 65339,0\n")
+            f.write("PAUSE 1\n")
+            f.write("if IN 65339 = 0 then\n")
+            f.write("FOR F=0 TO 63: READ A: OUT 48955, F: OUT 65339, A: NEXT F: DATA " + ",".join([str(ula_colors) for ula_colors in ula_colors]))
+            f.write("\nend if")
+    else:
+        with open(str(Path(outFolder + "/ulacolors.bas")), "w") as f:
+            f.write("'ULA NOT CONFIGURED'\n")
+
     # convertir cada valor de cada una de esas lineas que estan separados por un espacio de hexadecimal a decimal y guardarlo todo en el array attrs
     for line in color_lines:
         for color in line.strip().split(" "):
             if color:
                 attrs.append(int(color, 16))
-            
+
     # Guardar array de enteros de una dimension attrs en fichero binario para cargarlo desde basic
     attrs = [int(attr) for attr in attrs]
 

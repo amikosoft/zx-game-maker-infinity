@@ -199,6 +199,7 @@ screenAttributesEnabled = False
 playerReadyConfirmation = False
 fullChangeScreenAnimation = False
 
+ulaPlusValidation = False
 fadeTilesInScreenMax = 0
 fadeTilesFramesCount = 0
 
@@ -403,6 +404,8 @@ if 'properties' in data:
             gameLanguage = property['value']
         elif property['name'] == 'fontCustom':
             fontCustom = property['value']
+        elif property['name'] == 'ulaPlusValidation':
+            ulaPlusValidation = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -1129,6 +1132,9 @@ if screenAttributesEnabled:
 
 if adventureTextsAcceptWithFire == True:
     configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"
+
+if ulaPlusValidation == True:
+    configStr += "#DEFINE ULA_PLUS_VALIDATION\n"
 
 if adventureTexts and len(texts) > 0:
     configStr += "#DEFINE IN_GAME_TEXT_ENABLED\n"
