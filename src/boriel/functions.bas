@@ -395,6 +395,10 @@ end sub
 
 #ifdef SIDE_VIEW
     sub jump()
+        #ifdef GLUE_TILE_ENABLED
+            if isOnGlue then return
+        #endif
+
         if jumpCurrentKey = jumpStopValue and landed then
             landed = 0
             jumpCurrentKey = 0
@@ -426,11 +430,22 @@ end sub
                 if not maxFadeTile then return 
             #endif
         #endif
+
+        #ifdef GLUE_TILE_ENABLED
+            isOnGlue = 0
+        #endif
+
         Dim col as uByte = protaX >> 1
         Dim lin as uByte = (protaY >> 1) + 2
         
         for c=col to (col+2)
             dim tileFound as ubyte = isSolidTileByColLin(c, lin)
+
+            #ifdef GLUE_TILE_ENABLED
+                if tileFound = GLUE_TILE then
+                    isOnGlue = 1
+                end if
+            #endif
 
             #ifdef TRAMPOLIN_ENABLED
                 if tileFound = TRAMPOLIN_TILE Then

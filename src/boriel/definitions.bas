@@ -191,6 +191,10 @@ dim firstTimeEnemiesScreen as ubyte = 1
     dim fadeTileStatus(FADE_TILE_TOTAL, 2) as ubyte 
 #endif
 
+#ifdef GLUE_TILE_ENABLED
+    Dim isOnGlue as ubyte = 0
+#endif
+
 #ifdef IN_GAME_TEXT_ENABLED
     dim textsCoord(AVAILABLE_ADVENTURES, 5) as ubyte at TEXTS_COORD_DATA_ADDRESS
     dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS

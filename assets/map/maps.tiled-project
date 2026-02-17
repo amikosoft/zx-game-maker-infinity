@@ -560,6 +560,11 @@
                 "value": true
             },
             {
+                "name": "glueTileEnabled",
+                "type": "bool",
+                "value": true
+            },
+            {
                 "name": "useBreakableTile",
                 "type": "bool",
                 "value": false

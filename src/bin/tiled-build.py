@@ -56,6 +56,9 @@ mechanicalBeltEnabled = False
 leftTile = 0
 rightTile = 0
 
+glueTileEnabled = False
+glueTile = 0
+
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
@@ -79,6 +82,8 @@ for tileset in data['tilesets']:
                 leftTile = tile['id']
             if tile['type'] == 'right':
                 rightTile = tile['id']
+            if tile['type'] == 'glue':
+                glueTile = tile['id']
             if tile['type'] == 'animated':
                 animatedTilesIds.append(tile['id'])
             if tile['type'] == 'damage':
@@ -421,6 +426,8 @@ if 'properties' in data:
             trampolinEnabled = property['value']
         elif property['name'] == 'mechanicalBeltEnabled':
             mechanicalBeltEnabled = property['value']
+        elif property['name'] == 'glueTileEnabled':
+            glueTileEnabled = property['value']
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -771,6 +778,14 @@ if mechanicalBeltEnabled:
     configStr += "#define MECHANICAL_BELT_ENABLED\n"
     configStr += "const LEFT_TILE as ubyte = " + str(leftTile) + "\n"
     configStr += "const RIGHT_TILE as ubyte = " + str(rightTile) + "\n"
+
+if glueTileEnabled:
+    if underPlayerValidation == False:
+        configStr += "#define UNDER_PLAYER_VALIDATION\n"
+        underPlayerValidation = True
+
+    configStr += "#define GLUE_TILE_ENABLED\n"
+    configStr += "const GLUE_TILE as ubyte = " + str(glueTile) + "\n"
 
 if trampolinEnabled:
     if underPlayerValidation == False:

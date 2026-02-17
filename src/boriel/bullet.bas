@@ -43,7 +43,7 @@ End Function
             #endif
             ' desplazamiento de bala
             if bulletDirection = BULLET_DIRECTION_RIGHT then
-                if bulletPositionX >= bulletEndPositionX then
+                if bulletPositionX > bulletEndPositionX then
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
                     #else
@@ -66,7 +66,7 @@ End Function
                     #endif
                 #endif
             elseif bulletDirection = BULLET_DIRECTION_LEFT then
-                if bulletPositionX <= bulletEndPositionX then
+                if bulletPositionX < bulletEndPositionX then
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
                     #else
