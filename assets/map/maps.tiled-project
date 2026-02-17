@@ -555,6 +555,11 @@
                 "value": true
             },
             {
+                "name": "mechanicalBeltEnabled",
+                "type": "bool",
+                "value": true
+            },
+            {
                 "name": "useBreakableTile",
                 "type": "bool",
                 "value": false

@@ -52,6 +52,9 @@ flagTile = 0
 dropTile = 0
 trampolinTile = 0
 trampolinEnabled = False
+mechanicalBeltEnabled = False
+leftTile = 0
+rightTile = 0
 
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
@@ -72,6 +75,10 @@ for tileset in data['tilesets']:
                 lifeTile = str(tile['id'])
             if tile['type'] == 'trampolin':
                 trampolinTile = tile['id']
+            if tile['type'] == 'left':
+                leftTile = tile['id']
+            if tile['type'] == 'right':
+                rightTile = tile['id']
             if tile['type'] == 'animated':
                 animatedTilesIds.append(tile['id'])
             if tile['type'] == 'damage':
@@ -412,6 +419,8 @@ if 'properties' in data:
             ulaPlusValidation = property['value']
         elif property['name'] == 'trampolinEnabled':
             trampolinEnabled = property['value']
+        elif property['name'] == 'mechanicalBeltEnabled':
+            mechanicalBeltEnabled = property['value']
         
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -754,7 +763,16 @@ else:
 if platformMoveable == True:
     configStr += "#define PLATFORM_MOVEABLE\n"
 
-if trampolinEnabled > 0:
+if mechanicalBeltEnabled:
+    if underPlayerValidation == False:
+        configStr += "#define UNDER_PLAYER_VALIDATION\n"
+        underPlayerValidation = True
+
+    configStr += "#define MECHANICAL_BELT_ENABLED\n"
+    configStr += "const LEFT_TILE as ubyte = " + str(leftTile) + "\n"
+    configStr += "const RIGHT_TILE as ubyte = " + str(rightTile) + "\n"
+
+if trampolinEnabled:
     if underPlayerValidation == False:
         configStr += "#define UNDER_PLAYER_VALIDATION\n"
         underPlayerValidation = True

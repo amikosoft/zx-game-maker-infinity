@@ -439,6 +439,18 @@ end sub
                 end if
             #endif
 
+            #ifdef MECHANICAL_BELT_ENABLED
+                if enemiesFrame band 1 = 1 then
+                    if tileFound = LEFT_TILE Then
+                        leftKey(0)
+                        exit for
+                    else if tileFound = RIGHT_TILE Then
+                        rightKey(0)
+                        exit for
+                    end if
+                end if
+            #endif
+
             #ifdef FADE_TILES_ENABLED
                 if tileFound = FADE_TILE or tileFound = FADE_TILE_END Then
                     for i = 0 to maxFadeTile - 1

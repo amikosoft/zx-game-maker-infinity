@@ -190,7 +190,9 @@ End Function
             
             If pressingUp() And jumpEnergy > 0 Then
                 If Not CheckCollision(protaX, protaY - 1) Then
-                    updateProtaData( protaY - 1, protaX, getNextFrameJumpingFalling(), protaDirection)
+                    'updateProtaData( protaY - 1, protaX, getNextFrameJumpingFalling(), protaDirection)
+                    protaY = protaY - 1
+                    protaTile = getNextFrameJumpingFalling()
                 End If
                 jumpCurrentKey = jumpCurrentKey + 1
                 jumpEnergy = jumpEnergy - 1
@@ -286,7 +288,9 @@ End Function
         currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
         If protaDirection Then
             #ifdef IDLE_ENABLED
-                updateProtaData( protaY, protaX, 1, 1)
+                'updateProtaData( protaY, protaX, 1, 1)
+                protaTile = 1
+                protaDirection = 1
             #endif
             
             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
@@ -302,7 +306,9 @@ End Function
             End If
         Elseif protaDirection = 0
             #ifdef IDLE_ENABLED
-                updateProtaData( protaY, protaX, 5, 0)
+                'updateProtaData( protaY, protaX, 5, 0)
+                protaTile = 5
+                protaDirection = 0
             #endif
             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
             bulletPositionX = protaX
@@ -417,8 +423,8 @@ End Function
     End Sub
 #endif
 
-Sub leftKey()
-    If protaDirection <> 0 Then
+Sub leftKey(animate as ubyte)
+    If animate and protaDirection <> 0 Then
         #ifdef SIDE_VIEW
             protaFrame = 4
         #Else
@@ -442,12 +448,20 @@ Sub leftKey()
             end if
         #endif
         
-        if Not CheckCollision(protaX - 1, protaY) then updateProtaData( protaY, protaX - 1, protaFrame + 1, 0)
+        if Not CheckCollision(protaX - 1, protaY) then 
+            'updateProtaData( protaY, protaX - 1, protaFrame + 1, 0)
+            protaX = protaX - 1
+
+            if animate then
+                protaTile = protaFrame + 1 
+                protaDirection = 0
+            end if
+        end if
     End If
 End Sub
 
-Sub rightKey()
-    If protaDirection <> 1 Then
+Sub rightKey(animate as ubyte)
+    If animate and protaDirection <> 1 Then
         protaFrame = 0
     End If
     
@@ -467,7 +481,15 @@ Sub rightKey()
             end if
         #endif
         
-        if Not CheckCollision(protaX + 1, protaY) then updateProtaData( protaY, protaX + 1, protaFrame + 1, 1)
+        if Not CheckCollision(protaX + 1, protaY) then 
+            'updateProtaData( protaY, protaX + 1, protaFrame + 1, 1)
+            protaX = protaX + 1
+
+            if animate then
+                protaTile = protaFrame + 1 
+                protaDirection = 1
+            end if
+        end if
     End If
 End Sub
 
@@ -491,7 +513,10 @@ Sub upKey()
             protaFrame = 4
         End If
         If canMoveUp() Then
-            updateProtaData( protaY - 1, protaX, protaFrame + 1, 8)
+            'updateProtaData( protaY - 1, protaX, protaFrame + 1, 8)
+            protaY = protaY - 1
+            protaTile = protaFrame + 1
+            protaDirection = 8
             
             checkProtaTop()
         End If
@@ -511,7 +536,10 @@ Sub downKey()
                     #endif
                 #endif
             Else
-                updateProtaData( protaY + 1, protaX, protaFrame + 1, 2)
+                'updateProtaData( protaY + 1, protaX, protaFrame + 1, 2)
+                protaY = protaY + 1
+                protaTile = protaFrame + 1
+                protaDirection = 2
             End If
         End If
     #Else
@@ -661,8 +689,8 @@ Sub keyboardListen()
     
     If kempston Then
         Dim n As Ubyte = In(31)
-        If n bAND %10 Then leftKey()
-        If n bAND %1 Then rightKey()
+        If n bAND %10 Then leftKey(1)
+        If n bAND %1 Then rightKey(1)
         If n bAND %1000 Then upKey()
         If n bAND %100 Then downKey()
         If n bAND %10000 Then fireKey()
@@ -676,8 +704,8 @@ Sub keyboardListen()
             #endif
         ' #endif
     Else
-        If MultiKeys(keyArray(LEFT)) Then leftKey()
-        If MultiKeys(keyArray(RIGHT)) Then rightKey()
+        If MultiKeys(keyArray(LEFT)) Then leftKey(1)
+        If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
         If MultiKeys(keyArray(UP)) Then upKey()
         If MultiKeys(keyArray(DOWN)) Then downKey()
         If MultiKeys(keyArray(FIRE)) Then fireKey()
