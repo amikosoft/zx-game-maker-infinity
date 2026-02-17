@@ -564,7 +564,10 @@
 <h2 id="nuevo-en-esta-version">Nuevo en esta versión</h2>
 <ul>
 <li>Trampolines</li>
+<li>Cintas automáticas</li>
+<li>Tile pegamento</li>
 <li>Pasmo ya no es requerido para generar Fx</li>
+<li>Se ha corregido el bug por el cual al poner un tile rompible en los bordes de la pantalla a veces no se rompía</li>
 </ul>
 <!-- 
 [TOC]
@@ -673,6 +676,14 @@ Visita [ULA Plus config](ulaplus.md) donde tienes las instrucciones necesarias p
 * **trampolinEnabled** activa los trampolines en el juego. Si está activo, el tile de la imagen se convierte en un objeto que al tocarlo el jugador salta.
 
 ![Trampolin tile](imgs/trampolinTile.png)
+
+* **glueTileEnabled** activa el tile pegamento en el juego. Si está activo, el tile de la imagen se convierte en un objeto que al tocarlo el jugador se pega a él y le impide saltar.
+
+![Glue tile](imgs/glueTile.png)
+
+* **mechanicalBeltEnabled** activa las cintas automáticas en el juego. Si está activo, el tile de la imagen se convierte en un objeto que al tocarlo el jugador se mueve en la dirección indicada por la cinta.
+
+![Mechanical belt tile](imgs/mechanicalBeltTile.png)
 
 * **fontCustom** te permite cambiar la fuente para mostrar en los textos del juego dándole su toque especial.
 
