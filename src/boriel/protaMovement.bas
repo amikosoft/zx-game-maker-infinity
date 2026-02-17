@@ -264,7 +264,7 @@ End Function
                     protaY = protaY + 1
                 #endif
             End If
-        #ifdef FADE_TILES_ENABLED
+        #ifdef UNDER_PLAYER_VALIDATION
         Else
             CheckAutoBreakableTile()
         #endif

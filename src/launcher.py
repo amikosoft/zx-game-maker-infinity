@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 
-version = "3.4.0"
+version = "3.5.0"
 
 def printBanner():
     output_text.insert(tk.END, f"\n")
@@ -107,6 +107,7 @@ from tkinter import messagebox, PhotoImage
 import threading
 import webbrowser
 
+from builder.PlayerFxBuilder import PlayerFxBuilder
 from builder.SpritesPreviewGenerator import SpritesPreviewGenerator
 from builder.helper import DIST_FOLDER, MAPS_PROJECT, getProjectFileName
 
@@ -371,6 +372,12 @@ def open_map_with_tiled():
     
     # Ejecutar el comando
 
+def fxBuild():
+    if PlayerFxBuilder.build():
+        messagebox.showinfo("Éxito", "Los FX se han construido correctamente.")
+    else:
+        messagebox.showerror("Error", "Hubo un error al construir los FX.")
+
 # Crear la ventana principal
 root = tk.Tk()
 root.title(f"ZXGM - Infinity v{version}")
@@ -432,7 +439,8 @@ build_menu.add_command(label="Build", command=lambda: run_script("make-game"))
 build_menu.add_command(label="Build (verbose)", command=lambda: run_script("make-game", ["--verbose"]))
 build_menu.add_separator()
 build_menu.add_command(label="Build Tiles+Sprites", command=lambda: run_script("make-graphics"))
-build_menu.add_command(label="Build FX", command=lambda: run_script("make-fx"))
+# build_menu.add_command(label="Build FX", command=lambda: run_script("make-fx"))
+build_menu.add_command(label="Build FX", command=lambda: fxBuild())
 
 menu_bar.add_cascade(label="-= Game =-", menu=build_menu)
 

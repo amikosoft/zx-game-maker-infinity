@@ -50,6 +50,8 @@ lifeTile = 0
 flagTile = 0
 
 dropTile = 0
+trampolinTile = 0
+trampolinEnabled = False
 
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
@@ -68,6 +70,8 @@ for tileset in data['tilesets']:
                 doorTile = str(tile['id'])
             if tile['type'] == 'life':
                 lifeTile = str(tile['id'])
+            if tile['type'] == 'trampolin':
+                trampolinTile = tile['id']
             if tile['type'] == 'animated':
                 animatedTilesIds.append(tile['id'])
             if tile['type'] == 'damage':
@@ -406,7 +410,9 @@ if 'properties' in data:
             fontCustom = property['value']
         elif property['name'] == 'ulaPlusValidation':
             ulaPlusValidation = property['value']
-
+        elif property['name'] == 'trampolinEnabled':
+            trampolinEnabled = property['value']
+        
 if len(damageTiles) == 0:
     damageTiles.append('0')
  
@@ -475,11 +481,14 @@ if fullChangeScreenAnimation:
 print(fadeTilesInScreenMax)
 print(fadeTilesFramesCount)
 
+underPlayerValidation = False
 if fadeTilesInScreenMax > 0 and fadeTilesFramesCount > 0:
     
     if fadeTilesFramesCount < 6:
         fadeTilesFramesCount = 6
     
+    underPlayerValidation = True
+    configStr += "#define UNDER_PLAYER_VALIDATION\n"
     configStr += "#DEFINE FADE_TILES_ENABLED\n"
     configStr += "const FADE_TILE_FRAMES as ubyte = " + str(fadeTilesFramesCount) + "\n"
     configStr += "const FADE_TILE_TOTAL as ubyte = " + str(fadeTilesInScreenMax) + "\n"
@@ -744,6 +753,14 @@ else:
 
 if platformMoveable == True:
     configStr += "#define PLATFORM_MOVEABLE\n"
+
+if trampolinEnabled > 0:
+    if underPlayerValidation == False:
+        configStr += "#define UNDER_PLAYER_VALIDATION\n"
+        underPlayerValidation = True
+    
+    configStr += "#define TRAMPOLIN_ENABLED\n"
+    configStr += "const TRAMPOLIN_TILE as ubyte = " + str(trampolinTile) + "\n"
 
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"

@@ -1,0 +1,20 @@
+version  = "ZX SPECTRUM GAME MAKER V1"  # versión del fichero de configuration
+
+src = "."
+ui = "ui"     # UI_FOLDER
+bin = "bin"   # BIN_FOLDER
+output = "output"    # OUTPUT_FOLDER
+config_file = "output/config.bas"
+dist = "../dist"     # DIST_FOLDER
+
+[assets]
+folder = "../assets"         # ASSETS_FOLDER
+screens.folder = "screens"   # SCREENS_FOLDER
+fx.folder = "fx"             # FX_FOLDER
+map.folder = "map"           # MAP_FOLDER
+music = "music"              # MUSIC_FOLDER
+i18n = "i18n"
+
+# ficheros
+map.maps_file = "maps.tmx"                # MAPS_FILE
+map.maps_project = "maps.tiled-project"   # MAPS_PROJECT

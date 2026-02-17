@@ -137,9 +137,20 @@ Dim inMenu As Ubyte = 1
     Dim isOnPlatform as Ubyte = 0
 #endif
 
+' #ifdef ENABLED_128k
+'     #define DATA_BANK 4
+'     #define MUSIC_BANK 3
+' #endif
+
 #ifdef ENABLED_128k
-    #define DATA_BANK 4
-    #define MUSIC_BANK 3
+    Dim screensBank As Ubyte = 3
+    Dim musicBank As Ubyte = 4
+    Dim fxBank As Ubyte = 6
+    If Peek(23312) = 1 Then ' Amstrad
+        screensBank = 4
+        musicBank = 3
+        fxBank = 1
+    End If
 #endif
 
 ' #ifdef SIDE_VIEW

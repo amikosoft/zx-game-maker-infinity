@@ -193,5 +193,6 @@ FX:
   dw   $001e            ; Se inicializa a $001E para que desde la primera vez salga de NextNote si no tiene que reproducir nada (líneas 29 a 32)
 
 FXAddress:
+
 ; Archivo asm generado por BeepFX sin reproductor
-include "../assets/fx/fx.asm"
+#include once "../../assets/fx/fx.asm"

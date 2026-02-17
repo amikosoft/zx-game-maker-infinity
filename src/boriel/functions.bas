@@ -7,7 +7,7 @@ end sub
 
 Sub loadScreen128(screen_address as Integer)
     #ifdef ENABLED_128k
-        PaginarMemoria(DATA_BANK)
+        PaginarMemoria(screensBank)
         dzx0Standard(screen_address, $4000)
         PaginarMemoria(0)
     #else
@@ -321,36 +321,6 @@ end function
     end function
 #endif
 
-#ifdef FADE_TILES_ENABLED
-sub CheckAutoBreakableTile()
-    if not maxFadeTile then return 
-    Dim col as uByte = protaX >> 1
-    Dim lin as uByte = (protaY >> 1) + 2
-    
-    for c=col to (col+2)
-        dim tileFound as ubyte = isSolidTileByColLin(c, lin)
-        if tileFound = FADE_TILE or tileFound = FADE_TILE_END Then
-            for i = 0 to maxFadeTile - 1
-                dim tileStatus as ubyte = fadeTileStatus(i, 2)
-                if tileStatus and fadeTileStatus(i, 0) = c and fadeTileStatus(i, 1) = lin then 
-                    tileStatus = tileStatus - 1
-
-                    if not tileStatus then
-                        #ifdef SCREEN_ATTRIBUTES
-                            SetTile(currentTileBackground, currentScreenBackground, c, lin)
-                        #else
-                            SetTile(0, BACKGROUND_ATTRIBUTE, c, lin)
-                        #endif
-                    else if tileStatus < (FADE_TILE_FRAMES/3) and tileFound = FADE_TILE then
-                        SetTile(FADE_TILE_END, tileAttrWithBackground(FADE_TILE_END), c, lin)
-                    end if
-                    fadeTileStatus(i, 2) = tileStatus
-                end if
-            next i
-        End if
-    next c
-end sub
-#endif
 
 function CheckCollision(x as uByte, y as uByte) as uByte
     ' Dim xIsEven as uByte = (x bAnd 1) = 0
@@ -448,7 +418,53 @@ end sub
         #endif
         end if
     end sub
+
+    #ifdef UNDER_PLAYER_VALIDATION
+    sub CheckAutoBreakableTile()
+        #ifdef FADE_TILES_ENABLED
+            #ifndef TRAMPOLIN_ENABLED
+                if not maxFadeTile then return 
+            #endif
+        #endif
+        Dim col as uByte = protaX >> 1
+        Dim lin as uByte = (protaY >> 1) + 2
+        
+        for c=col to (col+2)
+            dim tileFound as ubyte = isSolidTileByColLin(c, lin)
+
+            #ifdef TRAMPOLIN_ENABLED
+                if tileFound = TRAMPOLIN_TILE Then
+                    jump()
+                    exit for
+                end if
+            #endif
+
+            #ifdef FADE_TILES_ENABLED
+                if tileFound = FADE_TILE or tileFound = FADE_TILE_END Then
+                    for i = 0 to maxFadeTile - 1
+                        dim tileStatus as ubyte = fadeTileStatus(i, 2)
+                        if tileStatus and fadeTileStatus(i, 0) = c and fadeTileStatus(i, 1) = lin then 
+                            tileStatus = tileStatus - 1
+
+                            if not tileStatus then
+                                #ifdef SCREEN_ATTRIBUTES
+                                    SetTile(currentTileBackground, currentScreenBackground, c, lin)
+                                #else
+                                    SetTile(0, BACKGROUND_ATTRIBUTE, c, lin)
+                                #endif
+                            else if tileStatus < (FADE_TILE_FRAMES/3) and tileFound = FADE_TILE then
+                                SetTile(FADE_TILE_END, tileAttrWithBackground(FADE_TILE_END), c, lin)
+                            end if
+                            fadeTileStatus(i, 2) = tileStatus
+                        end if
+                    next i
+                End if
+            #endif
+        next c
+    end sub
+    #endif
 #endif
+
 
 sub debugA(value as uBYTE)
     PRINT AT 0, 0; "----"

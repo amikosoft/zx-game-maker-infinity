@@ -550,6 +550,11 @@
                 "value": 16
             },
             {
+                "name": "trampolinEnabled",
+                "type": "bool",
+                "value": true
+            },
+            {
                 "name": "useBreakableTile",
                 "type": "bool",
                 "value": false
