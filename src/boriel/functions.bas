@@ -395,7 +395,7 @@ end sub
 
 #ifdef SIDE_VIEW
     sub jump()
-        #ifdef GLUE_TILE_ENABLED
+        #ifdef GLUE_PREVENT_JUMP
             if isOnGlue then return
         #endif
 
@@ -455,7 +455,7 @@ end sub
             #endif
 
             #ifdef MECHANICAL_BELT_ENABLED
-                if enemiesFrame band 1 = 1 then
+                if enemiesFrame band 1 then
                     if tileFound = LEFT_TILE Then
                         leftKey(0)
                         exit for

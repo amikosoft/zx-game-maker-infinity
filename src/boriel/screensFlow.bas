@@ -233,9 +233,34 @@ Sub playGame()
 
                 For i=firstTileInScreen To ANIMATED_TILES_TOTAL
                     if i > ANIMATED_TILES_TOTAL or animatedTilesPerScreen(i, 0) <> currentScreen Then Exit for
-                    Dim tile As Ubyte = animatedTilesPerScreen(i, 1) + animatedFrame
-                    'SetTile(tile, attrSet(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
-                    SetTileAnimated(tile, tileAttrWithBackground(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+
+                    #ifdef ANIMATED_ALL_HIDDEN
+                        if animatedFrame then
+                            #ifdef SCREEN_ATTRIBUTES
+                                SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                            #else
+                                SetTileAnimated(0, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                            #endif
+                        else
+                            Dim tile As Ubyte = animatedTilesPerScreen(i, 1)
+                            SetTileAnimated(tile, tileAttrWithBackground(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                        end if
+                    #else
+                        Dim tile As Ubyte = animatedTilesPerScreen(i, 1) + animatedFrame
+                        #ifdef ANIMATED_SOLID_HIDDEN
+                            if tile < ENEMY_DOOR_TILE and animatedFrame then
+                                #ifdef SCREEN_ATTRIBUTES
+                                    SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                #else
+                                    SetTileAnimated(0, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                #endif
+                            else
+                                SetTileAnimated(tile, tileAttrWithBackground(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                            end if
+                        #else
+                            SetTileAnimated(tile, tileAttrWithBackground(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                        #endif
+                    #endif
                 Next i
             End If
         #endif

@@ -161,6 +161,30 @@
         "valuesAsFlags": false
     },
     {
+        "id": 14,
+        "name": "glueModes",
+        "storageType": "string",
+        "type": "enum",
+        "values": [
+            "prevent jump and slow down",
+            "prevent jump",
+            "slow down"
+        ],
+        "valuesAsFlags": false
+    },
+    {
+        "id": 15,
+        "name": "animatedTilesModes",
+        "storageType": "string",
+        "type": "enum",
+        "values": [
+            "Standar",
+            "Solid tiles disappears",
+            "All tiles disappears"
+        ],
+        "valuesAsFlags": false
+    },
+    {
         "color": "#ffa0a0a4",
         "drawFill": true,
         "id": 2,
@@ -194,6 +218,12 @@
                 "name": "animatePeriodTile",
                 "type": "int",
                 "value": 10
+            },
+            {
+                "name": "animatedTilesMode",
+                "propertyType": "animatedTilesModes",
+                "type": "string",
+                "value": "Standar"
             },
             {
                 "name": "adventureTexts",
@@ -563,6 +593,12 @@
                 "name": "glueTileEnabled",
                 "type": "bool",
                 "value": true
+            },
+            {
+                "name": "glueMode",
+                "propertyType": "glueModes",
+                "type": "string",
+                "value": "prevent jump and slow down player"
             },
             {
                 "name": "useBreakableTile",

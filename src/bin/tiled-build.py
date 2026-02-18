@@ -37,6 +37,8 @@ spriteTileOffset = 0
 maxEnemiesPerScreen = 3
 maxAnimatedTilesPerScreen = 6
 
+animatedTilesMode = "Standar"
+
 damageTiles = []
 animatedTilesIds = []
 animatedTilesPerScreen = []
@@ -57,6 +59,7 @@ leftTile = 0
 rightTile = 0
 
 glueTileEnabled = False
+glueMode = "prevent jump and slow down player"
 glueTile = 0
 
 for tileset in data['tilesets']:
@@ -308,6 +311,8 @@ if 'properties' in data:
             useBreakableTile = 1 if property['value'] else 0
         elif property['name'] == 'maxAnimatedTilesPerScreen':
             maxAnimatedTilesPerScreen = property['value']
+        elif property['name'] == 'animatedTilesMode':
+            animatedTilesMode = property['value']
         elif property['name'] == 'newBeeperPlayer':
             newBeeperPlayer = 1 if property['value'] else 0
         elif property['name'] == 'redefineKeysEnabled':
@@ -428,7 +433,8 @@ if 'properties' in data:
             mechanicalBeltEnabled = property['value']
         elif property['name'] == 'glueTileEnabled':
             glueTileEnabled = property['value']
-        
+        elif property['name'] == 'glueMode':
+            glueMode = property['value']
 if len(damageTiles) == 0:
     damageTiles.append('0')
  
@@ -785,6 +791,13 @@ if glueTileEnabled:
         underPlayerValidation = True
 
     configStr += "#define GLUE_TILE_ENABLED\n"
+
+    if glueMode != "prevent jump":
+        configStr += "#define GLUE_SLOW_DOWN\n"
+
+    if glueMode != "slow down":
+        configStr += "#define GLUE_PREVENT_JUMP\n"
+
     configStr += "const GLUE_TILE as ubyte = " + str(glueTile) + "\n"
 
 if trampolinEnabled:
@@ -842,6 +855,12 @@ if maxAnimatedTilesPerScreen > 0:
     configStr += "#define ANIMATED_TILES_ENABLED\n"
     configStr += "#define ANIMATED_TILES_TOTAL " + str(len(animatedTilesPerScreen)) + "\n"
     configStr += "#define MAX_ANIMATED_TILES_PER_SCREEN " + str(maxAnimatedTilesPerScreen) + "\n"
+
+    if animatedTilesMode == "All tiles disappears":
+        configStr += "#define ANIMATED_ALL_HIDDEN\n"
+    elif animatedTilesMode == "Solid tiles disappears":
+        configStr += "#define ANIMATED_SOLID_HIDDEN\n"
+
     with open("output/animatedTilesInScreen.bin", "wb") as f:
         for i in range(len(animatedTilesPerScreen)):
             tile = animatedTilesPerScreen[i]

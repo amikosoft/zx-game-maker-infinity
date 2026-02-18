@@ -13,7 +13,8 @@
   <property name="adventureTextsLength" value="60"/>
   <property name="ammo" type="int" value="100"/>
   <property name="animatePeriodMain" type="int" value="1"/>
-  <property name="animatePeriodTile" type="int" value="10"/>
+  <property name="animatePeriodTile" type="int" value="20"/>
+  <property name="animatedTilesMode" propertytype="animatedTilesModes" value="Solid tiles disappears"/>
   <property name="backgroundAttribute" type="int" value="71"/>
   <property name="borderDamageColor" value="3"/>
   <property name="bulletAnimation" type="bool" value="true"/>
@@ -43,6 +44,7 @@
   <property name="gameLanguage" value="es"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
+  <property name="glueMode" propertytype="glueModes" value="slow down"/>
   <property name="glueTileEnabled" type="bool" value="true"/>
   <property name="goalItems" type="int" value="5"/>
   <property name="graphicsModeUnshifted" type="bool" value="true"/>
@@ -97,6 +99,7 @@
   <tile id="35" type="solid"/>
   <tile id="44" type="solid"/>
   <tile id="45" type="solid"/>
+  <tile id="52" type="animated"/>
   <tile id="60" type="trampolin"/>
   <tile id="61" type="door"/>
   <tile id="96" type="animated"/>
@@ -176,7 +179,7 @@
 41,40,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,20,21,21,22,1,1,1,1,1,1,1,1,1,41,40,
 40,41,1,1,1,124,125,1,114,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,40,41,
 41,40,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,40,
-40,41,1,1,1,1,1,1,115,1,1,1,1,1,52,52,1,1,1,1,1,1,1,191,1,1,1,1,1,1,40,41,
+40,41,1,1,1,1,1,1,115,1,1,1,1,53,53,53,1,1,1,1,1,1,1,191,1,1,1,1,1,1,40,41,
 41,40,1,1,1,1,1,1,1,1,1,1,1,1,63,1,1,1,1,1,1,1,61,61,1,1,124,125,1,1,41,40,
 40,41,1,1,1,1,1,1,1,1,140,1,1,1,63,1,1,1,134,1,1,1,1,1,1,124,125,1,1,1,40,41,
 41,40,1,1,1,1,1,1,1,1,1,1,1,1,63,1,1,1,52,52,1,1,1,1,1,1,1,1,1,1,41,40,
