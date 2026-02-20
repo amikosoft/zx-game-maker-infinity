@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 
-version = "3.6.0"
+version = "3.7.0"
 
 def printBanner():
     output_text.insert(tk.END, f"\n")
@@ -197,6 +197,32 @@ def run_script(script_name, extra_args=None):
         menu_bar.entryconfig('Exit', state='normal')
             
     threading.Thread(target=execute, args=(script_name,)).start()
+
+def open_experimental_variant():
+    """Abre el juego con la versión custom de Spectral"""
+    try:
+        project_name = getProjectFileName() + '_infinity'
+
+        status_bar.configure(text='Running ' + project_name + '...')
+        
+        # Detectar el sistema operativo y seleccionar el archivo ejecutable
+        if platform.system() in ["Linux", "Darwin"]:
+            game_path = os.path.join(os.getcwd(), DIST_FOLDER, f"{project_name}.linux")
+        else:
+            messagebox.showerror("Error", "El sistema operativo no es compatible.")
+            return
+
+        # Verificar si el archivo existe
+        if not os.path.exists(game_path):
+            messagebox.showerror("Error", f"No se encontró el archivo del juego: {game_path}")
+            return
+
+        status_bar.configure(text='Executed ' + project_name)
+
+        # Abrir el archivo ejecutable
+        subprocess.Popen([game_path], shell=True)
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo abrir el juego: {e}")
 
 def open_game_variant(variant):
     """Abre el juego en su variante 'Normal' o 'RF'."""
@@ -434,6 +460,10 @@ menu_bar = tk.Menu(root,background='#111', foreground='#ffffff', borderwidth=0)
 build_menu = tk.Menu(menu_bar, tearoff=0)
 build_menu.add_command(label="Play", command=lambda: open_game_variant("normal"))
 build_menu.add_command(label="Play RF", command=lambda: open_game_variant("rf"))
+
+if platform.system() in ["Linux", "Darwin"]:
+    build_menu.add_command(label="Play Experimental", command=lambda: open_experimental_variant())
+
 build_menu.add_separator()
 build_menu.add_command(label="Build", command=lambda: run_script("make-game"))
 build_menu.add_command(label="Build (verbose)", command=lambda: run_script("make-game", ["--verbose"]))

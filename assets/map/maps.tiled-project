@@ -540,6 +540,11 @@
                 "value": false
             },
             {
+                "name": "musicToggleEnabled",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "newBeeperPlayer",
                 "type": "bool",
                 "value": true

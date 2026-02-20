@@ -150,6 +150,7 @@ ammo = -1
 ammoIncrement = 10
 
 musicEnabled = 0
+musicToggleEnabled = False
 
 ink = 7
 paper = 0
@@ -296,6 +297,8 @@ if 'properties' in data:
             ammoIncrement = property['value']
         elif property['name'] == 'musicEnabled':
             musicEnabled = 1 if property['value'] else 0
+        elif property['name'] == 'musicToggleEnabled':
+            musicToggleEnabled = property['value']
         elif property['name'] == 'ink':
             ink = property['value']
         elif property['name'] == 'paper':
@@ -670,6 +673,9 @@ if ammo > -1:
 
 if musicEnabled == 1:
     configStr += "#DEFINE MUSIC_ENABLED\n"
+
+    if musicToggleEnabled:
+        configStr += "#DEFINE MUSIC_TOGGLE_ENABLED\n"
 
 configStr += "const INK_VALUE as ubyte = " + str(ink) + "\n"
 configStr += "const PAPER_VALUE as ubyte = " + str(paper) + "\n"

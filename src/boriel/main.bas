@@ -81,9 +81,7 @@ SetTileset(@tileSet(0,0))
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
     If firstLoad Then
         firstLoad = 0
-        'pauseUntilPressKey()
-        while INKEY$<>"":wend
-        while INKEY$="":wend
+        pauseUntilPressKey()
     End If
 #endif
 

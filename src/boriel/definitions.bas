@@ -137,8 +137,6 @@ Dim protaTile As Ubyte
 
 Dim animatedFrame As Ubyte = 1
 
-Dim inMenu As Ubyte = 1
-
 #ifdef IDLE_ENABLED
     Dim protaLoopCounter As Ubyte = 0
 #endif
@@ -217,9 +215,15 @@ dim firstTimeEnemiesScreen as ubyte = 1
     dim currentScreenFirstText as ubyte = 0
 #endif
 
+#ifdef ENABLED_128k
 #ifdef MUSIC_ENABLED
     Dim screenMusic(SCREENS_COUNT) As Ubyte at SCREEN_MUSIC_DATA_ADDRESS
     Dim musicPlayed as Ubyte = 0
+            
+    #ifdef MUSIC_TOGGLE_ENABLED
+        Dim isMusicEnabled as Ubyte = 1
+    #endif
+#endif
 #endif
 
 #ifdef SCREEN_ATTRIBUTES
@@ -227,7 +231,6 @@ dim firstTimeEnemiesScreen as ubyte = 1
     Dim currentScreenBackground as ubyte = 0
     Dim currentTileBackground as ubyte = 0
 #endif
-
 
 #ifdef USE_BREAKABLE_TILE
     Dim brokenTiles(SCREENS_COUNT) As Ubyte at BROKEN_TILES_DATA_ADDRESS

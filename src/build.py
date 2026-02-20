@@ -114,7 +114,9 @@ def exeBuild():
 
 def linuxBuild():
     concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + "-RF.linux")), [str(Path("bin/spectral-rf.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
-    concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + ".linux")), [str(Path("bin/spectral.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
+    concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + ".linux")), [str(Path("bin/spectral.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])    
+    concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + "_infinity.linux")), [str(Path("bin/Spectral.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
+    
     # run_command("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + "-RF.linux")))
     # run_command("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + ".linux")))
 

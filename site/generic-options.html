@@ -226,6 +226,28 @@
   
 
       
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="binarios.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Ejecutables
+
+        </a>
+      </li>
+    
+  
+
+      
     </ul>
   </div>
 </nav>
@@ -720,6 +742,58 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="binarios.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    Ejecutables
+    
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -894,7 +968,20 @@
 </ul>
 <p><img alt="Glue tile" src="imgs/glueTile.png" /></p>
 <ul>
-<li><strong>mechanicalBeltEnabled</strong> activa las cintas automáticas en el juego. Si está activo, el tile de la imagen se convierte en un objeto que al tocarlo el jugador se mueve en la dirección indicada por la cinta.</li>
+<li>
+<p><strong>glueMode</strong> define cómo se va a comportar el pegamento. Las opciones disponibles son las siguientes:</p>
+<ul>
+<li><em>slow down</em>: El jugador se mueve más lento</li>
+<li><em>prevent jump</em>: El jugador no puede saltar</li>
+<li><em>prevent jump and slow down</em>: El jugador se mueve más lento y no puede saltar</li>
+</ul>
+</li>
+<li>
+<p><strong>mechanicalBeltEnabled</strong> activa las cintas automáticas en el juego. Si está activo, el tile de la imagen se convierte en un objeto que al tocarlo el jugador se mueve en la dirección indicada por la cinta.</p>
+<ul>
+<li><em>mechanicalBeltSlow</em> indica que las cintas van más lentas. Si no se indica nada, las cintas irán a la velocidad normal del player.</li>
+</ul>
+</li>
 </ul>
 <p><img alt="Mechanical belt tile" src="imgs/mechanicalBeltTile.png" /></p>
 <ul>
@@ -941,6 +1028,18 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 </li>
 <li>
 <p><strong>screenAttributes</strong> habilita la configuración de parámetros por pantalla (ver <a href="screen-attributes.html">Screen attributes</a>)</p>
+</li>
+<li>
+<p><strong>musicEnabled</strong> habilita/deshabilita la música en el juego.</p>
+<ul>
+<li><em>musicToggleEnabled</em> activa la posiblidad de activar/desactivar la música in-game desde el menú de inicio pulsando <strong>M</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>butonPauseEnabled</strong> activa el botón de pausa en el juego. Por defecto es la <em>T</em>. Es redefinible en el juego.</p>
+<ul>
+<li><em>butonQuitEnabled</em> activa el botón de salir del juego en el menú de pausa. Requiere botón de pausa. Por defecto es la <em>R</em>. Es redefinible en el juego.</li>
+</ul>
 </li>
 </ul>
 <h3 id="idioma-del-juego">Idioma del juego</h3>

@@ -15,39 +15,6 @@ Sub VortexTracker_Init()
     End Asm
 End Sub
 
-Sub Fastcall VortexTracker_Play(address As Uinteger)
-    Asm
-        di
-        ld a,($5b5c)
-        push af
-        And %11111000
-        ld  bc, (_musicBank)
-        Or c
-        ld bc,$7ffd
-        push bc
-        Out (c),a
-        push ix ; Guardamos ix
-        call $C003
-        pop ix ; Recuperamos ix
-        pop bc
-        pop af
-        Out (c),a
-    End Asm
-        VortexTracker_Status = 1
-    Asm
-        ei
-    End Asm
-End Sub
-
-' Se invoca de forma automática por el gestor de
-' interrupciones. Si no usamos el gestor, se debe llamar a
-' este método cada 20ms.
-Sub Fastcall VortexTracker_NextNote()
-    If not VortexTracker_Status Then Return
-    
-    callVtAddress($C005)
-End Sub
-
 ' This Sub used SetBank previously, which included DI/EI.
 ' Without SetBank, DI/EI *must* be done explicitly.
 Sub VortexTracker_Stop()
@@ -60,6 +27,47 @@ Sub VortexTracker_Stop()
     Asm
         ei
     End Asm
+End Sub
+
+Sub Fastcall VortexTracker_Play(address As Uinteger)
+    #ifdef MUSIC_TOGGLE_ENABLED
+    if isMusicEnabled then
+    #endif
+        Asm
+            di
+            ld a,($5b5c)
+            push af
+            And %11111000
+            ld  bc, (_musicBank)
+            Or c
+            ld bc,$7ffd
+            push bc
+            Out (c),a
+            push ix ; Guardamos ix
+            call $C003
+            pop ix ; Recuperamos ix
+            pop bc
+            pop af
+            Out (c),a
+        End Asm
+            VortexTracker_Status = 1
+        Asm
+            ei
+        End Asm
+    #ifdef MUSIC_TOGGLE_ENABLED
+    else
+        VortexTracker_Stop()
+    end if
+    #endif
+End Sub
+
+' Se invoca de forma automática por el gestor de
+' interrupciones. Si no usamos el gestor, se debe llamar a
+' este método cada 20ms.
+Sub Fastcall VortexTracker_NextNote()
+    If not VortexTracker_Status Then Return
+    
+    callVtAddress($C005)
 End Sub
 
 ' This Sub *must* be used with dissabled INTs:

@@ -1,13 +1,20 @@
 dim dmAddress as integer = arrayBasePtr(decompressedMap)
 
+sub waitForReleaseKey()
+    while GetKeyScanCode():wend
+end sub
+
 sub pauseUntilPressKey()
     ' while INKEY$<>"":wend
     ' while INKEY$="":wend
-    Do Loop While GetKeyScanCode()
+    ' Do Loop While GetKeyScanCode()
+    waitForReleaseKey()
     Do Loop Until GetKeyScanCode()
 end sub
 
-Sub loadScreen128(screen_address as Integer)
+Sub loadScreen(screen_address as Integer)
+    clearScreen()
+
     #ifdef ENABLED_128k
         SetBank(screensBank)
         dzx0Standard(screen_address, $4000)
@@ -33,6 +40,7 @@ End Function
 sub pauseUntilPressFire()
     Do
     Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
+    waitForReleaseKey()
 End Sub
 
 Function checkProtaTop() As Ubyte

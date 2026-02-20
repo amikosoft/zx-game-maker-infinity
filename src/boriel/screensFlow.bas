@@ -2,27 +2,37 @@ Sub clearScreen()
     Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
 end sub
 
-Sub showMenu()
-    #ifdef ENABLED_128k
-        #ifdef MUSIC_ENABLED
-            VortexTracker_Stop()
+#ifdef ENABLED_128k
+    #ifdef MUSIC_ENABLED
+        #ifdef MUSIC_TOGGLE_ENABLED
+        Sub toggleMusic()
+            isMusicEnabled = not isMusicEnabled
+            VortexTracker_Play(MUSIC_TITLE_ADDRESS)
+        end sub
         #endif
     #endif
-    inMenu = 1
-    clearScreen()
+#endif
 
+Sub showMenu()
+    ' #ifdef ENABLED_128k
+    '     #ifdef MUSIC_ENABLED
+    '         VortexTracker_Stop()
+    '     #endif
+    ' #endif
+
+    ' clearScreen()
+
+    loadScreen(TITLE_SCREEN_ADDRESS)
+        
     #ifdef ENABLED_128k
         ' SetBank(DATA_BANK)
         ' dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
         ' SetBank(0)
-        loadScreen128(TITLE_SCREEN_ADDRESS)
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_TITLE_ENABLED
                 VortexTracker_Play(MUSIC_TITLE_ADDRESS)
             #endif
         #endif
-    #Else
-        dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
     #endif
     
     #ifdef HISCORE_ENABLED
@@ -65,6 +75,16 @@ Sub showMenu()
             #ifdef REDEFINE_KEYS_ENABLED
             elseif MultiKeys(KEY4) Then
                 redefineKeys()
+            #endif
+
+            #ifdef ENABLED_128k
+                #ifdef MUSIC_ENABLED
+                    #ifdef MUSIC_TOGGLE_ENABLED
+                        elseif MultiKeys(KEYM) Then
+                            toggleMusic()
+                            waitForReleaseKey()
+                    #endif
+                #endif
             #endif
         End If
     Loop
@@ -144,8 +164,8 @@ End Sub
         
         dim pass(passwordLen) as ubyte
         For i=0 To passwordLen - 1
-            While GetKeyScanCode()
-            Wend
+            ' While GetKeyScanCode(): Wend
+            waitForReleaseKey()
             pass(i) = GetKey
             Print AT 12, 10 + i; chr(pass(i))
         Next i
@@ -161,8 +181,6 @@ End Sub
 #endif
 
 Sub playGame()
-    inMenu = 0
-    
     #ifdef ENABLED_128k
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_TITLE_ENABLED
@@ -174,7 +192,7 @@ Sub playGame()
             ' SetBank(DATA_BANK)
             ' dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
             ' SetBank(0)
-            loadScreen128(INTRO_SCREEN_ADDRESS)
+            loadScreen(INTRO_SCREEN_ADDRESS)
             pauseUntilPressEnter()
         #endif
     #endif
@@ -187,20 +205,17 @@ Sub playGame()
         currentScreen = INITIAL_SCREEN
     #endif
     
+    #ifndef PLAYER_READY_CONFIRMATION
+        loadScreen(HUD_SCREEN_ADDRESS)
+    #endif
+    
     #ifdef ENABLED_128k
         ' SetBank(DATA_BANK)
         ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
         ' SetBank(0)
-        #ifndef PLAYER_READY_CONFIRMATION
-            loadScreen128(HUD_SCREEN_ADDRESS)
-        #endif
 
         #ifdef MUSIC_ENABLED
             VortexTracker_Play(MUSIC_ADDRESS)
-        #endif
-    #Else
-        #ifndef PLAYER_READY_CONFIRMATION
-            dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
         #endif
     #endif
 
@@ -238,7 +253,8 @@ Sub playGame()
         if MultiKeys(keyArray(PAUSE_BUTTON)) then
             isPaused = 1
             
-            while GetKeyScanCode():wend
+            ' while GetKeyScanCode():wend
+            waitForReleaseKey()
 
             while isPaused
                 #ifdef MESSAGES_ENABLED
@@ -254,7 +270,8 @@ Sub playGame()
                 end if
             wend
 
-            while GetKeyScanCode():wend
+            ' while GetKeyScanCode():wend
+            waitForReleaseKey()
 
             #ifdef MESSAGES_ENABLED
                 messageLoopCounter = 1
@@ -400,6 +417,8 @@ Sub playGame()
 End Sub
 
 Sub ending()
+    loadScreen(ENDING_SCREEN_ADDRESS)
+
     #ifdef ENABLED_128k
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_ENDING_ENABLED
@@ -408,13 +427,8 @@ Sub ending()
                 VortexTracker_Stop()
             #endif
         #endif
-
-        loadScreen128(ENDING_SCREEN_ADDRESS)
-    #Else
-        dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
     #endif
-    ' Do
-    ' Loop Until MultiKeys(KEYENTER)
+
     pauseUntilPressEnter()
     showMenu()
 End Sub
@@ -439,7 +453,7 @@ Sub gameOver()
             ' SetBank(DATA_BANK)
             ' dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
             ' SetBank(0)
-            loadScreen128(GAMEOVER_SCREEN_ADDRESS)
+            loadScreen(GAMEOVER_SCREEN_ADDRESS)
         #Else
             'updateProtaData( protaY, protaX, 15, 0)
             protaTile = 15
@@ -612,12 +626,8 @@ Sub swapScreen(waitReady as ubyte)
 
     #ifdef PLAYER_READY_CONFIRMATION
         if waitReady Then
-            #ifdef ENABLED_128k
-                loadScreen128(HUD_SCREEN_ADDRESS)
-            #else
-                dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
-            #endif
-
+            loadScreen(HUD_SCREEN_ADDRESS)
+            
             #ifdef HISCORE_ENABLED
                 Print AT 22, 20; TEXT_HI_SCORE_ZERO
                 Print AT 23, 20; TEXT_HI_SCORE_ZERO
