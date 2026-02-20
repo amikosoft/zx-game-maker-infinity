@@ -8,6 +8,8 @@ Const TEXT_CHECK_POINT as String = "CHECKED!!"
 Const TEXT_LIFE as String = "LIFE!!!  "
 Const TEXT_AMMO as String = "AMMO!!!  "
 
+Const TEXT_PAUSE as String = "-=PAUSE=-"
+
 ' Free length, less for lower memmory
 Const REDEFINE_PRESS_KEY_FOR as String = "Press key For:"
 Const REDEFINE_LEFT as String = "Left"
@@ -15,6 +17,10 @@ Const REDEFINE_RIGHT as String = "Right"
 Const REDEFINE_UP as String = "Up"
 Const REDEFINE_DOWN as String = "Down"
 Const REDEFINE_FIRE as String = "Fire"
+
+Const REDEFINE_PAUSE as String = "Pause"
+Const REDEFINE_QUIT as String = "Exit"
+
 Const GENERIC_ENTER_CONTINUE as String = "Press ENTER..."
 
 Const TEXT_HI_SCORE as String = "HI:"

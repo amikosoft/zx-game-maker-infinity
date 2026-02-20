@@ -12,9 +12,9 @@ Sub showMenu()
     clearScreen()
 
     #ifdef ENABLED_128k
-        ' PaginarMemoria(DATA_BANK)
+        ' SetBank(DATA_BANK)
         ' dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
-        ' PaginarMemoria(0)
+        ' SetBank(0)
         loadScreen128(TITLE_SCREEN_ADDRESS)
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_TITLE_ENABLED
@@ -31,14 +31,23 @@ Sub showMenu()
     #endif
     
     kempston = 0
+
+    #ifdef BUTTON_PAUSE_ENABLED
+    If Not keyArray(PAUSE_BUTTON) Then keyArray(PAUSE_BUTTON) = KEYT
+
+        #ifdef BUTTON_QUIT_ENABLED
+        If Not keyArray(QUIT_BUTTON) Then keyArray(QUIT_BUTTON) = KEYR
+        #endif
+    #endif
+            
     Do
         If MultiKeys(KEY1) Then
             If Not keyArray(LEFT) Then
-                Let keyArray(LEFT) = KEYO
-                Let keyArray(RIGHT) = KEYP
-                Let keyArray(UP) = KEYQ
-                Let keyArray(DOWN) = KEYA
-                Let keyArray(FIRE) = KEYSPACE
+                keyArray(LEFT) = KEYO
+                keyArray(RIGHT) = KEYP
+                keyArray(UP) = KEYQ
+                keyArray(DOWN) = KEYA
+                keyArray(FIRE) = KEYSPACE
             End If
 
             playGame()
@@ -46,11 +55,11 @@ Sub showMenu()
             kempston = 1
             playGame()
         elseif MultiKeys(KEY3) Then
-            Let keyArray(LEFT)=KEY6
-            Let keyArray(RIGHT)=KEY7
-            Let keyArray(UP)=KEY9
-            Let keyArray(DOWN)=KEY8
-            Let keyArray(FIRE)=KEY0
+            keyArray(LEFT)=KEY6
+            keyArray(RIGHT)=KEY7
+            keyArray(UP)=KEY9
+            keyArray(DOWN)=KEY8
+            keyArray(FIRE)=KEY0
             
             playGame()
             #ifdef REDEFINE_KEYS_ENABLED
@@ -65,8 +74,9 @@ End Sub
 
 #ifdef REDEFINE_KEYS_ENABLED
     Function LeerTecla() As Uinteger
-        Do Loop While GetKeyScanCode()
-        Do Loop Until GetKeyScanCode()
+        ' Do Loop While GetKeyScanCode()
+        ' Do Loop Until GetKeyScanCode()
+        pauseUntilPressKey()
         Return GetKeyScanCode()
     End Function
     
@@ -79,9 +89,9 @@ End Sub
             #endif
         #endif
         
-        Print AT 5,5;REDEFINE_PRESS_KEY_FOR
+        Print AT 7,5;REDEFINE_PRESS_KEY_FOR
         
-        Print AT 8,10;REDEFINE_LEFT
+        Print AT 9,10;REDEFINE_LEFT
         keyArray(LEFT) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 8,20; keyOption
@@ -91,24 +101,34 @@ End Sub
         ' keyOption = Inkey$
         ' Print AT 10,20; keyOption
         
-        Print AT 12,10;REDEFINE_UP
+        Print AT 11,10;REDEFINE_UP
         keyArray(UP) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 12,20; keyOption
         
-        Print AT 14,10;REDEFINE_DOWN
+        Print AT 12,10;REDEFINE_DOWN
         keyArray(DOWN) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 14,20; keyOption
         
-        Print AT 16,10;REDEFINE_FIRE
+        Print AT 13,10;REDEFINE_FIRE
         keyArray(FIRE) = LeerTecla()
         ' keyOption = Inkey$
         ' Print AT 16,20; keyOption
         '
         ' keyOption = ""
         
-        Print AT 20,2;GENERIC_ENTER_CONTINUE
+        #ifdef BUTTON_PAUSE_ENABLED
+        Print AT 15,10;REDEFINE_PAUSE
+        keyArray(PAUSE_BUTTON) = LeerTecla()
+        
+            #ifdef BUTTON_QUIT_ENABLED
+                Print AT 16,10;REDEFINE_QUIT
+                keyArray(QUIT_BUTTON) = LeerTecla()
+            #endif        
+        #endif
+
+        Print AT 19,2;GENERIC_ENTER_CONTINUE
         ' Do
         ' Loop Until MultiKeys(KEYENTER)
         pauseUntilPressEnter()
@@ -151,9 +171,9 @@ Sub playGame()
         #endif
         
         #ifdef INTRO_SCREEN_ENABLED
-            ' PaginarMemoria(DATA_BANK)
+            ' SetBank(DATA_BANK)
             ' dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
-            ' PaginarMemoria(0)
+            ' SetBank(0)
             loadScreen128(INTRO_SCREEN_ADDRESS)
             pauseUntilPressEnter()
         #endif
@@ -168,9 +188,9 @@ Sub playGame()
     #endif
     
     #ifdef ENABLED_128k
-        ' PaginarMemoria(DATA_BANK)
+        ' SetBank(DATA_BANK)
         ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
-        ' PaginarMemoria(0)
+        ' SetBank(0)
         #ifndef PLAYER_READY_CONFIRMATION
             loadScreen128(HUD_SCREEN_ADDRESS)
         #endif
@@ -214,6 +234,46 @@ Sub playGame()
     ' enemiesScreen = enemiesPerScreen(currentScreen)
 
     Do
+        #ifdef BUTTON_PAUSE_ENABLED
+        if MultiKeys(keyArray(PAUSE_BUTTON)) then
+            isPaused = 1
+            
+            while GetKeyScanCode():wend
+
+            while isPaused
+                #ifdef MESSAGES_ENABLED
+                if not messageLoopCounter then printMessage(TEXT_PAUSE, 2, 0)
+                #endif
+            
+                if MultiKeys(keyArray(PAUSE_BUTTON)) then
+                    isPaused = 0
+                #ifdef BUTTON_QUIT_ENABLED
+                else if MultiKeys(keyArray(QUIT_BUTTON)) then
+                    showMenu()
+                #endif
+                end if
+            wend
+
+            while GetKeyScanCode():wend
+
+            #ifdef MESSAGES_ENABLED
+                messageLoopCounter = 1
+            #endif
+        end if
+        #endif
+
+        If not enemiesScreen Then 
+            waitretrace
+        end if
+
+        ' if enemiesFrame band 1 Then
+        '     ActivarBuffer()
+        '     switch2ShadowScreen()
+        ' else
+        '     DesactivarBuffer()
+        '     switch2NormalScreen()
+        ' end if
+
         #ifdef PLATFORM_MOVEABLE
             If not isOnPlatform and enemiesFrame band 1 Then
                 protaFrame = getNextFrameRunning()
@@ -349,9 +409,6 @@ Sub ending()
             #endif
         #endif
 
-        ' PaginarMemoria(DATA_BANK)
-        ' dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
-        ' PaginarMemoria(0)
         loadScreen128(ENDING_SCREEN_ADDRESS)
     #Else
         dzx0Standard(ENDING_SCREEN_ADDRESS, $4000)
@@ -379,9 +436,9 @@ Sub gameOver()
     
     #ifdef ENABLED_128k
         #ifdef GAMEOVER_SCREEN_ENABLED
-            ' PaginarMemoria(DATA_BANK)
+            ' SetBank(DATA_BANK)
             ' dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
-            ' PaginarMemoria(0)
+            ' SetBank(0)
             loadScreen128(GAMEOVER_SCREEN_ADDRESS)
         #Else
             'updateProtaData( protaY, protaX, 15, 0)

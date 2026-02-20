@@ -1,15 +1,17 @@
 dim dmAddress as integer = arrayBasePtr(decompressedMap)
 
 sub pauseUntilPressKey()
-    while INKEY$<>"":wend
-    while INKEY$="":wend
+    ' while INKEY$<>"":wend
+    ' while INKEY$="":wend
+    Do Loop While GetKeyScanCode()
+    Do Loop Until GetKeyScanCode()
 end sub
 
 Sub loadScreen128(screen_address as Integer)
     #ifdef ENABLED_128k
-        PaginarMemoria(screensBank)
+        SetBank(screensBank)
         dzx0Standard(screen_address, $4000)
-        PaginarMemoria(0)
+        SetBank(0)
     #else
         dzx0Standard(screen_address, $4000)
     #endif 
@@ -276,9 +278,9 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     return tile
 end function
 
-function isInStep(x as ubyte, y as ubyte) as ubyte
+function isInStep(x as ubyte) as ubyte
     Dim col as uByte = x >> 1
-    Dim lin as uByte = y >> 1
+    Dim lin as uByte = (protaY + 3) >> 1
 
     if GetTile(col, lin) = 64 or GetTile(col, lin) = 65 then return 1
     
@@ -455,7 +457,9 @@ end sub
             #endif
 
             #ifdef MECHANICAL_BELT_ENABLED
+                #ifdef MECHANICAL_BELT_SLOW
                 if enemiesFrame band 1 then
+                #endif
                     if tileFound = LEFT_TILE Then
                         leftKey(0)
                         exit for
@@ -463,7 +467,9 @@ end sub
                         rightKey(0)
                         exit for
                     end if
+                #ifdef MECHANICAL_BELT_SLOW
                 end if
+                #endif
             #endif
 
             #ifdef FADE_TILES_ENABLED

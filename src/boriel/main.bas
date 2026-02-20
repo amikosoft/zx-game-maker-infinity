@@ -1,6 +1,8 @@
 #include <zx0.bas>
 #include <retrace.bas>
 #include <keys.bas>
+#include <memorybank.bas>
+
 #include "definitions.bas"
 #include "dataLoader.bas"
 
@@ -13,7 +15,7 @@
 #ifdef ENABLED_128k
     #include "128/im2.bas"
     #include "128/vortexTracker.bas"
-    #include "128/functions.bas"
+    ' #include "128/functions.bas"
 
     #ifdef MUSIC_ENABLED
         ' VortexTracker_Init()
@@ -44,6 +46,9 @@ loadDataFromTape()
 #endif
 
 #include "functions.bas"
+
+' #INCLUDE <scrbuffer.bas>
+' #include "screens.bas"
 
 #include "bullet.bas"
 #include "enemies.bas"
@@ -82,7 +87,7 @@ SetTileset(@tileSet(0,0))
     End If
 #endif
 
-waitretrace
+' waitretrace
 
 #ifdef PASSWORD_ENABLED
     passwordScreen()

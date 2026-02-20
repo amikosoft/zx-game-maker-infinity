@@ -555,6 +555,16 @@
                 "value": ""
             },
             {
+                "name": "buttonPauseEnabled",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "buttonQuitEnabled",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "redefineKeysEnabled",
                 "type": "bool",
                 "value": false
@@ -586,6 +596,11 @@
             },
             {
                 "name": "mechanicalBeltEnabled",
+                "type": "bool",
+                "value": true
+            },
+            {
+                "name": "mechanicalBeltSlow",
                 "type": "bool",
                 "value": true
             },

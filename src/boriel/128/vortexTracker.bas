@@ -1,7 +1,7 @@
 Dim VortexTracker_Status As Ubyte = 0
 
-' This Sub used PaginarMemoria previously, which included/d DI/EI.
-' Without PaginarMemoria, DI/EI *must* be done explicitly.
+' This Sub used SetBank previously, which included/d DI/EI.
+' Without SetBank, DI/EI *must* be done explicitly.
 'usarIM2 (Byte): 1 utiliza el motor de interrupciones
 Sub VortexTracker_Init()
     Asm
@@ -48,8 +48,8 @@ Sub Fastcall VortexTracker_NextNote()
     callVtAddress($C005)
 End Sub
 
-' This Sub used PaginarMemoria previously, which included DI/EI.
-' Without PaginarMemoria, DI/EI *must* be done explicitly.
+' This Sub used SetBank previously, which included DI/EI.
+' Without SetBank, DI/EI *must* be done explicitly.
 Sub VortexTracker_Stop()
     VortexTracker_Status = 0
     

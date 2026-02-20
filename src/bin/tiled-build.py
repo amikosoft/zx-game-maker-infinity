@@ -55,12 +55,14 @@ dropTile = 0
 trampolinTile = 0
 trampolinEnabled = False
 mechanicalBeltEnabled = False
+mechanicalBeltSlow = True
 leftTile = 0
 rightTile = 0
 
 glueTileEnabled = False
 glueMode = "prevent jump and slow down player"
 glueTile = 0
+
 
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
@@ -225,6 +227,9 @@ fadeTilesFramesCount = 0
 gameLanguage = 'en'
 
 fontCustom = 'default'
+
+buttonPauseEnabled = False
+buttonQuitEnabled = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -431,10 +436,17 @@ if 'properties' in data:
             trampolinEnabled = property['value']
         elif property['name'] == 'mechanicalBeltEnabled':
             mechanicalBeltEnabled = property['value']
+        elif property['name'] == 'mechanicalBeltSlow':
+            mechanicalBeltSlow = property['value']
         elif property['name'] == 'glueTileEnabled':
             glueTileEnabled = property['value']
         elif property['name'] == 'glueMode':
             glueMode = property['value']
+        elif property['name'] == 'buttonPauseEnabled':
+            buttonPauseEnabled = property['value']
+        elif property['name'] == 'buttonQuitEnabled':
+            buttonQuitEnabled = property['value']
+ 
 if len(damageTiles) == 0:
     damageTiles.append('0')
  
@@ -687,6 +699,12 @@ if idleTime > 0:
     configStr += "#DEFINE IDLE_ENABLED\n"
     configStr += "const IDLE_TIME as ubyte = " + str(idleTime) + "\n"
 
+if buttonPauseEnabled:
+    configStr += "#DEFINE BUTTON_PAUSE_ENABLED\n"
+
+    if buttonQuitEnabled:
+        configStr += "#DEFINE BUTTON_QUIT_ENABLED\n"
+
 for layer in data['layers']:
     if layer['type'] == 'tilelayer':
         screensCount = len(layer['chunks'])
@@ -782,6 +800,9 @@ if mechanicalBeltEnabled:
         underPlayerValidation = True
 
     configStr += "#define MECHANICAL_BELT_ENABLED\n"
+
+    if mechanicalBeltSlow:
+        configStr += "#define MECHANICAL_BELT_SLOW\n"
     configStr += "const LEFT_TILE as ubyte = " + str(leftTile) + "\n"
     configStr += "const RIGHT_TILE as ubyte = " + str(rightTile) + "\n"
 
@@ -1210,12 +1231,11 @@ if adventureTexts and len(texts) > 0:
 
     configStr += "const TEXTS_SIZE as ubyte = " + str(adventureTextsLength) + "\n"
     
-    if adventureTextsBackgroundColor > 0:
+    if adventureTextsClearScreen == True:
+        configStr += "#DEFINE FULLSCREEN_TEXTS\n"
+    elif adventureTextsBackgroundColor > 0:
         configStr += "#DEFINE MAP_COLOR_TEXT_ENABLED\n"
-        configStr += "const MAP_COLOR_TEXT_COLOR as ubyte = " + str(adventureTextsBackgroundColor) + "\n"
-    else:
-        if adventureTextsClearScreen == True:
-            configStr += "#DEFINE FULLSCREEN_TEXTS\n"
+        configStr += "const MAP_COLOR_TEXT_COLOR as ubyte = " + str(adventureTextsBackgroundColor) + "\n"  
     
     if adventureTextsHideTiles == True:
         configStr += "#DEFINE ADVENTURE_TEXTS_HIDE_TILES\n"

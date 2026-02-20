@@ -441,14 +441,14 @@ Sub leftKey(animate as ubyte)
         #endif
     Else
         #ifdef SIDE_VIEW
-            if isInStep(protaX, protaY + 3) then
+            if isInStep(protaX) then
                 protaY = protaY - 1
                 ' elseif isInStep(protaX + 4, protaY + 4) then
                 '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
             end if
 
             #ifdef GLUE_SLOW_DOWN
-                if isOnGlue and enemiesFrame band 1 then return
+                if isOnGlue and (enemiesFrame band 1 )then return
             #endif
         #endif
         
@@ -478,14 +478,14 @@ Sub rightKey(animate as ubyte)
         #endif
     Else
         #ifdef SIDE_VIEW
-            if isInStep(protaX+3, protaY + 3) then
+            if isInStep(protaX+3) then
                 protaY = protaY - 1
                 ' elseif isInStep(protaX+1, protaY + 4) then
                 '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
             end if
 
             #ifdef GLUE_SLOW_DOWN
-                if isOnGlue and enemiesFrame band 1 then return
+                if isOnGlue and (enemiesFrame band 1) then return
             #endif
         #endif
         
@@ -591,7 +591,7 @@ End Sub
                 SetTile(tile, attrSet(tile), 16, 4)
             #EndIf
         #EndIf
-        
+
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
             for letra=0 to 14
                 #ifndef FULLSCREEN_TEXTS
@@ -605,7 +605,7 @@ End Sub
                 #endif
             #endif
         Next fila
-        
+
         #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
             pauseUntilPressFire()
         #else

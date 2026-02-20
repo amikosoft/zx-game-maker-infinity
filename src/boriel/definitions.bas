@@ -91,7 +91,22 @@ dim enemiesFrame as ubyte = 0
 
 Dim kempston As Ubyte
 Dim keyOption As String
-Dim keyArray(4) As Uinteger
+
+#ifdef BUTTON_PAUSE_ENABLED
+Const PAUSE_BUTTON As Ubyte = 5
+dim isPaused as ubyte = 1
+
+    #ifdef BUTTON_QUIT_ENABLED
+        Const QUIT_BUTTON As Ubyte = 6
+        Dim keyArray(6) As Uinteger
+    #else
+        Dim keyArray(5) As Uinteger
+    #endif
+#else
+    Dim keyArray(4) As Uinteger
+#endif
+
+
 
 Dim framec As Ubyte AT 23672
 

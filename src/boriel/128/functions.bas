@@ -1,4 +1,4 @@
-Sub Fastcall PaginarMemoria(banco As Ubyte)
+Sub Fastcall PaginarOldMemoria(banco As Ubyte)
     ASM
         ld d,a
         ; Con Fastcall banco se coloca en A
