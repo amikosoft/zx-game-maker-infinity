@@ -35,10 +35,10 @@ Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
     #endif
 #endif
 
-const MAX_SCREEEN_RIGHT as ubyte = 60
-const MAX_SCREEN_LEFT as ubyte = 2
-const MAX_SCREEN_BOTTOM as ubyte = 40
-const MAX_SCREEN_TOP as ubyte = 2
+' const MAX_SCREEN_LEFT as ubyte = 2
+' const MAX_SCREEN_TOP as ubyte = 2
+' const MAX_SCREEN_RIGHT as ubyte = 60
+' const MAX_SCREEN_BOTTOM as ubyte = 40
 
 ' const MAX_GENERIC_TILE as ubyte = 188
 

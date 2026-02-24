@@ -365,11 +365,11 @@ Sub playGame()
         '     #endif
         ' #endif
 
-        drawSprites()
-
         If moveScreen <> 0 Then
             moveToScreen(moveScreen)
             ' enemiesScreen = enemiesPerScreen(currentScreen)
+        else
+            drawSprites()
         End If
         
         If currentLife = 0 and not invincible Then gameOver()
@@ -656,9 +656,9 @@ Sub swapScreen(waitReady as ubyte)
 
     #ifdef FULL_SCREEN_CHANGE_ANIMATION
         #ifdef SCREEN_ATTRIBUTES
-            FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
+            FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, 0, 0)
         #else
-            FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+            FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, 0, 0)
         #endif
     #endif
 

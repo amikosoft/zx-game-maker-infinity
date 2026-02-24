@@ -242,7 +242,7 @@ End Function
     Sub gravity()
         If jumpCurrentKey = jumpStopValue And isFalling() Then
             landed = 0
-            If protaY >= MAX_LINE Then
+            If protaY >= MAX_SCREEN_BOTTOM Then
                 #ifdef LEVELS_MODE
                     landed = 1
                     decrementLife()
@@ -296,13 +296,13 @@ End Function
             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
             bulletPositionX = protaX + 2
             If BULLET_DISTANCE <> 0 Then
-                If protaX + BULLET_DISTANCE > MAX_SCREEEN_RIGHT Then
-                    bulletEndPositionX = MAX_SCREEEN_RIGHT
+                If protaX + BULLET_DISTANCE > MAX_SCREEN_RIGHT Then
+                    bulletEndPositionX = MAX_SCREEN_RIGHT
                 Else
                     bulletEndPositionX = protaX + BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionX = MAX_SCREEEN_RIGHT
+                bulletEndPositionX = MAX_SCREEN_RIGHT
             End If
         Elseif protaDirection = 0
             #ifdef IDLE_ENABLED
@@ -354,13 +354,13 @@ End Function
             bulletPositionX = protaX + 2
             bulletPositionY = protaY + 1
             If BULLET_DISTANCE <> 0 Then
-                If protaX + BULLET_DISTANCE > MAX_SCREEEN_RIGHT Then
-                    bulletEndPositionX = MAX_SCREEEN_RIGHT
+                If protaX + BULLET_DISTANCE > MAX_SCREEN_RIGHT Then
+                    bulletEndPositionX = MAX_SCREEN_RIGHT
                 Else
                     bulletEndPositionX = protaX + BULLET_DISTANCE + 1
                 End If
             Else
-                bulletEndPositionX = MAX_SCREEEN_RIGHT
+                bulletEndPositionX = MAX_SCREEN_RIGHT
             End If
         Elseif protaDirection = 0
             #ifdef IDLE_ENABLED
@@ -434,7 +434,7 @@ Sub leftKey(animate as ubyte)
     
     If protaX = 0 Then
         #ifdef ARCADE_MODE
-            protaX = 60
+            protaX = MAX_SCREEN_RIGHT
             Return
         #Else
             moveScreen = 4
@@ -469,7 +469,7 @@ Sub rightKey(animate as ubyte)
         protaFrame = 0
     End If
     
-    If protaX = 60 Then
+    If protaX = MAX_SCREEN_RIGHT Then
         #ifdef ARCADE_MODE
             protaX = 0
             Return
@@ -537,7 +537,7 @@ Sub downKey()
             protaFrame = 6
         End If
         If canMoveDown() Then
-            If protaY >= MAX_LINE Then
+            If protaY >= MAX_SCREEN_BOTTOM Then
                 #ifndef LEVELS_MODE
                     #ifndef ARCADE_MODE
                         moveScreen = 2
@@ -579,9 +579,9 @@ End Sub
     Sub muestraDialogo(texto as ubyte, tile as ubyte)
         #ifdef FULLSCREEN_TEXTS
             #ifdef SCREEN_ATTRIBUTES
-                FillWithTile(currentTileBackground, 32, 22, currentScreenBackground, 0, 0)
+                FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, 0, 0)
             #else
-                FillWithTile(0, 32, 22, BACKGROUND_ATTRIBUTE, 0, 0)
+                FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, 0, 0)
             #endif
             
             SetTile(tile, attrSet(tile), 16, 4)

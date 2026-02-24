@@ -157,7 +157,7 @@ End Function
         ' desplazamiento de bala
         #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
             if localBulletDirection = BULLET_DIRECTION_RIGHT then
-                if localBulletX >= MAX_SCREEEN_RIGHT then
+                if localBulletX >= MAX_SCREEN_RIGHT then
                     enemyBullets(bulletId, 0) = 0
                     return 0
                 end if

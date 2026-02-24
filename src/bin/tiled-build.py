@@ -459,8 +459,17 @@ animatedTilesIdsCount = len(animatedTilesIds) - 1 if len(animatedTilesIds) > 0 e
 configStr = "const MAX_ENEMIES_PER_SCREEN as ubyte = " + str(maxEnemiesPerScreen) + "\n"
 configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
+
+configStr += "const MAX_SCREEN_LEFT as ubyte = 2\n"
+configStr += "const MAX_SCREEN_TOP as ubyte = 4\n"
+configStr += "const MAX_SCREEN_RIGHT as ubyte = " + str((screenWidth*2)-4) + "\n"
+configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
+
+configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)-3) + "\n"
+
 configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
-configStr += "const MAX_LINE as ubyte = " + str(screenHeight * 2 - 4) + "\n"
+configStr += "const MAX_LINE as ubyte = " + str((screenHeight * 2) - 4) + "\n"
+configStr += "const MAX_COL as ubyte = " + str((screenWidth * 2) - 4) + "\n"
 
 configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(64+transpasableItems) + "\n"
 
@@ -1110,7 +1119,7 @@ for layer in data['layers']:
                     initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
                     initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
 
-                    if int(initialMainCharacterX) < 2 or int(initialMainCharacterX) > 60 or int(initialMainCharacterY) < 0 or int(initialMainCharacterY) > 38:
+                    if int(initialMainCharacterX) < 2 or int(initialMainCharacterX) > ((screenWidth*2)-8) or int(initialMainCharacterY) < 0 or int(initialMainCharacterY) > ((screenHeight*2)-8):
                         exitWithErrorMessage('Main character initial position is out of bounds. X: ' + initialMainCharacterX + ', Y: ' + initialMainCharacterY)
                     
                     if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio

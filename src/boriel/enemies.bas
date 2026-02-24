@@ -315,7 +315,7 @@ Sub moveEnemies()
                                 end if
                             end if
                         #endif
-                    Elseif enemyLinBucle = MAX_LINE or enemyLinBucle = 0 or enemyColBucle = 60 or enemyColBucle = 0 Then
+                    Elseif enemyLinBucle = MAX_SCREEN_BOTTOM or enemyLinBucle = 0 or enemyColBucle = MAX_SCREEN_RIGHT or enemyColBucle = 0 Then
                         enemyColBucle = enemyColIniBucle
                         enemyLinBucle = enemyLinIniBucle
                         verticalDirectionBucle = 0
@@ -336,7 +336,7 @@ Sub moveEnemies()
                                 if enemySpeedBucle = 3 and not verticalDirectionBucle and not horizontalDirectionBucle Then
                                     if downKeyPressed Then
                                         If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLinBucle = enemyLinBucle - 1
-                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < 40 Then
+                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < MAX_SCREEN_BOTTOM Then
                                         enemyLinBucle = enemyLinBucle + 1
                                     End If
                                     

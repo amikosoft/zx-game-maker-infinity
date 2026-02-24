@@ -222,7 +222,7 @@ Sub moveToScreen(direction As Ubyte)
         #endif
     Elseif direction = 4 Then
         'updateProtaData( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
-        protaX = 60 - SCREEN_ADJUSTMENT
+        protaX = MAX_SCREEN_RIGHT - SCREEN_ADJUSTMENT
         currentScreen = currentScreen - 1
     Elseif direction = 2 Then
         #ifdef LEVELS_MODE
@@ -255,7 +255,7 @@ Sub moveToScreen(direction As Ubyte)
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
         #endif
     Elseif direction = 8 Then
-        protaY = MAX_LINE - SCREEN_ADJUSTMENT
+        protaY = MAX_SCREEN_BOTTOM - SCREEN_ADJUSTMENT
         
         #ifdef SIDE_VIEW
             if not landed Then jumpCurrentKey = 0
@@ -276,7 +276,7 @@ Sub moveToScreen(direction As Ubyte)
 End Sub
 
 Sub drawSprites()
-    If (protaY < 41) Then
+    If protaY < MAX_SCREEN_BOTTOM_PRINT Then
         #ifdef LIVES_MODE_GRAVEYARD
             #ifdef ENERGY_ENABLED
                 If not currentEnergy or Not invincible Or invincible bAnd 2 Then
