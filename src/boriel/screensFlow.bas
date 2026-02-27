@@ -238,16 +238,12 @@ Sub playGame()
     
     ' Let lastFrameProta = framec
     ' Let lastFrameEnemies = framec
-    #ifdef ANIMATED_TILES_ENABLED
-        lastFrameTiles = 0
-    #endif
     
     ' #ifdef NEW_BEEPER_PLAYER
     '     Let lastFrameBeep = framec
     ' #endif
     
     ' enemiesScreen = enemiesPerScreen(currentScreen)
-
     Do
         #ifdef BUTTON_PAUSE_ENABLED
         if MultiKeys(keyArray(PAUSE_BUTTON)) then
@@ -311,7 +307,7 @@ Sub playGame()
                 For i=firstTileInScreen To ANIMATED_TILES_TOTAL
                     if i > ANIMATED_TILES_TOTAL or animatedTilesPerScreen(i, 0) <> currentScreen Then Exit for
 
-                    #ifdef ANIMATED_ALL_HIDDEN
+                    #ifdef ANIMATED_ALL_HIDDEN    
                         if animatedFrame then
                             #ifdef SCREEN_ATTRIBUTES
                                 SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
@@ -325,7 +321,18 @@ Sub playGame()
                     #else
                         Dim tile As Ubyte = animatedTilesPerScreen(i, 1) + animatedFrame
                         #ifdef ANIMATED_SOLID_HIDDEN
-                            if tile < ENEMY_DOOR_TILE and animatedFrame then
+                            tileMustHide = 0
+                            if tile < ENEMY_DOOR_TILE then
+                                tile = tile - animatedFrame
+
+                                if animatedFrame then
+                                    tileMustHide = tile band 1
+                                else
+                                    tileMustHide = not tile band 1
+                                end if
+                            end if
+
+                            if tileMustHide then
                                 #ifdef SCREEN_ATTRIBUTES
                                     SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                                 #else
@@ -540,7 +547,6 @@ Sub resetValues()
     #ifdef MUSIC_ENABLED
         musicPlayed = 0
     #endif
-
 End Sub
 
 Sub swapScreen(waitReady as ubyte)

@@ -33,6 +33,7 @@ Sub mapDraw()
     Next index
     
     #ifdef ANIMATED_TILES_ENABLED
+        lastFrameTiles = ANIMATE_PERIOD_TILE
         For i=0 To ANIMATED_TILES_TOTAL
             firstTileInScreen = i
             if animatedTilesPerScreen(i, 0) = currentScreen Then Exit for

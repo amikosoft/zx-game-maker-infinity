@@ -195,6 +195,14 @@ dim firstTimeEnemiesScreen as ubyte = 1
     Dim animatedTilesPerScreen(ANIMATED_TILES_TOTAL, 3) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
     dim firstTileInScreen as integer = 0
     Dim lastFrameTiles As Ubyte = 0
+
+    #ifdef ANIMATED_ALL_HIDDEN 
+        dim tileMustHide as ubyte = 0
+    #else
+        #ifdef ANIMATED_SOLID_HIDDEN
+            dim tileMustHide as ubyte = 0
+        #endif
+    #endif
 #endif
 
 #ifdef FADE_TILES_ENABLED
