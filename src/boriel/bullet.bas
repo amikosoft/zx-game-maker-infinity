@@ -46,6 +46,7 @@ End Function
                 if bulletPositionX > bulletEndPositionX then
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
+                        bulletPositionX = bulletEndPositionX
                     #else
                         resetBullet()
                         return
@@ -69,6 +70,7 @@ End Function
                 if bulletPositionX < bulletEndPositionX then
                     #ifdef BULLET_BOOMERANG
                         bulletDirection = BULLET_DIRECTION_BOOMERANG
+                        bulletPositionX = bulletEndPositionX
                     #else
                         resetBullet()
                         return
@@ -90,9 +92,10 @@ End Function
                 #endif
                 #ifdef OVERHEAD_VIEW
                 elseif bulletDirection = BULLET_DIRECTION_DOWN then
-                    if bulletPositionY >= bulletEndPositionY then
+                    if bulletPositionY > bulletEndPositionY then
                         #ifdef BULLET_BOOMERANG
                             bulletDirection = BULLET_DIRECTION_BOOMERANG
+                            bulletPositionY = bulletEndPositionY
                         #else
                             resetBullet()
                             return
@@ -101,9 +104,10 @@ End Function
                         bulletPositionY = bulletPositionY + BULLET_SPEED
                     end if
                 elseif bulletDirection = BULLET_DIRECTION_UP
-                    if bulletPositionY <= bulletEndPositionY then
+                    if bulletPositionY < bulletEndPositionY then
                         #ifdef BULLET_BOOMERANG
                             bulletDirection = BULLET_DIRECTION_BOOMERANG
+                            bulletPositionY = bulletEndPositionY
                         #else
                             resetBullet()
                             return

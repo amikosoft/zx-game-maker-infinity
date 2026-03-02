@@ -23,7 +23,9 @@ ZX0_EXEC="bin/salvador"
 
 # Screens count per row
 screenWidth = data['editorsettings']['chunksize']['width']
+widthSkip = 0
 screenHeight = data['editorsettings']['chunksize']['height']
+heightSkip = 0
 cellsPerScreen = screenWidth * screenHeight
 
 tileHeight = data['tileheight']
@@ -449,6 +451,10 @@ if 'properties' in data:
             buttonPauseEnabled = property['value']
         elif property['name'] == 'buttonQuitEnabled':
             buttonQuitEnabled = property['value']
+        elif property['name'] == 'layoutSkipWidth':
+            widthSkip = property['value']
+        elif property['name'] == 'layoutSkipHeight':
+            heightSkip = property['value']
  
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -457,19 +463,58 @@ damageTilesCount = len(damageTiles) - 1 if len(damageTiles) > 0 else 0
 animatedTilesIdsCount = len(animatedTilesIds) - 1 if len(animatedTilesIds) > 0 else 0
 
 configStr = "const MAX_ENEMIES_PER_SCREEN as ubyte = " + str(maxEnemiesPerScreen) + "\n"
+
+# if screenHeight == 21:
+#     configStr += "const screenHeight as ubyte = " + str(screenHeight + 1) + "\n"
+#     configStr += "#DEFINE SKIP_HEIGHT\n"
+#     heightSkip = 1
+# else:
+# configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
+
 configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
+
+# if screenWidth % 2 == 0:
+if widthSkip > 0:
+    # widthSkip = (32-screenWidth)//2
+    
+    configStr += "const SKIP_WIDTH_SIZE as ubyte = " + str(widthSkip) + "\n"
+    
+    configStr += "const MAX_SCREEN_LEFT as ubyte = " + str(2+(widthSkip*2)) + "\n"
+    configStr += "const MAX_SCREEN_RIGHT as ubyte = " + str((screenWidth*2)+(widthSkip*2)) + "\n"
+
+    configStr += "const PLAYER_BOUNDS_LEFT as ubyte = " + str((widthSkip*2)) + "\n"
+    configStr += "const PLAYER_BOUNDS_RIGHT as ubyte = " + str((screenWidth*2)+(widthSkip*2)-4) + "\n"
+else:
+    configStr += "const SKIP_WIDTH_SIZE as ubyte = 0\n"
+    
+    configStr += "const MAX_SCREEN_LEFT as ubyte = 2\n"
+    configStr += "const MAX_SCREEN_RIGHT as ubyte = " + str((screenWidth*2)) + "\n"
+    
+    configStr += "const PLAYER_BOUNDS_LEFT as ubyte = 0\n"
+    configStr += "const PLAYER_BOUNDS_RIGHT as ubyte = " + str((screenWidth*2)) + "\n"
+    
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
 
-configStr += "const MAX_SCREEN_LEFT as ubyte = 2\n"
-configStr += "const MAX_SCREEN_TOP as ubyte = 4\n"
-configStr += "const MAX_SCREEN_RIGHT as ubyte = " + str((screenWidth*2)-4) + "\n"
-configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
+if heightSkip > 0:
+    # widthSkip = (32-screenWidth)//2
+    configStr += "const SKIP_HEIGHT_SIZE as ubyte = " + str(heightSkip) + "\n"
+    configStr += "const PLAYER_BOUNDS_TOP as ubyte = " + str((heightSkip*2)+2) + "\n"
+    configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
+    configStr += "const MAX_SCREEN_TOP as ubyte = " + str(2+(screenHeight*2)) + "\n"
+    configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)+(heightSkip*2)-4) + "\n"
+    # configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
+    configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)+(heightSkip*2)-3) + "\n"
+else:
+    configStr += "const SKIP_HEIGHT_SIZE as ubyte = 0\n"
+    configStr += "const PLAYER_BOUNDS_TOP as ubyte = 2\n"
+    configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
+    configStr += "const MAX_SCREEN_TOP as ubyte = 2\n"
+    configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
+    # configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
+    configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)-3) + "\n"
 
-configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)-3) + "\n"
 
 configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
-configStr += "const MAX_LINE as ubyte = " + str((screenHeight * 2) - 4) + "\n"
-configStr += "const MAX_COL as ubyte = " + str((screenWidth * 2) - 4) + "\n"
 
 configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(64+transpasableItems) + "\n"
 
@@ -568,7 +613,11 @@ else:
     configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
 
 configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
+
 configStr += "const BULLET_DISTANCE as ubyte = " + str(bulletDistance) + "\n"
+
+if bulletDistance == 0:
+    configStr += "#DEFINE BULLET_DISTANCE_FULL\n"
 
 if int(dropTile) > 0:
     configStr += "#DEFINE DROP_ENABLED\n"
@@ -723,7 +772,7 @@ if buttonPauseEnabled:
 for layer in data['layers']:
     if layer['type'] == 'tilelayer':
         screensCount = len(layer['chunks'])
-        mapRows = layer['height']//screenHeight
+        # mapRows = layer['height']//screenHeight
         mapCols = layer['width']//screenWidth
 
         screens = []
@@ -741,8 +790,8 @@ for layer in data['layers']:
             screenAnimatedTiles[idx] = []
 
             for jdx, cell in enumerate(screen['data']):
-                mapX = jdx % screen['width']
-                mapY = jdx // screen['width']
+                mapX = (jdx % screen['width'])+widthSkip
+                mapY = (jdx // screen['width'])+heightSkip
 
                 tile = str(cell - 1)
 
@@ -1123,7 +1172,7 @@ for layer in data['layers']:
                         exitWithErrorMessage('Main character initial position is out of bounds. X: ' + initialMainCharacterX + ', Y: ' + initialMainCharacterY)
                     
                     if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
-                        keys[str(screenId)] = [int(initialMainCharacterX), int(initialMainCharacterY)]
+                        keys[str(screenId)] = [int(initialMainCharacterX+widthSkip), int(initialMainCharacterY+heightSkip)]
                 elif object['type'] == 'text':
                     if adventureTexts == True:
                         xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4
@@ -1152,7 +1201,7 @@ for layer in data['layers']:
                                 print(adventureState)
                                 print(object['properties'])
                                 exitWithErrorMessage('Cannot set an item to text without adventure state')
-                            texts.append([str(screenId), str(xScreenPosition), str(yScreenPosition), adventureText, adventureItem, adventureState])
+                            texts.append([str(screenId), str(xScreenPosition+(widthSkip*2)), str(yScreenPosition+(heightSkip*2)), adventureText, adventureItem, adventureState])
 
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
@@ -1329,8 +1378,8 @@ for enemyId in objects:
 enemiesPerScreen = []
 
 configStr += "const INITIAL_SCREEN as ubyte = " + str(initialScreen) + "\n"
-configStr += "const INITIAL_MAIN_CHARACTER_X as ubyte = " + str(initialMainCharacterX) + "\n"
-configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(initialMainCharacterY) + "\n"
+configStr += "const INITIAL_MAIN_CHARACTER_X as ubyte = " + str(int(initialMainCharacterX) + widthSkip) + "\n"
+configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(int(initialMainCharacterY) + heightSkip) + "\n"
 
 # configStr += "\n\ntextsData:\n"
 # for i in allTexts:
@@ -1396,13 +1445,13 @@ for layer in data['layers']:
 
                         enemiesPerScreen[idx] = enemiesPerScreen[idx] + 1
                         arrayBuffer.append(int(enemy['tile']))
-                        arrayBuffer.append(int(enemy['linIni']))
-                        arrayBuffer.append(int(enemy['colIni']))
-                        arrayBuffer.append(int(enemy['linEnd']))
-                        arrayBuffer.append(int(enemy['colEnd']))
+                        arrayBuffer.append(int(enemy['linIni']) + (heightSkip*2))
+                        arrayBuffer.append(int(enemy['colIni']) + (widthSkip*2))
+                        arrayBuffer.append(int(enemy['linEnd']) + (heightSkip*2))
+                        arrayBuffer.append(int(enemy['colEnd']) + (widthSkip*2))
                         arrayBuffer.append(int(horizontalDirection))
-                        arrayBuffer.append(int(enemy['linIni']))
-                        arrayBuffer.append(int(enemy['colIni']))
+                        arrayBuffer.append(int(enemy['linIni']) + (heightSkip*2))
+                        arrayBuffer.append(int(enemy['colIni']) + (widthSkip*2))
                         arrayBuffer.append(int(enemy['life']))
                         arrayBuffer.append(int(enemy['mode']))
                         arrayBuffer.append(int(verticalDirection))                  

@@ -8,8 +8,8 @@
 
 Function canMoveUp() As Ubyte
     #ifdef ARCADE_MODE
-        If protaY = 0 Then
-            protaY = 39
+        If protaY <= PLAYER_BOUNDS_TOP Then
+            protaY = PLAYER_BOUNDS_BOTTOM
             Return 1
         End If
     #endif
@@ -47,8 +47,8 @@ End Function
 
 Function canMoveDown() As Ubyte
     #ifdef ARCADE_MODE
-        If protaY > 39 Then
-            protaY = 0
+        If protaY > MAX_SCREEN_BOTTOM Then
+            protaY = PLAYER_BOUNDS_TOP
             Return 1
         End If
     #endif
@@ -293,17 +293,17 @@ End Function
                 protaDirection = 1
             #endif
             
-            currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+            'currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
             bulletPositionX = protaX + 2
-            If BULLET_DISTANCE <> 0 Then
-                If protaX + BULLET_DISTANCE > MAX_SCREEN_RIGHT Then
-                    bulletEndPositionX = MAX_SCREEN_RIGHT
-                Else
-                    bulletEndPositionX = protaX + BULLET_DISTANCE + 1
+            
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionX = protaX + BULLET_DISTANCE
+                If bulletEndPositionX > (PLAYER_BOUNDS_RIGHT) Then
+                    bulletEndPositionX = PLAYER_BOUNDS_RIGHT
                 End If
-            Else
-                bulletEndPositionX = MAX_SCREEN_RIGHT
-            End If
+            #Else
+                bulletEndPositionX = PLAYER_BOUNDS_RIGHT
+            #EndIf
         Elseif protaDirection = 0
             #ifdef IDLE_ENABLED
                 'updateProtaData( protaY, protaX, 5, 0)
@@ -312,15 +312,14 @@ End Function
             #endif
             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
             bulletPositionX = protaX
-            If BULLET_DISTANCE <> 0 Then
-                If BULLET_DISTANCE > protaX Then
-                    bulletEndPositionX = MAX_SCREEN_LEFT
-                Else
-                    bulletEndPositionX = protaX - BULLET_DISTANCE + 1
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionX = protaX - BULLET_DISTANCE
+                If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
+                    bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
                 End If
-            Else
-                bulletEndPositionX = MAX_SCREEN_LEFT
-            End If
+            #Else
+                bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
+            #EndIf
         End If
         
         bulletPositionY = protaY + 1
@@ -353,15 +352,14 @@ End Function
             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
             bulletPositionX = protaX + 2
             bulletPositionY = protaY + 1
-            If BULLET_DISTANCE <> 0 Then
-                If protaX + BULLET_DISTANCE > MAX_SCREEN_RIGHT Then
-                    bulletEndPositionX = MAX_SCREEN_RIGHT
-                Else
-                    bulletEndPositionX = protaX + BULLET_DISTANCE + 1
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionX = protaX + BULLET_DISTANCE
+                If bulletEndPositionX > (PLAYER_BOUNDS_RIGHT) Then
+                    bulletEndPositionX = PLAYER_BOUNDS_RIGHT
                 End If
-            Else
-                bulletEndPositionX = MAX_SCREEN_RIGHT
-            End If
+            #Else
+                bulletEndPositionX = PLAYER_BOUNDS_RIGHT
+            #EndIf
         Elseif protaDirection = 0
             #ifdef IDLE_ENABLED
                 ' updateProtaData( protaY, protaX, 5, 0)
@@ -371,15 +369,14 @@ End Function
             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
             bulletPositionX = protaX
             bulletPositionY = protaY + 1
-            If BULLET_DISTANCE <> 0 Then
-                If BULLET_DISTANCE > protaX Then
-                    bulletEndPositionX = MAX_SCREEN_LEFT
-                Else
-                    bulletEndPositionX = protaX - BULLET_DISTANCE + 1
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionX = protaX - BULLET_DISTANCE
+                If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
+                    bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
                 End If
-            Else
-                bulletEndPositionX = MAX_SCREEN_LEFT
-            End If
+            #Else
+                bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
+            #EndIf
         Elseif protaDirection = 8
             #ifdef IDLE_ENABLED
                 ' updateProtaData( protaY, protaX, 5, 0)
@@ -389,15 +386,15 @@ End Function
             currentBulletSpriteId = BULLET_SPRITE_UP_ID
             bulletPositionX = protaX + 1
             bulletPositionY = protaY + 1
-            If BULLET_DISTANCE <> 0 Then
-                If BULLET_DISTANCE > protaY Then
-                    bulletEndPositionY = MAX_SCREEN_TOP
-                Else
-                    bulletEndPositionY = protaY - BULLET_DISTANCE + 1
+
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionY = protaY - BULLET_DISTANCE
+                If bulletEndPositionY < PLAYER_BOUNDS_TOP Then
+                    bulletEndPositionY = PLAYER_BOUNDS_TOP
                 End If
-            Else
-                bulletEndPositionY = MAX_SCREEN_TOP
-            End If
+            #Else
+                bulletEndPositionY = PLAYER_BOUNDS_TOP
+            #EndIf
         Else
             #ifdef IDLE_ENABLED
                 ' updateProtaData( protaY, protaX, 5, 0)
@@ -407,15 +404,15 @@ End Function
             currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
             bulletPositionX = protaX + 1
             bulletPositionY = protaY + 2
-            If BULLET_DISTANCE <> 0 Then
-                If protaY + BULLET_DISTANCE > MAX_SCREEN_BOTTOM Then
-                    bulletEndPositionY = MAX_SCREEN_BOTTOM
-                Else
-                    bulletEndPositionY = protaY + BULLET_DISTANCE + 1
+
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionY = protaY + BULLET_DISTANCE
+                If bulletEndPositionY > (PLAYER_BOUNDS_BOTTOM-2) Then
+                    bulletEndPositionY = PLAYER_BOUNDS_BOTTOM-2
                 End If
-            Else
-                bulletEndPositionY = MAX_SCREEN_BOTTOM
-            End If
+            #Else
+                bulletEndPositionY = PLAYER_BOUNDS_BOTTOM-2
+            #EndIf
         End If
         
         bulletDirection = protaDirection
@@ -432,7 +429,7 @@ Sub leftKey(animate as ubyte)
         #endif
     End If
     
-    If protaX = 0 Then
+    If protaX <= PLAYER_BOUNDS_LEFT Then
         #ifdef ARCADE_MODE
             protaX = MAX_SCREEN_RIGHT
             Return
@@ -469,9 +466,9 @@ Sub rightKey(animate as ubyte)
         protaFrame = 0
     End If
     
-    If protaX = MAX_SCREEN_RIGHT Then
+    If protaX >= PLAYER_BOUNDS_RIGHT Then
         #ifdef ARCADE_MODE
-            protaX = 0
+            protaX = MAX_SCREEN_LEFT
             Return
         #Else
             moveScreen = 6
@@ -579,9 +576,9 @@ End Sub
     Sub muestraDialogo(texto as ubyte, tile as ubyte)
         #ifdef FULLSCREEN_TEXTS
             #ifdef SCREEN_ATTRIBUTES
-                FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, 0, 0)
+                FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
             #else
-                FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, 0, 0)
+                FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
             #endif
             
             SetTile(tile, attrSet(tile), 16, 4)

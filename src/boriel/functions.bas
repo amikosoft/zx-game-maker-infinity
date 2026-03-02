@@ -44,12 +44,12 @@ sub pauseUntilPressFire()
 End Sub
 
 Function checkProtaTop() As Ubyte
-    If protaY < 2 Then
+    If protaY < PLAYER_BOUNDS_TOP Then
         #ifdef ARCADE_MODE
-            protaY = 39
+            protaY = MAX_SCREEN_BOTTOM
         #Else
             #ifdef LEVELS_MODE
-                protaY = 2
+                protaY = PLAYER_BOUNDS_TOP
             #Else
                 moveScreen = 8
             #endif
@@ -136,9 +136,14 @@ sub decrementLife()
 end sub
 
 sub printLife()
-    PRINT AT 22, 5; TEXT_3_SPACES
-    PRINT AT 22, 5; currentLife
-    
+    #ifdef SKIP_HEIGHT
+        PRINT AT 1, 1; TEXT_3_SPACES
+        PRINT AT 1, 1; currentLife
+    #else
+        PRINT AT 22, 5; TEXT_3_SPACES
+        PRINT AT 22, 5; currentLife
+    #endif
+
     #ifdef ENERGY_ENABLED
         ' if currentEnergy > INITIAL_ENERGY Then currentEnergy = INITIAL_ENERGY
         
@@ -357,8 +362,8 @@ sub removeTilesFromScreen(tile as ubyte)
     dim index as uinteger
     dim y, x as ubyte
     
-    x = 0
-    y = 0
+    x = SKIP_WIDTH_SIZE
+    y = SKIP_HEIGHT_SIZE
     
     for index=0 to SCREEN_LENGTH
         if peek(dmAddress + index) - 1 = tile then
@@ -370,8 +375,9 @@ sub removeTilesFromScreen(tile as ubyte)
         end if
         
         x = x + 1
-        if x = screenWidth then
-            x = 0
+        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
+            x = SKIP_WIDTH_SIZE
+
             y = y + 1
         end if
     next index

@@ -662,9 +662,9 @@ Sub swapScreen(waitReady as ubyte)
 
     #ifdef FULL_SCREEN_CHANGE_ANIMATION
         #ifdef SCREEN_ATTRIBUTES
-            FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, 0, 0)
+            FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
         #else
-            FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, 0, 0)
+            FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
         #endif
     #endif
 

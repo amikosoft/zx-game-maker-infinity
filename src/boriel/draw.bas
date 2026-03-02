@@ -2,8 +2,8 @@ Sub mapDraw()
     Dim index As Uinteger
     Dim y, x As Ubyte
     
-    x = 0
-    y = 0
+    x = SKIP_WIDTH_SIZE
+    y = SKIP_HEIGHT_SIZE
     
     #ifdef FADE_TILES_ENABLED
     maxFadeTile = 0
@@ -26,8 +26,8 @@ Sub mapDraw()
         #endif
         
         x = x + 1
-        If x = screenWidth Then
-            x = 0
+        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
+            x = SKIP_WIDTH_SIZE
             y = y + 1
         End If
     Next index
@@ -73,47 +73,48 @@ Sub mapColor(color As Ubyte)
     Dim index As Uinteger
     Dim y, x As Ubyte
     
-    x = 0
-    y = 0
+    x = SKIP_WIDTH_SIZE
+    y = SKIP_HEIGHT_SIZE
     
     For index=0 To SCREEN_LENGTH
         SetTileColor(x, y, color)
         
         x = x + 1
-        If x = screenWidth Then
-            x = 0
+        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
+            x = SKIP_WIDTH_SIZE
             y = y + 1
         End If
     Next index
 End Sub
 
 Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
+    'Revisar draws de vacío innecesarios
     #ifdef SCREEN_ATTRIBUTES
         SetTile(currentTileBackground, currentScreenBackground, x, y)
     #else
         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
     #endif
     
-    If tile < 1 Then Return
+    If not tile Then Return
     
     If tile < MAX_GENERIC_TILE Then
         If tile = ENEMY_DOOR_TILE Then
             #ifdef SHOULD_KILL_ENEMIES_ENABLED
-                If screensWon(currentScreen) Then
-                    #ifdef SCREEN_ATTRIBUTES
-                        SetTile(currentTileBackground, currentScreenBackground, x, y)
-                    #else
-                        SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-                    #endif
-                Else
+                If not screensWon(currentScreen) Then
+                '     #ifdef SCREEN_ATTRIBUTES
+                '         SetTile(currentTileBackground, currentScreenBackground, x, y)
+                '     #else
+                '         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                '     #endif
+                ' Else
                     SetTile(tile, tileAttrWithBackground(tile), x, y)
                 End If
-            #Else
-                #ifdef SCREEN_ATTRIBUTES
-                    SetTile(currentTileBackground, currentScreenBackground, x, y)
-                #else
-                    SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-                #endif
+            ' #Else
+            '     #ifdef SCREEN_ATTRIBUTES
+            '         SetTile(currentTileBackground, currentScreenBackground, x, y)
+            '     #else
+            '         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+            '     #endif
             #endif
             #ifdef KEYS_ENABLED
             Elseif tile = DOOR_TILE
@@ -123,13 +124,13 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             #endif
             #ifdef USE_BREAKABLE_TILE
             ElseIf tile = BREAKABLE_TILE Then
-                If brokenTiles(currentScreen) Then
-                    #ifdef SCREEN_ATTRIBUTES
-                        SetTile(currentTileBackground, currentScreenBackground, x, y)
-                    #else
-                        SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-                    #endif
-                Else
+                If not brokenTiles(currentScreen) Then
+                '     #ifdef SCREEN_ATTRIBUTES
+                '         SetTile(currentTileBackground, currentScreenBackground, x, y)
+                '     #else
+                '         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                '     #endif
+                ' Else
                     SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 End If
             #endif
@@ -141,7 +142,7 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
                 SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             End If
-        Elseif tile = KEY_TILE
+        Elseif tile = KEY_TILE then
             #ifdef ARCADE_MODE
                 currentScreenKeyX = x
                 currentScreenKeyY = y
@@ -150,57 +151,17 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
                     SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 End If
             #endif
-        Elseif tile = LIFE_TILE
+        Elseif tile = LIFE_TILE then
             If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
                 SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             End If
-        Elseif tile = AMMO_TILE
+        Elseif tile = AMMO_TILE then
             If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
                 SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             End If
         End If
     End If
     
-    ' #ifdef USE_BREAKABLE_TILE
-    '     If tile = BREAKABLE_TILE Then
-    '         If brokenTiles(currentScreen) Then
-    '             SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-    '         Else
-    '             SetTileChecked(tile, attrSet(tile), x, y)
-    '         End If
-    '         Return
-    '     End If
-    ' #endif
-    
-    ' If tile < MAX_GENERIC_TILE Then
-    '     SetTile(tile, attrSet(tile), x, y)
-    '     Return
-    ' End If
-    
-    ' if force then SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-    
-    ' If tile = ITEM_TILE Then
-    '     If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-    '         SetTileChecked(tile, attrSet(tile), x, y)
-    '     End If
-    ' Elseif tile = KEY_TILE
-    '     #ifdef ARCADE_MODE
-    '         currentScreenKeyX = x
-    '         currentScreenKeyY = y
-    '     #Else
-    '         If screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
-    '             SetTileChecked(tile, attrSet(tile), x, y)
-    '         End If
-    '     #endif
-    ' Elseif tile = LIFE_TILE
-    '     If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
-    '         SetTileChecked(tile, attrSet(tile), x, y)
-    '     End If
-    ' Elseif tile = AMMO_TILE
-    '     If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
-    '         SetTileChecked(tile, attrSet(tile), x, y)
-    '     End If
-    ' End If
 End Sub
 
 ' #ifdef ARCADE_MODE
@@ -211,8 +172,11 @@ End Sub
 
 Sub moveToScreen(direction As Ubyte)
     If direction = 6 Then
+        ' EXITING RIGHT
         'updateProtaData( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
-        protaX = 0 + SCREEN_ADJUSTMENT
+        
+        protaX = PLAYER_BOUNDS_LEFT + SCREEN_ADJUSTMENT
+        
         currentScreen = currentScreen + 1
         
         #ifdef LIVES_MODE_ENABLED
@@ -222,10 +186,13 @@ Sub moveToScreen(direction As Ubyte)
             #endif
         #endif
     Elseif direction = 4 Then
+        ' EXITING LEFT
         'updateProtaData( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
-        protaX = MAX_SCREEN_RIGHT - SCREEN_ADJUSTMENT
+        protaX = PLAYER_BOUNDS_RIGHT - SCREEN_ADJUSTMENT
+
         currentScreen = currentScreen - 1
     Elseif direction = 2 Then
+        ' EXITING BOTTOM
         #ifdef LEVELS_MODE
             currentLevel = currentLevel + 1
             if currentLevel > (SCREENS_COUNT/MAP_SCREENS_WIDTH_COUNT) then
@@ -252,10 +219,12 @@ Sub moveToScreen(direction As Ubyte)
             End if
         #else
             'updateProtaData( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
-            protaY = 0+ SCREEN_ADJUSTMENT
+            protaY = SKIP_HEIGHT_SIZE + SCREEN_ADJUSTMENT
+        
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
         #endif
     Elseif direction = 8 Then
+        ' EXITING TOP
         protaY = MAX_SCREEN_BOTTOM - SCREEN_ADJUSTMENT
         
         #ifdef SIDE_VIEW

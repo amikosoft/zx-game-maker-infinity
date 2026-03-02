@@ -664,6 +664,16 @@
                 "name": "ulaPlusValidation",
                 "type": "bool",
                 "value": false
+            },
+            {
+                "name": "layoutSkipWidth",
+                "type": "int",
+                "value": 0
+            },
+            {
+                "name": "layoutSkipHeight",
+                "type": "int",
+                "value": 0
             }
         ],
         "name": "ZXSpectrumGameMaker",
