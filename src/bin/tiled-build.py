@@ -475,42 +475,33 @@ configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
 
 # if screenWidth % 2 == 0:
 if widthSkip > 0:
-    # widthSkip = (32-screenWidth)//2
-    
     configStr += "const SKIP_WIDTH_SIZE as ubyte = " + str(widthSkip) + "\n"
-    
     configStr += "const MAX_SCREEN_LEFT as ubyte = " + str(2+(widthSkip*2)) + "\n"
     configStr += "const MAX_SCREEN_RIGHT as ubyte = " + str((screenWidth*2)+(widthSkip*2)) + "\n"
-
     configStr += "const PLAYER_BOUNDS_LEFT as ubyte = " + str((widthSkip*2)) + "\n"
     configStr += "const PLAYER_BOUNDS_RIGHT as ubyte = " + str((screenWidth*2)+(widthSkip*2)-4) + "\n"
 else:
     configStr += "const SKIP_WIDTH_SIZE as ubyte = 0\n"
-    
     configStr += "const MAX_SCREEN_LEFT as ubyte = 2\n"
     configStr += "const MAX_SCREEN_RIGHT as ubyte = " + str((screenWidth*2)) + "\n"
-    
     configStr += "const PLAYER_BOUNDS_LEFT as ubyte = 0\n"
-    configStr += "const PLAYER_BOUNDS_RIGHT as ubyte = " + str((screenWidth*2)) + "\n"
+    configStr += "const PLAYER_BOUNDS_RIGHT as ubyte = " + str((screenWidth*2)-4) + "\n"
     
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
 
 if heightSkip > 0:
-    # widthSkip = (32-screenWidth)//2
     configStr += "const SKIP_HEIGHT_SIZE as ubyte = " + str(heightSkip) + "\n"
     configStr += "const PLAYER_BOUNDS_TOP as ubyte = " + str((heightSkip*2)+2) + "\n"
     configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
     configStr += "const MAX_SCREEN_TOP as ubyte = " + str(2+(screenHeight*2)) + "\n"
     configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)+(heightSkip*2)-4) + "\n"
-    # configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
     configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)+(heightSkip*2)-3) + "\n"
 else:
     configStr += "const SKIP_HEIGHT_SIZE as ubyte = 0\n"
     configStr += "const PLAYER_BOUNDS_TOP as ubyte = 2\n"
     configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
     configStr += "const MAX_SCREEN_TOP as ubyte = 2\n"
-    configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
-    # configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
+    configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
     configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)-3) + "\n"
 
 
