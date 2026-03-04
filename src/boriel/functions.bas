@@ -290,9 +290,9 @@ function isInStep(x as ubyte) as ubyte
     Dim col as uByte = x >> 1
     Dim lin as uByte = (protaY + 3) >> 1
 
-    if GetTile(col, lin) = 64 or GetTile(col, lin) = 65 then return 1
+    if GetTile(col, lin) < STEPS_TILE_INIT or GetTile(col, lin) > STEPS_TILE_END then return 0
     
-    return 0
+    return 1
 end function
 
 #ifdef ARCADE_MODE

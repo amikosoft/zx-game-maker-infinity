@@ -28,6 +28,8 @@ Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
     #endif
 #endif
 
+Const STEPS_TILE_INIT As Ubyte = 64
+Const STEPS_TILE_END As Ubyte = 67
 
 ' const MAX_SCREEN_LEFT as ubyte = 2
 ' const MAX_SCREEN_TOP as ubyte = 2

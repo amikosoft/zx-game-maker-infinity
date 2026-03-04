@@ -36,7 +36,7 @@ End Function
         if not bulletPositionX then return
         
     #ifdef BULLET_BOOMERANG
-        if bulletDirection = BULLET_DIRECTION_BOOMERANG Then
+        if bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }} Then
             bulletPositionX = bulletPositionX + (sgn((protaX+1) - bulletPositionX)*BULLET_SPEED)
             bulletPositionY = bulletPositionY + (sgn((protaY+1) - bulletPositionY)*BULLET_SPEED)
             if bulletPositionX >= protaX and bulletPositionX <= (protaX+4) Then
@@ -56,7 +56,7 @@ End Function
         if bulletDirection = BULLET_DIRECTION_RIGHT then
             if bulletPositionX > bulletEndPositionX then
                 #ifdef BULLET_BOOMERANG
-                    bulletDirection = BULLET_DIRECTION_BOOMERANG
+                    bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
                     bulletPositionX = bulletEndPositionX
                 #else
                     resetBullet()
@@ -80,7 +80,7 @@ End Function
         elseif bulletDirection = BULLET_DIRECTION_LEFT then
             if bulletPositionX < bulletEndPositionX then
                 #ifdef BULLET_BOOMERANG
-                    bulletDirection = BULLET_DIRECTION_BOOMERANG
+                    bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
                     bulletPositionX = bulletEndPositionX
                 #else
                     resetBullet()
@@ -105,12 +105,12 @@ End Function
         
         ' #ifdef SHOOT_ALL
         #ifdef BULLET_BOOMERANG
-        if bulletDirection <> BULLET_DIRECTION_BOOMERANG then
+        if bulletDirection <> {{ BULLET_DIRECTION_BOOMERANG }} then
         #endif
             if bulletDirectionVertical = BULLET_DIRECTION_DOWN then
                 if bulletPositionY > bulletEndPositionY then
                     #ifdef BULLET_BOOMERANG
-                        bulletDirection = BULLET_DIRECTION_BOOMERANG
+                        bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
                         bulletPositionY = bulletEndPositionY
                     #else
                         resetBullet()
@@ -122,7 +122,7 @@ End Function
             elseif bulletDirectionVertical = BULLET_DIRECTION_UP then
                 if bulletPositionY < bulletEndPositionY then
                     #ifdef BULLET_BOOMERANG
-                        bulletDirection = BULLET_DIRECTION_BOOMERANG
+                        bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
                         bulletPositionY = bulletEndPositionY
                     #else
                         resetBullet()
@@ -158,7 +158,7 @@ End Function
                 #endif
                 
                 #ifdef BULLET_BOOMERANG
-                    bulletDirection = BULLET_DIRECTION_BOOMERANG
+                    bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
                 #else
                     resetBullet()
                 #endif
