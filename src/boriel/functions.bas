@@ -136,57 +136,52 @@ sub decrementLife()
 end sub
 
 sub printLife()
-    #ifdef SKIP_HEIGHT
-        PRINT AT 1, 1; TEXT_3_SPACES
-        PRINT AT 1, 1; currentLife
-    #else
-        PRINT AT 22, 5; TEXT_3_SPACES
-        PRINT AT 22, 5; currentLife
-    #endif
+    PRINT AT 22, 4; TEXT_3_SPACES
+    PRINT AT 22, 4; currentLife
 
     #ifdef ENERGY_ENABLED
-        ' if currentEnergy > INITIAL_ENERGY Then currentEnergy = INITIAL_ENERGY
+        if currentEnergy > INITIAL_ENERGY Then currentEnergy = INITIAL_ENERGY
         
-        PRINT AT 23, 5; TEXT_3_SPACES
-        PRINT AT 23, 5; currentEnergy
+        PRINT AT 23, 4; TEXT_3_SPACES
+        PRINT AT 23, 4; currentEnergy
     #endif
     
     #ifdef JETPACK_FUEL
-        PRINT AT 23, 5; TEXT_3_SPACES
-        PRINT AT 23, 5; jumpEnergy
+        PRINT AT 21, 4; TEXT_3_SPACES
+        PRINT AT 21, 4; jumpEnergy
     #endif
     #ifdef AMMO_ENABLED
-        PRINT AT 22, 10; TEXT_3_SPACES
-        PRINT AT 22, 10; currentAmmo
+        PRINT AT 22, 9; TEXT_3_SPACES
+        PRINT AT 22, 9; currentAmmo
     #endif
     #ifndef ARCADE_MODE
         #ifdef KEYS_ENABLED
-            PRINT AT 22, 16; currentKeys
+            PRINT AT 22, 22; currentKeys
         #endif
     #endif
     #ifdef HISCORE_ENABLED
         ' Print AT 22, 20; "00000"
         ' Print AT 23, 20; "00000"
-        PRINT AT 22, 25 - LEN(STR$(hiScore)); hiScore
-        PRINT AT 23, 25 - LEN(STR$(score)); score
+        PRINT AT 22, 18 - LEN(STR$(hiScore)); hiScore
+        PRINT AT 23, 18 - LEN(STR$(score)); score
     #endif
     #ifndef ARCADE_MODE
         #ifdef ITEMS_ENABLED
-            PRINT AT 22, 30; TEXT_3_SPACES
-            PRINT AT 22, 30; currentItems
+            PRINT AT 22, 28; TEXT_3_SPACES
+            PRINT AT 22, 28; currentItems
         #endif
     #endif
     
     #ifdef LEVELS_MODE
-        PRINT AT 23, 10; TEXT_3_SPACES
-        PRINT AT 23, 10; currentLevel + 1
+        PRINT AT 23, 9; TEXT_3_SPACES
+        PRINT AT 23, 9; currentLevel + 1
     #endif
 end sub
 
 #ifdef MESSAGES_ENABLED
     sub printMessage(line1 as string, p as ubyte, i as ubyte)
         Paper p: Ink i: Flash 1
-        PRINT AT 22, 18; line1
+        PRINT AT 21, 11; line1
         Paper 0: Ink 7: Flash 0
         messageLoopCounter = MESSAGE_LOOPS_VISIBLE
     end sub
@@ -195,7 +190,7 @@ end sub
         if messageLoopCounter Then
             messageLoopCounter = messageLoopCounter - 1
             If not messageLoopCounter Then
-                PRINT AT 22, 18; TEXT_EMPTY_STRING
+                PRINT AT 21, 11; TEXT_EMPTY_STRING
             End If
         End if
     end sub

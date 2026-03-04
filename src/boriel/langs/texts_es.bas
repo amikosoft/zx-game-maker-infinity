@@ -1,12 +1,12 @@
 ' FIXED 9 letters/letras -> TEXT_EMPTY_STRING IS THE STRING LENGTH
 Const TEXT_EMPTY_STRING as String = "         "
-Const TEXT_KEY_FOUND as String = "LLAVE    "
+Const TEXT_KEY_FOUND as String = "  LLAVE  "
 Const TEXT_NEED_KEYS as String = "Sin llave"
-Const TEXT_KILL_ALL as String = "Matalos  "
-Const TEXT_NEW_ITEM as String = "Un item!!"
+Const TEXT_KILL_ALL as String = " Matalos "
+Const TEXT_NEW_ITEM as String = " Un item "
 Const TEXT_CHECK_POINT as String = "Guardado!"
-Const TEXT_LIFE as String = "VIDA!!!  "
-Const TEXT_AMMO as String = "BALAS!!! "
+Const TEXT_LIFE as String = " VIDA!!! "
+Const TEXT_AMMO as String = " BALAS!! "
 
 Const TEXT_PAUSE as String = "-=PAUSA=-"
 

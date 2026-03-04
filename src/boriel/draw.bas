@@ -70,7 +70,6 @@ Sub mapDraw()
 End Sub
 
 Sub mapColor(color As Ubyte)
-    Dim index As Uinteger
     Dim y, x As Ubyte
     
     x = SKIP_WIDTH_SIZE
@@ -256,7 +255,7 @@ Sub drawSprites()
                 Draw2x2Sprite(protaTile, protaX, protaY)
             #endif
         #else
-            If not currentLife or Not invincible Or invincible bAnd 2 Then
+            If not currentLife or Not invincible Or (invincible bAnd 2) Then
                 Draw2x2Sprite(protaTile, protaX, protaY)
             End If
         #endif

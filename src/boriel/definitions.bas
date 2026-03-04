@@ -13,27 +13,21 @@ Const PROTA_SPRITE As Ubyte = 5
 Const BULLET_SPRITE_RIGHT_ID As Ubyte = 49
 Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
 
-#ifdef OVERHEAD_VIEW
+#ifdef BULLET_ANIMATION
+    ' Const BULLET_SPRITE_RIGHT_2_ID As Ubyte = 51
+    ' Const BULLET_SPRITE_LEFT_2_ID As Ubyte = 52   
+    #ifdef BULLET_ENEMIES
+        Const BULLET_SPRITE_ENEMY_ID As Ubyte = 51
+    #endif
+#else
     Const BULLET_SPRITE_UP_ID As Ubyte = 51
     Const BULLET_SPRITE_DOWN_ID As Ubyte = 52
-    
+
     #ifdef BULLET_ENEMIES
         Const BULLET_SPRITE_ENEMY_ID As Ubyte = 53
     #endif
-#Else
-    #ifdef BULLET_ANIMATION
-        Const BULLET_SPRITE_RIGHT_2_ID As Ubyte = 51
-        Const BULLET_SPRITE_LEFT_2_ID As Ubyte = 52
-        
-        #ifdef BULLET_ENEMIES
-            Const BULLET_SPRITE_ENEMY_ID As Ubyte = 53
-        #endif
-    #else
-        #ifdef BULLET_ENEMIES
-            Const BULLET_SPRITE_ENEMY_ID As Ubyte = 51
-        #endif
-    #endif
 #endif
+
 
 ' const MAX_SCREEN_LEFT as ubyte = 2
 ' const MAX_SCREEN_TOP as ubyte = 2
@@ -59,6 +53,7 @@ const BULLET_DIRECTION_DOWN = 2
     dim bulletPositionX as byte = 0
     dim bulletPositionY as byte = 0
     dim bulletDirection as byte = 0
+    dim bulletDirectionVertical as byte = 0
     dim bulletEndPositionX as byte = 0
     dim bulletEndPositionY as byte = 0
 #endif
@@ -106,8 +101,6 @@ dim isPaused as ubyte = 1
     Dim keyArray(4) As Uinteger
 #endif
 
-
-
 Dim framec As Ubyte AT 23672
 
 ' #ifdef NEW_BEEPER_PLAYER
@@ -145,8 +138,10 @@ Dim animatedFrame As Ubyte = 1
 '     Dim noKeyPressedForShoot As Ubyte = 1
 ' #endif
 
+Dim verticalAxisKeyPressed as byte
+Dim horizontalAxisKeyPressed as byte
+
 #ifdef PLATFORM_MOVEABLE
-    Dim downKeyPressed as Ubyte = 0
     Dim isOnPlatform as Ubyte = 0
 #endif
 

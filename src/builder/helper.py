@@ -113,6 +113,11 @@ def getBulletAnimation():
         maps_json = json.load(f)
     return any(prop["name"] == "bulletAnimation" and prop["value"] for prop in maps_json["properties"])
 
+def getBoomerangEnabled():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return next((prop["value"] for prop in maps_json["properties"] if prop["name"] == "bulletType"), 'boomerang')
+
 def getBulletDisableCollisions():
     with open(OUTPUT_FOLDER + "maps.json", "r") as f:
         maps_json = json.load(f)

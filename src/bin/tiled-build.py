@@ -475,6 +475,9 @@ configStr += "const screenWidth as ubyte = " + str(screenWidth) + "\n"
 
 # if screenWidth % 2 == 0:
 if widthSkip > 0:
+    if widthSkip + screenWidth > 32:
+        print(f"Width overflow: widthSkip({str(widthSkip)}) + screenWidth({str(screenWidth)}) > 32")
+        sys.exit(1)
     configStr += "const SKIP_WIDTH_SIZE as ubyte = " + str(widthSkip) + "\n"
     configStr += "const MAX_SCREEN_LEFT as ubyte = " + str(2+(widthSkip*2)) + "\n"
     configStr += "const MAX_SCREEN_RIGHT as ubyte = " + str((screenWidth*2)+(widthSkip*2)) + "\n"
@@ -490,18 +493,21 @@ else:
 configStr += "const screenHeight as ubyte = " + str(screenHeight) + "\n"
 
 if heightSkip > 0:
+    if heightSkip + screenHeight > 22:
+        print(f"Width overflow: heightSkip({str(heightSkip)}) + screenHeight({str(screenHeight)}) > 22")
+        sys.exit(1)
     configStr += "const SKIP_HEIGHT_SIZE as ubyte = " + str(heightSkip) + "\n"
-    configStr += "const PLAYER_BOUNDS_TOP as ubyte = " + str((heightSkip*2)+2) + "\n"
-    configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
     configStr += "const MAX_SCREEN_TOP as ubyte = " + str(2+(screenHeight*2)) + "\n"
     configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)+(heightSkip*2)-4) + "\n"
+    configStr += "const PLAYER_BOUNDS_TOP as ubyte = " + str((heightSkip*2)+2) + "\n"
+    configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)+(heightSkip*2)-4) + "\n"
     configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)+(heightSkip*2)-3) + "\n"
 else:
     configStr += "const SKIP_HEIGHT_SIZE as ubyte = 0\n"
-    configStr += "const PLAYER_BOUNDS_TOP as ubyte = 2\n"
-    configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)) + "\n"
     configStr += "const MAX_SCREEN_TOP as ubyte = 2\n"
     configStr += "const MAX_SCREEN_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
+    configStr += "const PLAYER_BOUNDS_TOP as ubyte = 2\n"
+    configStr += "const PLAYER_BOUNDS_BOTTOM as ubyte = " + str((screenHeight*2)-4) + "\n"
     configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)-3) + "\n"
 
 
@@ -702,6 +708,7 @@ if len(password) > 0:
 
 if gameView == 'overhead':
     configStr += "#DEFINE OVERHEAD_VIEW\n"
+    configStr += "#DEFINE SHOOT_ALL\n"
 else:
     configStr += "#DEFINE SIDE_VIEW\n"
 
@@ -835,11 +842,13 @@ configStr += "    Dim jumpEnergy As Ubyte = jumpStepsCount\n"
 configStr += "  #endif\n"
 configStr += "#endif\n"
 
-if bulletAnimation == 1:
-    configStr += "#define BULLET_ANIMATION\n"
 
 if bulletType == 'boomerang':
     configStr += "#define BULLET_BOOMERANG\n"
+    configStr += "#define BULLET_ANIMATION\n"
+    bulletAnimation == 1
+elif bulletAnimation == 1:
+    configStr += "#define BULLET_ANIMATION\n"
 
 if bulletDisableCollisions == True:
     useBreakableTile = 0

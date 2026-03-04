@@ -62,33 +62,18 @@
 
 'Total number of 1x1 defined sprites
 'Total number of 1x1 defined sprites
-#ifdef BULLET_BOOMERANG
+
+#ifdef BULLET_ANIMATION
     #ifdef BULLET_ENEMIES
         #define TOTAL_1x1_SPRITES 3
     #else
         #define TOTAL_1x1_SPRITES 2
     #endif
 #else
-    #ifdef SIDE_VIEW
-        #ifdef BULLET_ANIMATION
-            #ifdef BULLET_ENEMIES
-                #define TOTAL_1x1_SPRITES 5
-            #else
-                #define TOTAL_1x1_SPRITES 4
-            #endif
-        #else
-            #ifdef BULLET_ENEMIES
-                #define TOTAL_1x1_SPRITES 3
-            #else
-                #define TOTAL_1x1_SPRITES 2
-            #endif
-        #endif
+    #ifdef BULLET_ENEMIES
+        #define TOTAL_1x1_SPRITES 5
     #else
-        #ifdef BULLET_ENEMIES
-            #define TOTAL_1x1_SPRITES 5
-        #else
-            #define TOTAL_1x1_SPRITES 4
-        #endif
+        #define TOTAL_1x1_SPRITES 4
     #endif
 #endif
 

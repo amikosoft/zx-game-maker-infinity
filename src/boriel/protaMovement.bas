@@ -272,7 +272,99 @@ End Function
         #endif
         End If
     End Sub
-    
+#endif
+
+
+' #ifdef OVERHEAD_VIEW
+'     Sub shoot()
+'         ' If Not noKeyPressedForShoot Then Return
+        
+'         ' noKeyPressedForShoot = 0
+        
+'         If bulletPositionX Then Return
+        
+'         #ifdef AMMO_ENABLED
+'             If not currentAmmo Then Return
+'             currentAmmo = currentAmmo - 1
+'             printLife()
+'         #endif
+        
+'         If protaDirection = 1 Then
+'             #ifdef IDLE_ENABLED
+'                 ' updateProtaData( protaY, protaX, 1, 1)
+'                 protaTile = 1
+'             #endif
+
+'             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+'             bulletPositionX = protaX + 2
+'             bulletPositionY = protaY + 1
+'             #ifndef BULLET_DISTANCE_FULL
+'                 bulletEndPositionX = protaX + BULLET_DISTANCE
+'                 If bulletEndPositionX > (PLAYER_BOUNDS_RIGHT) Then
+'                     bulletEndPositionX = PLAYER_BOUNDS_RIGHT
+'                 End If
+'             #Else
+'                 bulletEndPositionX = PLAYER_BOUNDS_RIGHT
+'             #EndIf
+'         Elseif protaDirection = 0
+'             #ifdef IDLE_ENABLED
+'                 ' updateProtaData( protaY, protaX, 5, 0)
+'                 protaTile = 3
+'             #endif
+
+'             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+'             bulletPositionX = protaX
+'             bulletPositionY = protaY + 1
+'             #ifndef BULLET_DISTANCE_FULL
+'                 bulletEndPositionX = protaX - BULLET_DISTANCE
+'                 If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
+'                     bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
+'                 End If
+'             #Else
+'                 bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
+'             #EndIf
+'         Elseif protaDirection = 8
+'             #ifdef IDLE_ENABLED
+'                 ' updateProtaData( protaY, protaX, 5, 0)
+'                 protaTile = 5
+'             #endif
+
+'             currentBulletSpriteId = BULLET_SPRITE_UP_ID
+'             bulletPositionX = protaX + 1
+'             bulletPositionY = protaY + 1
+
+'             #ifndef BULLET_DISTANCE_FULL
+'                 bulletEndPositionY = protaY - BULLET_DISTANCE
+'                 If bulletEndPositionY < PLAYER_BOUNDS_TOP Then
+'                     bulletEndPositionY = PLAYER_BOUNDS_TOP
+'                 End If
+'             #Else
+'                 bulletEndPositionY = PLAYER_BOUNDS_TOP
+'             #EndIf
+'         Else
+'             #ifdef IDLE_ENABLED
+'                 ' updateProtaData( protaY, protaX, 5, 0)
+'                 protaTile = 7
+'             #endif
+            
+'             currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
+'             bulletPositionX = protaX + 1
+'             bulletPositionY = protaY + 2
+
+'             #ifndef BULLET_DISTANCE_FULL
+'                 bulletEndPositionY = protaY + BULLET_DISTANCE
+'                 If bulletEndPositionY > PLAYER_BOUNDS_BOTTOM Then
+'                     bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
+'                 End If
+'             #Else
+'                 bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
+'             #EndIf
+'         End If
+        
+'         bulletDirection = protaDirection
+'         BeepFX_Play(2)
+'     End Sub
+' #else
     Sub shoot()
         ' If Not noKeyPressedForShoot Then Return
         ' noKeyPressedForShoot = 0
@@ -285,142 +377,124 @@ End Function
             printLife()
         #endif
         
-        currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-        If protaDirection Then
-            #ifdef IDLE_ENABLED
-                'updateProtaData( protaY, protaX, 1, 1)
-                protaTile = 1
-                protaDirection = 1
-            #endif
-            
-            'currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-            bulletPositionX = protaX + 2
-            
-            #ifndef BULLET_DISTANCE_FULL
-                bulletEndPositionX = protaX + BULLET_DISTANCE
-                If bulletEndPositionX > (PLAYER_BOUNDS_RIGHT) Then
-                    bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-                End If
-            #Else
-                bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-            #EndIf
-        Elseif protaDirection = 0
-            #ifdef IDLE_ENABLED
-                'updateProtaData( protaY, protaX, 5, 0)
-                protaTile = 5
-                protaDirection = 0
-            #endif
-            currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-            bulletPositionX = protaX
-            #ifndef BULLET_DISTANCE_FULL
-                bulletEndPositionX = protaX - BULLET_DISTANCE
-                If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
-                    bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-                End If
-            #Else
-                bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-            #EndIf
-        End If
-        
+        bulletDirection = -1
+        bulletDirectionVertical = 0
         bulletPositionY = protaY + 1
-        bulletDirection = protaDirection
-        BeepFX_Play(2)
-    End Sub
-#endif
 
-
-#ifdef OVERHEAD_VIEW
-    Sub shoot()
-        ' If Not noKeyPressedForShoot Then Return
-        
-        ' noKeyPressedForShoot = 0
-        
-        If bulletPositionX Then Return
-        
-        #ifdef AMMO_ENABLED
-            If not currentAmmo Then Return
-            currentAmmo = currentAmmo - 1
-            printLife()
-        #endif
-        
-        If protaDirection = 1 Then
-             #ifdef IDLE_ENABLED
-                ' updateProtaData( protaY, protaX, 1, 1)
-                protaTile = 1
-            #endif
-
-            currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-            bulletPositionX = protaX + 2
-            bulletPositionY = protaY + 1
-            #ifndef BULLET_DISTANCE_FULL
-                bulletEndPositionX = protaX + BULLET_DISTANCE
-                If bulletEndPositionX > (PLAYER_BOUNDS_RIGHT) Then
-                    bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-                End If
-            #Else
-                bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-            #EndIf
-        Elseif protaDirection = 0
-            #ifdef IDLE_ENABLED
-                ' updateProtaData( protaY, protaX, 5, 0)
-                protaTile = 3
-            #endif
-
-            currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-            bulletPositionX = protaX
-            bulletPositionY = protaY + 1
-            #ifndef BULLET_DISTANCE_FULL
-                bulletEndPositionX = protaX - BULLET_DISTANCE
-                If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
-                    bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-                End If
-            #Else
-                bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-            #EndIf
-        Elseif protaDirection = 8
-            #ifdef IDLE_ENABLED
-                ' updateProtaData( protaY, protaX, 5, 0)
-                protaTile = 5
-            #endif
-
-            currentBulletSpriteId = BULLET_SPRITE_UP_ID
+        if not horizontalAxisKeyPressed or verticalAxisKeyPressed then
             bulletPositionX = protaX + 1
-            bulletPositionY = protaY + 1
 
-            #ifndef BULLET_DISTANCE_FULL
-                bulletEndPositionY = protaY - BULLET_DISTANCE
-                If bulletEndPositionY < PLAYER_BOUNDS_TOP Then
+            if protaDirection = 8 or verticalAxisKeyPressed = 1 Then
+                #ifdef OVERHEAD_VIEW
+                #ifdef IDLE_ENABLED
+                    protaTile = 5
+                #endif
+                #endif
+                bulletDirectionVertical = BULLET_DIRECTION_UP
+
+                #ifndef BULLET_ANIMATION
+                    currentBulletSpriteId = BULLET_SPRITE_UP_ID
+                #endif
+
+                bulletPositionY = protaY
+
+                #ifndef BULLET_DISTANCE_FULL
+                    bulletEndPositionY = protaY - BULLET_DISTANCE
+                    If bulletEndPositionY < PLAYER_BOUNDS_TOP Then
+                        bulletEndPositionY = PLAYER_BOUNDS_TOP
+                    End If
+                #Else
                     bulletEndPositionY = PLAYER_BOUNDS_TOP
-                End If
-            #Else
-                bulletEndPositionY = PLAYER_BOUNDS_TOP
-            #EndIf
-        Else
-            #ifdef IDLE_ENABLED
-                ' updateProtaData( protaY, protaX, 5, 0)
-                protaTile = 7
-            #endif
-            
-            currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
-            bulletPositionX = protaX + 1
-            bulletPositionY = protaY + 2
+                #EndIf
+            elseif protaDirection = 2 or verticalAxisKeyPressed = -1 then
+                #ifdef OVERHEAD_VIEW
+                #ifdef IDLE_ENABLED
+                    protaTile = 7
+                #endif
+                #endif
 
-            #ifndef BULLET_DISTANCE_FULL
-                bulletEndPositionY = protaY + BULLET_DISTANCE
-                If bulletEndPositionY > (PLAYER_BOUNDS_BOTTOM-2) Then
-                    bulletEndPositionY = PLAYER_BOUNDS_BOTTOM-2
-                End If
-            #Else
-                bulletEndPositionY = PLAYER_BOUNDS_BOTTOM-2
-            #EndIf
-        End If
+                bulletDirectionVertical = BULLET_DIRECTION_DOWN
+
+                #ifndef BULLET_ANIMATION
+                    currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
+                #endif
+                
+                bulletPositionY = protaY + 2
+
+                #ifndef BULLET_DISTANCE_FULL
+                    bulletEndPositionY = protaY + BULLET_DISTANCE
+                    If bulletEndPositionY > PLAYER_BOUNDS_BOTTOM Then
+                        bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
+                    End If
+                #Else
+                    bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
+                #EndIf
+            end if
+
+        end if
         
-        bulletDirection = protaDirection
+        if not verticalAxisKeyPressed or horizontalAxisKeyPressed then
+            If protaDirection = 1 or horizontalAxisKeyPressed = 1 Then
+                #ifdef IDLE_ENABLED
+                    'updateProtaData( protaY, protaX, 1, 1)
+                    protaTile = 1
+
+                    #ifndef OVERHEAD_VIEW
+                        protaDirection = 1
+                    #endif
+                #endif
+                
+                bulletDirection = BULLET_DIRECTION_RIGHT
+                
+                #ifndef BULLET_ANIMATION
+                    currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+                #endif
+                bulletPositionX = protaX + 2
+                
+                #ifndef BULLET_DISTANCE_FULL
+                    bulletEndPositionX = protaX + BULLET_DISTANCE
+                    If bulletEndPositionX > PLAYER_BOUNDS_RIGHT Then
+                        bulletEndPositionX = PLAYER_BOUNDS_RIGHT
+                    End If
+                #Else
+                    bulletEndPositionX = PLAYER_BOUNDS_RIGHT
+                #EndIf
+            Elseif protaDirection = 0 or horizontalAxisKeyPressed = -1 then
+                #ifdef IDLE_ENABLED
+                    'updateProtaData( protaY, protaX, 5, 0)
+                    #ifdef OVERHEAD_VIEW
+                        protaTile = 3
+                    #else
+                        protaTile = 5
+                        protaDirection = 0
+                    #endif
+                #endif
+                
+                bulletDirection = BULLET_DIRECTION_LEFT
+
+                #ifndef BULLET_ANIMATION
+                    currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+                #endif
+                bulletPositionX = protaX
+                
+                #ifndef BULLET_DISTANCE_FULL
+                    bulletEndPositionX = protaX - BULLET_DISTANCE
+                    If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
+                        bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
+                    End If
+                #Else
+                    bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
+                #EndIf
+            End If
+        end if
+
         BeepFX_Play(2)
     End Sub
-#endif
+' #endif
 
 Sub leftKey(animate as ubyte)
+    horizontalAxisKeyPressed = -1
+
     If animate and protaDirection <> 0 Then
         #ifdef SIDE_VIEW
             protaFrame = 4
@@ -462,6 +536,8 @@ Sub leftKey(animate as ubyte)
 End Sub
 
 Sub rightKey(animate as ubyte)
+    horizontalAxisKeyPressed = 1
+
     If animate and protaDirection <> 1 Then
         protaFrame = 0
     End If
@@ -499,6 +575,8 @@ Sub rightKey(animate as ubyte)
 End Sub
 
 Sub upKey()
+    verticalAxisKeyPressed = 1
+
     #ifdef SIDE_VIEW
         #ifdef LADDERS_ANIMATION_ENABLED
             If checkIsLadder(protaY + 3, 1) Then
@@ -529,6 +607,8 @@ Sub upKey()
 End Sub
 
 Sub downKey()
+    verticalAxisKeyPressed = -1
+
     #ifdef OVERHEAD_VIEW
         If protaDirection <> 2 Then
             protaFrame = 6
@@ -552,9 +632,9 @@ Sub downKey()
             jumpCurrentKey = jumpStopValue
         #endif
         
-        #ifdef PLATFORM_MOVEABLE
-            downKeyPressed = 1
-        #endif
+        ' #ifdef PLATFORM_MOVEABLE
+            ' verticalAxisKeyPressed = -1
+        ' #endif
         
         if protaY bAnd 1 Then protaY = protaY + 1
         
@@ -688,10 +768,11 @@ Sub fireKey()
 End Sub
 
 Sub keyboardListen()
-    #ifdef PLATFORM_MOVEABLE
-        downKeyPressed = 0
-    #endif
-    
+    ' #ifdef PLATFORM_MOVEABLE
+    verticalAxisKeyPressed = 0
+    horizontalAxisKeyPressed = 0
+    ' #endif
+
     If kempston Then
         Dim n As Ubyte = In(31)
         If n bAND %10 Then leftKey(1)
@@ -700,13 +781,13 @@ Sub keyboardListen()
         If n bAND %100 Then downKey()
         If n bAND %10000 Then fireKey()
         ' #ifdef SIDE_VIEW
-            #ifdef IDLE_ENABLED
-                If not n Then
-                    If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
-                Else
-                    protaLoopCounter = 0
-                End If
-            #endif
+            ' #ifdef IDLE_ENABLED
+            '     If not n Then
+            '         If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
+            '     Else
+            '         protaLoopCounter = 0
+            '     End If
+            ' #endif
         ' #endif
     Else
         If MultiKeys(keyArray(LEFT)) Then leftKey(1)
@@ -716,16 +797,23 @@ Sub keyboardListen()
         If MultiKeys(keyArray(FIRE)) Then fireKey()
         
         ' #ifdef SIDE_VIEW
-            #ifdef IDLE_ENABLED
-                ' If not MultiKeys(keyArray(LEFT)) And not MultiKeys(keyArray(RIGHT)) And not MultiKeys(keyArray(UP)) And not MultiKeys(keyArray(DOWN))=0 And not MultiKeys(keyArray(FIRE)) Then
-                if not GetKeyScanCode() Then
-                    If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
-                Else
-                    protaLoopCounter = 0
-                End If
-            #endif
+            ' #ifdef IDLE_ENABLED
+            '     if not GetKeyScanCode() Then
+            '         If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
+            '     Else
+            '         protaLoopCounter = 0
+            '     End If
+            ' #endif
         ' #endif
     End If
+
+    #ifdef IDLE_ENABLED
+        If not horizontalAxisKeyPressed and not verticalAxisKeyPressed Then
+            If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
+        Else
+            protaLoopCounter = 0
+        End If
+    #endif
 End Sub
 
 Function checkTileObject(tile As Ubyte) As Ubyte

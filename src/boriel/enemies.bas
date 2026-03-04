@@ -315,7 +315,7 @@ Sub moveEnemies()
                                 end if
                             end if
                         #endif
-                    Elseif enemyLinBucle = MAX_SCREEN_BOTTOM or enemyLinBucle = 0 or enemyColBucle = MAX_SCREEN_RIGHT or enemyColBucle = 0 Then
+                    Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle < PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle < PLAYER_BOUNDS_LEFT Then
                         enemyColBucle = enemyColIniBucle
                         enemyLinBucle = enemyLinIniBucle
                         verticalDirectionBucle = 0
@@ -334,7 +334,7 @@ Sub moveEnemies()
                         If checkPlatformHasProtaOnTop(enemyColBucle, enemyLinBucle) Then
                             #ifdef PLATFORM_MOVEABLE
                                 if enemySpeedBucle = 3 and not verticalDirectionBucle and not horizontalDirectionBucle Then
-                                    if downKeyPressed Then
+                                    if verticalAxisKeyPressed = -1 Then
                                         If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLinBucle = enemyLinBucle - 1
                                     ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < MAX_SCREEN_BOTTOM Then
                                         enemyLinBucle = enemyLinBucle + 1

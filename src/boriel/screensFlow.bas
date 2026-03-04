@@ -635,8 +635,8 @@ Sub swapScreen(waitReady as ubyte)
             loadScreen(HUD_SCREEN_ADDRESS)
             
             #ifdef HISCORE_ENABLED
-                Print AT 22, 20; TEXT_HI_SCORE_ZERO
-                Print AT 23, 20; TEXT_HI_SCORE_ZERO
+                Print AT 22, 13; TEXT_HI_SCORE_ZERO
+                Print AT 23, 13; TEXT_HI_SCORE_ZERO
             #endif
             
             printLife()
@@ -649,8 +649,8 @@ Sub swapScreen(waitReady as ubyte)
         end if 
     #else
         #ifdef HISCORE_ENABLED
-            Print AT 22, 20; TEXT_HI_SCORE_ZERO
-            Print AT 23, 20; TEXT_HI_SCORE_ZERO
+            Print AT 22, 13; TEXT_HI_SCORE_ZERO
+            Print AT 23, 13; TEXT_HI_SCORE_ZERO
         #endif
         
         printLife()

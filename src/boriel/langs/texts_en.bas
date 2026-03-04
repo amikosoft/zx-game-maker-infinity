@@ -5,8 +5,8 @@ Const TEXT_NEED_KEYS as String = "Need keys"
 Const TEXT_KILL_ALL as String = "Kill All!"
 Const TEXT_NEW_ITEM as String = "NEW ITEM!"
 Const TEXT_CHECK_POINT as String = "CHECKED!!"
-Const TEXT_LIFE as String = "LIFE!!!  "
-Const TEXT_AMMO as String = "AMMO!!!  "
+Const TEXT_LIFE as String = " LIFE!!! "
+Const TEXT_AMMO as String = " AMMO!!! "
 
 Const TEXT_PAUSE as String = "-=PAUSE=-"
 
