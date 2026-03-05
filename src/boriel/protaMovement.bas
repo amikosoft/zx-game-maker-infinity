@@ -754,16 +754,35 @@ End Sub
 #endif
 
 Sub fireKey()
-    #ifdef IN_GAME_TEXT_ENABLED
-        #ifdef SHOOTING_ENABLED
-            if not validaTexto(0) then shoot()
-        #Else
-            validaTexto(0)
+    #ifdef TELEPORT_ENABLED
+    dim tileTeleport as ubyte = GetTile((protaX+1)>>1, (protaY+1)>>1)
+
+    if tileTeleport = 186 then
+        currentScreen = currentTeleportTo - 1
+        moveScreen = 10
+
+        BeepFX_Play(6)
+        
+        #ifdef TELEPORT_ANIMATION
+            for color=1 to 7
+                mapColor(color)
+            next color
         #endif
-    #else
-        #ifdef SHOOTING_ENABLED
-            shoot()
+    else
+    #endif
+        #ifdef IN_GAME_TEXT_ENABLED
+            #ifdef SHOOTING_ENABLED
+                if not validaTexto(0) then shoot()
+            #Else
+                validaTexto(0)
+            #endif
+        #else
+            #ifdef SHOOTING_ENABLED
+                shoot()
+            #endif
         #endif
+    #ifdef TELEPORT_ENABLED
+    end if
     #endif
 End Sub
 
@@ -958,14 +977,22 @@ Sub checkDamageByTile()
     Dim col As Ubyte = protaX >> 1
     Dim lin As Ubyte = protaY >> 1
     
-    If isADamageTile(col, lin) Or isADamageTile(col + 1, lin) Then
-        decrementLife()
-        Return
-    End If
-    if isADamageTile(col, lin + 1) Or isADamageTile(col + 1, lin + 1) Then
-        decrementLife()
-        Return
-    End If
+    for c=0 to 1
+        for l=0 to 1
+            If isADamageTile(col+c, lin+l) Then
+                decrementLife()
+                Return
+            End If
+        next l
+    next c
+    ' If isADamageTile(col, lin) Or isADamageTile(col + 1, lin) Then
+    '     decrementLife()
+    '     Return
+    ' End If
+    ' if isADamageTile(col, lin + 1) Or isADamageTile(col + 1, lin + 1) Then
+    '     decrementLife()
+    '     Return
+    ' End If
 End Sub
 
 Sub protaMovement()
@@ -981,6 +1008,8 @@ Sub protaMovement()
     '     noKeyPressedForShoot = 1
     ' End If
     keyboardListen()
+
+    if moveScreen then return
     checkObjectContact()
     
     #ifdef SIDE_VIEW

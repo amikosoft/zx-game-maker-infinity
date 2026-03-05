@@ -315,7 +315,7 @@ Sub moveEnemies()
                                 end if
                             end if
                         #endif
-                    Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle < PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle < PLAYER_BOUNDS_LEFT Then
+                    Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle <= PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle <= PLAYER_BOUNDS_LEFT Then
                         enemyColBucle = enemyColIniBucle
                         enemyLinBucle = enemyLinIniBucle
                         verticalDirectionBucle = 0

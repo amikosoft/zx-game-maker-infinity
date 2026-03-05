@@ -674,6 +674,16 @@
                 "name": "layoutSkipHeight",
                 "type": "int",
                 "value": 0
+            },
+            {
+                "name": "teleportEnabled",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "teleportAnimation",
+                "type": "bool",
+                "value": false
             }
         ],
         "name": "ZXSpectrumGameMaker",

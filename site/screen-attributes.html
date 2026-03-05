@@ -12,7 +12,7 @@
         <link rel="prev" href="musics.html">
       
       
-        <link rel="next" href="binarios.html">
+        <link rel="next" href="layout.html">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -386,6 +386,8 @@
       
         
       
+        
+      
     
     
     
@@ -672,10 +674,66 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pantalla-de-destino-para-teleport" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pantalla de destino para teleport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pantalla de destino para teleport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Activación
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#funcionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Funcionamiento
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="layout.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Layout de juego
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -817,6 +875,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pantalla-de-destino-para-teleport" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pantalla de destino para teleport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pantalla de destino para teleport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Activación
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#funcionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Funcionamiento
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -874,6 +965,43 @@ Se debe combinar con el atributo <em>background</em>.</p>
 </li>
 <li>
 <p><strong>gameover</strong> tema para cuando pierdes o para cuando no te gusta la pantalla</p>
+</li>
+<li>
+<p><strong>no_music</strong> desactiva la música en el juego hasta que se llegue a una pantalla con música</p>
+</li>
+</ul>
+<h2 id="pantalla-de-destino-para-teleport">Pantalla de destino para teleport</h2>
+<p>El atributo <strong>teleportTo</strong> te permite indicar a qué pantalla se teletransportará el jugador cuando entre en un portal.</p>
+<p><em>NOTA: Para que funcione tienes que habilitar la opción </em><em>teleportEnabled</em><em> en las opciones genéricas</em></p>
+<p>Las pantallas se identifican por su número de pantalla (empezando por 1) de izquierda a derecha y de arriba a abajo en Tiled. Por ejemplo, si tienes un mapa de 5x5, la pantalla 1 es la primera de la izquierda/arriba y la pantalla 25 es la última de la derecha/abajo.</p>
+<h3 id="activacion">Activación</h3>
+<p>Cuando el jugador entra en un tile <strong>teleport</strong> y pulsa <em>disparo</em>, se teletransportará a la pantalla indicada en el atributo <strong>teleportTo</strong>.</p>
+<p>El tile <strong>teleport</strong> es el siguiente:</p>
+<p><img alt="Tile Teleport" src="images/tileTeleport.png" /></p>
+<p>Hay que tener en cuenta que la validación se hace desde el centro del player por lo que se recomienda poner como mínimo un conjunto de 2x2 tiles para que se detecte bien.</p>
+<h3 id="funcionamiento">Funcionamiento</h3>
+<p>Para que funcione el teleport se deben poner los tiles <strong>teleport</strong> en Tiled. Además se debe configurar el atributo <strong>teleportTo</strong> en la pantalla afectada. Dependiendo de lo configurado en las pantallas afectadas, el teleport será de un tipo u otro.</p>
+<p>SOLO SE PUEDE PONER UN PORTAL POR PANTALLA.</p>
+<p>Los teleport pueden ser de varios tipos: </p>
+<ul>
+<li>
+<p><strong>Bidreccional</strong> El jugador puede entrar por cualquier lado y saldrá por el lado opuesto. Cada pantalla contiene tiles de teleport y se debe configurar el atributo <strong>teleportTo</strong> en ambas pantallas apuntando la una a la otra.</p>
+</li>
+<li>
+<p><strong>Unidireccional</strong> El jugador puede entrar por un lado y saldrá por el lado opuesto. Sólo una pantalla apunta a la otra.</p>
+</li>
+</ul>
+<p>Ahora pueden pasar 2 cosas según configures:</p>
+<ul>
+<li>
+<p>Si pones tiles de teleport en la pantalla de destino el jugador empezará ahí la nueva pantalla PERO los tiles no se verán. De hecho, NUNCA se verán los tiles de teleport en una pantalla si no tiene <strong>teleportTo</strong> configurado.</p>
+</li>
+<li>
+<p>Si NO pones tiles de teleport en la pantalla de destino el jugador aparecerá en la pantalla de destino PERO en la misma posición que estaba en la pantalla de origen. Por lo que si no pones tiles de teleport en la pantalla de destino ten cuidado de no tapar la entrada con tiles de pared o similares.</p>
+</li>
+<li>
+<p><strong>Unidireccional múltiple</strong> El jugador entraría por la pantalla 1 y saldría por la pantalla 2, pero al entrar por la pantalla 2 saldría por la pantalla 3. Y así sucesivamente.
+Para esta configuración simplemente se debe poner el <strong>teleportTo</strong> de cada portal a la siguiente, no estás obligado a poner siempre la misma dirección de entrada y salida.</p>
 </li>
 </ul>
 

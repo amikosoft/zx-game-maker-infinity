@@ -232,7 +232,12 @@ dim firstTimeEnemiesScreen as ubyte = 1
 #endif
 
 #ifdef SCREEN_ATTRIBUTES
-    Dim screenAttributes(SCREENS_COUNT, 1) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
+    #ifdef TELEPORT_ENABLED
+        Dim screenAttributes(SCREENS_COUNT, 2) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
+        Dim currentTeleportTo as ubyte = 0
+    #else
+        Dim screenAttributes(SCREENS_COUNT, 1) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
+    #endif
     Dim currentScreenBackground as ubyte = 0
     Dim currentTileBackground as ubyte = 0
 #endif

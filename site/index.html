@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#zxgm-infinity" class="md-skip">
+        <a href="#zxgm-infinity-4" class="md-skip">
           Skip to content
         </a>
       
@@ -342,18 +342,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#cosas-implementadas-en-infinity" class="md-nav__link">
+  <a href="#nuevo-en-esta-version" class="md-nav__link">
     <span class="md-ellipsis">
-      Cosas implementadas en Infinity
+      Nuevo en esta versión
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-esta-version" class="md-nav__link">
+  <a href="#cosas-implementadas-en-infinity" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en esta versión
+      Cosas implementadas en Infinity
     </span>
   </a>
   
@@ -436,6 +436,8 @@
   
     
     
+      
+        
       
         
       
@@ -571,18 +573,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#cosas-implementadas-en-infinity" class="md-nav__link">
+  <a href="#nuevo-en-esta-version" class="md-nav__link">
     <span class="md-ellipsis">
-      Cosas implementadas en Infinity
+      Nuevo en esta versión
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-esta-version" class="md-nav__link">
+  <a href="#cosas-implementadas-en-infinity" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en esta versión
+      Cosas implementadas en Infinity
     </span>
   </a>
   
@@ -613,9 +615,18 @@
 
 
 
-<h1 id="zxgm-infinity">ZXGM Infinity</h1>
+<h1 id="zxgm-infinity-4">ZXGM Infinity 4</h1>
 <p>Manual para configurar las características de Infinity</p>
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
+<h2 id="nuevo-en-esta-version">Nuevo en esta versión</h2>
+<ul>
+<li>Layout de juego configurable</li>
+<li>Posibilidad de configurar pantallas sin música</li>
+<li>Ahora el jugador dispara en 8 direcciones: izquierda, derecha, arriba, abajo y diagonales</li>
+<li>Portales/Puertas</li>
+<li>Los tiles animados ocultables van alternos entre los pares y los impares</li>
+<li>Sprites para balas se queda en 2 ficheros: bullet.zxp (boomerang o animadas) y bullet_overhead.zxp (no animadas)</li>
+</ul>
 <h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
 <ul>
 <li>Más movimientos de enemigos disponibles y configurables</li>
@@ -661,11 +672,12 @@
 <li>
 <p>Corrección de bugs</p>
 </li>
-<li>Optimización de código/memoria (en todas las versiones)</li>
-</ul>
-<h2 id="nuevo-en-esta-version">Nuevo en esta versión</h2>
-<ul>
-<li>Botón de pausa y botón de salir del juego</li>
+<li>
+<p>Optimización de código/memoria (en todas las versiones)</p>
+</li>
+<li>
+<p>Botón de pausa y botón de salir del juego</p>
+</li>
 <li>Botón para activar/desactivar la música</li>
 <li>Modos de funcionamiento para tile pegamento</li>
 <li>Velocidad configurable para cintas automáticas</li>
@@ -687,14 +699,14 @@ Con esta acción podrás compilar tus tiles.zxp y sprites.zxp, sin necesidad de 
 
 ## Migración
 
-Si vienes de una versión anterior de v3 es recomendable seguir estos pasos:
+Si vienes de una versión anterior de v4 es recomendable seguir estos pasos:
 
 * Descargar la última versión del ZXGM Infinity e instalar en una carpeta nueva
 * Copiar la carpeta assets de tu proyecto original teniendo en cuenta lo siguiente:
     * De la carpeta del mapa sólo hay que copiar los ficheros con extensión _.zxp_ y el _map.tmx_ para que te reconozca bien los nuevos parámetros de configuración introducidos
 * Lanzar una primera compilación para generar los png de tiles y todo para usar en tiled
 
-Si vienes de v2 o ZXGM no hay migración.
+No hay migración desde versiones anteriores ni desde ZXGM.
 
 ## Solución de problemas
 
@@ -839,6 +851,10 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 * **butonPauseEnabled** activa el botón de pausa en el juego. Por defecto es la *T*. Es redefinible en el juego.
     * *butonQuitEnabled* activa el botón de salir del juego en el menú de pausa. Requiere botón de pausa. Por defecto es la *R*. Es redefinible en el juego.
 
+* **teleportEnabled** activa los portales/puertas en el juego (requiere activar **screenAttributes**). Para configurar los portales/puertas visita [Screen attributes](screen-attributes.md)
+
+* **teleportAnimation** activa la animación de teletransporte en el juego. Esto es útil activar si el efecto deseado es un teletransporte o desactivar si lo que se quiere es simular una puerta/escalera.
+
 ### Idioma del juego
 
 Con infinity puedes generar tu juego en múltiples idiomas de manera sencilla y sin límite de idiomas.
@@ -909,7 +925,7 @@ Para modo **bullet**, para editar la animación se debe usar bullet_animated.zxp
 * Las balas en azul corresponden a la animación de dirección derecha
 * Las balas en rosa corresponden a la animación de dirección izquierda
 
-Para modo **boomerang** se usará siempre el fichero bullet.zxp independientemente si es vista **side** o **overhead**
+Para modo **boomerang** se usará siempre el fichero bullet.zxp
 
 Las balas de los enemigos no son animadas
 
@@ -965,7 +981,7 @@ Esto quiere decir que si marco 3, todos los enemigos iguales o menores al grupo 
 
 Las opciones son **horizontal**, **vertical** o **all** (las 2 anteriores)
 
-Para configurar el sprite de bala tenemos el fichero bullet.zxp, bullet_animated.zxp y bullet_overhead.zxp
+Para configurar el sprite de bala tenemos el fichero bullet.zxp y bullet_overhead.zxp 
 
 ![](imgs/bullet_overhead.png) ![](imgs/bullet_no_animation.png)
 
@@ -1165,7 +1181,9 @@ Los ejecutables para versiones linux tienen las siguientes opciones incluídas:
     * *F5* modo original
     * *F6* modo RF
     * *F7* modo CRT (TV)
-    * *F8* modo CRT (TV) + RF -->
+    * *F8* modo CRT (TV) + RF
+
+Por otro lado, cuando la ventana de juego pierde el foco se pone en pausa automáticamente y se reanuda cuando vuelve a tener el foco. -->
 
 
 

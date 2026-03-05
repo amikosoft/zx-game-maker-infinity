@@ -308,14 +308,20 @@ Sub playGame()
                     if i > ANIMATED_TILES_TOTAL or animatedTilesPerScreen(i, 0) <> currentScreen Then Exit for
 
                     #ifdef ANIMATED_ALL_HIDDEN    
+                        Dim tile As Ubyte = animatedTilesPerScreen(i, 1)
+
+                        tileMustHide = not tile band 1
                         if animatedFrame then
+                            tileMustHide = tile band 1
+                        end if
+                        
+                        if tileMustHide then
                             #ifdef SCREEN_ATTRIBUTES
                                 SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                             #else
                                 SetTileAnimated(0, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                             #endif
                         else
-                            Dim tile As Ubyte = animatedTilesPerScreen(i, 1)
                             SetTileAnimated(tile, tileAttrWithBackground(tile), animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                         end if
                     #else
@@ -354,28 +360,21 @@ Sub playGame()
             checkDamageByTile()
         End if
 
-        moveEnemies()
-
-        #ifdef SHOOTING_ENABLED
-            moveBullet()
-        #endif
-        
-        ' #ifdef BULLET_ENEMIES enemies
-        '     moveEnemyBullet()
-        ' #endif
+        ' moveEnemies()
 
         ' #ifdef SHOOTING_ENABLED
-        '     #ifdef BULLET_ENEMIES
-        '         #ifdef BULLET_COLLIDE_BULLET
-        '             ' checkBulletsCollision() 
-        '         #endif
-        '     #endif
+        '     moveBullet()
         ' #endif
-
-        If moveScreen <> 0 Then
+        If moveScreen Then
             moveToScreen(moveScreen)
             ' enemiesScreen = enemiesPerScreen(currentScreen)
         else
+            moveEnemies()
+
+            #ifdef SHOOTING_ENABLED
+                moveBullet()
+            #endif
+
             drawSprites()
         End If
         
@@ -593,6 +592,10 @@ Sub swapScreen(waitReady as ubyte)
             if newScreenMusic <> 0  and newScreenMusic <> musicPlayed Then
                 musicPlayed = newScreenMusic
                 
+                #ifdef NO_MUSIC_SELECTED
+                    if newScreenMusic = 10 Then VortexTracker_Stop()
+                #endif
+                
                 #ifdef MUSIC_1_SELECTED
                     if newScreenMusic = 1 Then VortexTracker_Play(MUSIC_ADDRESS)
                 #endif
@@ -628,6 +631,9 @@ Sub swapScreen(waitReady as ubyte)
     #ifdef SCREEN_ATTRIBUTES
         currentScreenBackground = screenAttributes(currentScreen, 0)
         currentTileBackground = screenAttributes(currentScreen, 1)
+        #ifdef TELEPORT_ENABLED
+            currentTeleportTo = screenAttributes(currentScreen, 2)
+        #endif
     #endif
 
     #ifdef PLAYER_READY_CONFIRMATION
@@ -668,5 +674,5 @@ Sub swapScreen(waitReady as ubyte)
         #endif
     #endif
 
-    mapDraw()
+    mapDraw()    
 End Sub

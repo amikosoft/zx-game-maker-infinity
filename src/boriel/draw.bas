@@ -1,5 +1,5 @@
 Sub mapDraw()
-    Dim index As Uinteger
+    ' Dim index As Uinteger
     Dim y, x As Ubyte
     
     x = SKIP_WIDTH_SIZE
@@ -10,10 +10,10 @@ Sub mapDraw()
     #endif
 
     For index=0 To SCREEN_LENGTH
-        #ifdef FADE_TILES_ENABLED
-            dim nextTile as ubyte = Peek(dmAddress + index) - 1
+        dim nextTile as ubyte = Peek(dmAddress + index) - 1
             
-            drawTile(nextTile, x, y)
+        #ifdef FADE_TILES_ENABLED
+            ' drawTile(nextTile, x, y)
             
             if maxFadeTile < FADE_TILE_TOTAL and (nextTile = FADE_TILE or nextTile = FADE_TILE_END) then
                 fadeTileStatus(maxFadeTile, 0) = x
@@ -21,10 +21,26 @@ Sub mapDraw()
                 fadeTileStatus(maxFadeTile, 2) = FADE_TILE_FRAMES
                 maxFadeTile = maxFadeTile + 1
             end if
-        #else
-            drawTile(Peek(dmAddress + index) - 1, x, y)
+        ' #else
+        '     drawTile(nextTile, x, y)
         #endif
-        
+
+        #ifdef TELEPORT_ENABLED
+            if nextTile = 186 then
+                if moveScreen = 10 then
+                    protaX = x*2
+                    protaY = y*2
+                    protaXRespawn = protaX
+                    protaYRespawn = protaY
+                    moveScreen = 0
+                end if
+                
+                if not currentTeleportTo then nextTile = 0
+            end if
+        #endif
+
+        drawTile(nextTile, x, y)
+
         x = x + 1
         If x = (screenWidth+SKIP_WIDTH_SIZE) Then
             x = SKIP_WIDTH_SIZE
