@@ -843,7 +843,7 @@ Function checkTileObject(tile As Ubyte) As Ubyte
         '     End If
         ' #endif
         #ifdef SHOULD_PICKUP_ITEMS
-            screensWon(currentScreen) = 1
+            screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
             removeTilesFromScreen(ENEMY_DOOR_TILE)
         #endif
         currentItems = currentItems + ITEMS_INCREMENT

@@ -17,7 +17,7 @@ class Builder:
         musicEnabled = getMusicEnabled()
         attrsEnabled = getAttrsEnabled()
 
-        ScreensCompressor().execute(is128K, screenExists("intro"), screenExists("gameover"))
+        ScreensCompressor().execute(is128K, screenExists("intro"), screenExists("gameover"), screenExists("gamemap"))
         TilesGenerator().execute()
         SpritesGenerator().execute()
         MusicSetup().splitSongs()

@@ -102,6 +102,31 @@ Sub mapColor(color As Ubyte)
     Next index
 End Sub
 
+' const MAP_X_ADJUSTMENT as ubyte = 14
+' const MAP_Y_ADJUSTMENT as ubyte = 10
+Sub pathDraw()
+    Dim y, x As Ubyte
+    
+    x = 0
+    y = MAP_Y_ADJUSTMENT
+    
+    For index=0 To SCREENS_COUNT
+        PAPER screensStatus(index) + 1
+
+        if index = currentScreen then
+            PRINT AT y, MAP_X_ADJUSTMENT + (x*2); "X"
+        else
+            PRINT AT y, MAP_X_ADJUSTMENT + (x*2); " "
+        end if
+
+        x = x + 1
+        If x >= MAP_SCREENS_WIDTH_COUNT Then
+            x = 0
+            y = y + 2
+        End If
+    Next index
+End Sub
+
 Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
     'Revisar draws de vacío innecesarios
     #ifdef SCREEN_ATTRIBUTES
@@ -115,21 +140,9 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
     If tile < MAX_GENERIC_TILE Then
         If tile = ENEMY_DOOR_TILE Then
             #ifdef SHOULD_KILL_ENEMIES_ENABLED
-                If not screensWon(currentScreen) Then
-                '     #ifdef SCREEN_ATTRIBUTES
-                '         SetTile(currentTileBackground, currentScreenBackground, x, y)
-                '     #else
-                '         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-                '     #endif
-                ' Else
+                If screensStatus(currentScreen) < SCREEN_STATUS_COMPLETED Then
                     SetTile(tile, tileAttrWithBackground(tile), x, y)
                 End If
-            ' #Else
-            '     #ifdef SCREEN_ATTRIBUTES
-            '         SetTile(currentTileBackground, currentScreenBackground, x, y)
-            '     #else
-            '         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-            '     #endif
             #endif
             #ifdef KEYS_ENABLED
             Elseif tile = DOOR_TILE

@@ -34,7 +34,7 @@ class BinaryFilesToTapMerger:
             OUTPUT_FOLDER + "damageTiles.bin",
             OUTPUT_FOLDER + "enemiesPerScreen.bin",
             OUTPUT_FOLDER + "screenObjects.bin",
-            OUTPUT_FOLDER + "screensWon.bin",
+            OUTPUT_FOLDER + "screensStatus.bin",
             OUTPUT_FOLDER + "decompressedEnemiesScreen.bin"
         ]
 

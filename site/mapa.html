@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="ulaplus.html">
+        <link rel="prev" href="layout.html">
       
       
-        <link rel="next" href="screen-attributes.html">
+        <link rel="next" href="binarios.html">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Música - ZXGM Infinity Docs</title>
+        <title>Mapa del juego - ZXGM Infinity Docs</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#musica-in-game-por-pantallas" class="md-skip">
+        <a href="#mapa-del-juego" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Música
+              Mapa del juego
             
           </span>
         </div>
@@ -550,19 +550,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="musics.html" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="musics.html" class="md-nav__link">
         
   
   
@@ -573,7 +564,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -629,10 +619,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="mapa.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Mapa del juego
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="mapa.html" class="md-nav__link md-nav__link--active">
         
   
   
@@ -643,6 +655,53 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#funcionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Funcionamiento
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametrizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parametrización
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -727,6 +786,41 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#funcionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Funcionamiento
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametrizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parametrización
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -741,10 +835,39 @@
 
 
 
-<h1 id="musica-in-game-por-pantallas">Música in-game por pantallas</h1>
-<p>Con la última versión del motor ZXGM se ha liberado la posibilidad de meter múltiples canciones para tu juego.</p>
-<p>En Infinity funciona un poco distinto y aquí te lo explico. </p>
-<p>Visitar <a href="screen-attributes.html">Screen attributes</a></p>
+<h1 id="mapa-del-juego">Mapa del juego</h1>
+<p>A partir de v4 de ZX Infinity se puede ver el mapa del juego in-game.</p>
+<h2 id="funcionamiento">Funcionamiento</h2>
+<p>El mapa de juego se activará en el menú de <em>pausa</em> con el mismo botón. Cada pantalla se pintará representada por un cuadrado con distintos colores según su estado. Los estados/colores son los siguientes:</p>
+<ul>
+<li><strong>Rojo</strong> no visitada</li>
+<li><strong>Azul</strong> visitada</li>
+<li><strong>Verde</strong> completada (si tuviera algún objetivo)</li>
+</ul>
+<p>La pantalla donde te encuentres en ese momento se pintará con una <strong>X</strong>.</p>
+<p>El pintado de mapa representa las pantallas según lo configurado en Tiled quedando de la siguiente manera (cada X es una pantalla):</p>
+<pre><code>X-X-X-X-X
+X-X-X-X-X
+X-X-X-X-X
+X-X-X-X-X
+</code></pre>
+<p>Empieza a dibujarse desde la parte superior izquierda de la pantalla pudiendo ajustarse según la parametrización.</p>
+<h2 id="configuracion">Configuración</h2>
+<p>Hay 2 maneras de activar el mapa in-game:</p>
+<ul>
+<li>Meter el fichero <strong>screenmap.scr</strong> en la carpeta <strong>assets</strong> de tu proyecto dentro de <em>screens</em>.</li>
+</ul>
+<p><img alt="Layout" src="imgs/screenmap.png" /></p>
+<ul>
+<li>Activar la opción <strong>gameMapIfNoImage</strong> en los atributos generales del juego.</li>
+</ul>
+<p><img alt="Layout" src="imgs/forcedmap.png" /></p>
+<h2 id="parametrizacion">Parametrización</h2>
+<p>Una vez activado el mapa del juego se debe parametrizar el mapa del juego. Para ello se debe configurar en los atributos generales del juego lo siguiente:</p>
+<ul>
+<li><strong>gameMapXAdjustment</strong> permite desplazar el mapa del juego horizontalmente para ajustarlo a tus necesidades.</li>
+<li><strong>gameMapYAdjustment</strong> permite desplazar el mapa del juego verticalmente para ajustarlo a tus necesidades.</li>
+</ul>
 
 
 

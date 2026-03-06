@@ -31,7 +31,7 @@ class SizesGetter:
         sizes.DAMAGE_TILES_DATA = self.__getOutputFileSize("damageTiles.bin")
         sizes.ENEMIES_PER_SCREEN_INITIAL_DATA = self.__getOutputFileSize("enemiesPerScreen.bin")
         sizes.SCREEN_OBJECTS_DATA = self.__getOutputFileSize("screenObjects.bin")
-        sizes.SCREENS_WON_DATA = self.__getOutputFileSize("screensWon.bin")
+        sizes.SCREENS_WON_DATA = self.__getOutputFileSize("screensStatus.bin")
         sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA = self.__getOutputFileSize("decompressedEnemiesScreen.bin")
         
         if self.adventureTexts:
@@ -58,6 +58,7 @@ class SizesGetter:
             sizes.MUSIC_GAMEOVER = self.__getFileSize(OUTPUT_FOLDER + "music-gameover.tap") if musicExists("gameover") else 0
             sizes.INTRO_SCREEN = self.__getOutputFileSize("intro.scr.zx0") if screenExists("intro") else 0
             sizes.GAMEOVER_SCREEN = self.__getOutputFileSize("gameover.scr.zx0") if screenExists("gameover") else 0
+            sizes.GAMEMAP_SCREEN = self.__getOutputFileSize("gamemap.scr.zx0") if screenExists("gamemap") else 0
             
         return sizes
     

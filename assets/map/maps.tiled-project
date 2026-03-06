@@ -684,6 +684,21 @@
                 "name": "teleportAnimation",
                 "type": "bool",
                 "value": false
+            },
+            {
+                "name": "gameMapIfNoImage",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "gameMapXAdjustment",
+                "type": "int",
+                "value": 14
+            },
+            {
+                "name": "gameMapYAdjustment",
+                "type": "int",
+                "value": 10
             }
         ],
         "name": "ZXSpectrumGameMaker",

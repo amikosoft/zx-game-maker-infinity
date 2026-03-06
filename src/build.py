@@ -94,6 +94,10 @@ def tapsBuild():
         if os.path.isfile("output/gameover.scr.zx0"):
             runCommand("bin2tap " + str(Path("output/gameover.scr.zx0")) + " " + str(Path("output/gameover.tap")) + " 49152")
             input_files.append("output/gameover.tap")
+        
+        if os.path.isfile("output/gamemap.scr.zx0"):
+            runCommand("bin2tap " + str(Path("output/gamemap.scr.zx0")) + " " + str(Path("output/gamemap.tap")) + " 49152")
+            input_files.append("output/gamemap.tap")
     else:
         input_files = [
             str(Path("output/loader.tap")),

@@ -249,13 +249,37 @@ Sub playGame()
         if MultiKeys(keyArray(PAUSE_BUTTON)) then
             isPaused = 1
             
+            ' ActivarBuffer()
+            ' switch2ShadowScreen()
+
+            #ifdef ENABLED_128    
+                #ifdef GAMEMAP_SCREEN_ENABLED
+                    loadScreen(GAMEMAP_SCREEN_ADDRESS)
+
+                    pathDraw()
+                #else
+                    #ifdef GAMEMAP_SHOW_ENABLED
+                        mapColor(0)
+                        pathDraw()
+                    #endif
+                #endif
+            #else
+                #ifdef GAMEMAP_SHOW_ENABLED
+                    mapColor(0)
+                    pathDraw()
+                #endif
+            #endif
+            
             ' while GetKeyScanCode():wend
             waitForReleaseKey()
 
             while isPaused
-                #ifdef MESSAGES_ENABLED
-                if not messageLoopCounter then printMessage(TEXT_PAUSE, 2, 0)
+                #ifndef GAMEMAP_SCREEN_ENABLED
+                    #ifdef MESSAGES_ENABLED
+                    if not messageLoopCounter then printMessage(TEXT_PAUSE, 2, 0)
+                    #endif
                 #endif
+
             
                 if MultiKeys(keyArray(PAUSE_BUTTON)) then
                     isPaused = 0
@@ -269,8 +293,33 @@ Sub playGame()
             ' while GetKeyScanCode():wend
             waitForReleaseKey()
 
-            #ifdef MESSAGES_ENABLED
-                messageLoopCounter = 1
+            #ifndef GAMEMAP_SCREEN_ENABLED
+                #ifdef MESSAGES_ENABLED
+                    messageLoopCounter = 1
+                #endif
+            #endif
+
+            ' DesactivarBuffer()
+            ' switch2NormalScreen()
+            #ifdef ENABLED_128    
+                #ifdef GAMEMAP_SCREEN_ENABLED
+                    loadScreen(HUD_SCREEN_ADDRESS)
+                    mapDraw()
+
+                    #ifdef HISCORE_ENABLED
+                        Print AT 22, 13; TEXT_HI_SCORE_ZERO
+                        Print AT 23, 13; TEXT_HI_SCORE_ZERO
+                    #endif
+                    printLife()
+                #else
+                    #ifdef GAMEMAP_SHOW_ENABLED
+                        mapDraw()
+                    #endif
+                #endif
+            #else
+                #ifdef GAMEMAP_SHOW_ENABLED
+                    mapDraw()
+                #endif
             #endif
         end if
         #endif
@@ -278,14 +327,6 @@ Sub playGame()
         If not enemiesScreen Then 
             waitretrace
         end if
-
-        ' if enemiesFrame band 1 Then
-        '     ActivarBuffer()
-        '     switch2ShadowScreen()
-        ' else
-        '     DesactivarBuffer()
-        '     switch2NormalScreen()
-        ' end if
 
         #ifdef PLATFORM_MOVEABLE
             If not isOnPlatform and enemiesFrame band 1 Then
@@ -296,7 +337,6 @@ Sub playGame()
                 protaFrame = getNextFrameRunning()
             End if
         #EndIf
-
 
         #ifdef ANIMATED_TILES_ENABLED
             lastFrameTiles = lastFrameTiles + 1
@@ -520,13 +560,12 @@ Sub resetValues()
     screenObjects = screenObjectsInitial
 
     For i = 0 To SCREENS_COUNT
-        screensWon(i) = 0
-    Next i
-    #ifdef USE_BREAKABLE_TILE
-        For i = 0 To SCREENS_COUNT
+        screensStatus(i) = SCREEN_STATUS_NOT_VISITED
+    
+        #ifdef USE_BREAKABLE_TILE
             brokenTiles(i) = 0
-        Next i
-    #endif
+        #endif
+    Next i
     #ifdef HISCORE_ENABLED
         score = 0
     #endif
@@ -553,6 +592,8 @@ Sub swapScreen(waitReady as ubyte)
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), arrayBasePtr(decompressedEnemiesScreen))
     
     enemiesScreen = enemiesPerScreen(currentScreen)
+
+    if screensStatus(currentScreen) < SCREEN_STATUS_COMPLETED then screensStatus(currentScreen) = SCREEN_STATUS_VISITED
     
     ' #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
         firstTimeEnemiesScreen = 1

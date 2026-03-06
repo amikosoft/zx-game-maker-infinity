@@ -237,6 +237,10 @@ buttonQuitEnabled = False
 teleportEnabled = False
 teleportAnimation = False
 
+gameMapIfNoImage = False
+gameMapXAdjustment = 14
+gameMapYAdjustment = 10
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -462,6 +466,8 @@ if 'properties' in data:
             teleportEnabled = property['value']
         elif property['name'] == 'teleportAnimation':
             teleportAnimation = property['value']
+        elif property['name'] == 'gameMapIfNoImage':
+            gameMapIfNoImage = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -825,6 +831,12 @@ configStr += "const SCREEN_OBJECT_LIFE_INDEX as ubyte = 3 \n"
 configStr += "const SCREEN_OBJECT_AMMO_INDEX as ubyte = 4 \n"
 configStr += "const SCREENS_COUNT as ubyte = " + str(screensCount - 1) + "\n\n"
 
+if gameMapIfNoImage == True:
+    configStr += "#define GAMEMAP_SHOW_ENABLED\n"
+
+configStr += "const MAP_X_ADJUSTMENT as ubyte = " + str(gameMapXAdjustment) + "\n"
+configStr += "const MAP_Y_ADJUSTMENT as ubyte = " + str(gameMapYAdjustment) + "\n"    
+
 configStr += "#ifdef SIDE_VIEW\n"
 configStr += "  Const jumpStopValue As Ubyte = 255\n"
 configStr += "  Dim landed As Ubyte = 1\n"
@@ -1001,7 +1013,7 @@ if fontCustom != 'default':
     elif fontCustom == 'bold all':
         configStr += "#DEFINE CUSTOM_FONT_BOLD_ALL\n"
 
-with open("output/screensWon.bin", "wb") as f:
+with open("output/screensStatus.bin", "wb") as f:
     f.write(bytearray([0] * screensCount))
 
 if useBreakableTile == 1:

@@ -98,7 +98,7 @@ Sub moveEnemies()
             #ifndef ENEMIES_SLOW_DOWN
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
                     If enemyLiveBucle > 0 and tileBucle > 16 Then
-                        If screensWon(currentScreen) Then continue For
+                        If screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED Then continue For
                     End If
                 #endif
             #endif

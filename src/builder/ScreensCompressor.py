@@ -3,7 +3,7 @@ import shutil
 from builder.helper import *
 
 class ScreensCompressor:
-    def execute(self, is128k, introScreenExists, gameoverScreenExists):
+    def execute(self, is128k, introScreenExists, gameoverScreenExists, gamemapScreenExists):
         self.__compressScreen("title")
         self.__compressScreen("ending")
         self.__compressScreen("hud")
@@ -13,7 +13,8 @@ class ScreensCompressor:
                 self.__compressScreen("intro")
             if gameoverScreenExists:
                 self.__compressScreen("gameover")
-
+            if gamemapScreenExists:
+                self.__compressScreen("gamemap")
 
         shutil.copy(SCREENS_FOLDER + "loading.scr", OUTPUT_FOLDER + "loading.bin")
 

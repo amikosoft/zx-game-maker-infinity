@@ -44,6 +44,7 @@
   <property name="fontCustom" propertytype="fontCustom" value="default"/>
   <property name="fullChangeScreenAnimation" type="bool" value="true"/>
   <property name="gameLanguage" value="es"/>
+  <property name="gameMapIfNoImage" type="bool" value="true"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="glueMode" propertytype="glueModes" value="prevent jump and slow down"/>

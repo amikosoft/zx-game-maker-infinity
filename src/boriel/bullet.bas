@@ -326,9 +326,9 @@ sub damageEnemy(enemyToKill as Ubyte)
             ' si ambos estan definidos
             #ifdef ENEMIES_NOT_RESPAWN_ENABLED
                 #ifdef SHOULD_KILL_ENEMIES
-                    ' if not screensWon(currentScreen) then
+                    ' if not screensStatus(currentScreen) then
                     if allEnemiesKilled() then
-                        screensWon(currentScreen) = 1
+                        screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
                         removeTilesFromScreen(ENEMY_DOOR_TILE)
                     end if
                     ' end if
@@ -338,9 +338,9 @@ sub damageEnemy(enemyToKill as Ubyte)
             ' si solo uno esta definido
             #ifndef ENEMIES_NOT_RESPAWN_ENABLED
                 #ifdef SHOULD_KILL_ENEMIES
-                    ' if not screensWon(currentScreen) then
+                    ' if not screensStatus(currentScreen) then
                     if allEnemiesKilled() then
-                        screensWon(currentScreen) = 1
+                        screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
                         removeTilesFromScreen(ENEMY_DOOR_TILE)
                     end if
                     ' end if
@@ -349,9 +349,9 @@ sub damageEnemy(enemyToKill as Ubyte)
             
             #ifndef SHOULD_KILL_ENEMIES_ENABLED
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                    ' if not screensWon(currentScreen) then
+                    ' if not screensStatus(currentScreen) then
                     if allEnemiesKilled() then
-                        screensWon(currentScreen) = 1
+                        screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
                         removeTilesFromScreen(ENEMY_DOOR_TILE)
                     end if
                     ' end if

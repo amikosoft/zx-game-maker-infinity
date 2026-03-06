@@ -26,6 +26,10 @@ class ConfigWriter:
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.GAMEOVER_SCREEN_STRING(), currentAddress)
                     self.__write("#DEFINE GAMEOVER_SCREEN_ENABLED\n")
                 
+                if screenExists("gamemap"):
+                    currentAddress = self.__writeDeclarationAndIncrement(Sizes.GAMEMAP_SCREEN_STRING(), currentAddress)
+                    self.__write("#DEFINE GAMEMAP_SCREEN_ENABLED\n")
+                
                 if musicExists("title"):
                     self.__write("#DEFINE MUSIC_TITLE_ENABLED\n")
                 
