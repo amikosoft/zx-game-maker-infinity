@@ -252,24 +252,17 @@ Sub playGame()
             ' ActivarBuffer()
             ' switch2ShadowScreen()
 
-            #ifdef ENABLED_128    
-                #ifdef GAMEMAP_SCREEN_ENABLED
-                    loadScreen(GAMEMAP_SCREEN_ADDRESS)
+            #ifdef GAMEMAP_SCREEN_ENABLED
+                loadScreen(GAMEMAP_SCREEN_ADDRESS)
 
-                    pathDraw()
-                #else
-                    #ifdef GAMEMAP_SHOW_ENABLED
-                        mapColor(0)
-                        pathDraw()
-                    #endif
-                #endif
+                pathDraw()
             #else
                 #ifdef GAMEMAP_SHOW_ENABLED
                     mapColor(0)
                     pathDraw()
                 #endif
             #endif
-            
+        
             ' while GetKeyScanCode():wend
             waitForReleaseKey()
 
@@ -301,21 +294,15 @@ Sub playGame()
 
             ' DesactivarBuffer()
             ' switch2NormalScreen()
-            #ifdef ENABLED_128    
-                #ifdef GAMEMAP_SCREEN_ENABLED
-                    loadScreen(HUD_SCREEN_ADDRESS)
-                    mapDraw()
+            #ifdef GAMEMAP_SCREEN_ENABLED
+                loadScreen(HUD_SCREEN_ADDRESS)
+                mapDraw()
 
-                    #ifdef HISCORE_ENABLED
-                        Print AT 22, 13; TEXT_HI_SCORE_ZERO
-                        Print AT 23, 13; TEXT_HI_SCORE_ZERO
-                    #endif
-                    printLife()
-                #else
-                    #ifdef GAMEMAP_SHOW_ENABLED
-                        mapDraw()
-                    #endif
+                #ifdef HISCORE_ENABLED
+                    Print AT 22, 13; TEXT_HI_SCORE_ZERO
+                    Print AT 23, 13; TEXT_HI_SCORE_ZERO
                 #endif
+                printLife()
             #else
                 #ifdef GAMEMAP_SHOW_ENABLED
                     mapDraw()
