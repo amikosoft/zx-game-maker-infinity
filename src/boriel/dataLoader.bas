@@ -1,9 +1,10 @@
 Sub loadDataFromTape()
-    #ifdef ENABLED_128k
-        SetBank(fxBank)
-        load "" CODE $c000 ' Load fx
-        SetBank(0)
-    #Else
+    ' #ifdef ENABLED_128k
+    '     SetBank(fxBank)
+    '     load "" CODE $c000 ' Load fx
+    '     SetBank(0)
+    ' #Else
+    #ifndef ENABLED_128k
         load "" CODE ' Load fx
     #endif
     
@@ -37,9 +38,11 @@ Sub loadDataFromTape()
         #endif
         
         SetBank(screensBank)
+        load "" CODE BEEP_FX_ADDRESS        
         load "" CODE TITLE_SCREEN_ADDRESS ' Load title Screen
         load "" CODE ENDING_SCREEN_ADDRESS ' Load ending Screen
         load "" CODE HUD_SCREEN_ADDRESS ' Load hud Screen
+
         #ifdef INTRO_SCREEN_ENABLED
             load "" CODE INTRO_SCREEN_ADDRESS ' Load intro Screen
         #endif

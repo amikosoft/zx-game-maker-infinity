@@ -38,7 +38,6 @@ class SizesGetter:
             sizes.TEXTS_COORD_DATA = self.__getOutputFileSize("textsCoord.bin")
             sizes.TEXTS_DATA = self.__getOutputFileSize("texts.bin")
         
-        
         if self.useBreakableTile:
             sizes.BROKEN_TILES_DATA = self.__getOutputFileSize("brokenTiles.bin")
         

@@ -14,10 +14,11 @@ class ConfigWriter:
             self.__setFileHandler(config_bas)
             if getEnabled128K():
                 self.__write("\n' Memory bank 3\n")
+                currentAddress = self.__writeDeclarationAndIncrement(Sizes.BEEP_FX_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.TITLE_SCREEN_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.ENDING_SCREEN_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.HUD_SCREEN_STRING(), currentAddress)
-
+                
                 if screenExists("intro"):
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.INTRO_SCREEN_STRING(), currentAddress)
                     self.__write("#DEFINE INTRO_SCREEN_ENABLED\n")

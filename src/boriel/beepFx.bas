@@ -3,7 +3,8 @@ Sub Fastcall BeepFX_Play(Sound As Ubyte)
         ASM
             push af
         End ASM
-        SetBank(fxBank)
+        ' SetBank(fxBank)
+        SetBank(screensBank)
         ASM
             pop af
         End ASM
@@ -22,7 +23,8 @@ End Sub
 #ifdef NEW_BEEPER_PLAYER
     Sub Fastcall BeepFX_NextNote()
         #ifdef ENABLED_128k
-            SetBank(fxBank)
+            ' SetBank(fxBank)
+            SetBank(screensBank)
         #endif
         ASM
             call 49169 ; Siguiente nota
@@ -34,7 +36,8 @@ End Sub
     
     Sub Fastcall BeepFX_Reset()
         #ifdef ENABLED_128k
-            SetBank(fxBank)
+            ' SetBank(fxBank)
+            SetBank(screensBank)
         #endif
         ASM
             call 49361 ; Reset
