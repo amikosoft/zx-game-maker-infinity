@@ -578,6 +578,10 @@ Sub upKey()
     verticalAxisKeyPressed = 1
 
     #ifdef SIDE_VIEW
+        #ifdef PREVENT_JUMP_ON_FIRE
+        if shootPressed then return
+        #endif
+
         #ifdef LADDERS_ANIMATION_ENABLED
             If checkIsLadder(protaY + 3, 1) Then
                 checkProtaTop()
@@ -787,44 +791,45 @@ Sub fireKey()
 End Sub
 
 Sub keyboardListen()
-    ' #ifdef PLATFORM_MOVEABLE
     verticalAxisKeyPressed = 0
     horizontalAxisKeyPressed = 0
-    ' #endif
-
+    
+    #ifdef PREVENT_JUMP_ON_FIRE
+        if shootPressed then shootPressed = shootPressed - 1
+    #endif
+    
     If kempston Then
         Dim n As Ubyte = In(31)
         If n bAND %10 Then leftKey(1)
         If n bAND %1 Then rightKey(1)
-        If n bAND %1000 Then upKey()
-        If n bAND %100 Then downKey()
-        If n bAND %10000 Then fireKey()
-        ' #ifdef SIDE_VIEW
-            ' #ifdef IDLE_ENABLED
-            '     If not n Then
-            '         If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
-            '     Else
-            '         protaLoopCounter = 0
-            '     End If
-            ' #endif
-        ' #endif
+        
+        #ifdef PREVENT_JUMP_ON_FIRE
+            If n bAND %10000 Then shootPressed = 5
+            If n bAND %1000 Then upKey()
+            If n bAND %100 Then downKey()
+        #else
+            If n bAND %1000 Then upKey()
+            If n bAND %100 Then downKey()
+            If n bAND %10000 Then fireKey()
+        #endif
     Else
         If MultiKeys(keyArray(LEFT)) Then leftKey(1)
         If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
-        If MultiKeys(keyArray(UP)) Then upKey()
-        If MultiKeys(keyArray(DOWN)) Then downKey()
-        If MultiKeys(keyArray(FIRE)) Then fireKey()
-        
-        ' #ifdef SIDE_VIEW
-            ' #ifdef IDLE_ENABLED
-            '     if not GetKeyScanCode() Then
-            '         If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
-            '     Else
-            '         protaLoopCounter = 0
-            '     End If
-            ' #endif
-        ' #endif
+
+        #ifdef PREVENT_JUMP_ON_FIRE
+            If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
+            If MultiKeys(keyArray(UP)) Then upKey()
+            If MultiKeys(keyArray(DOWN)) Then downKey()
+        #else
+            If MultiKeys(keyArray(UP)) Then upKey()
+            If MultiKeys(keyArray(DOWN)) Then downKey()
+            If MultiKeys(keyArray(FIRE)) Then fireKey()
+        #endif
     End If
+
+    #ifdef PREVENT_JUMP_ON_FIRE
+        if shootPressed = 5 then fireKey()
+    #endif
 
     #ifdef IDLE_ENABLED
         If not horizontalAxisKeyPressed and not verticalAxisKeyPressed Then

@@ -79,10 +79,15 @@ SetTileset(@tileSet(0,0))
 #endif
 
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
-    If firstLoad Then
-        firstLoad = 0
+    ' If firstLoad Then
+    '     firstLoad = 0
         pauseUntilPressKey()
-    End If
+    ' End If
+#endif
+
+#ifdef CREDITS_SCREEN_ENABLED
+    loadScreen(CREDITS_SCREEN_ADDRESS)
+    pauseUntilPressKey()
 #endif
 
 ' waitretrace

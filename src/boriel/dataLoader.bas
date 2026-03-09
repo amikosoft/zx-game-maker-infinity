@@ -47,7 +47,10 @@ Sub loadDataFromTape()
             load "" CODE GAMEOVER_SCREEN_ADDRESS ' Load game over Screen
         #endif
         #ifdef GAMEMAP_SCREEN_ENABLED
-            load "" CODE GAMEMAP_SCREEN_ADDRESS ' Load game over Screen
+            load "" CODE GAMEMAP_SCREEN_ADDRESS ' gamemap Screen
+        #endif
+        #ifdef CREDITS_SCREEN_ENABLED
+            load "" CODE CREDITS_SCREEN_ADDRESS ' credits Screen
         #endif
         
         SetBank(0)

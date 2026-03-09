@@ -588,6 +588,10 @@ Sub swapScreen(waitReady as ubyte)
 
     #ifdef SHOOTING_ENABLED
         bulletPositionX = 0
+
+        #ifdef PREVENT_JUMP_ON_FIRE
+            shootPressed = 0
+        #endif
     #endif
 
     ' #ifdef BULLET_ENEMIES

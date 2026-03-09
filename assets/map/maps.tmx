@@ -6,7 +6,7 @@
  <properties>
   <property name="128Kenabled" type="bool" value="true"/>
   <property name="adventureTexts" type="bool" value="true"/>
-  <property name="adventureTextsAcceptWithFire" type="bool" value="true"/>
+  <property name="adventureTextsAcceptWithFire" type="bool" value="false"/>
   <property name="adventureTextsBackgroundColor" type="int" value="1"/>
   <property name="adventureTextsClearScreen" type="bool" value="false"/>
   <property name="adventureTextsHideTiles" type="bool" value="true"/>
@@ -17,7 +17,7 @@
   <property name="animatedTilesMode" propertytype="animatedTilesModes" value="Solid tiles disappears"/>
   <property name="backgroundAttribute" type="int" value="71"/>
   <property name="borderDamageColor" value="3"/>
-  <property name="bulletAnimation" type="bool" value="false"/>
+  <property name="bulletAnimation" type="bool" value="true"/>
   <property name="bulletDisableCollisions" type="bool" value="false"/>
   <property name="bulletDistance" type="int" value="20"/>
   <property name="bulletType" propertytype="bulletType" value="bullet"/>
@@ -44,7 +44,7 @@
   <property name="fontCustom" propertytype="fontCustom" value="default"/>
   <property name="fullChangeScreenAnimation" type="bool" value="true"/>
   <property name="gameLanguage" value="es"/>
-  <property name="gameMapIfNoImage" type="bool" value="true"/>
+  <property name="gameMapIfNoImage" type="bool" value="false"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="glueMode" propertytype="glueModes" value="prevent jump and slow down"/>
@@ -85,6 +85,7 @@
   <property name="redefineKeysEnabled" type="bool" value="true"/>
   <property name="screenAttributes" type="bool" value="true"/>
   <property name="shooting" type="bool" value="true"/>
+  <property name="shootingPreventJump" type="bool" value="true"/>
   <property name="shouldKillEnemies" type="bool" value="true"/>
   <property name="shouldPickUpItems" type="bool" value="true"/>
   <property name="teleportAnimation" type="bool" value="true"/>

@@ -119,6 +119,7 @@ enemiesSlowDown = False
 enemiesRespawnInScreen = False
 enemiesNormalCollide = False
 shooting = 1
+shootingPreventJump = False
 shouldKillEnemies = 0
 
 shouldPickUpItems = False
@@ -267,6 +268,8 @@ if 'properties' in data:
             enemiesNormalCollide = property['value']
         elif property['name'] == 'shooting':
             shooting = 1 if property['value'] else 0
+        elif property['name'] == 'shootingPreventJump':
+            shootingPreventJump = property['value']
         elif property['name'] == 'shouldKillEnemies':
             shouldKillEnemies = 1 if property['value'] else 0
         elif property['name'] == 'shouldPickUpItems':
@@ -669,6 +672,9 @@ configStr += "const DAMAGE_TILES_COUNT as ubyte = " + str(damageTilesCount) + "\
 if shooting == 1:
     configStr += "#DEFINE SHOOTING_ENABLED\n"
 
+    if gameView != 'overhead' and shootingPreventJump:
+        configStr += "#DEFINE PREVENT_JUMP_ON_FIRE\n"
+
 if newBeeperPlayer == 1:
     configStr += "#DEFINE NEW_BEEPER_PLAYER\n"
 
@@ -756,7 +762,7 @@ if str(border) != borderDamageColor:
 
 if waitPressKeyAfterLoad == 1:
     configStr += "#DEFINE WAIT_PRESS_KEY_AFTER_LOAD\n"
-    configStr += "dim firstLoad as ubyte = 1\n"
+    # configStr += "dim firstLoad as ubyte = 1\n"
 
 if redefineKeysEnabled == 1:
     configStr += "#DEFINE REDEFINE_KEYS_ENABLED\n"

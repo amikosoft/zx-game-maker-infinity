@@ -699,6 +699,11 @@
                 "name": "gameMapYAdjustment",
                 "type": "int",
                 "value": 10
+            },
+            {
+                "name": "shootingPreventJump",
+                "type": "bool",
+                "value": false
             }
         ],
         "name": "ZXSpectrumGameMaker",

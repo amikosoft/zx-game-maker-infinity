@@ -136,9 +136,9 @@ Dim animatedFrame As Ubyte = 1
     Dim protaLoopCounter As Ubyte = 0
 #endif
 
-' #ifdef SHOOTING_ENABLED
-'     Dim noKeyPressedForShoot As Ubyte = 1
-' #endif
+#ifdef PREVENT_JUMP_ON_FIRE
+    Dim shootPressed As Ubyte = 0
+#endif
 
 Dim verticalAxisKeyPressed as byte
 Dim horizontalAxisKeyPressed as byte
