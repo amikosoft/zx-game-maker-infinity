@@ -38,7 +38,6 @@ Sub loadDataFromTape()
         #endif
         
         SetBank(screensBank)
-        load "" CODE BEEP_FX_ADDRESS        
         load "" CODE TITLE_SCREEN_ADDRESS ' Load title Screen
         load "" CODE ENDING_SCREEN_ADDRESS ' Load ending Screen
         load "" CODE HUD_SCREEN_ADDRESS ' Load hud Screen
@@ -55,7 +54,12 @@ Sub loadDataFromTape()
         #ifdef CREDITS_SCREEN_ENABLED
             load "" CODE CREDITS_SCREEN_ADDRESS ' credits Screen
         #endif
+
+        SetBank(fxBank)
         
+        load "" CODE BEEP_FX_ADDRESS        
+        load "" CODE TEXTS_DATA_ADDRESS ' credits Screen
+
         SetBank(0)
     #endif
 End Sub

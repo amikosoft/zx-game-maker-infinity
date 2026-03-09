@@ -45,6 +45,9 @@ def tapsBuild():
         runCommand("bin2tap " + str(Path("output/title.scr.zx0")) + " " + str(Path("output/title.tap")) + " 49152")
         runCommand("bin2tap " + str(Path("output/ending.scr.zx0")) + " " + str(Path("output/ending.tap")) + " 16384")
         runCommand("bin2tap " + str(Path("output/hud.scr.zx0")) + " " + str(Path("output/hud.tap")) + " 24576")
+
+        runCommand("bin2tap " + str(Path("output/texts.bin")) + " " + str(Path("output/textsalt.tap")) + " 49152")
+        
         input_files = [
             str(Path("output/loader.tap")),
             str(Path("output/loading.tap")),
@@ -58,7 +61,6 @@ def tapsBuild():
             str(Path(OUTPUT_FOLDER + "music3.tap")),
             str(Path(OUTPUT_FOLDER + "music-ending.tap")),
             str(Path(OUTPUT_FOLDER + "music-gameover.tap")),
-            str(Path(ASSETS_FOLDER + "fx/fx.tap")),
             str(Path("output/title.tap")),
             str(Path("output/ending.tap")),
             str(Path("output/hud.tap")),
@@ -103,6 +105,9 @@ def tapsBuild():
         if os.path.isfile("output/credits.scr.zx0"):
             runCommand("bin2tap " + str(Path("output/credits.scr.zx0")) + " " + str(Path("output/credits.tap")) + " 49152")
             input_files.append("output/credits.tap")
+
+        input_files.append(str(Path(ASSETS_FOLDER + "fx/fx.tap")))
+        input_files.append("output/textsalt.tap")
     else:
         input_files = [
             str(Path("output/loader.tap")),

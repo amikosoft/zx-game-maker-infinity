@@ -40,7 +40,8 @@ class BinaryFilesToTapMerger:
 
         if enableAdventureTexts:
             input_files.append(OUTPUT_FOLDER + "textsCoord.bin")
-            input_files.append(OUTPUT_FOLDER + "texts.bin")
+            if not is128k:
+                input_files.append(OUTPUT_FOLDER + "texts.bin")
 
         if is128k and musicEnabled:
             input_files.append(OUTPUT_FOLDER + "screenMusic.bin")

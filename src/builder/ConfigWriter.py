@@ -14,7 +14,6 @@ class ConfigWriter:
             self.__setFileHandler(config_bas)
             if getEnabled128K():
                 self.__write("\n' Memory bank 3\n")
-                currentAddress = self.__writeDeclarationAndIncrement(Sizes.BEEP_FX_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.TITLE_SCREEN_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.ENDING_SCREEN_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.HUD_SCREEN_STRING(), currentAddress)
@@ -66,7 +65,14 @@ class ConfigWriter:
                 if musicExists("gameover"):
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_GAMEOVER_STRING(), currentAddress)
                 
+                currentAddress = self.initialAddress
+                self.__write("\n' Memory bank 6\n")
+                
+                currentAddress = self.__writeDeclarationAndIncrement(Sizes.BEEP_FX_STRING(), currentAddress)
+                currentAddress = self.__writeDeclarationAndIncrement(Sizes.TEXTS_DATA_STRING(), currentAddress)
+                
                 self.__write("\n")
+
                 currentAddress = self.initialAddress
             else:
                 currentAddress += self.sizes.BEEP_FX
@@ -76,6 +82,7 @@ class ConfigWriter:
 
             for key, value in vars(self.sizes).items():
                 if key in Sizes.getKeysToMemoryBank():
+                    print(key)
                     continue
                 currentAddress = self.__writeDeclarationAndIncrement(key, currentAddress)
 

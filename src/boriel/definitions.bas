@@ -219,7 +219,11 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
 
 #ifdef IN_GAME_TEXT_ENABLED
     dim textsCoord(AVAILABLE_ADVENTURES, 5) as ubyte at TEXTS_COORD_DATA_ADDRESS
+    'dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS
+    ' const TEXTS_DATA_ADDRESS2 as uinteger = 49152
+    SetBank(fxBank)
     dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS
+    SetBank(0)
     dim currentAdventureState as ubyte = 0
     dim currentScreenFirstText as ubyte = 0
 #endif
