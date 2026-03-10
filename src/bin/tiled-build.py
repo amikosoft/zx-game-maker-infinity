@@ -219,7 +219,7 @@ adventureTextsBackgroundColor = 0
 
 unshiftedGraphics = False
 transpasableItems = 16
-screenAttributesEnabled = False
+screenAttributesEnabled = True
 
 playerReadyConfirmation = False
 fullChangeScreenAnimation = False
@@ -431,8 +431,8 @@ if 'properties' in data:
             unshiftedGraphics = property['value']
         elif property['name'] == 'transpasableItems':
             transpasableItems = property['value']
-        elif property['name'] == 'screenAttributes':
-            screenAttributesEnabled = property['value']
+        # elif property['name'] == 'screenAttributes':
+        #     screenAttributesEnabled = property['value']
         elif property['name'] == 'playerReadyConfirmation':
             playerReadyConfirmation = property['value']
         elif property['name'] == 'fullChangeScreenAnimation':
@@ -1060,13 +1060,15 @@ maxAdventureState = 0
 # musics
 musicsSelected = [False,False,False,False,False,False,False]
 
-musics = {}
-
 # screen attributes
 attributes = {}
-attributesSelected = False
-
-
+attributesSort = []
+attributesBackground = -1
+attributesTile = -1
+attributesBorder = -1
+attributesMusic = -1
+attributesTeleport = -1
+attributesIndex = -1
 
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
@@ -1233,48 +1235,62 @@ for layer in data['layers']:
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
                 elif object['type'] == 'screen_attributes':
+                    # screenAttributesEnabled = True
                     if not screenId in attributes:
                         attributes[screenId] = {
                             "background": int(backgroundAttribute),
                             "border": int(border),
                             "tile": 0,
-                            "teleportTo": 0
+                            "teleportTo": 0,
+                            "music": 0
                         }
                     for prop in range(len(object['properties'])):
                         if object['properties'][prop]['name'] == 'music':
                             if object['properties'][prop]['value'] == 'music1' or object['properties'][prop]['value'] == 'music':
-                                musics[screenId] = [1]
+                                attributes[screenId]["music"] = 1
                                 musicsSelected[0] = True
                             elif object['properties'][prop]['value'] == 'music2':
-                                musics[screenId] = [2]
+                                attributes[screenId]["music"] = 2
                                 musicsSelected[1] = True
                             elif object['properties'][prop]['value'] == 'music3':
-                                musics[screenId] = [3]
+                                attributes[screenId]["music"] = 3
                                 musicsSelected[2] = True
                             elif object['properties'][prop]['value'] == 'title':
-                                musics[screenId] = [4]
+                                attributes[screenId]["music"] = 4
                                 musicsSelected[3] = True
                             elif object['properties'][prop]['value'] == 'ending':
-                                musics[screenId] = [5]
+                                attributes[screenId]["music"] = 5
                                 musicsSelected[4] = True
                             elif object['properties'][prop]['value'] == 'gameover':
-                                musics[screenId] = [6]
+                                attributes[screenId]["music"] = 6
                                 musicsSelected[5] = True
                             elif object['properties'][prop]['value'] == 'no_music':
-                                musics[screenId] = [10]
+                                attributes[screenId]["music"] = 10
                                 musicsSelected[6] = True
+                            
+                            if not 'music' in attributesSort:
+                                attributesSort.append('music')
                         elif object['properties'][prop]['name'] == 'background':
-                            attributesSelected = True
                             attributes[screenId]["background"] = int(object['properties'][prop]['value'])
+
+                            if not 'background' in attributesSort:
+                                attributesSort.append('background')
                         elif object['properties'][prop]['name'] == 'tile':
-                            attributesSelected = True
                             attributes[screenId]["tile"] = int(object['properties'][prop]['value'])
+
+                            if not 'tile' in attributesSort:
+                                attributesSort.append('tile')
                         elif object['properties'][prop]['name'] == 'border':
-                            attributesSelected = True
                             attributes[screenId]["border"] = int(object['properties'][prop]['value'])
+
+                            if not 'border' in attributesSort:
+                                attributesSort.append('border')
                         elif object['properties'][prop]['name'] == 'teleportTo':
-                            attributesSelected = True
-                            attributes[screenId]["teleportTo"] = int(object['properties'][prop]['value'])
+                            if teleportEnabled:
+                                attributes[screenId]["teleportTo"] = int(object['properties'][prop]['value'])
+                                
+                                if not 'teleportTo' in attributesSort:
+                                    attributesSort.append('teleportTo')
                 else:
                     print(object)
                     errorMessage = 'Unknown object type. Only "enemy", "text", "screen_attributes" or "mainCharacter" are allowed. Found: ' + object['type']
@@ -1299,41 +1315,54 @@ if musicEnabled == 1:
     if musicsSelected[6] == True:
         configStr += "#DEFINE NO_MUSIC_SELECTED\n"
 
-    with open("output/screenMusic.bin", "wb") as f:
-        for screenId in range(screensCount):
-            if screenId in musics:
-                f.write(bytearray(musics[screenId]))
-            else:
-                f.write(bytearray([0]))
+    # with open("output/screenMusic.bin", "wb") as f:
+    #     for screenId in range(screensCount):
+    #         if screenId in musics:
+    #             f.write(bytearray(musics[screenId]))
+    #         else:
+    #             f.write(bytearray([0]))
 
 # Atributos por pantalla seleccionados
 if screenAttributesEnabled:
     configStr += "#DEFINE SCREEN_ATTRIBUTES\n"
+
+    configStr += "Const SCREEN_ATTRIBUTES_TOTAL as ubyte = " + str(len(attributesSort) - 1) + "\n"
 
     if teleportEnabled:
         configStr += "#DEFINE TELEPORT_ENABLED\n"
         if teleportAnimation:
             configStr += "#DEFINE TELEPORT_ANIMATION\n"
 
+    for attridx, attributeTmp in enumerate(attributesSort):
+        configStr += "#DEFINE SCREEN_" + attributeTmp.upper() + "_ENABLED\n"
+        configStr += "Const SCREEN_" + attributeTmp.upper() + " as ubyte = " + str(attridx) + "\n"
+
     print("SCREEN_ATTRIBUTES\n")
     with open("output/screenAttributes.bin", "wb") as f:
         for screenId in range(screensCount):
             print(screenId)
 
-            if teleportEnabled:
-                if screenId in attributes:
-                    print(attributes[screenId])
-                    print([attributes[screenId]['background'], attributes[screenId]['tile'], attributes[screenId]['teleportTo']])
-                    f.write(bytearray([attributes[screenId]['background'], attributes[screenId]['tile'], attributes[screenId]['teleportTo']]))
-                else:
-                    f.write(bytearray([backgroundAttribute, 0, 0]))
-            else:
-                if screenId in attributes:
-                    print(attributes[screenId])
-                    print([attributes[screenId]['background'], attributes[screenId]['tile']])
-                    f.write(bytearray([attributes[screenId]['background'], attributes[screenId]['tile']]))
-                else:
-                    f.write(bytearray([backgroundAttribute, 0]))
+            arrayAttrs = []
+            print(attributes[screenId])
+            for attridx, attributeTmp in enumerate(attributesSort):
+                arrayAttrs.append(attributes[screenId][attributeTmp])
+
+            print(arrayAttrs)
+            f.write(bytearray(arrayAttrs))
+            # if teleportEnabled:
+            #     if screenId in attributes:
+            #         print(attributes[screenId])
+            #         print([attributes[screenId]['background'], attributes[screenId]['tile'], attributes[screenId]['teleportTo']])
+            #         f.write(bytearray([attributes[screenId]['background'], attributes[screenId]['tile'], attributes[screenId]['teleportTo']]))
+            #     else:
+            #         f.write(bytearray([backgroundAttribute, 0, 0]))
+            # else:
+            #     if screenId in attributes:
+            #         print(attributes[screenId])
+            #         print([attributes[screenId]['background'], attributes[screenId]['tile']])
+            #         f.write(bytearray([attributes[screenId]['background'], attributes[screenId]['tile']]))
+            #     else:
+            #         f.write(bytearray([backgroundAttribute, 0]))
 
 if adventureTextsAcceptWithFire == True:
     configStr += "#DEFINE ADVENTURE_TEXTS_CONFIRM_FIRE\n"

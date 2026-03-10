@@ -82,7 +82,6 @@ class ConfigWriter:
 
             for key, value in vars(self.sizes).items():
                 if key in Sizes.getKeysToMemoryBank():
-                    print(key)
                     continue
                 currentAddress = self.__writeDeclarationAndIncrement(key, currentAddress)
 

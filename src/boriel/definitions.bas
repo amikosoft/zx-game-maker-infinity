@@ -230,7 +230,6 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
 
 #ifdef ENABLED_128k
 #ifdef MUSIC_ENABLED
-    Dim screenMusic(SCREENS_COUNT) As Ubyte at SCREEN_MUSIC_DATA_ADDRESS
     Dim musicPlayed as Ubyte = 0
             
     #ifdef MUSIC_TOGGLE_ENABLED
@@ -241,11 +240,9 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
 
 #ifdef SCREEN_ATTRIBUTES
     #ifdef TELEPORT_ENABLED
-        Dim screenAttributes(SCREENS_COUNT, 2) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
-        Dim currentTeleportTo as ubyte = 0
-    #else
-        Dim screenAttributes(SCREENS_COUNT, 1) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
+    Dim currentTeleportTo as ubyte = 0
     #endif
+    Dim screenAttributes(SCREENS_COUNT, SCREEN_ATTRIBUTES_TOTAL) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
     Dim currentScreenBackground as ubyte = 0
     Dim currentTileBackground as ubyte = 0
 #endif

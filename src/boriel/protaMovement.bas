@@ -673,15 +673,15 @@ End Sub
             #EndIf
         #EndIf
 
-
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
+            dim textId as ubyte = textsCoord(texto, 3)
             SetBank(fxBank)
             for letra=0 to 14
                 #ifndef FULLSCREEN_TEXTS
                     if fila = 0 Then Print AT 5, 9 + letra; " "
                 #endif
 
-                Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textsCoord(texto, 3), (fila*15)+letra))
+                Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
             Next letra
             SetBank(0)
             #ifndef FULLSCREEN_TEXTS

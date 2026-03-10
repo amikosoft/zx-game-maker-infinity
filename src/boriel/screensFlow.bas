@@ -618,53 +618,68 @@ Sub swapScreen(waitReady as ubyte)
         next texto
     #endif
 
-    #ifdef ENABLED_128k
-        #ifdef MUSIC_ENABLED
-            dim newScreenMusic as ubyte = screenMusic(currentScreen)
-            if newScreenMusic <> 0  and newScreenMusic <> musicPlayed Then
-                musicPlayed = newScreenMusic
-                
-                #ifdef NO_MUSIC_SELECTED
-                    if newScreenMusic = 10 Then VortexTracker_Stop()
-                #endif
-                
-                #ifdef MUSIC_1_SELECTED
-                    if newScreenMusic = 1 Then VortexTracker_Play(MUSIC_ADDRESS)
-                #endif
-                #ifdef MUSIC_2_SELECTED
-                    #ifdef MUSIC_2_ENABLED
-                        if newScreenMusic = 2 Then VortexTracker_Play(MUSIC_2_ADDRESS)
-                    #endif
-                #endif
-                #ifdef MUSIC_3_SELECTED
-                    #ifdef MUSIC_3_ENABLED
-                        if newScreenMusic = 3 Then VortexTracker_Play(MUSIC_3_ADDRESS)
-                    #endif
-                #endif
-                #ifdef MUSIC_4_SELECTED
-                    #ifdef MUSIC_TITLE_ENABLED
-                        if newScreenMusic = 4 Then VortexTracker_Play(MUSIC_TITLE_ADDRESS)
-                    #endif
-                #endif
-                #ifdef MUSIC_5_SELECTED
-                    #ifdef MUSIC_ENDING_ENABLED
-                        if newScreenMusic = 5 Then VortexTracker_Play(MUSIC_ENDING_ADDRESS)
-                    #endif
-                #endif
-                #ifdef MUSIC_6_SELECTED
-                    #ifdef MUSIC_GAMEOVER_ENABLED
-                        if newScreenMusic = 6 Then VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
-                    #endif
-                #endif
-            End if
-        #endif
-    #endif
-    
     #ifdef SCREEN_ATTRIBUTES
-        currentScreenBackground = screenAttributes(currentScreen, 0)
-        currentTileBackground = screenAttributes(currentScreen, 1)
-        #ifdef TELEPORT_ENABLED
-            currentTeleportTo = screenAttributes(currentScreen, 2)
+        #ifdef SCREEN_BACKGROUND_ENABLED
+            currentScreenBackground = screenAttributes(currentScreen, SCREEN_BACKGROUND)
+        #else
+            currentScreenBackground = 0
+        #endif
+
+        #ifdef SCREEN_TILE_ENABLED
+            currentTileBackground = screenAttributes(currentScreen, SCREEN_TILE)
+        #else
+            currentTileBackground = 0
+        #endif
+        
+        #ifdef SCREEN_TELEPORTTO_ENABLED
+            currentTeleportTo = screenAttributes(currentScreen, SCREEN_TELEPORTTO)
+        #else
+            currentTeleportTo = 0
+        #endif
+
+        #ifdef ENABLED_128k
+            #ifdef MUSIC_ENABLED
+                #ifdef SCREEN_MUSIC_ENABLED
+                    dim newScreenMusic as ubyte = screenAttributes(currentScreen, SCREEN_MUSIC)
+
+                    if newScreenMusic <> 0  and newScreenMusic <> musicPlayed Then
+                        musicPlayed = newScreenMusic
+                        
+                        #ifdef NO_MUSIC_SELECTED
+                            if newScreenMusic = 10 Then VortexTracker_Stop()
+                        #endif
+                        
+                        #ifdef MUSIC_1_SELECTED
+                            if newScreenMusic = 1 Then VortexTracker_Play(MUSIC_ADDRESS)
+                        #endif
+                        #ifdef MUSIC_2_SELECTED
+                            #ifdef MUSIC_2_ENABLED
+                                if newScreenMusic = 2 Then VortexTracker_Play(MUSIC_2_ADDRESS)
+                            #endif
+                        #endif
+                        #ifdef MUSIC_3_SELECTED
+                            #ifdef MUSIC_3_ENABLED
+                                if newScreenMusic = 3 Then VortexTracker_Play(MUSIC_3_ADDRESS)
+                            #endif
+                        #endif
+                        #ifdef MUSIC_4_SELECTED
+                            #ifdef MUSIC_TITLE_ENABLED
+                                if newScreenMusic = 4 Then VortexTracker_Play(MUSIC_TITLE_ADDRESS)
+                            #endif
+                        #endif
+                        #ifdef MUSIC_5_SELECTED
+                            #ifdef MUSIC_ENDING_ENABLED
+                                if newScreenMusic = 5 Then VortexTracker_Play(MUSIC_ENDING_ADDRESS)
+                            #endif
+                        #endif
+                        #ifdef MUSIC_6_SELECTED
+                            #ifdef MUSIC_GAMEOVER_ENABLED
+                                if newScreenMusic = 6 Then VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
+                            #endif
+                        #endif
+                    End if
+                #endif
+            #endif
         #endif
     #endif
 

@@ -45,8 +45,8 @@ class SizesGetter:
             sizes.SCREEN_ATTRS_DATA = self.__getOutputFileSize("screenAttributes.bin")
         
         if self.is128k:
-            if self.musicEnabled:
-                sizes.SCREEN_MUSIC_DATA = self.__getOutputFileSize("screenMusic.bin")
+            # if self.musicEnabled:
+            #     sizes.SCREEN_MUSIC_DATA = self.__getOutputFileSize("screenMusic.bin")
         
             sizes.VTPLAYER = self.__getFileSize(BIN_FOLDER + "vtplayer.tap")
             sizes.MUSIC = self.__getFileSize(OUTPUT_FOLDER + "music.tap")

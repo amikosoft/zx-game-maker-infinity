@@ -15,16 +15,16 @@ class Builder:
         useBreakableTile = getUseBreakableTile() and not getBulletDisableCollisions()
         enableAdventureTexts = getAdventureTexts()
         musicEnabled = getMusicEnabled()
-        attrsEnabled = getAttrsEnabled()
+        # attrsEnabled = getAttrsEnabled()
 
         ScreensCompressor().execute(is128K, screenExists("intro"), screenExists("gameover"), screenExists("gamemap"), screenExists("credits"))
         TilesGenerator().execute()
         SpritesGenerator().execute()
         MusicSetup().splitSongs()
         ConvertZXPToGuSprites.convert()
-        BinaryFilesToTapMerger().execute(is128K, useBreakableTile, enableAdventureTexts, musicEnabled, attrsEnabled)
-        sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile, enableAdventureTexts, musicEnabled, attrsEnabled).execute()
-        ChartGenerator().execute(sizes, is128K, enableAdventureTexts, musicEnabled, useBreakableTile, attrsEnabled)
+        BinaryFilesToTapMerger().execute(is128K, useBreakableTile, enableAdventureTexts, musicEnabled, True)
+        sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile, enableAdventureTexts, musicEnabled, True).execute()
+        ChartGenerator().execute(sizes, is128K, enableAdventureTexts, musicEnabled, useBreakableTile, True)
         ConfigWriter(OUTPUT_FOLDER + "config.bas", INITIAL_ADDRESS, sizes).execute()
 
         return sizes

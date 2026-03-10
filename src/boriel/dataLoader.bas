@@ -58,7 +58,7 @@ Sub loadDataFromTape()
         SetBank(fxBank)
         
         load "" CODE BEEP_FX_ADDRESS        
-        load "" CODE TEXTS_DATA_ADDRESS ' credits Screen
+        load "" CODE TEXTS_DATA_ADDRESS ' texts
 
         SetBank(0)
     #endif

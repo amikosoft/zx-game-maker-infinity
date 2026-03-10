@@ -83,7 +83,6 @@
   <property name="platformMoveable" type="bool" value="true"/>
   <property name="playerReadyConfirmation" type="bool" value="true"/>
   <property name="redefineKeysEnabled" type="bool" value="true"/>
-  <property name="screenAttributes" type="bool" value="true"/>
   <property name="shooting" type="bool" value="true"/>
   <property name="shootingPreventJump" type="bool" value="true"/>
   <property name="shouldKillEnemies" type="bool" value="true"/>

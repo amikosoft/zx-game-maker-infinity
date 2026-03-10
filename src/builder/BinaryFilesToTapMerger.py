@@ -43,8 +43,8 @@ class BinaryFilesToTapMerger:
             if not is128k:
                 input_files.append(OUTPUT_FOLDER + "texts.bin")
 
-        if is128k and musicEnabled:
-            input_files.append(OUTPUT_FOLDER + "screenMusic.bin")
+        # if is128k and musicEnabled:
+        #     input_files.append(OUTPUT_FOLDER + "screenMusic.bin")
 
         if screenAttrs:
             input_files.append(OUTPUT_FOLDER + "screenAttributes.bin")
