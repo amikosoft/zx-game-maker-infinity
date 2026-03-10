@@ -846,7 +846,7 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 *Desactivado* pintará el cambio de pantalla sobre la pantalla anterior haciéndo más rápido el cambio y parece una transición
 *Activado* limpia primero la pantalla y luego la nueva
 
-* **screenAttributes** habilita la configuración de parámetros por pantalla (ver [Screen attributes](screen-attributes.md))
+* **screenAttributes** (ya no está en el motor pero se activan automáticamente) (ver [Screen attributes](screen-attributes.md))
 
 * **musicEnabled** habilita/deshabilita la música en el juego.
     * *musicToggleEnabled* activa la posiblidad de activar/desactivar la música in-game desde el menú de inicio pulsando **M**
@@ -857,6 +857,10 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 * **teleportEnabled** activa los portales/puertas en el juego (requiere activar **screenAttributes**). Para configurar los portales/puertas visita [Screen attributes](screen-attributes.md)
 
 * **teleportAnimation** activa la animación de teletransporte en el juego. Esto es útil activar si el efecto deseado es un teletransporte o desactivar si lo que se quiere es simular una puerta/escalera.
+
+* **teleportDisabledTile** hace que los portales que no funcionan se muestren con un tile distinto. Por defecto es el tile anterior al del portal.
+
+* **shootingPreventJump** si activas esto tu personaje no saltará cuando dispares (secuencia de botones: disparo+salto)
 
 ### Idioma del juego
 
@@ -1185,6 +1189,8 @@ Los ejecutables para versiones linux tienen las siguientes opciones incluídas:
     * *F6* modo RF
     * *F7* modo CRT (TV)
     * *F8* modo CRT (TV) + RF
+
+* Alternar entre paletas. Pulsando *F10* se cambia entre la paleta normal o "premium".
 
 Por otro lado, cuando la ventana de juego pierde el foco se pone en pausa automáticamente y se reanuda cuando vuelve a tener el foco. -->
 
