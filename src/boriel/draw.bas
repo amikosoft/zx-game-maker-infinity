@@ -111,14 +111,20 @@ Sub pathDraw()
     y = MAP_Y_ADJUSTMENT
     
     For index=0 To SCREENS_COUNT
-        PAPER screensStatus(index) + 1
+        #ifdef GAMEMAP_ONLY_VISITED
+        if screensStatus(index) <> SCREEN_STATUS_NOT_VISITED then
+        #endif
+            PAPER screensStatus(index) + 1
 
-        if index = currentScreen then
-            PRINT AT y, MAP_X_ADJUSTMENT + (x*2); "X"
-        else
-            PRINT AT y, MAP_X_ADJUSTMENT + (x*2); " "
+            if index = currentScreen then
+                PRINT AT y, MAP_X_ADJUSTMENT + (x*2); "X"
+            else
+                PRINT AT y, MAP_X_ADJUSTMENT + (x*2); " "
+            end if
+        #ifdef GAMEMAP_ONLY_VISITED
         end if
-
+        #endif
+        
         x = x + 1
         If x >= MAP_SCREENS_WIDTH_COUNT Then
             x = 0

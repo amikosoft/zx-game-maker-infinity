@@ -696,6 +696,11 @@
                 "value": 10
             },
             {
+                "name": "gameMapOnlyVisited",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "shootingPreventJump",
                 "type": "bool",
                 "value": false

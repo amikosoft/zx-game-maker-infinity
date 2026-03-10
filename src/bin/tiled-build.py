@@ -241,6 +241,7 @@ teleportAnimation = False
 gameMapIfNoImage = False
 gameMapXAdjustment = 14
 gameMapYAdjustment = 10
+gameMapOnlyVisited = False
 
 if 'properties' in data:
     for property in data['properties']:
@@ -471,6 +472,8 @@ if 'properties' in data:
             teleportAnimation = property['value']
         elif property['name'] == 'gameMapIfNoImage':
             gameMapIfNoImage = property['value']
+        elif property['name'] == 'gameMapOnlyVisited':
+            gameMapOnlyVisited = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -836,6 +839,9 @@ configStr += "const SCREEN_OBJECT_DOOR_INDEX as ubyte = 2 \n"
 configStr += "const SCREEN_OBJECT_LIFE_INDEX as ubyte = 3 \n"
 configStr += "const SCREEN_OBJECT_AMMO_INDEX as ubyte = 4 \n"
 configStr += "const SCREENS_COUNT as ubyte = " + str(screensCount - 1) + "\n\n"
+
+if gameMapOnlyVisited:
+    configStr += "#define GAMEMAP_ONLY_VISITED\n"
 
 if gameMapIfNoImage == True:
     configStr += "#define GAMEMAP_SHOW_ENABLED\n"
