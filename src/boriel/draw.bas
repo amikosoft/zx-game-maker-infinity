@@ -35,7 +35,11 @@ Sub mapDraw()
                     moveScreen = 0
                 end if
                 
-                if not currentTeleportTo then nextTile = 0
+                #ifdef TELEPORT_DISABLED_TILE
+                    if not currentTeleportTo then nextTile = 185
+                #else
+                    if not currentTeleportTo then nextTile = 0
+                #endif
             end if
         #endif
 
@@ -124,7 +128,7 @@ Sub pathDraw()
         #ifdef GAMEMAP_ONLY_VISITED
         end if
         #endif
-        
+
         x = x + 1
         If x >= MAP_SCREENS_WIDTH_COUNT Then
             x = 0

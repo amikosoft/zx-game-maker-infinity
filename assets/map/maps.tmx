@@ -456,7 +456,7 @@
   <object id="141" name="pantalla 1" type="screen_attributes" x="104" y="48">
    <properties>
     <property name="music" value="no_music"/>
-    <property name="teleportTo" type="int" value="3"/>
+    <property name="teleportTo" type="int" value="0"/>
    </properties>
    <point/>
   </object>

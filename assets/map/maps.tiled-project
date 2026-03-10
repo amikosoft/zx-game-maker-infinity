@@ -681,6 +681,11 @@
                 "value": false
             },
             {
+                "name": "teleportDisabledTile",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "gameMapIfNoImage",
                 "type": "bool",
                 "value": false

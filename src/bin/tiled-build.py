@@ -237,6 +237,7 @@ buttonQuitEnabled = False
 
 teleportEnabled = False
 teleportAnimation = False
+teleportDisabledTile = False
 
 gameMapIfNoImage = False
 gameMapXAdjustment = 14
@@ -470,6 +471,8 @@ if 'properties' in data:
             teleportEnabled = property['value']
         elif property['name'] == 'teleportAnimation':
             teleportAnimation = property['value']
+        elif property['name'] == 'teleportDisabledTile':
+            teleportDisabledTile = property['value']
         elif property['name'] == 'gameMapIfNoImage':
             gameMapIfNoImage = property['value']
         elif property['name'] == 'gameMapOnlyVisited':
@@ -1338,6 +1341,9 @@ if screenAttributesEnabled:
         configStr += "#DEFINE TELEPORT_ENABLED\n"
         if teleportAnimation:
             configStr += "#DEFINE TELEPORT_ANIMATION\n"
+        
+        if teleportDisabledTile:
+            configStr += "#DEFINE TELEPORT_DISABLED_TILE\n"
 
     for attridx, attributeTmp in enumerate(attributesSort):
         configStr += "#DEFINE SCREEN_" + attributeTmp.upper() + "_ENABLED\n"
