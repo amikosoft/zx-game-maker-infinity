@@ -14,20 +14,9 @@ end sub
 #endif
 
 Sub showMenu()
-    ' #ifdef ENABLED_128k
-    '     #ifdef MUSIC_ENABLED
-    '         VortexTracker_Stop()
-    '     #endif
-    ' #endif
-
-    ' clearScreen()
-
     loadScreen(TITLE_SCREEN_ADDRESS)
         
     #ifdef ENABLED_128k
-        ' SetBank(DATA_BANK)
-        ' dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
-        ' SetBank(gameBank)
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_TITLE_ENABLED
                 VortexTracker_Play(MUSIC_TITLE_ADDRESS)

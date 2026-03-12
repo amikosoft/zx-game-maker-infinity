@@ -12,7 +12,7 @@ Sub mapDraw()
     ' dim dmAddress as integer = 
 
     For index=0 To SCREEN_LENGTH
-        dim nextTile as ubyte = Peek(arrayBasePtr(decompressedMap) + index) - 1
+        dim nextTile as ubyte = Peek(arrayBasePtr(decompressedMap) + index)
         
         #ifdef FADE_TILES_ENABLED
             ' drawTile(nextTile, x, y)

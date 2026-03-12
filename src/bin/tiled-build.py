@@ -802,7 +802,8 @@ for layer in data['layers']:
         screenObjects = defaultdict(dict)
 
         for idx, screen in enumerate(layer['chunks']):
-            screens.append(array.array('B', screen['data']))
+            dataCorrected = [x - 1 for x in screen['data']]    
+            screens.append(array.array('B', dataCorrected))
 
             screenObjects[idx]['ammo'] = 0
             screenObjects[idx]['key'] = 0
@@ -812,11 +813,11 @@ for layer in data['layers']:
 
             screenAnimatedTiles[idx] = []
 
-            for jdx, cell in enumerate(screen['data']):
+            for jdx, cell in enumerate(dataCorrected):
                 mapX = (jdx % screen['width'])+widthSkip
                 mapY = (jdx // screen['width'])+heightSkip
 
-                tile = str(cell - 1)
+                tile = str(cell)
 
                 # screens[idx][mapY][mapX % screenWidth] = tile
 

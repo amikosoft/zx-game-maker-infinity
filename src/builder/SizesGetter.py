@@ -33,7 +33,6 @@ class SizesGetter:
         sizes.SCREENS_WON_DATA = self.__getOutputFileSize("screensStatus.bin")
         sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA = self.__getOutputFileSize("decompressedEnemiesScreen.bin")
         sizes.MAPS_DATA = self.__getOutputFileSize("map.bin.zx0")
-        sizes.DECOMPRESSED_MAP_DATA = self.__getOutputFileSize("decompressedMap.bin")
         
         if self.adventureTexts:
             sizes.TEXTS_COORD_DATA = self.__getOutputFileSize("textsCoord.bin")

@@ -9,8 +9,8 @@ class TilesGenerator:
 
         # os.system("zxp2gus -t tiles -i " + tilesPath + " -o " + MAP_FOLDER + " -f png")
         # os.system("zxp2gus -t tiles -i " + tilesPath + " -o output -f bin")
-        zxp2gus.generate("tiles",tilesPath, MAP_FOLDER, "png")
-        zxp2gus.generate("tiles",tilesPath, "output", "bin")
+        zxp2gus.generate("tiles",tilesPath, MAP_FOLDER, "png", True)
+        zxp2gus.generate("tiles",tilesPath, "output", "bin", True)
 
         # tilesExtraPath = str(Path(MAP_FOLDER + "tiles_extra.zxp"))
         # zxp2gus.generate("tiles",tilesExtraPath, MAP_FOLDER, "png", True)

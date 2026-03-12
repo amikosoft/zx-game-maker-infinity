@@ -11,7 +11,7 @@ class ZXPToSpritesConversor:
 
         # Validar que el número de líneas sea múltiplo de 16
         if len(bit_lines) % sprite_size != 0:
-            raise ValueError("El archivo ZXP no contiene un número válido de filas para sprites de 16x16.")
+            raise ValueError("El archivo ZXP no contiene un número válido de filas para sprites de " + sprite_size +"*"+sprite_size)
 
         sprites = []
 

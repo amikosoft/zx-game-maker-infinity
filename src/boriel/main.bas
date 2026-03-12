@@ -47,8 +47,8 @@ loadDataFromTape()
 
 #include "functions.bas"
 
-#INCLUDE <scrbuffer.bas>
-#include "screens.bas"
+' #INCLUDE <scrbuffer.bas>
+' #include "screens.bas"
 
 #include "bullet.bas"
 #include "enemies.bas"
