@@ -675,15 +675,17 @@ End Sub
 
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
             dim textId as ubyte = textsCoord(texto, 3)
-            SetBank(fxBank)
+            SetBank(textsBank)
             for letra=0 to 14
                 #ifndef FULLSCREEN_TEXTS
                     if fila = 0 Then Print AT 5, 9 + letra; " "
                 #endif
 
                 Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
+
+                PAUSE 2: BEEP .01, 8
             Next letra
-            SetBank(0)
+            SetBank(gameBank)
             #ifndef FULLSCREEN_TEXTS
                 #ifndef MAP_COLOR_TEXT_ENABLED
                     SetTile(tile, attrSet(tile), 16, 5)

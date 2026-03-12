@@ -991,7 +991,9 @@ else:
         f.write(bytearray([]))
 
 configStr += "const SCREEN_LENGTH as uinteger = " + str(len(screens[0]) - 1) + "\n"
-configStr += "dim decompressedMap(SCREEN_LENGTH) as ubyte\n"
+
+# configStr += "dim decompressedMap(SCREEN_LENGTH) as ubyte\n"
+# configStr += "dim dmAddress as integer = arrayBasePtr(decompressedMap)\n"
 
 currentOffset = 0
 screenOffsets = []
@@ -1030,6 +1032,10 @@ if fontCustom != 'default':
 
 with open("output/screensStatus.bin", "wb") as f:
     f.write(bytearray([0] * screensCount))
+
+with open("output/decompressedMap.bin", "wb") as f:
+    f.write(bytearray([0] * len(screens[0])))
+
 
 if useBreakableTile == 1:
     configStr += "#DEFINE USE_BREAKABLE_TILE\n"
@@ -1183,7 +1189,7 @@ for layer in data['layers']:
                 xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
                 yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
                 screenId = xScreenPosition + (yScreenPosition * mapCols)
-                    
+
                 if object['type'] == '' and 'properties' in object:
                     objects[str(object['properties'][0]['value'])]['linEnd'] = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
                     objects[str(object['properties'][0]['value'])]['colEnd'] = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
@@ -1355,6 +1361,16 @@ if screenAttributesEnabled:
             print(screenId)
 
             arrayAttrs = []
+
+            if not screenId in attributes:
+                attributes[screenId] = {
+                    "background": int(backgroundAttribute),
+                    "border": int(border),
+                    "tile": 0,
+                    "teleportTo": 0,
+                    "music": 0
+                }
+
             print(attributes[screenId])
             for attridx, attributeTmp in enumerate(attributesSort):
                 arrayAttrs.append(attributes[screenId][attributeTmp])

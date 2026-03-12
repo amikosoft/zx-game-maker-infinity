@@ -90,6 +90,7 @@
   <property name="shouldPickUpItems" type="bool" value="true"/>
   <property name="teleportAnimation" type="bool" value="true"/>
   <property name="teleportEnabled" type="bool" value="true"/>
+  <property name="teleportDisabledTile" type="bool" value="true"/>
   <property name="trampolinEnabled" type="bool" value="true"/>
   <property name="transpasableItems" type="int" value="16"/>
   <property name="ulaPlusValidation" type="bool" value="true"/>

@@ -1,4 +1,4 @@
-dim dmAddress as integer = arrayBasePtr(decompressedMap)
+' dim dmAddress as integer = arrayBasePtr(decompressedMap)
 
 sub waitForReleaseKey()
     while GetKeyScanCode():wend
@@ -18,7 +18,7 @@ Sub loadScreen(screen_address as Integer)
     #ifdef ENABLED_128k
         SetBank(screensBank)
         dzx0Standard(screen_address, $4000)
-        SetBank(0)
+        SetBank(gameBank)
     #else
         dzx0Standard(screen_address, $4000)
     #endif 
@@ -305,7 +305,7 @@ end function
         itemsToFind = 0
         currentItems = 0
         for index=0 to SCREEN_LENGTH
-            if peek(dmAddress + index) - 1 = ITEM_TILE then
+            if GetTile(x, y) = ITEM_TILE then
                 itemsToFind = itemsToFind + 1
             end if
             
@@ -361,7 +361,7 @@ sub removeTilesFromScreen(tile as ubyte)
     y = SKIP_HEIGHT_SIZE
     
     for index=0 to SCREEN_LENGTH
-        if peek(dmAddress + index) - 1 = tile then
+        if GetTile(x, y) = tile then
             #ifdef SCREEN_ATTRIBUTES
                 SetTile(currentTileBackground, currentScreenBackground, x, y)
             #else

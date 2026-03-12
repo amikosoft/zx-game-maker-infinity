@@ -147,38 +147,34 @@ Dim horizontalAxisKeyPressed as byte
     Dim isOnPlatform as Ubyte = 0
 #endif
 
-' #ifdef ENABLED_128k
-'     #define DATA_BANK 4
-'     #define MUSIC_BANK 3
-' #endif
+Const gameBank As Ubyte = 0
 
 #ifdef ENABLED_128k
-    Dim screensBank As Ubyte = 3
+    Dim textsBank As Ubyte = 3
+    Dim screensBank As Ubyte = 7 '3
     Dim musicBank As Ubyte = 4
     Dim fxBank As Ubyte = 6
     If Peek(23312) = 1 Then ' Amstrad
-        screensBank = 4
+        textsBank = 4
+        screensBank = 7
         musicBank = 3
         fxBank = 1
     End If
 #endif
 
-' #ifdef SIDE_VIEW
-'     Dim tileSet(192, 7) As Ubyte at TILESET_DATA_ADDRESS
-' #Else
-'     Dim tileSet(194, 7) As Ubyte at TILESET_DATA_ADDRESS
-' #endif
-Dim tileSet(191, 7) As Ubyte at TILESET_DATA_ADDRESS
-Dim attrSet(191) As Ubyte at ATTR_DATA_ADDRESS
+Dim tileSet(255, 7) As Ubyte at TILESET_DATA_ADDRESS
+Dim attrSet(255) As Ubyte at ATTR_DATA_ADDRESS
 ' Dim sprites(47, 31) As Ubyte at SPRITES_DATA_ADDRESS
 Dim screenObjectsInitial(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
-Dim screensOffsets(SCREENS_COUNT) As Uinteger at SCREEN_OFFSETS_DATA_ADDRESS
 Dim enemiesInScreenOffsets(SCREENS_COUNT) As Uinteger at ENEMIES_IN_SCREEN_OFFSETS_DATA_ADDRESS
 Dim damageTiles(DAMAGE_TILES_COUNT) As Ubyte at DAMAGE_TILES_DATA_ADDRESS
 Dim enemiesPerScreen(SCREENS_COUNT) As byte at ENEMIES_PER_SCREEN_INITIAL_DATA_ADDRESS
 Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 Dim screensStatus(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
+Dim screensOffsets(SCREENS_COUNT) As Uinteger at SCREEN_OFFSETS_DATA_ADDRESS
+
+dim decompressedMap(SCREEN_LENGTH) as ubyte
 
 dim firstTimeEnemiesScreen as ubyte = 1
 
@@ -223,7 +219,7 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
     ' const TEXTS_DATA_ADDRESS2 as uinteger = 49152
     SetBank(fxBank)
     dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS
-    SetBank(0)
+    SetBank(gameBank)
     dim currentAdventureState as ubyte = 0
     dim currentScreenFirstText as ubyte = 0
 #endif

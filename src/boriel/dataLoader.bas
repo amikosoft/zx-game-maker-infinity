@@ -1,9 +1,5 @@
 Sub loadDataFromTape()
-    ' #ifdef ENABLED_128k
-    '     SetBank(fxBank)
-    '     load "" CODE $c000 ' Load fx
-    '     SetBank(0)
-    ' #Else
+
     #ifndef ENABLED_128k
         load "" CODE ' Load fx
     #endif
@@ -57,9 +53,14 @@ Sub loadDataFromTape()
 
         SetBank(fxBank)
         
-        load "" CODE BEEP_FX_ADDRESS        
-        load "" CODE TEXTS_DATA_ADDRESS ' texts
-
-        SetBank(0)
+        load "" CODE BEEP_FX_ADDRESS
+        load "" CODE MAPS_DATA_ADDRESS
+        
+        #ifdef IN_GAME_TEXT_ENABLED    
+            SetBank(textsBank)
+            load "" CODE TEXTS_DATA_ADDRESS ' texts
+        #endif
+        
+        SetBank(gameBank)
     #endif
 End Sub

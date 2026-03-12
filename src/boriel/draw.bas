@@ -8,10 +8,12 @@ Sub mapDraw()
     #ifdef FADE_TILES_ENABLED
     maxFadeTile = 0
     #endif
+    
+    ' dim dmAddress as integer = 
 
     For index=0 To SCREEN_LENGTH
-        dim nextTile as ubyte = Peek(dmAddress + index) - 1
-            
+        dim nextTile as ubyte = Peek(arrayBasePtr(decompressedMap) + index) - 1
+        
         #ifdef FADE_TILES_ENABLED
             ' drawTile(nextTile, x, y)
             

@@ -27,7 +27,7 @@ Sub showMenu()
     #ifdef ENABLED_128k
         ' SetBank(DATA_BANK)
         ' dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
-        ' SetBank(0)
+        ' SetBank(gameBank)
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_TITLE_ENABLED
                 VortexTracker_Play(MUSIC_TITLE_ADDRESS)
@@ -191,7 +191,7 @@ Sub playGame()
         #ifdef INTRO_SCREEN_ENABLED
             ' SetBank(DATA_BANK)
             ' dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
-            ' SetBank(0)
+            ' SetBank(gameBank)
             loadScreen(INTRO_SCREEN_ADDRESS)
             pauseUntilPressEnter()
         #endif
@@ -212,7 +212,7 @@ Sub playGame()
     #ifdef ENABLED_128k
         ' SetBank(DATA_BANK)
         ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
-        ' SetBank(0)
+        ' SetBank(gameBank)
 
         #ifdef MUSIC_ENABLED
             VortexTracker_Play(MUSIC_ADDRESS)
@@ -483,9 +483,6 @@ Sub gameOver()
     
     #ifdef ENABLED_128k
         #ifdef GAMEOVER_SCREEN_ENABLED
-            ' SetBank(DATA_BANK)
-            ' dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
-            ' SetBank(0)
             loadScreen(GAMEOVER_SCREEN_ADDRESS)
         #Else
             'updateProtaData( protaY, protaX, 15, 0)
@@ -575,7 +572,12 @@ Sub resetValues()
 End Sub
 
 Sub swapScreen(waitReady as ubyte)
-    dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), dmAddress)
+    dim offsetTmp as uinteger = screensOffsets(currentScreen)
+
+    SetBank(fxBank)
+    dzx0Standard(MAPS_DATA_ADDRESS + offsetTmp, arrayBasePtr(decompressedMap))
+    SetBank(gameBank)
+
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), arrayBasePtr(decompressedEnemiesScreen))
     
     enemiesScreen = enemiesPerScreen(currentScreen)

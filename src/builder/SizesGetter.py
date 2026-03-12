@@ -20,7 +20,6 @@ class SizesGetter:
         sizes.TITLE_SCREEN = self.__getOutputFileSize("title.scr.zx0")
         sizes.ENDING_SCREEN = self.__getOutputFileSize("ending.scr.zx0")
         sizes.HUD_SCREEN = self.__getOutputFileSize("hud.scr.zx0")
-        sizes.MAPS_DATA = self.__getOutputFileSize("map.bin.zx0")
         sizes.ENEMIES_DATA = self.__getOutputFileSize("enemies.bin.zx0")
         sizes.TILESET_DATA = self.__getOutputFileSize("tiles.bin")
         sizes.ATTR_DATA = self.__getOutputFileSize("attrs.bin")
@@ -33,6 +32,8 @@ class SizesGetter:
         sizes.SCREEN_OBJECTS_DATA = self.__getOutputFileSize("screenObjects.bin")
         sizes.SCREENS_WON_DATA = self.__getOutputFileSize("screensStatus.bin")
         sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA = self.__getOutputFileSize("decompressedEnemiesScreen.bin")
+        sizes.MAPS_DATA = self.__getOutputFileSize("map.bin.zx0")
+        sizes.DECOMPRESSED_MAP_DATA = self.__getOutputFileSize("decompressedMap.bin")
         
         if self.adventureTexts:
             sizes.TEXTS_COORD_DATA = self.__getOutputFileSize("textsCoord.bin")

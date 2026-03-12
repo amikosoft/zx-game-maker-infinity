@@ -19,7 +19,7 @@ sub ActivarBuffer()
 end sub
 
 sub DesactivarBuffer() 
-    SetBank(0)
+    SetBank(gameBank)
     SetScreenBufferAddr($4000) 
     SetAttrBufferAddr($5800)
 end sub

@@ -22,7 +22,6 @@ class BinaryFilesToTapMerger:
             input_files = []
 
         input_files += [
-            OUTPUT_FOLDER + "map.bin.zx0",
             OUTPUT_FOLDER + "enemies.bin.zx0",
             # OUTPUT_FOLDER + "sprites.bin",
             OUTPUT_FOLDER + "tiles.bin",
@@ -35,7 +34,9 @@ class BinaryFilesToTapMerger:
             OUTPUT_FOLDER + "enemiesPerScreen.bin",
             OUTPUT_FOLDER + "screenObjects.bin",
             OUTPUT_FOLDER + "screensStatus.bin",
-            OUTPUT_FOLDER + "decompressedEnemiesScreen.bin"
+            OUTPUT_FOLDER + "decompressedEnemiesScreen.bin",
+            # OUTPUT_FOLDER + "map.bin.zx0",
+            # OUTPUT_FOLDER + "decompressedMap.bin"
         ]
 
         if enableAdventureTexts:

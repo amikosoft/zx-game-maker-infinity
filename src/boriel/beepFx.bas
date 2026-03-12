@@ -15,7 +15,7 @@ Sub Fastcall BeepFX_Play(Sound As Ubyte)
         pop ix ; Recuperamos ix
     End ASM
     #ifdef ENABLED_128k
-        SetBank(0)
+        SetBank(gameBank)
     #endif
 End Sub
 
@@ -28,7 +28,7 @@ End Sub
             call 49169 ; Siguiente nota
         End ASM
         #ifdef ENABLED_128k
-            SetBank(0)
+            SetBank(gameBank)
         #endif
     End Sub
     
@@ -40,7 +40,7 @@ End Sub
             call 49361 ; Reset
         End ASM
         #ifdef ENABLED_128k
-            SetBank(0)
+            SetBank(gameBank)
         #endif
     End Sub
 #endif
