@@ -34,6 +34,10 @@ class ConfigWriter:
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.CREDITS_SCREEN_STRING(), currentAddress)
                     self.__write("#DEFINE CREDITS_SCREEN_ENABLED\n")
 
+                if screenExists("redefine"):
+                    currentAddress = self.__writeDeclarationAndIncrement(Sizes.REDEFINE_SCREEN_STRING(), currentAddress)
+                    self.__write("#DEFINE REDEFINE_SCREEN_ENABLED\n")
+
                 if musicExists("title"):
                     self.__write("#DEFINE MUSIC_TITLE_ENABLED\n")
                 

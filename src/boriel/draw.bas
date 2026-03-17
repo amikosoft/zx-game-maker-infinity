@@ -1,4 +1,10 @@
 Sub mapDraw()
+    if screenIsDark then
+        SetTileset(@darkTileSet(0,0))
+    else
+        SetTileset(@tileSet(0,0))
+    end if
+
     ' Dim index As Uinteger
     Dim y, x As Ubyte
     
@@ -28,7 +34,7 @@ Sub mapDraw()
         #endif
 
         #ifdef TELEPORT_ENABLED
-            if nextTile = 186 then
+            if nextTile = TELEPORT_TILE then
                 if moveScreen = 10 then
                     protaX = x*2
                     protaY = y*2
@@ -38,7 +44,7 @@ Sub mapDraw()
                 end if
                 
                 #ifdef TELEPORT_DISABLED_TILE
-                    if not currentTeleportTo then nextTile = 185
+                    if not currentTeleportTo then nextTile = TELEPORT_QUIT_TILE
                 #else
                     if not currentTeleportTo then nextTile = 0
                 #endif
@@ -64,7 +70,7 @@ Sub mapDraw()
 
     #ifdef IN_GAME_TEXT_ENABLED
         #ifdef IS_TEXT_ADVENTURE
-            #ifdef ADVENTURE_TEXTS_HIDE_TILES
+            #ifdef ADVENTURE_TEXTS_MANAGE_TILES
                 for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
                     if textsCoord(texto, 0) <> currentScreen Then exit for
                     dim textState as ubyte = textsCoord(texto, 5)
@@ -74,15 +80,22 @@ Sub mapDraw()
                         dim cordY as ubyte = textsCoord(texto, 2) >> 1
                         
                         if textState >= currentAdventureState Then
-                            dim textTile as ubyte = textsCoord(texto, 4)
-                            
-                            if textTile Then SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
+                            #ifdef ADVENTURE_TEXTS_SHOW_TILES
+                                dim textTile as ubyte = textsCoord(texto, 4)
+                                #ifdef SCREEN_ATTRIBUTES
+                                    if textTile Then SetTileChecked(textTile, tileAttrWithBackground(textTile), cordX, cordY)
+                                #else
+                                    if textTile Then SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
+                                #endif
+                            #endif
+                        #ifdef ADVENTURE_TEXTS_HIDE_TILES
                         Else
                             #ifdef SCREEN_ATTRIBUTES
                                 SetTileChecked(currentTileBackground, currentScreenBackground, cordX, cordY)
                             #else
                                 SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
                             #endif
+                        #endif
                         End if
                     End if
                 Next texto
@@ -92,20 +105,11 @@ Sub mapDraw()
 End Sub
 
 Sub mapColor(color As Ubyte)
-    Dim y, x As Ubyte
-    
-    x = SKIP_WIDTH_SIZE
-    y = SKIP_HEIGHT_SIZE
-    
-    For index=0 To SCREEN_LENGTH
-        SetTileColor(x, y, color)
-        
-        x = x + 1
-        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
-            x = SKIP_WIDTH_SIZE
-            y = y + 1
-        End If
-    Next index
+    for tmpX = SKIP_WIDTH_SIZE to SKIP_WIDTH_SIZE + screenWidth - 1
+        for tmpY = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
+            SetTileColor(tmpX, tmpY, color)
+        next tmpY
+    next tmpX
 End Sub
 
 ' const MAP_X_ADJUSTMENT as ubyte = 14
@@ -165,14 +169,12 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             #ifdef USE_BREAKABLE_TILE
             ElseIf tile = BREAKABLE_TILE Then
                 If not brokenTiles(currentScreen) Then
-                '     #ifdef SCREEN_ATTRIBUTES
-                '         SetTile(currentTileBackground, currentScreenBackground, x, y)
-                '     #else
-                '         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-                '     #endif
-                ' Else
                     SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 End If
+            #endif
+            #ifdef SCREEN_DARK_ENABLED
+            ElseIf tile = SWITCHER_TILE Then
+                SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             #endif
         Else
             SetTile(tile, tileAttrWithBackground(tile), x, y)
@@ -300,6 +302,8 @@ Sub drawSprites()
                 Draw2x2Sprite(protaTile, protaX, protaY)
             End If
         #endif
+
+        ' Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, protaX+3, protaY+1)
     End If
     
     #ifdef SHOOTING_ENABLED

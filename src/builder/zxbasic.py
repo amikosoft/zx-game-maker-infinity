@@ -70,7 +70,7 @@ def getTilesBas(inFile, outFolder, extra=False):
     tiles[0] = [0] * 8
 
     # Guardar tiles en fichero bin para cargarlo desde basic
-    with open(str(Path(outFolder + "/tiles.bin")), "wb+") as f:
+    with open(str(Path(outFolder + ".bin")), "wb+") as f:
         for tile in tiles:
             f.write(bytearray(tile))
 
@@ -97,14 +97,14 @@ def getTilesBas(inFile, outFolder, extra=False):
             ula_colors.append(int(ulacolor, 16))
 
         # print(ula_colors)
-        with open(str(Path(outFolder + "/ulacolors.bas")), "w") as f:
+        with open(str(Path(outFolder + "_ulacolors.bas")), "w") as f:
             f.write("OUT 48955,64: OUT 65339,0\n")
             f.write("PAUSE 1\n")
             f.write("if IN 65339 = 0 then\n")
             f.write("FOR F=0 TO 63: READ A: OUT 48955, F: OUT 65339, A: NEXT F: DATA " + ",".join([str(ula_colors) for ula_colors in ula_colors]))
             f.write("\nend if")
     else:
-        with open(str(Path(outFolder + "/ulacolors.bas")), "w") as f:
+        with open(str(Path(outFolder + "_ulacolors.bas")), "w") as f:
             f.write("'ULA NOT CONFIGURED'\n")
 
     # convertir cada valor de cada una de esas lineas que estan separados por un espacio de hexadecimal a decimal y guardarlo todo en el array attrs
@@ -116,6 +116,6 @@ def getTilesBas(inFile, outFolder, extra=False):
     # Guardar array de enteros de una dimension attrs en fichero binario para cargarlo desde basic
     attrs = [int(attr) for attr in attrs]
 
-    with open(str(Path(outFolder + "/attrs.bin")), "wb+") as f:
+    with open(str(Path(outFolder + "_attrs.bin")), "wb+") as f:
         for attr in attrs:
             f.write(attr.to_bytes(1, byteorder='big'))

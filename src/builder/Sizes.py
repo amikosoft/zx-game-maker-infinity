@@ -10,6 +10,8 @@ class Sizes:
         self.ENEMIES_DATA = 0
         self.TILESET_DATA = 0
         self.ATTR_DATA = 0
+        self.DARKTILESET_DATA = 0
+        self.DARKATTR_DATA = 0
         self.SCREEN_OBJECTS_INITIAL_DATA = 0
         self.SCREEN_OFFSETS_DATA = 0
         self.ENEMIES_IN_SCREEN_OFFSETS_DATA = 0
@@ -26,6 +28,7 @@ class Sizes:
         self.GAMEOVER_SCREEN = 0
         self.GAMEMAP_SCREEN = 0
         self.CREDITS_SCREEN = 0
+        self.REDEFINE_SCREEN = 0
         self.TEXTS_COORD_DATA = 0
         self.TEXTS_DATA = 0
         self.SCREEN_MUSIC_DATA = 0
@@ -68,6 +71,14 @@ class Sizes:
     @staticmethod
     def ATTR_DATA_STRING():
         return "ATTR_DATA"
+    
+    @staticmethod
+    def DARKTILESET_DATA_STRING():
+        return "DARKTILESET_DATA"
+    
+    @staticmethod
+    def DARKATTR_DATA_STRING():
+        return "DARKATTR_DATA"
     
     @staticmethod
     def SCREEN_OBJECTS_INITIAL_DATA_STRING():
@@ -154,6 +165,10 @@ class Sizes:
         return "CREDITS_SCREEN"
     
     @staticmethod
+    def REDEFINE_SCREEN_STRING():
+        return "REDEFINE_SCREEN"
+    
+    @staticmethod
     def MUSIC_TITLE_STRING():
         return "MUSIC_TITLE"
 
@@ -179,7 +194,7 @@ class Sizes:
     
     @staticmethod
     def getKeysToMemoryBank():
-        return ["MAPS_DATA", "DECOMPRESSED_MAP_DATA", "BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "GAMEMAP_SCREEN", "CREDITS_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "SCREEN_ATTRS", "TEXTS_DATA", "SCREEN_MUSIC", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
+        return ["MAPS_DATA", "DECOMPRESSED_MAP_DATA", "BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "GAMEMAP_SCREEN", "CREDITS_SCREEN", "REDEFINE_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "SCREEN_ATTRS", "TEXTS_DATA", "SCREEN_MUSIC", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
     
     def printAllSizesByMemoryBankFor128(self, musicEnabled):
 
@@ -196,6 +211,8 @@ class Sizes:
             self.TEXTS_COORD_DATA_STRING(),
             self.TILESET_DATA_STRING(),
             self.ATTR_DATA_STRING(),
+            self.DARKTILESET_DATA_STRING(),
+            self.DARKATTR_DATA_STRING(),
             self.SCREEN_OBJECTS_INITIAL_DATA_STRING(),
             self.DAMAGE_TILES_DATA_STRING(),
             self.ANIMATED_TILES_IN_SCREEN_DATA_STRING(),
@@ -204,7 +221,7 @@ class Sizes:
             self.BROKEN_TILES_DATA_STRING()
         ], "0")
 
-        self.__printSizesArraySum([self.TITLE_SCREEN_STRING(), self.ENDING_SCREEN_STRING(), self.HUD_SCREEN_STRING(), self.GAMEOVER_SCREEN_STRING(), self.GAMEMAP_SCREEN_STRING(), self.CREDITS_SCREEN_STRING(), self.INTRO_SCREEN_STRING()], "7")
+        self.__printSizesArraySum([self.TITLE_SCREEN_STRING(), self.ENDING_SCREEN_STRING(), self.HUD_SCREEN_STRING(), self.GAMEOVER_SCREEN_STRING(), self.GAMEMAP_SCREEN_STRING(), self.CREDITS_SCREEN_STRING(), self.REDEFINE_SCREEN_STRING(), self.INTRO_SCREEN_STRING()], "7")
         
         if musicEnabled:
             self.__printSizesArraySum([self.VTPLAYER_STRING(), self.MUSIC_TITLE_STRING(), self.MUSIC_STRING(), self.MUSIC_2_STRING(), self.MUSIC_3_STRING(), self.MUSIC_ENDING_STRING(), self.MUSIC_GAMEOVER_STRING()], "4")
@@ -229,6 +246,8 @@ class Sizes:
             self.TEXTS_DATA_STRING(),
             self.TILESET_DATA_STRING(),
             self.ATTR_DATA_STRING(),
+            self.DARKTILESET_DATA_STRING(),
+            self.DARKATTR_DATA_STRING(),
             self.SCREEN_OBJECTS_INITIAL_DATA_STRING(),
             self.DAMAGE_TILES_DATA_STRING(),
             self.ANIMATED_TILES_IN_SCREEN_DATA_STRING(),

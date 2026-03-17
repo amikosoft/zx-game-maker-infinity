@@ -6,9 +6,11 @@
         Return 0
     End Function
     
-    Function checkPlatformByXY(protaX As Ubyte, protaY4 As Ubyte) As Ubyte
+    Function checkPlatformByXY() As Ubyte
         If not enemiesScreen Then Return 0
         
+        dim protaY4 As Ubyte = protaY + 4
+
         For enemyId=0 To enemiesScreen - 1
             If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
                 Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)

@@ -43,6 +43,11 @@ sub pauseUntilPressFire()
     waitForReleaseKey()
 End Sub
 
+function tileAttrSet(tile as ubyte) as ubyte
+    if screenIsDark then return darkAttrSet(tile)
+    return attrSet(tile)
+end function
+
 Function checkProtaTop() As Ubyte
     If protaY < PLAYER_BOUNDS_TOP Then
         #ifdef ARCADE_MODE
@@ -216,7 +221,11 @@ function allEnemiesKilled() as ubyte
 end function
 
 Function tileAttrWithBackground(tile As Ubyte) As Ubyte
-    Dim attr As Ubyte = attrSet(tile)
+    #ifdef SCREEN_DARK_ENABLED
+        Dim attr As Ubyte = tileAttrSet(tile)
+    #Else
+        Dim attr As Ubyte = attrSet(tile)
+    #endif
     
     #ifdef SCREEN_ATTRIBUTES
         Dim backgroundAttr as ubyte = currentScreenBackground
@@ -354,28 +363,17 @@ function CheckCollision(x as uByte, y as uByte) as uByte
 end function
 
 sub removeTilesFromScreen(tile as ubyte)
-    dim index as uinteger
-    dim y, x as ubyte
-    
-    x = SKIP_WIDTH_SIZE
-    y = SKIP_HEIGHT_SIZE
-    
-    for index=0 to SCREEN_LENGTH
-        if GetTile(x, y) = tile then
-            #ifdef SCREEN_ATTRIBUTES
-                SetTile(currentTileBackground, currentScreenBackground, x, y)
-            #else
-                SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-            #endif
-        end if
-        
-        x = x + 1
-        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
-            x = SKIP_WIDTH_SIZE
-
-            y = y + 1
-        end if
-    next index
+    for tmpX = SKIP_WIDTH_SIZE to SKIP_WIDTH_SIZE + screenWidth - 1
+        for tmpY = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
+            if GetTile(tmpX, tmpY) = tile then
+                #ifdef SCREEN_ATTRIBUTES
+                    SetTile(currentTileBackground, currentScreenBackground, tmpX, tmpY)
+                #else
+                    SetTile(0, BACKGROUND_ATTRIBUTE, tmpX, tmpY)
+                #endif
+            end if
+        next tmpY
+    next tmpX
 end sub
 
 sub updateProtaData(lin as ubyte, col as ubyte, tile as ubyte, directionRight as ubyte)

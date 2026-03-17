@@ -4,7 +4,7 @@
 #include <memorybank.bas>
 
 #include "definitions.bas"
-#include "dataLoader.bas"
+' #include "dataLoader.bas"
 
 ' #ifdef GAME_LANGUAGE_ES
 '     #include "texts_es.bas"
@@ -23,7 +23,8 @@
     #endif
 #endif
 
-loadDataFromTape()
+#include "dataLoader.bas"
+'loadDataFromTape()
 
 ' #include "graphicsInitializer.bas"
 #include "lib/GuSpritesConfig.bas"
@@ -75,7 +76,7 @@ SetTileset(@tileSet(0,0))
 #endif
 
 #ifdef ULA_PLUS_VALIDATION
-    #include "../output/ulacolors.bas"
+    #include "../output/tiles_ulacolors.bas"
 #endif
 
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD

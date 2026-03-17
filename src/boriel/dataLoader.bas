@@ -1,4 +1,4 @@
-Sub loadDataFromTape()
+' Sub loadDataFromTape()
 
     #ifndef ENABLED_128k
         load "" CODE ' Load fx
@@ -50,7 +50,9 @@ Sub loadDataFromTape()
         #ifdef CREDITS_SCREEN_ENABLED
             load "" CODE CREDITS_SCREEN_ADDRESS ' credits Screen
         #endif
-
+        #ifdef REDEFINE_SCREEN_ENABLED
+            load "" CODE REDEFINE_SCREEN_ADDRESS ' gamemap Screen
+        #endif
         SetBank(fxBank)
         
         load "" CODE BEEP_FX_ADDRESS
@@ -63,4 +65,4 @@ Sub loadDataFromTape()
         
         SetBank(gameBank)
     #endif
-End Sub
+' End Sub

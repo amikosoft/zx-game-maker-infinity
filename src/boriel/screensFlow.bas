@@ -90,56 +90,67 @@ End Sub
     End Function
     
     Sub redefineKeys()
-        clearScreen()
-        
-        #ifdef MUSIC_ENABLED
-            #ifdef MUSIC_TITLE_ENABLED
-                ' VortexTracker_Stop()
-            #endif
-        #endif
-        
-        Print AT 7,5;REDEFINE_PRESS_KEY_FOR
-        
-        Print AT 9,10;REDEFINE_LEFT
-        keyArray(LEFT) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 8,20; keyOption
-        
-        Print AT 10,10;REDEFINE_RIGHT
-        keyArray(RIGHT) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 10,20; keyOption
-        
-        Print AT 11,10;REDEFINE_UP
-        keyArray(UP) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 12,20; keyOption
-        
-        Print AT 12,10;REDEFINE_DOWN
-        keyArray(DOWN) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 14,20; keyOption
-        
-        Print AT 13,10;REDEFINE_FIRE
-        keyArray(FIRE) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 16,20; keyOption
-        '
-        ' keyOption = ""
-        
-        #ifdef BUTTON_PAUSE_ENABLED
-        Print AT 15,10;REDEFINE_PAUSE
-        keyArray(PAUSE_BUTTON) = LeerTecla()
-        
-            #ifdef BUTTON_QUIT_ENABLED
-                Print AT 16,10;REDEFINE_QUIT
-                keyArray(QUIT_BUTTON) = LeerTecla()
-            #endif        
-        #endif
+        #ifdef REDEFINE_SCREEN_ENABLED
+            loadScreen(REDEFINE_SCREEN_ADDRESS)
 
-        Print AT 19,2;GENERIC_ENTER_CONTINUE
-        ' Do
-        ' Loop Until MultiKeys(KEYENTER)
+            keyArray(LEFT) = LeerTecla()
+            Print AT 6,20;REDEFINE_X
+
+            keyArray(RIGHT) = LeerTecla()
+            Print AT 8,20;REDEFINE_X
+
+            keyArray(UP) = LeerTecla()
+            Print AT 10,20;REDEFINE_X
+
+            keyArray(DOWN) = LeerTecla()
+            Print AT 12,20;REDEFINE_X
+
+            keyArray(FIRE) = LeerTecla()
+            Print AT 14,20;REDEFINE_X
+
+            #ifdef BUTTON_PAUSE_ENABLED
+                keyArray(PAUSE_BUTTON) = LeerTecla()
+                Print AT 16,20;REDEFINE_X
+
+                #ifdef BUTTON_QUIT_ENABLED
+                    keyArray(QUIT_BUTTON) = LeerTecla()
+                    Print AT 18,20;REDEFINE_X
+                #endif        
+            #endif
+        #else
+            clearScreen()
+        
+            Print AT 7,5;REDEFINE_PRESS_KEY_FOR
+
+            Print AT 9,10;REDEFINE_LEFT
+            keyArray(LEFT) = LeerTecla()
+
+            Print AT 10,10;REDEFINE_RIGHT
+            keyArray(RIGHT) = LeerTecla()
+            
+            Print AT 11,10;REDEFINE_UP
+            keyArray(UP) = LeerTecla()
+            
+            Print AT 12,10;REDEFINE_DOWN
+            keyArray(DOWN) = LeerTecla()
+            
+            Print AT 13,10;REDEFINE_FIRE
+            keyArray(FIRE) = LeerTecla()
+
+            #ifdef BUTTON_PAUSE_ENABLED
+                Print AT 15,10;REDEFINE_PAUSE
+                keyArray(PAUSE_BUTTON) = LeerTecla()
+                
+                #ifdef BUTTON_QUIT_ENABLED
+                    Print AT 16,10;REDEFINE_QUIT
+                    keyArray(QUIT_BUTTON) = LeerTecla()
+                #endif        
+            #endif
+        
+        #endif
+        
+        Print AT 21,10;GENERIC_ENTER_CONTINUE
+
         pauseUntilPressEnter()
         
         showMenu()
@@ -394,7 +405,10 @@ Sub playGame()
             drawSprites()
         End If
         
-        If currentLife = 0 and not invincible Then gameOver()
+        If currentLife = 0 and not invincible Then
+            pauseUntilPressEnter()
+            gameOver()
+        end if
         
         If invincible Then
             invincible = invincible - 1
@@ -568,11 +582,11 @@ Sub swapScreen(waitReady as ubyte)
     SetBank(gameBank)
 
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), arrayBasePtr(decompressedEnemiesScreen))
-    
+
     enemiesScreen = enemiesPerScreen(currentScreen)
 
     if screensStatus(currentScreen) < SCREEN_STATUS_COMPLETED then screensStatus(currentScreen) = SCREEN_STATUS_VISITED
-    
+
     ' #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
         firstTimeEnemiesScreen = 1
     ' #endif
@@ -624,8 +638,10 @@ Sub swapScreen(waitReady as ubyte)
         
         #ifdef SCREEN_TELEPORTTO_ENABLED
             currentTeleportTo = screenAttributes(currentScreen, SCREEN_TELEPORTTO)
-        #else
-            currentTeleportTo = 0
+        #endif
+
+        #ifdef SCREEN_DARK_ENABLED
+            screenIsDark = screenAttributes(currentScreen, SCREEN_DARK)
         #endif
 
         #ifdef ENABLED_128k

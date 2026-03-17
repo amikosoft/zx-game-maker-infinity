@@ -257,6 +257,16 @@
                 "value": false
             },
             {
+                "name": "adventureTextsShowTiles",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "adventureTextsSound",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "arcadeMode",
                 "type": "bool",
                 "value": false
@@ -677,6 +687,11 @@
             },
             {
                 "name": "teleportAnimation",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "teleportSound",
                 "type": "bool",
                 "value": false
             },

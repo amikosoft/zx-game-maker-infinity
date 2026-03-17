@@ -53,6 +53,11 @@ doorTile = 0
 lifeTile = 0
 flagTile = 0
 
+breakableTile = 0
+unlockableTile = 0
+teleportTile = 0
+switcherTile = 0
+
 dropTile = 0
 trampolinTile = 0
 trampolinEnabled = False
@@ -71,8 +76,14 @@ for tileset in data['tilesets']:
         for tile in tileset['tiles']:
             if tile['type'] == 'flag':
                 flagTile = tile['id']
-            # if tile['type'] == 'gore':
-            #     dropTile = str(tile['id'])
+            if tile['type'] == 'breakable':
+                breakableTile = tile['id']
+            if tile['type'] == 'unlockable':
+                unlockableTile = tile['id']
+            if tile['type'] == 'teleport':
+                teleportTile = tile['id']
+            if tile['type'] == 'switcher':
+                switcherTile = tile['id']
             if tile['type'] == 'ammo':
                 ammoTile = str(tile['id'])
             if tile['type'] == 'key':
@@ -215,6 +226,8 @@ adventureTextsLength = 30
 adventureTextsClearScreen = False
 adventureTextsAcceptWithFire = False
 adventureTextsHideTiles = False
+adventureTextsShowTiles = False
+adventureTextsSound = False
 adventureTextsBackgroundColor = 0
 
 unshiftedGraphics = False
@@ -238,6 +251,8 @@ buttonQuitEnabled = False
 teleportEnabled = False
 teleportAnimation = False
 teleportDisabledTile = False
+teleportSound = False
+switchesEnabled = False
 
 gameMapIfNoImage = False
 gameMapXAdjustment = 14
@@ -425,6 +440,10 @@ if 'properties' in data:
             adventureTextsAcceptWithFire = property['value']
         elif property['name'] == 'adventureTextsHideTiles':
             adventureTextsHideTiles = property['value']
+        elif property['name'] == 'adventureTextsSound':
+            adventureTextsSound = property['value']
+        elif property['name'] == 'adventureTextsShowTiles':
+            adventureTextsShowTiles = property['value']
         elif property['name'] == 'laddersEnabled':
             laddersEnabled = property['value']
         elif property['name'] == 'checkpointsEnabled':
@@ -473,6 +492,8 @@ if 'properties' in data:
             teleportAnimation = property['value']
         elif property['name'] == 'teleportDisabledTile':
             teleportDisabledTile = property['value']
+        elif property['name'] == 'teleportSound':
+            teleportSound = property['value']
         elif property['name'] == 'gameMapIfNoImage':
             gameMapIfNoImage = property['value']
         elif property['name'] == 'gameMapOnlyVisited':
@@ -533,9 +554,15 @@ else:
     configStr += "const MAX_SCREEN_BOTTOM_PRINT as ubyte = " + str((screenHeight*2)-3) + "\n"
 
 
-configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
+configStr += "const SWITCHER_TILE as ubyte = " + str(switcherTile) + "\n"
+configStr += "const BREAKABLE_TILE as ubyte = " + str(breakableTile) + "\n"
+configStr += "const TELEPORT_TILE as ubyte = " + str(teleportTile) + "\n"
+configStr += "const TELEPORT_QUIT_TILE as ubyte = " + str(teleportTile-1) + "\n"
+configStr += "const ENEMY_DOOR_TILE as ubyte = " + str(unlockableTile) + "\n"
+configStr += "const STEPS_TILE_INIT as ubyte = " + str(unlockableTile + 1) + "\n"
+configStr += "const STEPS_TILE_END as ubyte = " + str(unlockableTile + 5) + "\n"
 
-configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(64+transpasableItems) + "\n"
+configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(unlockableTile+transpasableItems) + "\n"
 
 # configStr += "#DEFINE GAME_LANGUAGE_" + gameLanguage.upper() + "\n"
 if not os.path.exists("boriel/langs/texts_" + gameLanguage.lower() + ".bas"):
@@ -632,6 +659,7 @@ else:
     configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
 
 configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
+configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 
 configStr += "const BULLET_DISTANCE as ubyte = " + str(bulletDistance) + "\n"
 
@@ -1079,12 +1107,6 @@ musicsSelected = [False,False,False,False,False,False,False]
 # screen attributes
 attributes = {}
 attributesSort = []
-attributesBackground = -1
-attributesTile = -1
-attributesBorder = -1
-attributesMusic = -1
-attributesTeleport = -1
-attributesIndex = -1
 
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
@@ -1258,7 +1280,8 @@ for layer in data['layers']:
                             "border": int(border),
                             "tile": 0,
                             "teleportTo": 0,
-                            "music": 0
+                            "music": 0,
+                            "dark": 0
                         }
                     for prop in range(len(object['properties'])):
                         if object['properties'][prop]['name'] == 'music':
@@ -1301,6 +1324,15 @@ for layer in data['layers']:
 
                             if not 'border' in attributesSort:
                                 attributesSort.append('border')
+                        elif object['properties'][prop]['name'] == 'dark':
+                            switchesEnabled = True
+                            if object['properties'][prop]['value'] == True:
+                                attributes[screenId]["dark"] = 1
+                            else:
+                                attributes[screenId]["dark"] = 0
+
+                            if not 'dark' in attributesSort:
+                                attributesSort.append('dark')
                         elif object['properties'][prop]['name'] == 'teleportTo':
                             if teleportEnabled:
                                 attributes[screenId]["teleportTo"] = int(object['properties'][prop]['value'])
@@ -1344,6 +1376,9 @@ if screenAttributesEnabled:
 
     configStr += "Const SCREEN_ATTRIBUTES_TOTAL as ubyte = " + str(len(attributesSort) - 1) + "\n"
 
+    if switchesEnabled or teleportEnabled:
+        configStr += "#DEFINE FIRED_ITEMS_ENABLED\n"
+
     if teleportEnabled:
         configStr += "#DEFINE TELEPORT_ENABLED\n"
         if teleportAnimation:
@@ -1351,6 +1386,9 @@ if screenAttributesEnabled:
         
         if teleportDisabledTile:
             configStr += "#DEFINE TELEPORT_DISABLED_TILE\n"
+
+        if teleportSound:
+            configStr += "#DEFINE TELEPORT_SOUND\n"
 
     for attridx, attributeTmp in enumerate(attributesSort):
         configStr += "#DEFINE SCREEN_" + attributeTmp.upper() + "_ENABLED\n"
@@ -1369,14 +1407,14 @@ if screenAttributesEnabled:
                     "border": int(border),
                     "tile": 0,
                     "teleportTo": 0,
-                    "music": 0
+                    "music": 0,
+                    "dark": 0
                 }
 
             print(attributes[screenId])
             for attridx, attributeTmp in enumerate(attributesSort):
                 arrayAttrs.append(attributes[screenId][attributeTmp])
 
-            print(arrayAttrs)
             f.write(bytearray(arrayAttrs))
             # if teleportEnabled:
             #     if screenId in attributes:
@@ -1410,8 +1448,17 @@ if adventureTexts and len(texts) > 0:
         configStr += "#DEFINE MAP_COLOR_TEXT_ENABLED\n"
         configStr += "const MAP_COLOR_TEXT_COLOR as ubyte = " + str(adventureTextsBackgroundColor) + "\n"  
     
+    if adventureTextsHideTiles == True or adventureTextsShowTiles == True:
+        configStr += "#DEFINE ADVENTURE_TEXTS_MANAGE_TILES\n"
+    
+    if adventureTextsSound:
+        configStr += "#DEFINE ADVENTURE_TEXTS_SOUND\n"
+
     if adventureTextsHideTiles == True:
         configStr += "#DEFINE ADVENTURE_TEXTS_HIDE_TILES\n"
+    
+    if adventureTextsShowTiles == True:
+        configStr += "#DEFINE ADVENTURE_TEXTS_SHOW_TILES\n"
     
     if isAdventure:
         if maxAdventureState < 2:

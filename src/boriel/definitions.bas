@@ -28,8 +28,8 @@ Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
     #endif
 #endif
 
-Const STEPS_TILE_INIT As Ubyte = 64
-Const STEPS_TILE_END As Ubyte = 67
+' Const STEPS_TILE_INIT As Ubyte = 64
+' Const STEPS_TILE_END As Ubyte = 67
 
 ' const MAX_SCREEN_LEFT as ubyte = 2
 ' const MAX_SCREEN_TOP as ubyte = 2
@@ -164,6 +164,10 @@ Const gameBank As Ubyte = 0
 
 Dim tileSet(255, 7) As Ubyte at TILESET_DATA_ADDRESS
 Dim attrSet(255) As Ubyte at ATTR_DATA_ADDRESS
+
+Dim darkTileSet(255, 7) As Ubyte at DARKTILESET_DATA_ADDRESS
+Dim darkAttrSet(255) As Ubyte at DARKATTR_DATA_ADDRESS
+
 ' Dim sprites(47, 31) As Ubyte at SPRITES_DATA_ADDRESS
 Dim screenObjectsInitial(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
 Dim enemiesInScreenOffsets(SCREENS_COUNT) As Uinteger at ENEMIES_IN_SCREEN_OFFSETS_DATA_ADDRESS
@@ -224,6 +228,8 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
     dim currentScreenFirstText as ubyte = 0
 #endif
 
+dim isActionPerformed as ubyte = 0
+
 #ifdef ENABLED_128k
 #ifdef MUSIC_ENABLED
     Dim musicPlayed as Ubyte = 0
@@ -241,6 +247,10 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
     Dim screenAttributes(SCREENS_COUNT, SCREEN_ATTRIBUTES_TOTAL) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
     Dim currentScreenBackground as ubyte = 0
     Dim currentTileBackground as ubyte = 0
+
+    #ifdef SCREEN_DARK_ENABLED
+    Dim screenIsDark as ubyte = 0
+    #endif
 #endif
 
 #ifdef USE_BREAKABLE_TILE
@@ -283,5 +293,5 @@ Const ENEMY_MODE_TRAP_HORIZONAL = 12
     Dim currentLevel As Ubyte = 0
 #endif
 
-Const BREAKABLE_TILE As Ubyte = 62
-Const ENEMY_DOOR_TILE As Ubyte = 63
+' Const BREAKABLE_TILE As Ubyte = 62
+' Const ENEMY_DOOR_TILE As Ubyte = 63

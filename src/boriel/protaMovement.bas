@@ -52,11 +52,15 @@ Function canMoveDown() As Ubyte
             Return 1
         End If
     #endif
-    If CheckCollision(protaX, protaY + 1) Then Return 0
+    
     #ifdef SIDE_VIEW
-        If checkPlatformByXY(protaX, protaY + 4) Then Return 0
+        If CheckCollision(protaX, protaY + 1) Then Return 0
+        
+        If checkPlatformByXY() Then Return 0
         
         if checkIsLadder(protaY + 4, 0) then return 0
+    #else
+        If CheckCollision(protaX, protaY + 1) Then Return 0
     #endif
     Return 1
 End Function
@@ -659,11 +663,11 @@ End Sub
 #ifdef IN_GAME_TEXT_ENABLED
     Sub muestraDialogo(texto as ubyte, tile as ubyte)
         #ifdef FULLSCREEN_TEXTS
-            #ifdef SCREEN_ATTRIBUTES
-                FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
-            #else
+            ' #ifdef SCREEN_ATTRIBUTES
+            '     FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+            ' #else
                 FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
-            #endif
+            ' #endif
             
             SetTile(tile, attrSet(tile), 16, 4)
         #else
@@ -683,7 +687,9 @@ End Sub
 
                 Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
 
-                PAUSE 2: BEEP .01, 8
+                #ifdef ADVENTURE_TEXTS_SOUND
+                    PAUSE 2: BEEP .01, 8
+                #endif
             Next letra
             SetBank(gameBank)
             #ifndef FULLSCREEN_TEXTS
@@ -764,35 +770,18 @@ End Sub
 #endif
 
 Sub fireKey()
-    #ifdef TELEPORT_ENABLED
-    dim tileTeleport as ubyte = GetTile((protaX+1)>>1, (protaY+1)>>1)
-
-    if tileTeleport = 186 then
-        currentScreen = currentTeleportTo - 1
-        moveScreen = 10
-
-        BeepFX_Play(6)
-        
-        #ifdef TELEPORT_ANIMATION
-            for color=1 to 7
-                mapColor(color)
-            next color
-        #endif
-    else
+    isActionPerformed = 0
+    
+    #ifdef FIRED_ITEMS_ENABLED
+    checkObjectContact(0)
     #endif
-        #ifdef IN_GAME_TEXT_ENABLED
-            #ifdef SHOOTING_ENABLED
-                if not validaTexto(0) then shoot()
-            #Else
-                validaTexto(0)
-            #endif
-        #else
-            #ifdef SHOOTING_ENABLED
-                shoot()
-            #endif
-        #endif
-    #ifdef TELEPORT_ENABLED
-    end if
+    
+    #ifdef IN_GAME_TEXT_ENABLED
+        if not isActionPerformed then isActionPerformed = validaTexto(0)
+    #endif
+    
+    #ifdef SHOOTING_ENABLED
+        if not isActionPerformed then shoot()
     #endif
 End Sub
 
@@ -846,134 +835,159 @@ Sub keyboardListen()
     #endif
 End Sub
 
-Function checkTileObject(tile As Ubyte) As Ubyte
-    If tile = ITEM_TILE Then
-        ' #ifndef ARCADE_MODE
-        '     If Not screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-        '         Return 0
-        '     End If
-        ' #endif
-        #ifdef SHOULD_PICKUP_ITEMS
-            screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
-            removeTilesFromScreen(ENEMY_DOOR_TILE)
-        #endif
-        currentItems = currentItems + ITEMS_INCREMENT
-        #ifdef HISCORE_ENABLED
-            score = score + 100
-            If score > hiScore Then
-                hiScore = score
-            End If
-        #endif
-        printLife()
-        #ifdef MESSAGES_ENABLED
-            printMessage(TEXT_NEW_ITEM, 4, 0)
-        #endif
-        #ifdef ARCADE_MODE
-            If currentItems = itemsToFind Then
-                SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
-            End If
-        #Else
-            #ifndef LEVELS_MODE
-                If currentItems = GOAL_ITEMS Then
-                    ending()
+Function checkTileObject(tile As Ubyte, oneUse as ubyte) As Ubyte
+    if oneUse then
+        If tile = ITEM_TILE Then
+            #ifdef SHOULD_PICKUP_ITEMS
+                screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
+                removeTilesFromScreen(ENEMY_DOOR_TILE)
+            #endif
+            currentItems = currentItems + ITEMS_INCREMENT
+            #ifdef HISCORE_ENABLED
+                score = score + 100
+                If score > hiScore Then
+                    hiScore = score
                 End If
             #endif
-        #endif
-        screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
-        BeepFX_Play(5)
-        Return tile
-        #ifndef ARCADE_MODE
-            #ifdef CHECKPOINTS_ENABLED
-            ElseIf tile = FLAG_TILE Then
-                #ifdef MESSAGES_ENABLED
-                    if protaScreenRespawn <> currentScreen Then printMessage(TEXT_CHECK_POINT, 4, 0)
-                #endif
-                
-                protaXRespawn = protaX
-                protaYRespawn = protaY - 1
-                protaScreenRespawn = currentScreen
+            printLife()
+            #ifdef MESSAGES_ENABLED
+                printMessage(TEXT_NEW_ITEM, 4, 0)
             #endif
-        #endif
-        #ifdef KEYS_ENABLED
-        Elseif tile = KEY_TILE Then
             #ifdef ARCADE_MODE
-                If currentScreen = SCREENS_COUNT Then
-                    ending()
-                Else
-                    moveScreen = 6
-                    Return 1
+                If currentItems = itemsToFind Then
+                    SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
                 End If
+            #Else
+                #ifndef LEVELS_MODE
+                    If currentItems = GOAL_ITEMS Then
+                        ending()
+                    End If
+                #endif
             #endif
-            currentKeys = currentKeys + 1
-            printLife()
-            #ifdef MESSAGES_ENABLED
-                printMessage(TEXT_KEY_FOUND, 4, 0)
-            #endif
-            screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
-            BeepFX_Play(3)
+            screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
+            BeepFX_Play(5)
             Return tile
-        #endif
-    Elseif tile = LIFE_TILE Then
-        #ifdef ENERGY_ENABLED
-            if currentEnergy = INITIAL_ENERGY Then
+            #ifndef ARCADE_MODE
+                #ifdef CHECKPOINTS_ENABLED
+                ElseIf tile = FLAG_TILE Then
+                    #ifdef MESSAGES_ENABLED
+                        if protaScreenRespawn <> currentScreen Then printMessage(TEXT_CHECK_POINT, 4, 0)
+                    #endif
+                    
+                    protaXRespawn = protaX
+                    protaYRespawn = protaY - 1
+                    protaScreenRespawn = currentScreen
+                #endif
+            #endif
+            #ifdef KEYS_ENABLED
+            Elseif tile = KEY_TILE Then
+                #ifdef ARCADE_MODE
+                    If currentScreen = SCREENS_COUNT Then
+                        ending()
+                    Else
+                        moveScreen = 6
+                        Return 1
+                    End If
+                #endif
+                currentKeys = currentKeys + 1
+                printLife()
+                #ifdef MESSAGES_ENABLED
+                    printMessage(TEXT_KEY_FOUND, 4, 0)
+                #endif
+                screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
+                BeepFX_Play(3)
+                Return tile
+            #endif
+        Elseif tile = LIFE_TILE Then
+            #ifdef ENERGY_ENABLED
+                if currentEnergy = INITIAL_ENERGY Then
+                    currentLife = currentLife + LIFE_AMOUNT
+                else
+                    currentEnergy = INITIAL_ENERGY
+                End if
+            #else
                 currentLife = currentLife + LIFE_AMOUNT
-            else
-                currentEnergy = INITIAL_ENERGY
-            End if
-        #else
-            currentLife = currentLife + LIFE_AMOUNT
-        #endif
-        
-        printLife()
-        
-        #ifdef MESSAGES_ENABLED
-            printMessage(TEXT_LIFE, 2, 0)
-        #endif
-        
-        screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
-        BeepFX_Play(6)
-        Return tile
-        #ifdef AMMO_ENABLED
-        Elseif tile = AMMO_TILE Then
-            currentAmmo = currentAmmo + AMMO_INCREMENT
+            #endif
+            
             printLife()
             
             #ifdef MESSAGES_ENABLED
-                printMessage(TEXT_AMMO, 2, 0)
+                printMessage(TEXT_LIFE, 2, 0)
             #endif
             
-            screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
+            screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
             BeepFX_Play(6)
             Return tile
+            #ifdef AMMO_ENABLED
+            Elseif tile = AMMO_TILE Then
+                currentAmmo = currentAmmo + AMMO_INCREMENT
+                printLife()
+                
+                #ifdef MESSAGES_ENABLED
+                    printMessage(TEXT_AMMO, 2, 0)
+                #endif
+                
+                screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
+                BeepFX_Play(6)
+                Return tile
+            #endif
+        End If
+    #ifdef FIRED_ITEMS_ENABLED
+    else if not isActionPerformed then
+        #ifdef SCREEN_DARK_ENABLED
+            if tile = SWITCHER_TILE Then
+                screenIsDark = not screenIsDark
+                mapDraw()
+                isActionPerformed = tile
+                return tile
+            end if
         #endif
-    End If
+        #ifdef TELEPORT_ENABLED
+            if tile = TELEPORT_TILE then
+                currentScreen = currentTeleportTo - 1
+                moveScreen = 10
+                isActionPerformed = tile
+                ' BeepFX_Play(6)
+                
+                #ifdef TELEPORT_ANIMATION
+                    for color=1 to 7
+                        #ifdef TELEPORT_SOUND
+                            BEEP 0.01, color
+                        #endif
+                        mapColor(7-color)
+                    next color
+                #endif
+            End if
+        #endif
+    #endif
+    End if
+
     Return 0
 End Function
 
-Sub checkObjectContact()
+Sub checkObjectContact(oneUse as ubyte)
     Dim col As Ubyte = protaX >> 1
     Dim lin As Ubyte = protaY >> 1
-    
     for c=col to (col+1)
         for l=lin to (lin+1)
             #ifdef IN_GAME_TEXT_ENABLED
                 dim tile = GetTile(c, l)
                 
-                if checkTileObject(tile) then
+                if checkTileObject(tile, oneUse) then
                     validaTexto(tile)
                     
                     #ifdef SCREEN_ATTRIBUTES
-                        SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        if oneUse then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                        if oneUse then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #else
-                If checkTileObject(GetTile(c, l)) Then
+                If checkTileObject(GetTile(c, l), oneUse) Then
                     #ifdef SCREEN_ATTRIBUTES
-                        SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        if oneUse then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                        if oneUse then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #endif
@@ -1021,7 +1035,7 @@ Sub protaMovement()
     keyboardListen()
 
     if moveScreen then return
-    checkObjectContact()
+    checkObjectContact(1)
     
     #ifdef SIDE_VIEW
         #ifndef JETPACK_FUEL

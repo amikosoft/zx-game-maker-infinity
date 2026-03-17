@@ -81,10 +81,7 @@ def generateTilesPng(inFile, outFolder, extra=False):
             img.putpixel((x, y), colorBinary)
 
     # Guardar la imagen como PNG
-    if extra:
-        img.save(str(Path(outFolder + "/tiles_extra.png")))
-    else:
-        img.save(str(Path(outFolder + "/tiles.png")))
+    img.save(str(Path(outFolder + ".png")))
 
 def binaryToZxSpectrumColor(colorInt, bright):
     zxSpectrumColorsToRgb = {

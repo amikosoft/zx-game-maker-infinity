@@ -11,6 +11,7 @@ Const TEXT_AMMO as String = " BALAS!! "
 Const TEXT_PAUSE as String = "-=PAUSA=-"
 
 ' Free length, less for lower memmory
+Const REDEFINE_X as String = "X"
 Const REDEFINE_PRESS_KEY_FOR as String = "Tecla:"
 Const REDEFINE_LEFT as String = "Izq."
 Const REDEFINE_RIGHT as String = "Der."
@@ -32,4 +33,5 @@ Const TEXT_GAME_OVER as String = "GAME OVER"
 Const TEXT_LEVEL_COMPLETE as String = "Nivel completado!"
 
 ' dont touch
+
 Const TEXT_3_SPACES as String = "   "
