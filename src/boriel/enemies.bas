@@ -346,7 +346,7 @@ Sub moveEnemies()
                                 if enemySpeedBucle = 3 and not verticalDirectionBucle and not horizontalDirectionBucle Then
                                     if verticalAxisKeyPressed = -1 Then
                                         If (protaY - 1) > (PLAYER_BOUNDS_TOP + 2) and Not CheckCollision(protaX, protaY - 1) Then enemyLinBucle = enemyLinBucle - 1
-                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < PLAYER_BOUNDS_TOP Then
+                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < PLAYER_BOUNDS_BOTTOM Then
                                         enemyLinBucle = enemyLinBucle + 1
                                     End If
                                     
