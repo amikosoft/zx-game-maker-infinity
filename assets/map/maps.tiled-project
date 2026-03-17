@@ -360,6 +360,11 @@
                 "value": "all"
             },
             {
+                "name": "enemiesSound",
+                "type": "bool",
+                "value": true
+            },
+            {
                 "name": "enemiesBulletCollision",
                 "type": "bool",
                 "value": true

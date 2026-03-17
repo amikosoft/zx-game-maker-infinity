@@ -41,6 +41,7 @@
   <property name="enemiesShootSpeed" value="slow"/>
   <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
   <property name="enemiesSlowDown" type="bool" value="false"/>
+  <property name="enemiesSound" type="bool" value="true"/>
   <property name="fadeTilesFramesCount" type="int" value="30"/>
   <property name="fadeTilesInScreenMax" type="int" value="5"/>
   <property name="fontCustom" propertytype="fontCustom" value="default"/>
@@ -195,7 +196,7 @@
 41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,
 40,1,1,1,1,1,44,1,1,172,1,1,1,1,1,1,1,166,1,1,1,1,1,172,1,124,125,1,255,40,
 41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,52,52,1,1,1,1,1,124,125,1,1,93,41,
-40,1,124,125,1,1,1,1,1,1,1,1,249,1,1,1,1,1,1,1,1,1,1,166,1,1,1,1,1,40,
+40,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,166,1,1,1,1,1,40,
 41,1,1,1,172,1,1,1,52,52,52,1,1,1,1,1,1,1,1,1,1,1,98,52,52,1,1,1,1,41,
 40,1,1,1,1,1,1,1,1,1,52,52,52,97,1,1,1,1,1,1,1,98,1,1,1,1,1,1,1,40,
 41,1,1,1,129,1,1,1,1,1,1,1,1,1,97,1,1,1,1,1,98,1,1,124,1,1,1,1,1,41,
@@ -395,9 +396,9 @@
   <object id="110" name="trap1" gid="285" x="168" y="72" width="16" height="16">
    <properties>
     <property name="life" type="int" value="99"/>
-    <property name="mode" propertytype="enemyMovement" value="trap all directions"/>
+    <property name="mode" propertytype="enemyMovement" value="trap vertical"/>
     <property name="speed" type="int" propertytype="enemySpeed" value="2"/>
-    <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="all including diagonals"/>
+    <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="no"/>
    </properties>
   </object>
   <object id="121" name="plataf1" gid="265" x="16" y="168" width="16" height="16"/>
@@ -468,10 +469,10 @@
    </properties>
    <point/>
   </object>
-  <object id="142" name="1" type="text" x="96" y="224">
+  <object id="142" name="1" type="text" x="272" y="280">
    <properties>
     <property name="adventureState" type="int" value="0"/>
-    <property name="es" value="Se fue la luz!!No veo bien"/>
+    <property name="es" value="Un interruptor en una piramideQue modernidad!"/>
     <property name="itemAction" type="int" value="0"/>
    </properties>
    <point/>

@@ -557,8 +557,6 @@ Sub rightKey(animate as ubyte)
         #ifdef SIDE_VIEW
             if isInStep(protaX+3) then
                 protaY = protaY - 1
-                ' elseif isInStep(protaX+1, protaY + 4) then
-                '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
             end if
 
             #ifdef GLUE_SLOW_DOWN

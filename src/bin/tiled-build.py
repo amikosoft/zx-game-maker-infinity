@@ -214,6 +214,8 @@ enemiesPursuitCollide = True
 enemiesShootSpeed = 2
 enemiesShootingLookAtPlayer = False
 enemiesShootOnlyLookingPlayer = False
+enemiesSound = False
+
 bulletAnimation = 0
 bulletsCollisionWithBullets = False
 messagesEnabled = 0
@@ -420,6 +422,8 @@ if 'properties' in data:
             enemiesShootingLookAtPlayer = property['value']
         elif property['name'] == 'enemiesShootOnlyLookingPlayer':
             enemiesShootOnlyLookingPlayer = property['value']
+        elif property['name'] == 'enemiesSound':
+            enemiesSound = property['value']
         elif property['name'] == 'bulletsCollisionWithBullets':
             bulletsCollisionWithBullets = property['value']
         elif property['name'] == 'bulletType':
@@ -955,6 +959,9 @@ if trampolinEnabled:
     
     configStr += "#define TRAMPOLIN_ENABLED\n"
     configStr += "const TRAMPOLIN_TILE as ubyte = " + str(trampolinTile) + "\n"
+
+if enemiesSound:
+    configStr += "#define ENEMIES_SOUND\n"
 
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"
@@ -1603,8 +1610,13 @@ for layer in data['layers']:
                         arrayBuffer.append(int(enemy['tile']))
                         arrayBuffer.append(int(enemy['linIni']) + (heightSkip*2))
                         arrayBuffer.append(int(enemy['colIni']) + (widthSkip*2))
-                        arrayBuffer.append(int(enemy['linEnd']) + (heightSkip*2))
-                        arrayBuffer.append(int(enemy['colEnd']) + (widthSkip*2))
+
+                        if enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
+                            arrayBuffer.append(int(enemy['linEnd']))
+                            arrayBuffer.append(int(enemy['colEnd']))
+                        else:
+                            arrayBuffer.append(int(enemy['linEnd']) + (heightSkip*2))
+                            arrayBuffer.append(int(enemy['colEnd']) + (widthSkip*2))
                         arrayBuffer.append(int(horizontalDirection))
                         arrayBuffer.append(int(enemy['linIni']) + (heightSkip*2))
                         arrayBuffer.append(int(enemy['colIni']) + (widthSkip*2))

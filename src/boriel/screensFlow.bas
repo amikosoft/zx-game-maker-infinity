@@ -406,7 +406,6 @@ Sub playGame()
         End If
         
         If currentLife = 0 and not invincible Then
-            pauseUntilPressEnter()
             gameOver()
         end if
         

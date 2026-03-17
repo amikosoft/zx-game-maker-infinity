@@ -33,14 +33,6 @@ SoundEffect2Data:
 	defb 0
 SoundEffect3Data:
 	defb 1 ;tone
-	defw 1,500,500,100,384
-	defb 1 ;tone
-	defw 1,500,500,100,384
-	defb 1 ;tone
-	defw 1,500,500,100,384
-	defb 1 ;tone
-	defw 1,500,1000,100,64
-	defb 1 ;tone
 	defw 1,500,1000,100,64
 	defb 1 ;tone
 	defw 1,500,1000,100,64
@@ -88,16 +80,4 @@ SoundEffect6Data:
 	defw 1,500,1000,0,16
 	defb 1 ;tone
 	defw 1,500,1000,0,16
-	defb 1 ;tone
-	defw 1,500,1200,0,128
-	defb 1 ;tone
-	defw 1,500,1200,0,128
-	defb 1 ;tone
-	defw 1,500,1200,0,16
-	defb 1 ;tone
-	defw 1,500,1200,0,16
-	defb 1 ;tone
-	defw 1,500,1400,0,128
-	defb 1 ;tone
-	defw 1,500,1400,0,16
 	defb 0

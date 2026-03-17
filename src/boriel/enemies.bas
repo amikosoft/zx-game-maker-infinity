@@ -297,6 +297,10 @@ Sub moveEnemies()
                     If enemyColEndBucle = enemyColBucle And enemyLinEndBucle = enemyLinBucle Then
                         enemyColBucle = enemyColIniBucle
                         enemyLinBucle = enemyLinIniBucle
+
+                        #ifdef ENEMIES_SOUND
+                            BEEP .01, 4
+                        #endif
                     End If
                 #endif
                 #ifdef ENEMIES_TRAP_ENABLED
@@ -322,6 +326,10 @@ Sub moveEnemies()
                         enemyLinBucle = enemyLinIniBucle
                         verticalDirectionBucle = 0
                         horizontalDirectionBucle = 0
+
+                        #ifdef ENEMIES_SOUND
+                            BEEP .01, 4
+                        #endif
                     End if
                 #endif
             End if
