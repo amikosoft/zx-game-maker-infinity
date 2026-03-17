@@ -530,11 +530,12 @@ Sub resetValues()
     #ifdef ARCADE_MODE
         currentItems = 0
     #Else
-        If ITEMS_COUNTDOWN Then
+        #ifdef ITEMS_COUNTDOWN_ENABLED
+        ' If ITEMS_COUNTDOWN Then
             currentItems = itemsToFind
-        Else
+        #Else
             currentItems = 0
-        End If
+        #EndIf
     #endif
     
     ' #ifdef LIVES_MODE_ENABLED

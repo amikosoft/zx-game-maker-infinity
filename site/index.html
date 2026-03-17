@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#zxgm-infinity-4" class="md-skip">
+        <a href="#zxgm-infinity-5" class="md-skip">
           Skip to content
         </a>
       
@@ -342,9 +342,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-esta-version" class="md-nav__link">
+  <a href="#nuevo-en-esta-version-5" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en esta versión
+      Nuevo en esta versión 5
     </span>
   </a>
   
@@ -575,9 +575,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-esta-version" class="md-nav__link">
+  <a href="#nuevo-en-esta-version-5" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en esta versión
+      Nuevo en esta versión 5
     </span>
   </a>
   
@@ -617,11 +617,19 @@
 
 
 
-<h1 id="zxgm-infinity-4">ZXGM Infinity 4</h1>
+<h1 id="zxgm-infinity-5">ZXGM Infinity 5</h1>
 <p>Manual para configurar las características de Infinity</p>
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
-<h2 id="nuevo-en-esta-version">Nuevo en esta versión</h2>
+<h2 id="nuevo-en-esta-version-5">Nuevo en esta versión 5</h2>
 <ul>
+<li>Se ha dejado de dar soporte a ZX Spectrum 48K con el fin de mejorar el rendimiento y poder implementar nuevas características</li>
+<li>El número de tiles ha subido a 512 (255 tiles de color y 255 para modo oscuro)</li>
+<li>Ahora se puede indicar en una pantalla que esté oscura al entrar cambiando entre los tiles normales y los tiles oscuros</li>
+<li>Item interruptor que cambia (en la pantalla actual) entre oscuro y normal</li>
+<li>El mapa permite configurarse para mostrar sólo las pantallas visitadas ocultando el resto</li>
+<li>Sonido para los textos de la aventura</li>
+<li>Sonido para los enemigos</li>
+<li>Pantalla scr para redefinir teclas</li>
 <li>Layout de juego configurable</li>
 <li>Posibilidad de configurar pantallas sin música</li>
 <li>Ahora el jugador dispara en 8 direcciones: izquierda, derecha, arriba, abajo y diagonales</li>
@@ -702,7 +710,7 @@ Con esta acción podrás compilar tus tiles.zxp y sprites.zxp, sin necesidad de 
 
 ## Migración
 
-Si vienes de una versión anterior de v4 es recomendable seguir estos pasos:
+Si vienes de una versión anterior de v5 es recomendable seguir estos pasos:
 
 * Descargar la última versión del ZXGM Infinity e instalar en una carpeta nueva
 * Copiar la carpeta assets de tu proyecto original teniendo en cuenta lo siguiente:
@@ -885,6 +893,12 @@ Si activas esta funcionalidad el tile 32 (más del 33% de energía) y 33 (menos 
 
 ![Fade tile](imgs/fade-tile.png)
 
+### Tile interruptor
+
+Este tile permite al jugador cambiar entre el modo oscuro y normal en la pantalla actual.
+
+![Switch tile](imgs/switchTile.png)
+
 ### Comportamiento del personaje
 
 * **laddersEnabled** activando esta opción harás que el personaje suba escaleras (tiles transpasables) usando una animación de subir. La velocidad de subida será más lenta simulando la subida de escaleras. No afecta a la velocidad de bajada.
@@ -936,6 +950,14 @@ Para modo **boomerang** se usará siempre el fichero bullet.zxp
 
 Las balas de los enemigos no son animadas
 
+### Pantallas SCR
+
+A continuación se enumeran aquellas pantallas que pueden ser sustituidas por SCR
+
+* **Redefine Keys** muestra el SCR (redefine.scr) en lugar de la lógica de texto permitiendo ahorrar espacio y ganar en vistosidad
+
+* **Créditos** el fichero (credits.scr) se muestra nada más cargar el juego dando información del motor y agradecimientos que quieras meter. Quitándolo no se mostrará pero tampoco se ahorrará mucho espacio.
+
 ### Atributos que han dejado de tener utilidad
 
 * Tanto *animatePeriodEnemy* como *animatePeriodMain* no tienen efecto puesto que han sido eliminados y unificados.
@@ -955,6 +977,8 @@ Toda la información sobre la personalización del comportamiento de enemigos
 * **enemiesRespawnInScreen** activa el mecanismo por el cuál los enemigos resurgen después de matarlos. El enemigo se mostrará parpadeando breves momentos antes de aparecer.
 
 * **enemiesSlowDown** indica al motor que en lugar de morir los enemigos se ralentizen aumentando su velocidad de nuevo poco a poco hasta llegar al máximo de velocidad, que es 3. Ejemplo: Tienes un enemigo velocidad 1, lo ralentizas... a continuación se para unos instantes y empieza a acelerar hasta que llega a velocidad 3.
+
+* **enemiesSound** activa sonido para aquellos enemigos que tienen una sóla dirección de movimiento, como los *one direction* o los enemigos trampa. El sonido lo harán al final de su trayecto. Por ejemplo, se simula el sonido de una gota o del choque con algo.
 
 ### Distancia de enemigos en modo Alerta
 
@@ -1115,7 +1139,11 @@ Las longitudes son 30, 45 y 60. Hay que tener en cuenta que en el juego se mostr
 
 * **adventureTextsAcceptWithFire** habilita que los mensajes se acepten pulsando *disparo*
 
-* **adventureTextsHideTiles** esto indica al motor que oculte/muestre aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos. Activando esta opción, aquellos tiles configurados para el modo aventura se deben/pueden quitar del mapa y el motor se encargará de pintarlos, evitando el efecto *popping*.
+* **adventureTextsHideTiles** esto indica al motor que oculte aquellos tiles asociados a pasos de la aventura mientras no puedas cogerlos o no apliquen. Activando esta opción, aquellos tiles configurados para el modo aventura se deben pintar en el mapa y el motor se encargará de ocultarlos, evitando el efecto *popping*.
+
+* **adventureTextsShowTiles** esto indica al motor que pinte aquellos tiles asociados a pasos de la aventura mientras los puedas coger o apliquen. Esto previene de mostrar aquellos elementos de la aventura que no correspondan.
+
+* **adventureTextsSound** activa el sonido de los textos de la aventura simulando una escritura de máquina de escribir.
 
 * **adventureTextsBackgroundColor** hace que al mostrar los mensajes al usuario se cambie el color de la pantalla al indicado aquí. Hay que tener en cuenta que habilitando este *adventureTextsClearScreen* no tiene efecto.
 

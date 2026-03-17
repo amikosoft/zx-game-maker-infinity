@@ -190,11 +190,6 @@
         "id": 2,
         "members": [
             {
-                "name": "128Kenabled",
-                "type": "bool",
-                "value": false
-            },
-            {
                 "name": "ammo",
                 "type": "int",
                 "value": -1

@@ -134,7 +134,7 @@ shootingPreventJump = False
 shouldKillEnemies = 0
 
 shouldPickUpItems = False
-enabled128K = 0
+enabled128K = 1
 hiScore = 0
 
 initialScreen = 2
@@ -293,8 +293,8 @@ if 'properties' in data:
             shouldKillEnemies = 1 if property['value'] else 0
         elif property['name'] == 'shouldPickUpItems':
             shouldPickUpItems = property['value']
-        elif property['name'] == '128Kenabled':
-            enabled128K = 1 if property['value'] else 0
+        # elif property['name'] == '128Kenabled':
+        #     enabled128K = 1 if property['value'] else 0
         elif property['name'] == 'hiScore':
             hiScore = 1 if property['value'] else 0
         elif property['name'] == 'maxEnemiesPerScreen':
@@ -673,6 +673,8 @@ if bulletDistance == 0:
 if int(dropTile) > 0:
     configStr += "#DEFINE DROP_ENABLED\n"
     configStr += "const DROP_TILE as ubyte = " + str(dropTile) + "\n"
+    if dropTile < (flagTile + 1):
+        configStr += "#DEFINE DROP_DRAW_SIMPLE\n"
 
 configStr += "const KEY_TILE as ubyte = " + keyTile + "\n"
 configStr += "const ITEM_TILE as ubyte = " + itemTile + "\n"
@@ -682,7 +684,9 @@ configStr += "const ANIMATE_PERIOD_MAIN as ubyte = " + str(animatePeriodMain) + 
 configStr += "const ANIMATE_PERIOD_ENEMY as ubyte = " + str(animatePeriodEnemy) + "\n"
 configStr += "const ANIMATE_PERIOD_TILE as ubyte = " + str(animatePeriodTile) + "\n\n"
 
-configStr += "const ITEMS_COUNTDOWN as ubyte = " + str(itemsCountdown) + "\n"
+if itemsCountdown > 0:
+    configStr += "#define ITEMS_COUNTDOWN_ENABLED\n"
+# configStr += "const ITEMS_COUNTDOWN as ubyte = " + str(itemsCountdown) + "\n"
 configStr += "dim itemsToFind as ubyte = " + str(goalItems) + "\n"
 if itemsCountdown == 1 and not arcadeMode:
     if goalItems == 0:
@@ -735,8 +739,8 @@ if messagesEnabled == 1:
     configStr += "Dim messageLoopCounter As Ubyte = 0\n"
     configStr += "#Define MESSAGE_LOOPS_VISIBLE 30\n"
 
-if enabled128K == 1:
-    configStr += "#DEFINE ENABLED_128k\n"
+# if enabled128K == 1:
+configStr += "#DEFINE ENABLED_128k\n"
 
 if hiScore == 1:
     configStr += "#DEFINE HISCORE_ENABLED\n\n"

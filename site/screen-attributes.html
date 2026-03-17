@@ -644,6 +644,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dark-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dark mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#musica-in-game-por-pantallas" class="md-nav__link">
     <span class="md-ellipsis">
       Música in-game por pantallas
@@ -868,6 +877,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dark-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dark mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#musica-in-game-por-pantallas" class="md-nav__link">
     <span class="md-ellipsis">
       Música in-game por pantallas
@@ -962,6 +980,9 @@ Se puede combinar con el atributo <em>tile</em>.</p>
 <p>El atributo <strong>tile</strong> hace la misma función que background sólo que altera el tile de fondo (el tile 0 vacío) por el aquí indicado.
 Por ejemplo, si tu juego tiene distintos entornos, entre ellos edificios, puedes usar un tile de pared con distintos colores para cada edificio. ¡¡¡Tienes un tile con distintos colores sin usar espacio en tus tiles!!!
 Se debe combinar con el atributo <em>background</em>.</p>
+<h2 id="dark-mode">Dark mode</h2>
+<p>El atributo <strong>dark</strong> te permite indicar al motor que la pantalla esté oscura al entrar en ella. Junto con los nuevos tiles de interruptor podrás hacer que esto cambie durante tu estancia en la pantalla</p>
+<p>Cabe recordar que el juego de tiles oscuros se encuentra en el fichero <strong>tiles_dark.zxp</strong>. La lógica de sólidos, etc etc se mantiene igual. Por lo que si tienes un tile sólido en tiles.zxp, tendrás que tener el mismo tile sólido en tiles_dark.zxp pero no tiene por qué pintarse igual. Por otro lado, aunque se llame dark puedes simplemente poner otros colores y ocultar algunos tiles para simular otras cosas. Por ejemplo, puedes usarlo para simular que el jugador entra en una habitación con una luz de neón.</p>
 <h2 id="musica-in-game-por-pantallas">Música in-game por pantallas</h2>
 <p>El atributo <strong>music</strong> permite definir qué música cargar al entrar en esa pantalla</p>
 <h3 id="configuracion-original-a-tener-en-cuenta">Configuración original a tener en cuenta</h3>

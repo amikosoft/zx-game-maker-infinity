@@ -302,21 +302,17 @@ sub damageEnemy(enemyToKill as Ubyte)
                 dim eneY as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN) >> 1
 
                 if enemiesFrame band 2 = 2 Then
-                    #ifdef SCREEN_ATTRIBUTES
-                        if DROP_TILE < MAX_GENERIC_TILE Then
-                            drawDrop(eneX, eneY)
-                        elseif GetTile(eneX, eneY) = currentTileBackground Then
-                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
-                        End if
+                    #ifdef DROP_DRAW_SIMPLE
+                        drawDrop(eneX, eneY)
                     #else
-                        if DROP_TILE < MAX_GENERIC_TILE Then
-                            drawDrop(eneX, eneY)
-                        elseif not GetTile(eneX, eneY) Then
-                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
+                        if not GetTile(eneX, eneY) Then
+                            #ifdef SCREEN_ATTRIBUTES
+                                SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
+                            #else
+                                SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
+                            #endif
                         End if
                     #endif
-                ' Else
-                '     Draw2x2Sprite(BURST_SPRITE_ID, eneX, eneY)
                 End if
                 Draw2x2Sprite(BURST_SPRITE_ID, eneX << 1, eneY << 1)
             #else
