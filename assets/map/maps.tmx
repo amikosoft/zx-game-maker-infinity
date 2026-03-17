@@ -21,7 +21,7 @@
   <property name="bulletAnimation" type="bool" value="true"/>
   <property name="bulletDisableCollisions" type="bool" value="false"/>
   <property name="bulletDistance" type="int" value="20"/>
-  <property name="bulletType" propertytype="bulletType" value="bullet"/>
+  <property name="bulletType" propertytype="bulletType" value="boomerang"/>
   <property name="bulletsCollisionWithBullets" type="bool" value="true"/>
   <property name="buttonPauseEnabled" type="bool" value="true"/>
   <property name="buttonQuitEnabled" type="bool" value="true"/>
