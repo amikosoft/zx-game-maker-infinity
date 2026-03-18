@@ -28,7 +28,7 @@ class ChartGenerator:
             paramsMap3 = "Texts-sizes:" + str(textsSize) + " memory-bank-3.png"
             paramsMap4 = "Vortex-Player:" + str(sizes.VTPLAYER) + ",Title-Music:" + str(sizes.MUSIC_TITLE) + ",Ingame-Music:" + str(sizes.MUSIC) + ",Ingame-2-Music:" + str(sizes.MUSIC_2) + ",Ingame-3-Music:" + str(sizes.MUSIC_3) + ",Ending-Music:" + str(sizes.MUSIC_ENDING) + ",GameOver-Music:" + str(sizes.MUSIC_GAMEOVER) + " memory-bank-4.png"
             paramsMap6 = "FX:" + str(sizes.BEEP_FX) + ",Map:" + str(sizes.MAPS_DATA) + " memory-bank-6.png"
-            paramsMap7 = "Title-Screen:" + str(sizes.TITLE_SCREEN) + ",End-Screen:" + str(sizes.ENDING_SCREEN) + ",HUD:" + str(sizes.HUD_SCREEN) + ",Intro-Screen:" + str(sizes.INTRO_SCREEN) + ",GameOver-Screen:" + str(sizes.GAMEOVER_SCREEN) + ",GameMap-Screen:" + str(sizes.GAMEMAP_SCREEN)+ ",Credits-Screen:" + str(sizes.CREDITS_SCREEN) + ",Redefine-Screen:" + str(sizes.REDEFINE_SCREEN) + " memory-bank-7.png"
+            paramsMap7 = "Title-Screen:" + str(sizes.TITLE_SCREEN) + ",End-Screen:" + str(sizes.ENDING_SCREEN) + ",HUD:" + str(sizes.HUD_SCREEN) + ",Intro-Screen:" + str(sizes.INTRO_SCREEN) + ",GameOver-Screen:" + str(sizes.GAMEOVER_SCREEN) + ",GameMap-Screen:" + str(sizes.GAMEMAP_SCREEN)+ ",Credits-Screen:" + str(sizes.CREDITS_SCREEN) + ",Redefine-Screen:" + str(sizes.REDEFINE_SCREEN) + ",Instructions-Screen:" + str(sizes.INSTRUCTIONS_SCREEN) + " memory-bank-7.png"
             
             self.__generateMemoryChart(paramsMap3)
             self.__generateMemoryChart(paramsMap4)

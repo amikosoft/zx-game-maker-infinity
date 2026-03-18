@@ -110,6 +110,10 @@ def tapsBuild():
             runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "redefine.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "redefine.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "redefine.tap")
 
+        if os.path.isfile(OUTPUT_FOLDER + "instructions.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "instructions.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "instructions.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "instructions.tap")
+
         # Pal banco de sonidos/mapas        
         input_files.append(str(Path(ASSETS_FOLDER + "fx/fx.tap")))
         

@@ -38,20 +38,9 @@ class ConfigWriter:
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.REDEFINE_SCREEN_STRING(), currentAddress)
                     self.__write("#DEFINE REDEFINE_SCREEN_ENABLED\n")
 
-                if musicExists("title"):
-                    self.__write("#DEFINE MUSIC_TITLE_ENABLED\n")
-                
-                if musicExists("music2"):
-                    self.__write("#DEFINE MUSIC_2_ENABLED\n")
-                
-                if musicExists("music3"):
-                    self.__write("#DEFINE MUSIC_3_ENABLED\n")
-                
-                if musicExists("ending"):
-                    self.__write("#DEFINE MUSIC_ENDING_ENABLED\n")
-
-                if musicExists("gameover"):
-                    self.__write("#DEFINE MUSIC_GAMEOVER_ENABLED\n")
+                if screenExists("instructions"):
+                    currentAddress = self.__writeDeclarationAndIncrement(Sizes.INSTRUCTIONS_SCREEN_STRING(), currentAddress)
+                    self.__write("#DEFINE INSTRUCTIONS_SCREEN_ENABLED\n")
 
                 currentAddress = self.initialAddress
                 self.__write("\n' Memory bank 4\n")
@@ -59,14 +48,19 @@ class ConfigWriter:
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.VTPLAYER_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_STRING(), currentAddress)
                 if musicExists("title"):
+                    self.__write("#DEFINE MUSIC_TITLE_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_TITLE_STRING(), currentAddress)
                 if musicExists("music2"):
+                    self.__write("#DEFINE MUSIC_2_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_2_STRING(), currentAddress)
                 if musicExists("music3"):
+                    self.__write("#DEFINE MUSIC_3_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_3_STRING(), currentAddress)
                 if musicExists("ending"):
+                    self.__write("#DEFINE MUSIC_ENDING_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_ENDING_STRING(), currentAddress)
                 if musicExists("gameover"):
+                    self.__write("#DEFINE MUSIC_GAMEOVER_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_GAMEOVER_STRING(), currentAddress)
                 
                 currentAddress = self.initialAddress

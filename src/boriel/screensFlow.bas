@@ -1,5 +1,7 @@
 Sub clearScreen()
     Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
+
+    'Ink INK_VALUE: Paper PAPER_VALUE: Border BORDER_VALUE: BRIGHT 0: FLASH 0: Cls
 end sub
 
 #ifdef ENABLED_128k
@@ -14,6 +16,7 @@ end sub
 #endif
 
 Sub showMenu()
+    'Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
     loadScreen(TITLE_SCREEN_ADDRESS)
         
     #ifdef ENABLED_128k
@@ -79,8 +82,6 @@ Sub showMenu()
     Loop
 End Sub
 
-
-
 #ifdef REDEFINE_KEYS_ENABLED
     Function LeerTecla() As Uinteger
         ' Do Loop While GetKeyScanCode()
@@ -118,8 +119,9 @@ End Sub
                 #endif        
             #endif
         #else
-            clearScreen()
-        
+            'clearScreen()
+            Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
+            
             Print AT 7,5;REDEFINE_PRESS_KEY_FOR
 
             Print AT 9,10;REDEFINE_LEFT
@@ -176,6 +178,7 @@ End Sub
             End If
         Next i
 
+        clearScreen()
         showMenu()
     End Sub
 #endif
@@ -188,12 +191,17 @@ Sub playGame()
             #endif
         #endif
         
+        #ifdef INSTRUCTIONS_SCREEN_ENABLED
+            loadScreen(INSTRUCTIONS_SCREEN_ADDRESS)
+            pauseUntilPressKey()
+        #endif
+        
         #ifdef INTRO_SCREEN_ENABLED
             ' SetBank(DATA_BANK)
             ' dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
             ' SetBank(gameBank)
             loadScreen(INTRO_SCREEN_ADDRESS)
-            pauseUntilPressEnter()
+            pauseUntilPressKey()
         #endif
     #endif
     

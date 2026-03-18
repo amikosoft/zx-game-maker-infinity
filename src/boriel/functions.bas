@@ -13,7 +13,8 @@ sub pauseUntilPressKey()
 end sub
 
 Sub loadScreen(screen_address as Integer)
-    clearScreen()
+    ' clearScreen()
+    'Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
 
     #ifdef ENABLED_128k
         SetBank(screensBank)

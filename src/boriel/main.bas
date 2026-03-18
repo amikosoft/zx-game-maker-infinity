@@ -93,8 +93,12 @@ SetTileset(@tileSet(0,0))
 
 ' waitretrace
 
+
 #ifdef PASSWORD_ENABLED
     passwordScreen()
 #else
+    'Ink INK_VALUE: Paper PAPER_VALUE: Border BORDER_VALUE; BRIGHT 0: FLASH 0: Cls
+    'clearScreen()
+    Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
     showMenu()
 #endif

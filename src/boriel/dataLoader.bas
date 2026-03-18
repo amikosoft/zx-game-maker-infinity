@@ -51,7 +51,10 @@
             load "" CODE CREDITS_SCREEN_ADDRESS ' credits Screen
         #endif
         #ifdef REDEFINE_SCREEN_ENABLED
-            load "" CODE REDEFINE_SCREEN_ADDRESS ' gamemap Screen
+            load "" CODE REDEFINE_SCREEN_ADDRESS ' redefine Screen
+        #endif
+        #ifdef INSTRUCTIONS_SCREEN_ENABLED
+            load "" CODE INSTRUCTIONS_SCREEN_ADDRESS ' instructions Screen
         #endif
         SetBank(fxBank)
         

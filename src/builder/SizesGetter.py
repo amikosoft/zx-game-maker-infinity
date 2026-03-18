@@ -62,6 +62,7 @@ class SizesGetter:
             sizes.GAMEMAP_SCREEN = self.__getOutputFileSize("gamemap.scr.zx0") if screenExists("gamemap") else 0
             sizes.CREDITS_SCREEN = self.__getOutputFileSize("credits.scr.zx0") if screenExists("credits") else 0
             sizes.REDEFINE_SCREEN = self.__getOutputFileSize("redefine.scr.zx0") if screenExists("redefine") else 0
+            sizes.INSTRUCTIONS_SCREEN = self.__getOutputFileSize("instructions.scr.zx0") if screenExists("instructions") else 0
             
         return sizes
     
