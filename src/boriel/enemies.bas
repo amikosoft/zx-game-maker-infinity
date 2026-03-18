@@ -321,15 +321,17 @@ Sub moveEnemies()
                                 end if
                             end if
                         #endif
+                        
+                        #ifdef ENEMIES_SOUND
+                        if horizontalDirectionBucle or verticalDirectionBucle then
+                            BEEP .01, 4
+                        end if
+                        #endif
                     Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle <= PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle <= PLAYER_BOUNDS_LEFT Then
                         enemyColBucle = enemyColIniBucle
                         enemyLinBucle = enemyLinIniBucle
                         verticalDirectionBucle = 0
                         horizontalDirectionBucle = 0
-
-                        #ifdef ENEMIES_SOUND
-                            BEEP .01, 4
-                        #endif
                     End if
                 #endif
             End if
@@ -394,9 +396,11 @@ Sub moveEnemies()
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLinBucle
 
             #ifdef ENEMIES_TRAP_ENABLED
+            #ifndef ENEMIES_TRAP_SHOW_STATIC
             If enemyModeBucle >= ENEMY_MODE_TRAP_ALL Then
                 if not horizontalDirectionBucle and not verticalDirectionBucle Then Continue For
             End if
+            #endif
             #endif
 
             if tileBucle > 16 and horizontalDirectionBucle = -1 Then tileBucle = tileBucle + 16

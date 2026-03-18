@@ -215,6 +215,7 @@ enemiesShootSpeed = 2
 enemiesShootingLookAtPlayer = False
 enemiesShootOnlyLookingPlayer = False
 enemiesSound = False
+enemiesTrapShowWhileStatic = False
 
 bulletAnimation = 0
 bulletsCollisionWithBullets = False
@@ -424,6 +425,8 @@ if 'properties' in data:
             enemiesShootOnlyLookingPlayer = property['value']
         elif property['name'] == 'enemiesSound':
             enemiesSound = property['value']
+        elif property['name'] == 'enemiesTrapShowWhileStatic':
+            enemiesTrapShowWhileStatic = property['value']
         elif property['name'] == 'bulletsCollisionWithBullets':
             bulletsCollisionWithBullets = property['value']
         elif property['name'] == 'bulletType':
@@ -1206,6 +1209,9 @@ if enemiesTrap == 1:
 
     if enemiesTrapHorizontal == 1:
         configStr += "#DEFINE ENEMIES_TRAP_HORIZONTAL_ENABLED\n"
+
+    if enemiesTrapShowWhileStatic:
+        configStr += "#define ENEMIES_TRAP_SHOW_STATIC\n"
 
 if enemiesOneDirection == 1:
     configStr += "#DEFINE ENEMIES_ONE_DIRECTION_ENABLED\n"

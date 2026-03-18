@@ -360,6 +360,11 @@
                 "value": true
             },
             {
+                "name": "enemiesTrapShowWhileStatic",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "enemiesBulletCollision",
                 "type": "bool",
                 "value": true

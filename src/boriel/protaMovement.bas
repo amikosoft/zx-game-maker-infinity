@@ -935,6 +935,7 @@ Function checkTileObject(tile As Ubyte, oneUse as ubyte) As Ubyte
         #ifdef SCREEN_DARK_ENABLED
             if tile = SWITCHER_TILE Then
                 screenIsDark = not screenIsDark
+                BEEP 0.01, 14
                 mapDraw()
                 isActionPerformed = tile
                 return tile
