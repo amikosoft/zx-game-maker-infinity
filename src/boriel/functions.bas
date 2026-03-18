@@ -77,7 +77,7 @@ end Function
 ' end sub
 
 sub decrementLife()
-    if not currentLife then return
+    if not currentLife or invincible then return
     
     invincible = INVINCIBLE_FRAMES
 
@@ -437,7 +437,11 @@ end sub
     sub CheckAutoBreakableTile()
         #ifdef FADE_TILES_ENABLED
             #ifndef TRAMPOLIN_ENABLED
+            #ifndef GLUE_TILE_ENABLED
+            #ifndef MECHANICAL_BELT_ENABLED
                 if not maxFadeTile then return 
+            #endif
+            #endif
             #endif
         #endif
 
@@ -445,23 +449,21 @@ end sub
             isOnGlue = 0
         #endif
 
-        Dim col as uByte = protaX >> 1
-        Dim lin as uByte = (protaY >> 1) + 2
+        ' Dim col as uByte = protaX >> 1
+        Dim lin as uByte = protaLin + 2
         
-        for c=col to (col+2)
+        for c=protaCol to (protaCol+2)
             dim tileFound as ubyte = isSolidTileByColLin(c, lin)
-
-            #ifdef GLUE_TILE_ENABLED
-                if tileFound = GLUE_TILE then
-                    isOnGlue = 1
-                end if
-            #endif
 
             #ifdef TRAMPOLIN_ENABLED
                 if tileFound = TRAMPOLIN_TILE Then
                     jump()
                     exit for
                 end if
+            #endif
+
+            #ifdef GLUE_TILE_ENABLED
+                if tileFound = GLUE_TILE then isOnGlue = 1
             #endif
 
             #ifdef MECHANICAL_BELT_ENABLED

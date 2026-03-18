@@ -392,7 +392,7 @@ Sub playGame()
 
         If currentLife Then
             protaMovement()
-            checkDamageByTile()
+            ' checkDamageByTile()
         End if
 
         ' moveEnemies()

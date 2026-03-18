@@ -964,10 +964,10 @@ Function checkTileObject(tile As Ubyte, oneUse as ubyte) As Ubyte
 End Function
 
 Sub checkObjectContact(oneUse as ubyte)
-    Dim col As Ubyte = protaX >> 1
-    Dim lin As Ubyte = protaY >> 1
-    for c=col to (col+1)
-        for l=lin to (lin+1)
+    for c=protaCol to (protaCol+1)
+        for l=protaLin to (protaLin+1)
+            If isADamageTile(c, l) Then decrementLife()
+
             #ifdef IN_GAME_TEXT_ENABLED
                 dim tile = GetTile(c, l)
                 
@@ -993,31 +993,6 @@ Sub checkObjectContact(oneUse as ubyte)
     next c
 End Sub
 
-
-Sub checkDamageByTile()
-    If invincible Then Return
-    
-    Dim col As Ubyte = protaX >> 1
-    Dim lin As Ubyte = protaY >> 1
-    
-    for c=0 to 1
-        for l=0 to 1
-            If isADamageTile(col+c, lin+l) Then
-                decrementLife()
-                Return
-            End If
-        next l
-    next c
-    ' If isADamageTile(col, lin) Or isADamageTile(col + 1, lin) Then
-    '     decrementLife()
-    '     Return
-    ' End If
-    ' if isADamageTile(col, lin + 1) Or isADamageTile(col + 1, lin + 1) Then
-    '     decrementLife()
-    '     Return
-    ' End If
-End Sub
-
 Sub protaMovement()
     #ifdef LIVES_MODE_GRAVEYARD
         #ifdef ENERGY_ENABLED
@@ -1033,6 +1008,10 @@ Sub protaMovement()
     keyboardListen()
 
     if moveScreen then return
+
+    protaCol = protaX >> 1
+    protaLin = protaY >> 1
+    
     checkObjectContact(1)
     
     #ifdef SIDE_VIEW

@@ -121,6 +121,9 @@ Dim protaY As Ubyte
 Dim protaDirection As Ubyte
 Dim protaTile As Ubyte
 
+Dim protaLin As Ubyte
+Dim protaCol As Ubyte
+
 #ifdef LIVES_MODE_ENABLED
     dim protaXRespawn as ubyte
     dim protaYRespawn as ubyte
