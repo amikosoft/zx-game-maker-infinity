@@ -310,7 +310,7 @@ Sub playGame()
                     Print AT 22, 13; TEXT_HI_SCORE_ZERO
                     Print AT 23, 13; TEXT_HI_SCORE_ZERO
                 #endif
-                printLife()
+                printHud()
             #else
                 #ifdef GAMEMAP_SHOW_ENABLED
                     mapDraw()
@@ -410,7 +410,7 @@ Sub playGame()
                 moveBullet()
             #endif
 
-            drawSprites()
+            ' drawSprites()
         End If
         
         If currentLife = 0 and not invincible Then
@@ -439,7 +439,7 @@ Sub playGame()
                     currentEnergy = INITIAL_ENERGY
                     #endif
                     updateProtaData(protaYRespawn, protaXRespawn, 1, protaDirection)
-                    ' printLife()
+                    ' printHud()
 
                     #ifndef ARCADE_MODE
                         #ifdef CHECKPOINTS_ENABLED
@@ -452,6 +452,8 @@ Sub playGame()
             #endif
             End if
         End If
+        
+        drawSprites()
         
         #ifdef NEW_BEEPER_PLAYER
             BeepFX_NextNote()
@@ -652,6 +654,10 @@ Sub swapScreen(waitReady as ubyte)
             screenIsDark = screenAttributes(currentScreen, SCREEN_DARK)
         #endif
 
+        #ifdef SCREEN_TERRAIN_ENABLED
+            screenIsTerrain = screenAttributes(currentScreen, SCREEN_TERRAIN)
+        #endif
+
         #ifdef ENABLED_128k
             #ifdef MUSIC_ENABLED
                 #ifdef SCREEN_MUSIC_ENABLED
@@ -707,7 +713,7 @@ Sub swapScreen(waitReady as ubyte)
                 Print AT 23, 13; TEXT_HI_SCORE_ZERO
             #endif
             
-            printLife()
+            printHud()
 
             #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
                 pauseUntilPressFire()
@@ -721,7 +727,7 @@ Sub swapScreen(waitReady as ubyte)
             Print AT 23, 13; TEXT_HI_SCORE_ZERO
         #endif
         
-        printLife()
+        printHud()
     #endif
 
     asm

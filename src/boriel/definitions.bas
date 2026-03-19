@@ -124,6 +124,20 @@ Dim protaTile As Ubyte
 Dim protaLin As Ubyte
 Dim protaCol As Ubyte
 
+Const PROTA_FRAME_RIGHT as ubyte = 0
+Const PROTA_FRAME_LEFT as ubyte = 2
+
+Const PROTA_TILE_RIGHT as ubyte = 1
+Const PROTA_TILE_LEFT as ubyte = 3
+Const PROTA_TILE_UP as ubyte = 5
+Const PROTA_TILE_DOWN as ubyte = 7
+
+Const PROTA_FRAME_JUMP_RIGHT as ubyte = 11
+Const PROTA_FRAME_JUMP_LEFT as ubyte = 12
+
+Const FIRST_RUNNING_PROTA_SPRITE_RIGHT As Ubyte = 1
+Const FIRST_RUNNING_PROTA_SPRITE_LEFT As Ubyte = 3
+
 #ifdef LIVES_MODE_ENABLED
     dim protaXRespawn as ubyte
     dim protaYRespawn as ubyte
@@ -254,14 +268,15 @@ dim isActionPerformed as ubyte = 0
     #ifdef SCREEN_DARK_ENABLED
     Dim screenIsDark as ubyte = 0
     #endif
+
+    #ifdef SCREEN_TERRAIN_ENABLED
+    Dim screenIsTerrain as ubyte = 0
+    #endif
 #endif
 
 #ifdef USE_BREAKABLE_TILE
     Dim brokenTiles(SCREENS_COUNT) As Ubyte at BROKEN_TILES_DATA_ADDRESS
 #endif
-
-Const FIRST_RUNNING_PROTA_SPRITE_RIGHT As Ubyte = 1
-Const FIRST_RUNNING_PROTA_SPRITE_LEFT As Ubyte = 5
 
 Const ENEMY_TILE As Ubyte = 0
 Const ENEMY_LIN_INI As Ubyte = 1

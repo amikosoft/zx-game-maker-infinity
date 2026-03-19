@@ -69,6 +69,7 @@ rightTile = 0
 glueTileEnabled = False
 glueMode = "prevent jump and slow down player"
 glueTile = 0
+glueTerrainTile = 0
 
 
 for tileset in data['tilesets']:
@@ -102,6 +103,8 @@ for tileset in data['tilesets']:
                 rightTile = tile['id']
             if tile['type'] == 'glue':
                 glueTile = tile['id']
+            if tile['type'] == 'terrain_wall_glue':
+                glueTerrainTile = tile['id']
             if tile['type'] == 'animated':
                 animatedTilesIds.append(tile['id'])
             if tile['type'] == 'damage':
@@ -184,8 +187,6 @@ waitPressKeyAfterLoad = 0
 newBeeperPlayer = 1
 
 redefineKeysEnabled = 0
-
-mainCharacterExtraFrame = 1
 
 idleTime = 0
 
@@ -357,8 +358,6 @@ if 'properties' in data:
             newBeeperPlayer = 1 if property['value'] else 0
         elif property['name'] == 'redefineKeysEnabled':
             redefineKeysEnabled = 1 if property['value'] else 0
-        elif property['name'] == 'mainCharacterExtraFrame':
-            mainCharacterExtraFrame = 1 if property['value'] else 0
         elif property['name'] == 'idleTime':
             idleTime = property['value']
         elif property['name'] == 'arcadeMode':
@@ -567,7 +566,8 @@ configStr += "const TELEPORT_TILE as ubyte = " + str(teleportTile) + "\n"
 configStr += "const TELEPORT_QUIT_TILE as ubyte = " + str(teleportTile-1) + "\n"
 configStr += "const ENEMY_DOOR_TILE as ubyte = " + str(unlockableTile) + "\n"
 configStr += "const STEPS_TILE_INIT as ubyte = " + str(unlockableTile + 1) + "\n"
-configStr += "const STEPS_TILE_END as ubyte = " + str(unlockableTile + 5) + "\n"
+configStr += "const STEPS_TILE_END as ubyte = " + str(unlockableTile + 4) + "\n"
+configStr += "const LADDERS_TILE_INIT as ubyte = " + str(unlockableTile + 9) + "\n"
 
 configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(unlockableTile+transpasableItems) + "\n"
 
@@ -817,9 +817,6 @@ if jetPackFuel > 0:
 
 if laddersEnabled == True:
     configStr += "#DEFINE LADDERS_ANIMATION_ENABLED\n"
-else:
-    if mainCharacterExtraFrame == 1:
-        configStr += "#DEFINE MAIN_CHARACTER_EXTRA_FRAME\n"
 
 if idleTime > 0:
     configStr += "#DEFINE IDLE_ENABLED\n"
@@ -958,6 +955,7 @@ if glueTileEnabled:
         configStr += "#define GLUE_PREVENT_JUMP\n"
 
     configStr += "const GLUE_TILE as ubyte = " + str(glueTile) + "\n"
+    configStr += "const GLUE_TERRAIN_TILE as ubyte = " + str(glueTerrainTile) + "\n"
 
 if trampolinEnabled:
     if underPlayerValidation == False:
@@ -1252,8 +1250,8 @@ for layer in data['layers']:
                     initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
                     initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
 
-                    if int(initialMainCharacterX) < 2 or int(initialMainCharacterX) > ((screenWidth*2)-8) or int(initialMainCharacterY) < 0 or int(initialMainCharacterY) > ((screenHeight*2)-8):
-                        exitWithErrorMessage('Main character initial position is out of bounds. X: ' + initialMainCharacterX + ', Y: ' + initialMainCharacterY)
+                    # if int(initialMainCharacterX) < 2 or int(initialMainCharacterX) > ((screenWidth*2)-8) or int(initialMainCharacterY) < 0 or int(initialMainCharacterY) > ((screenHeight*2)-8):
+                    #     exitWithErrorMessage('Main character initial position is out of bounds. X: ' + initialMainCharacterX + ', Y: ' + initialMainCharacterY)
                     
                     if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
                         keys[str(screenId)] = [int(initialMainCharacterX+widthSkip), int(initialMainCharacterY+heightSkip)]
@@ -1298,7 +1296,8 @@ for layer in data['layers']:
                             "tile": 0,
                             "teleportTo": 0,
                             "music": 0,
-                            "dark": 0
+                            "dark": 0,
+                            "terrain": 0
                         }
                     for prop in range(len(object['properties'])):
                         if object['properties'][prop]['name'] == 'music':
@@ -1341,6 +1340,12 @@ for layer in data['layers']:
 
                             if not 'border' in attributesSort:
                                 attributesSort.append('border')
+                        elif object['properties'][prop]['name'] == 'terrain':
+                            attributes[screenId]["terrain"] = int(object['properties'][prop]['value'])
+
+                            if gameView != 'overhead':
+                                if not 'terrain' in attributesSort:
+                                    attributesSort.append('terrain')
                         elif object['properties'][prop]['name'] == 'dark':
                             switchesEnabled = True
                             if object['properties'][prop]['value'] == True:
@@ -1425,7 +1430,8 @@ if screenAttributesEnabled:
                     "tile": 0,
                     "teleportTo": 0,
                     "music": 0,
-                    "dark": 0
+                    "dark": 0,
+                    "terrain": 0
                 }
 
             print(attributes[screenId])

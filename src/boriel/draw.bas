@@ -5,60 +5,55 @@ Sub mapDraw()
         SetTileset(@tileSet(0,0))
     end if
 
-    ' Dim index As Uinteger
-    Dim y, x As Ubyte
-    
-    x = SKIP_WIDTH_SIZE
-    y = SKIP_HEIGHT_SIZE
+    Dim index As Uinteger = 0
     
     #ifdef FADE_TILES_ENABLED
     maxFadeTile = 0
     #endif
-    
-    ' dim dmAddress as integer = 
 
-    For index=0 To SCREEN_LENGTH
-        dim nextTile as ubyte = Peek(arrayBasePtr(decompressedMap) + index)
-        
-        #ifdef FADE_TILES_ENABLED
-            ' drawTile(nextTile, x, y)
+    for y = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
+        for x = SKIP_WIDTH_SIZE to SKIP_WIDTH_SIZE + screenWidth - 1
+            dim nextTile as ubyte = Peek(arrayBasePtr(decompressedMap) + index)
             
-            if maxFadeTile < FADE_TILE_TOTAL and (nextTile = FADE_TILE or nextTile = FADE_TILE_END) then
-                fadeTileStatus(maxFadeTile, 0) = x
-                fadeTileStatus(maxFadeTile, 1) = y
-                fadeTileStatus(maxFadeTile, 2) = FADE_TILE_FRAMES
-                maxFadeTile = maxFadeTile + 1
-            end if
-        ' #else
-        '     drawTile(nextTile, x, y)
-        #endif
-
-        #ifdef TELEPORT_ENABLED
-            if nextTile = TELEPORT_TILE then
-                if moveScreen = 10 then
-                    protaX = x*2
-                    protaY = y*2
-                    protaXRespawn = protaX
-                    protaYRespawn = protaY
-                    moveScreen = 0
+            #ifdef FADE_TILES_ENABLED
+                if maxFadeTile < FADE_TILE_TOTAL and (nextTile = FADE_TILE or nextTile = FADE_TILE_END) then
+                    fadeTileStatus(maxFadeTile, 0) = x
+                    fadeTileStatus(maxFadeTile, 1) = y
+                    fadeTileStatus(maxFadeTile, 2) = FADE_TILE_FRAMES
+                    maxFadeTile = maxFadeTile + 1
                 end if
-                
-                #ifdef TELEPORT_DISABLED_TILE
-                    if not currentTeleportTo then nextTile = TELEPORT_QUIT_TILE
-                #else
-                    if not currentTeleportTo then nextTile = 0
-                #endif
-            end if
-        #endif
+            #endif
 
-        drawTile(nextTile, x, y)
+            #ifdef TELEPORT_ENABLED
+                if nextTile = TELEPORT_TILE then
+                    if moveScreen = 10 then
+                        protaX = x*2
+                        protaY = y*2
 
-        x = x + 1
-        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
-            x = SKIP_WIDTH_SIZE
-            y = y + 1
-        End If
-    Next index
+                        #ifdef LIVES_MODE_ENABLED
+                            #ifndef CHECKPOINTS_ENABLED
+                                protaXRespawn = protaX
+                                protaYRespawn = protaY
+                                protaScreenRespawn = currentScreen
+                            #endif
+                        #endif
+                       
+                        moveScreen = 0
+                    end if
+                    
+                    #ifdef TELEPORT_DISABLED_TILE
+                        if not currentTeleportTo then nextTile = TELEPORT_QUIT_TILE
+                    #else
+                        if not currentTeleportTo then nextTile = 0
+                    #endif
+                end if
+            #endif
+
+            drawTile(nextTile, x, y)
+
+            index = index + 1
+        next x
+    next y
     
     #ifdef ANIMATED_TILES_ENABLED
         lastFrameTiles = ANIMATE_PERIOD_TILE
@@ -262,7 +257,6 @@ Sub moveToScreen(direction As Ubyte)
         #else
             'updateProtaData( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
             protaY = SKIP_HEIGHT_SIZE + SCREEN_ADJUSTMENT
-        
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
         #endif
     Elseif direction = 8 Then

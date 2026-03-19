@@ -45,7 +45,7 @@ End Function
                     
                     #ifdef AMMO_ENABLED
                         currentAmmo = currentAmmo + 1
-                        printLife()
+                        printHud()
                     #endif
                     Return
                 end if
@@ -273,7 +273,7 @@ sub damageEnemy(enemyToKill as Ubyte)
             If score > hiScore Then
                 hiScore = score
             End If
-            printLife()
+            printHud()
         #endif
         
         BeepFX_Play(1)
@@ -288,7 +288,7 @@ sub damageEnemy(enemyToKill as Ubyte)
             If score > hiScore Then
                 hiScore = score
             End If
-            printLife()
+            printHud()
         #endif
         
         decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive

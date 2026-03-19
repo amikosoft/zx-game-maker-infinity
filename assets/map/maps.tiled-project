@@ -525,11 +525,6 @@
                 "value": false
             },
             {
-                "name": "mainCharacterExtraFrame",
-                "type": "bool",
-                "value": true
-            },
-            {
                 "name": "maxAnimatedTilesPerScreen",
                 "type": "int",
                 "value": 6

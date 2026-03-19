@@ -137,16 +137,16 @@ sub decrementLife()
             currentLife = 0
         end if
     #endif
-    printLife()
+    printHud()
     BeepFX_Play(1)
 end sub
 
-sub printLife()
+sub printHud()
     PRINT AT 22, 4; TEXT_3_SPACES
     PRINT AT 22, 4; currentLife
 
     #ifdef ENERGY_ENABLED
-        if currentEnergy > INITIAL_ENERGY Then currentEnergy = INITIAL_ENERGY
+        if currentEnergy > INITIAL_ENERGY Then currentEnergy = 0
         
         PRINT AT 23, 4; TEXT_3_SPACES
         PRINT AT 23, 4; currentEnergy
@@ -190,15 +190,6 @@ end sub
         PRINT AT 21, 11; line1
         Paper 0: Ink 7: Flash 0
         messageLoopCounter = MESSAGE_LOOPS_VISIBLE
-    end sub
-    
-    sub checkMessageForDelete()
-        if messageLoopCounter Then
-            messageLoopCounter = messageLoopCounter - 1
-            If not messageLoopCounter Then
-                PRINT AT 21, 11; TEXT_EMPTY_STRING
-            End If
-        End if
     end sub
 #endif
 
@@ -276,7 +267,7 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
                 removeTilesFromScreen(DOOR_TILE)
             #endif
             
-            printLife()
+            printHud()
             BeepFX_Play(4)
             #ifdef MESSAGES_ENABLED
             Else
@@ -443,10 +434,6 @@ end sub
             #endif
             #endif
             #endif
-        #endif
-
-        #ifdef GLUE_TILE_ENABLED
-            isOnGlue = 0
         #endif
 
         ' Dim col as uByte = protaX >> 1
