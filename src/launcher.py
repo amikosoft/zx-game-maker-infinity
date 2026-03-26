@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 
-version = "4.1.0"
+version = "5.0.0"
 
 def printBanner():
     output_text.insert(tk.END, f"\n")
@@ -510,12 +510,13 @@ menu_bar.add_cascade(label="Sprites Preview", menu=sprites_menu)
 
 # Menú "Memory Usage"
 memory_menu = tk.Menu(menu_bar, tearoff=0)
-memory_menu.add_command(label="Bank 0 48k", command=lambda: open_memory_bank_image("memory-bank-0-48K.png"))
-memory_menu.add_separator()
-memory_menu.add_command(label="Bank 0 128k", command=lambda: open_memory_bank_image("memory-bank-0-128K.png"))
-memory_menu.add_command(label="Bank 3", command=lambda: open_memory_bank_image("memory-bank-3.png"))
-memory_menu.add_command(label="Bank 4", command=lambda: open_memory_bank_image("memory-bank-4.png"))
-memory_menu.add_command(label="Bank 6", command=lambda: open_memory_bank_image("memory-bank-6.png"))
+# memory_menu.add_command(label="Bank 0 48k", command=lambda: open_memory_bank_image("memory-bank-0-48K.png"))
+# memory_menu.add_separator()
+memory_menu.add_command(label="Bank 0 (Generic)", command=lambda: open_memory_bank_image("memory-bank-0-128K.png"))
+memory_menu.add_command(label="Bank 3 (Texts)", command=lambda: open_memory_bank_image("memory-bank-3.png"))
+memory_menu.add_command(label="Bank 4 (Musics)", command=lambda: open_memory_bank_image("memory-bank-4.png"))
+memory_menu.add_command(label="Bank 6 (Fx + Maps)", command=lambda: open_memory_bank_image("memory-bank-6.png"))
+memory_menu.add_command(label="Bank 7 (SCR)", command=lambda: open_memory_bank_image("memory-bank-7.png"))
 menu_bar.add_cascade(label="Memory Usage", menu=memory_menu)
 
 # Menú "Help"

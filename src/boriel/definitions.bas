@@ -28,8 +28,8 @@ Const BULLET_SPRITE_LEFT_ID As Ubyte = 50
     #endif
 #endif
 
-Const STEPS_TILE_INIT As Ubyte = 64
-Const STEPS_TILE_END As Ubyte = 67
+' Const STEPS_TILE_INIT As Ubyte = 64
+' Const STEPS_TILE_END As Ubyte = 67
 
 ' const MAX_SCREEN_LEFT as ubyte = 2
 ' const MAX_SCREEN_TOP as ubyte = 2
@@ -121,6 +121,23 @@ Dim protaY As Ubyte
 Dim protaDirection As Ubyte
 Dim protaTile As Ubyte
 
+Dim protaLin As Ubyte
+Dim protaCol As Ubyte
+
+Const PROTA_FRAME_RIGHT as ubyte = 0
+Const PROTA_FRAME_LEFT as ubyte = 2
+
+Const PROTA_TILE_RIGHT as ubyte = 1
+Const PROTA_TILE_LEFT as ubyte = 3
+Const PROTA_TILE_UP as ubyte = 5
+Const PROTA_TILE_DOWN as ubyte = 7
+
+Const PROTA_FRAME_JUMP_RIGHT as ubyte = 11
+Const PROTA_FRAME_JUMP_LEFT as ubyte = 12
+
+Const FIRST_RUNNING_PROTA_SPRITE_RIGHT As Ubyte = 1
+Const FIRST_RUNNING_PROTA_SPRITE_LEFT As Ubyte = 3
+
 #ifdef LIVES_MODE_ENABLED
     dim protaXRespawn as ubyte
     dim protaYRespawn as ubyte
@@ -147,38 +164,38 @@ Dim horizontalAxisKeyPressed as byte
     Dim isOnPlatform as Ubyte = 0
 #endif
 
-' #ifdef ENABLED_128k
-'     #define DATA_BANK 4
-'     #define MUSIC_BANK 3
-' #endif
+Const gameBank As Ubyte = 0
 
 #ifdef ENABLED_128k
-    Dim screensBank As Ubyte = 3
+    Dim textsBank As Ubyte = 3
+    Dim screensBank As Ubyte = 7 '3
     Dim musicBank As Ubyte = 4
     Dim fxBank As Ubyte = 6
     If Peek(23312) = 1 Then ' Amstrad
-        screensBank = 4
+        textsBank = 4
+        screensBank = 7
         musicBank = 3
         fxBank = 1
     End If
 #endif
 
-' #ifdef SIDE_VIEW
-'     Dim tileSet(192, 7) As Ubyte at TILESET_DATA_ADDRESS
-' #Else
-'     Dim tileSet(194, 7) As Ubyte at TILESET_DATA_ADDRESS
-' #endif
-Dim tileSet(191, 7) As Ubyte at TILESET_DATA_ADDRESS
-Dim attrSet(191) As Ubyte at ATTR_DATA_ADDRESS
+Dim tileSet(255, 7) As Ubyte at TILESET_DATA_ADDRESS
+Dim attrSet(255) As Ubyte at ATTR_DATA_ADDRESS
+
+Dim darkTileSet(255, 7) As Ubyte at DARKTILESET_DATA_ADDRESS
+Dim darkAttrSet(255) As Ubyte at DARKATTR_DATA_ADDRESS
+
 ' Dim sprites(47, 31) As Ubyte at SPRITES_DATA_ADDRESS
 Dim screenObjectsInitial(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
-Dim screensOffsets(SCREENS_COUNT) As Uinteger at SCREEN_OFFSETS_DATA_ADDRESS
 Dim enemiesInScreenOffsets(SCREENS_COUNT) As Uinteger at ENEMIES_IN_SCREEN_OFFSETS_DATA_ADDRESS
 Dim damageTiles(DAMAGE_TILES_COUNT) As Ubyte at DAMAGE_TILES_DATA_ADDRESS
 Dim enemiesPerScreen(SCREENS_COUNT) As byte at ENEMIES_PER_SCREEN_INITIAL_DATA_ADDRESS
 Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 Dim screensStatus(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, 11) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
+Dim screensOffsets(SCREENS_COUNT) As Uinteger at SCREEN_OFFSETS_DATA_ADDRESS
+
+dim decompressedMap(SCREEN_LENGTH) as ubyte
 
 dim firstTimeEnemiesScreen as ubyte = 1
 
@@ -223,10 +240,12 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
     ' const TEXTS_DATA_ADDRESS2 as uinteger = 49152
     SetBank(fxBank)
     dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS
-    SetBank(0)
+    SetBank(gameBank)
     dim currentAdventureState as ubyte = 0
     dim currentScreenFirstText as ubyte = 0
 #endif
+
+dim isActionPerformed as ubyte = 0
 
 #ifdef ENABLED_128k
 #ifdef MUSIC_ENABLED
@@ -245,14 +264,26 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
     Dim screenAttributes(SCREENS_COUNT, SCREEN_ATTRIBUTES_TOTAL) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
     Dim currentScreenBackground as ubyte = 0
     Dim currentTileBackground as ubyte = 0
+
+    #ifdef SCREEN_DARK_ENABLED
+    Dim screenIsDark as ubyte = 0
+    #endif
+
+    #ifdef SCREEN_TERRAIN_ENABLED
+    Dim screenIsTerrain as ubyte = 0
+    #endif
+
+    #ifdef HUD2_SCREEN_ENABLED
+        #ifdef SCREEN_HUD2_ENABLED
+            Dim screenHud as ubyte = 0
+            Dim currentHud as ubyte = 0
+        #endif
+    #endif
 #endif
 
 #ifdef USE_BREAKABLE_TILE
     Dim brokenTiles(SCREENS_COUNT) As Ubyte at BROKEN_TILES_DATA_ADDRESS
 #endif
-
-Const FIRST_RUNNING_PROTA_SPRITE_RIGHT As Ubyte = 1
-Const FIRST_RUNNING_PROTA_SPRITE_LEFT As Ubyte = 5
 
 Const ENEMY_TILE As Ubyte = 0
 Const ENEMY_LIN_INI As Ubyte = 1
@@ -287,5 +318,5 @@ Const ENEMY_MODE_TRAP_HORIZONAL = 12
     Dim currentLevel As Ubyte = 0
 #endif
 
-Const BREAKABLE_TILE As Ubyte = 62
-Const ENEMY_DOOR_TILE As Ubyte = 63
+' Const BREAKABLE_TILE As Ubyte = 62
+' Const ENEMY_DOOR_TILE As Ubyte = 63

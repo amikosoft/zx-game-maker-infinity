@@ -13,7 +13,7 @@ class ConfigWriter:
         with open(self.basicConfigPath, 'a') as config_bas:
             self.__setFileHandler(config_bas)
             if getEnabled128K():
-                self.__write("\n' Memory bank 3\n")
+                self.__write("\n' Memory bank 7\n")
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.TITLE_SCREEN_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.ENDING_SCREEN_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.HUD_SCREEN_STRING(), currentAddress)
@@ -34,20 +34,22 @@ class ConfigWriter:
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.CREDITS_SCREEN_STRING(), currentAddress)
                     self.__write("#DEFINE CREDITS_SCREEN_ENABLED\n")
 
-                if musicExists("title"):
-                    self.__write("#DEFINE MUSIC_TITLE_ENABLED\n")
-                
-                if musicExists("music2"):
-                    self.__write("#DEFINE MUSIC_2_ENABLED\n")
-                
-                if musicExists("music3"):
-                    self.__write("#DEFINE MUSIC_3_ENABLED\n")
-                
-                if musicExists("ending"):
-                    self.__write("#DEFINE MUSIC_ENDING_ENABLED\n")
+                if screenExists("redefine"):
+                    currentAddress = self.__writeDeclarationAndIncrement(Sizes.REDEFINE_SCREEN_STRING(), currentAddress)
+                    self.__write("#DEFINE REDEFINE_SCREEN_ENABLED\n")
 
-                if musicExists("gameover"):
-                    self.__write("#DEFINE MUSIC_GAMEOVER_ENABLED\n")
+                if screenExists("instructions"):
+                    currentAddress = self.__writeDeclarationAndIncrement(Sizes.INSTRUCTIONS_SCREEN_STRING(), currentAddress)
+                    self.__write("#DEFINE INSTRUCTIONS_SCREEN_ENABLED\n")
+
+                if screenExists("hud2"):
+                    currentAddress = self.__writeDeclarationAndIncrement(Sizes.HUD2_SCREEN_STRING(), currentAddress)
+                    self.__write("#DEFINE HUD2_SCREEN_ENABLED\n")
+
+                if screenExists("adventuretexts"):
+                    currentAddress = self.__writeDeclarationAndIncrement(Sizes.ADVENTURETEXTS_SCREEN_STRING(), currentAddress)
+                    self.__write("#DEFINE ADVENTURETEXTS_SCREEN_ENABLED\n")
+                
 
                 currentAddress = self.initialAddress
                 self.__write("\n' Memory bank 4\n")
@@ -55,20 +57,32 @@ class ConfigWriter:
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.VTPLAYER_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_STRING(), currentAddress)
                 if musicExists("title"):
+                    self.__write("#DEFINE MUSIC_TITLE_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_TITLE_STRING(), currentAddress)
                 if musicExists("music2"):
+                    self.__write("#DEFINE MUSIC_2_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_2_STRING(), currentAddress)
                 if musicExists("music3"):
+                    self.__write("#DEFINE MUSIC_3_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_3_STRING(), currentAddress)
                 if musicExists("ending"):
+                    self.__write("#DEFINE MUSIC_ENDING_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_ENDING_STRING(), currentAddress)
                 if musicExists("gameover"):
+                    self.__write("#DEFINE MUSIC_GAMEOVER_ENABLED\n")
                     currentAddress = self.__writeDeclarationAndIncrement(Sizes.MUSIC_GAMEOVER_STRING(), currentAddress)
                 
                 currentAddress = self.initialAddress
-                self.__write("\n' Memory bank 6\n")
+                self.__write("\n' Memory bank fx 6\n")
                 
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.BEEP_FX_STRING(), currentAddress)
+                currentAddress = self.__writeDeclarationAndIncrement(Sizes.MAPS_DATA_STRING(), currentAddress)
+                
+                self.__write("\n")
+
+                currentAddress = self.initialAddress
+                self.__write("\n' Memory bank text 4\n")
+                
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.TEXTS_DATA_STRING(), currentAddress)
                 
                 self.__write("\n")
@@ -80,6 +94,7 @@ class ConfigWriter:
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.ENDING_SCREEN_STRING(), currentAddress)
                 currentAddress = self.__writeDeclarationAndIncrement(Sizes.HUD_SCREEN_STRING(), currentAddress)
 
+            self.__write("\n' Memory bank default\n")
             for key, value in vars(self.sizes).items():
                 if key in Sizes.getKeysToMemoryBank():
                     continue

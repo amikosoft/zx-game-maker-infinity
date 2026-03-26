@@ -26,18 +26,41 @@ End Function
         for i=0 to 2
             #ifdef LADDERS_ANIMATION_ENABLED
                 dim tile as ubyte = CheckStaticPlatform(protaX+i, y)
+                #ifdef SCREEN_TERRAIN_ENABLED
+                    if screenIsTerrain then tile = 255
+                #endif
                 if tile Then
-                    if anim and tile > 65 Then
-                        If protaTile = 3 Then
-                            protaTile = 7
-                        Else
-                            protaTile = 3
+                    if tile > STEPS_TILE_END Then
+                        ' if anim then protaDirection = 2
+                        #ifdef SCREEN_TERRAIN_ENABLED
+                            if anim = 2 and screenIsTerrain Then
+                                protaDirection = 2
+                                If protaTile = PROTA_TILE_DOWN Then
+                                    protaTile = 8
+                                Else
+                                    protaTile = PROTA_TILE_DOWN
+                                End If
+                                return 1
+                            end if
+                        #endif
+                        
+                        if anim then
+                            protaDirection = 2
+                            If protaTile = PROTA_TILE_UP Then
+                                protaTile = 6
+                            Else
+                                protaTile = PROTA_TILE_UP
+                            End If
                         End If
                     end if
-                    return 1
+                    return 2
                 End if
             #else
-                if CheckStaticPlatform(protaX+i, y) Then return 1
+                #ifdef SCREEN_TERRAIN_ENABLED
+                    if screenIsTerrain or CheckStaticPlatform(protaX+i, y) Then return 2
+                #Else
+                    if CheckStaticPlatform(protaX+i, y) Then return 2
+                #endif
             #endif
         next i
         
@@ -52,62 +75,34 @@ Function canMoveDown() As Ubyte
             Return 1
         End If
     #endif
-    If CheckCollision(protaX, protaY + 1) Then Return 0
+    
     #ifdef SIDE_VIEW
-        If checkPlatformByXY(protaX, protaY + 4) Then Return 0
+        If CheckCollision(protaX, protaY + 1) Then Return 0
+        
+        If checkPlatformByXY() Then Return 0
         
         if checkIsLadder(protaY + 4, 0) then return 0
+    #else
+        If CheckCollision(protaX, protaY + 1) Then Return 0
     #endif
     Return 1
 End Function
 
 Function getNextFrameRunning() As Ubyte
     #ifdef SIDE_VIEW
-        #ifdef MAIN_CHARACTER_EXTRA_FRAME
-            If protaDirection = 1 Then
-                If protaFrame = 0 Then
-                    protaLastFrame = protaFrame
-                    Return 1
-                Else If protaFrame = 1 And protaLastFrame = 0 Then
-                    protaLastFrame = protaFrame
-                    Return 2
-                Else If protaFrame = 2 Then
-                    protaLastFrame = protaFrame
-                    Return 1
-                Else If protaFrame = 1 And protaLastFrame = 2 Then
-                    protaLastFrame = protaFrame
-                    Return 0
-                End If
+        If protaDirection = 1 Then
+            If protaFrame = 0 Then
+                Return 1
             Else
-                If protaFrame = 4 Then
-                    protaLastFrame = protaFrame
-                    Return 5
-                Else If protaFrame = 5 And protaLastFrame = 4 Then
-                    protaLastFrame = protaFrame
-                    Return 6
-                Else If protaFrame = 6 Then
-                    protaLastFrame = protaFrame
-                    Return 5
-                Else If protaFrame = 5 And protaLastFrame = 6 Then
-                    protaLastFrame = protaFrame
-                    Return 4
-                End If
+                Return 0
             End If
-        #Else
-            If protaDirection = 1 Then
-                If protaFrame = 0 Then
-                    Return 1
-                Else
-                    Return 0
-                End If
+        Elseif protaDirection = 0 Then
+            If protaFrame = 2 Then
+                Return 3
             Else
-                If protaFrame = 4 Then
-                    Return 5
-                Else
-                    Return 4
-                End If
+                Return 2
             End If
-        #endif
+        End If
     #Else
         If protaDirection = 1 Then
             If protaFrame = 0 Then
@@ -145,363 +140,136 @@ End Function
 '     Return ((kempston = 0 And MultiKeys(keyArray(DOWN)) <> 0) Or (kempston = 1 And In(31) bAND %100 <> 0))
 ' End Function
 
+Sub shoot()
+    If bulletPositionX Then Return
+    
+    #ifdef AMMO_ENABLED
+        If not currentAmmo Then Return
+        currentAmmo = currentAmmo - 1
+        printHud()
+    #endif
+    
+    bulletDirection = -1
+    bulletDirectionVertical = 0
+    bulletPositionY = protaY + 1
 
-#ifdef SIDE_VIEW
-    Function getNextFrameJumpingFalling() As Ubyte
-        If (protaDirection) Then
-            Return 4
-        Else
-            Return 8
-        End If
-    End Function
-    
-    #ifndef JETPACK_FUEL
-        Sub checkIsJumping()
-            If jumpCurrentKey >= jumpStopValue or jumpCurrentKey >= jumpStepsCount - 1 Then
-                jumpCurrentKey = jumpStopValue
-                Return
-            End If
-            
-            if checkProtaTop() or CheckCollision(protaX, protaY + jumpArray(jumpCurrentKey)) Then
-                jumpCurrentKey = jumpCurrentKey + 1
-                Return
-            End if
-            
-            ' If CheckCollision(protaX, protaY + jumpArray(jumpCurrentKey)) Then
-            '     jumpCurrentKey = jumpCurrentKey + 1
-            '     Return
-            ' End If
-            
-            protaTile = getNextFrameJumpingFalling()
-            protaY = protaY + jumpArray(jumpCurrentKey)
-            ' updateProtaData( protaY + jumpArray(jumpCurrentKey), protaX, getNextFrameJumpingFalling(), protaDirection)
-            
-            jumpCurrentKey = jumpCurrentKey + 1
-        End Sub
-    #endif
-    
-    #ifdef JETPACK_FUEL
-        Sub checkIsFlying()
-            If jumpCurrentKey = jumpStopValue Then Return
-            
-            If jumpEnergy > 0 Then
-                checkProtaTop()
-            End if
-            
-            If pressingUp() And jumpEnergy > 0 Then
-                If Not CheckCollision(protaX, protaY - 1) Then
-                    'updateProtaData( protaY - 1, protaX, getNextFrameJumpingFalling(), protaDirection)
-                    protaY = protaY - 1
-                    protaTile = getNextFrameJumpingFalling()
-                End If
-                jumpCurrentKey = jumpCurrentKey + 1
-                jumpEnergy = jumpEnergy - 1
-                PRINT AT 23, 5; TEXT_3_SPACES
-                PRINT AT 23, 5; jumpEnergy
-                Return
-            End If
-            
-            ' stop flight
-            jumpCurrentKey = jumpStopValue
-        End Sub
-    #endif
-    
-    Function isFalling() As Ubyte
-        If canMoveDown() Then
-            #ifdef JETPACK_FUEL
-                If pressingUp() Then
-                    jumpCurrentKey = 0
-                End If
+    if not horizontalAxisKeyPressed or verticalAxisKeyPressed then
+        bulletPositionX = protaX + 1
+
+        if protaDirection = 8 or verticalAxisKeyPressed = 1 Then
+            #ifdef OVERHEAD_VIEW
+            #ifdef IDLE_ENABLED
+                protaTile = PROTA_TILE_UP
             #endif
-            Return 1
-        Else
-            If not landed Then
-                landed = 1
-                jumpCurrentKey = jumpStopValue
-                #ifdef JETPACK_FUEL
-                    jumpEnergy = jumpStepsCount
-                    printLife()
-                #endif
-                If protaY bAND 1 Then
-                    ' updateProtaDataLin(PROTA_SPRITE, protaY - 1)
-                    protaY = protaY - 1
-                End If
-                'resetProtaSpriteToRunning()
-                if protaDirection then
-                    'updateProtaData(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_RIGHT, protaDirection)
-                    protaTile = FIRST_RUNNING_PROTA_SPRITE_RIGHT
-                else
-                    ' updateProtaData(protaY, protaX, FIRST_RUNNING_PROTA_SPRITE_LEFT, protaDirection)
-                    protaTile = FIRST_RUNNING_PROTA_SPRITE_LEFT
-                end if
-            End If
-            Return 0
-        End If
-    End Function
-    
-    Sub gravity()
-        If jumpCurrentKey = jumpStopValue And isFalling() Then
-            landed = 0
-            If protaY >= MAX_SCREEN_BOTTOM Then
-                #ifdef LEVELS_MODE
-                    landed = 1
-                    decrementLife()
-                    
-                    #ifndef LIVES_MODE_ENABLED
-                        jump()
-                    #endif
-                #else
-                    moveScreen = 2
-                #endif
-            Else
-                protaTile = getNextFrameJumpingFalling()
-                
-                #ifndef JETPACK_FUEL
-                    #ifndef LOW_GRAVITY
-                        protaY = protaY + 2
-                    #Else
-                        protaY = protaY + 1
-                    #endif
-                #Else
-                    protaY = protaY + 1
-                #endif
-            End If
-        #ifdef UNDER_PLAYER_VALIDATION
-        Else
-            CheckAutoBreakableTile()
-        #endif
-        End If
-    End Sub
-#endif
+            #endif
+            bulletDirectionVertical = BULLET_DIRECTION_UP
 
+            #ifndef BULLET_ANIMATION
+                currentBulletSpriteId = BULLET_SPRITE_UP_ID
+            #endif
 
-' #ifdef OVERHEAD_VIEW
-'     Sub shoot()
-'         ' If Not noKeyPressedForShoot Then Return
-        
-'         ' noKeyPressedForShoot = 0
-        
-'         If bulletPositionX Then Return
-        
-'         #ifdef AMMO_ENABLED
-'             If not currentAmmo Then Return
-'             currentAmmo = currentAmmo - 1
-'             printLife()
-'         #endif
-        
-'         If protaDirection = 1 Then
-'             #ifdef IDLE_ENABLED
-'                 ' updateProtaData( protaY, protaX, 1, 1)
-'                 protaTile = 1
-'             #endif
+            bulletPositionY = protaY
 
-'             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-'             bulletPositionX = protaX + 2
-'             bulletPositionY = protaY + 1
-'             #ifndef BULLET_DISTANCE_FULL
-'                 bulletEndPositionX = protaX + BULLET_DISTANCE
-'                 If bulletEndPositionX > (PLAYER_BOUNDS_RIGHT) Then
-'                     bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-'                 End If
-'             #Else
-'                 bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-'             #EndIf
-'         Elseif protaDirection = 0
-'             #ifdef IDLE_ENABLED
-'                 ' updateProtaData( protaY, protaX, 5, 0)
-'                 protaTile = 3
-'             #endif
-
-'             currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-'             bulletPositionX = protaX
-'             bulletPositionY = protaY + 1
-'             #ifndef BULLET_DISTANCE_FULL
-'                 bulletEndPositionX = protaX - BULLET_DISTANCE
-'                 If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
-'                     bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-'                 End If
-'             #Else
-'                 bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-'             #EndIf
-'         Elseif protaDirection = 8
-'             #ifdef IDLE_ENABLED
-'                 ' updateProtaData( protaY, protaX, 5, 0)
-'                 protaTile = 5
-'             #endif
-
-'             currentBulletSpriteId = BULLET_SPRITE_UP_ID
-'             bulletPositionX = protaX + 1
-'             bulletPositionY = protaY + 1
-
-'             #ifndef BULLET_DISTANCE_FULL
-'                 bulletEndPositionY = protaY - BULLET_DISTANCE
-'                 If bulletEndPositionY < PLAYER_BOUNDS_TOP Then
-'                     bulletEndPositionY = PLAYER_BOUNDS_TOP
-'                 End If
-'             #Else
-'                 bulletEndPositionY = PLAYER_BOUNDS_TOP
-'             #EndIf
-'         Else
-'             #ifdef IDLE_ENABLED
-'                 ' updateProtaData( protaY, protaX, 5, 0)
-'                 protaTile = 7
-'             #endif
-            
-'             currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
-'             bulletPositionX = protaX + 1
-'             bulletPositionY = protaY + 2
-
-'             #ifndef BULLET_DISTANCE_FULL
-'                 bulletEndPositionY = protaY + BULLET_DISTANCE
-'                 If bulletEndPositionY > PLAYER_BOUNDS_BOTTOM Then
-'                     bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
-'                 End If
-'             #Else
-'                 bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
-'             #EndIf
-'         End If
-        
-'         bulletDirection = protaDirection
-'         BeepFX_Play(2)
-'     End Sub
-' #else
-    Sub shoot()
-        ' If Not noKeyPressedForShoot Then Return
-        ' noKeyPressedForShoot = 0
-        
-        If bulletPositionX Then Return
-        
-        #ifdef AMMO_ENABLED
-            If not currentAmmo Then Return
-            currentAmmo = currentAmmo - 1
-            printLife()
-        #endif
-        
-        bulletDirection = -1
-        bulletDirectionVertical = 0
-        bulletPositionY = protaY + 1
-
-        if not horizontalAxisKeyPressed or verticalAxisKeyPressed then
-            bulletPositionX = protaX + 1
-
-            if protaDirection = 8 or verticalAxisKeyPressed = 1 Then
-                #ifdef OVERHEAD_VIEW
-                #ifdef IDLE_ENABLED
-                    protaTile = 5
-                #endif
-                #endif
-                bulletDirectionVertical = BULLET_DIRECTION_UP
-
-                #ifndef BULLET_ANIMATION
-                    currentBulletSpriteId = BULLET_SPRITE_UP_ID
-                #endif
-
-                bulletPositionY = protaY
-
-                #ifndef BULLET_DISTANCE_FULL
-                    bulletEndPositionY = protaY - BULLET_DISTANCE
-                    If bulletEndPositionY < PLAYER_BOUNDS_TOP Then
-                        bulletEndPositionY = PLAYER_BOUNDS_TOP
-                    End If
-                #Else
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionY = protaY - BULLET_DISTANCE
+                If bulletEndPositionY < PLAYER_BOUNDS_TOP Then
                     bulletEndPositionY = PLAYER_BOUNDS_TOP
-                #EndIf
-            elseif protaDirection = 2 or verticalAxisKeyPressed = -1 then
-                #ifdef OVERHEAD_VIEW
-                #ifdef IDLE_ENABLED
-                    protaTile = 7
-                #endif
-                #endif
+                End If
+            #Else
+                bulletEndPositionY = PLAYER_BOUNDS_TOP
+            #EndIf
+        elseif protaDirection = 2 or verticalAxisKeyPressed = -1 then
+            #ifdef OVERHEAD_VIEW
+            #ifdef IDLE_ENABLED
+                protaTile = PROTA_TILE_DOWN
+            #endif
+            #endif
 
-                bulletDirectionVertical = BULLET_DIRECTION_DOWN
+            bulletDirectionVertical = BULLET_DIRECTION_DOWN
 
-                #ifndef BULLET_ANIMATION
-                    currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
-                #endif
-                
-                bulletPositionY = protaY + 2
+            #ifndef BULLET_ANIMATION
+                currentBulletSpriteId = BULLET_SPRITE_DOWN_ID
+            #endif
+            
+            bulletPositionY = protaY + 2
 
-                #ifndef BULLET_DISTANCE_FULL
-                    bulletEndPositionY = protaY + BULLET_DISTANCE
-                    If bulletEndPositionY > PLAYER_BOUNDS_BOTTOM Then
-                        bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
-                    End If
-                #Else
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionY = protaY + BULLET_DISTANCE
+                If bulletEndPositionY > PLAYER_BOUNDS_BOTTOM Then
                     bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
-                #EndIf
-            end if
-
+                End If
+            #Else
+                bulletEndPositionY = PLAYER_BOUNDS_BOTTOM
+            #EndIf
         end if
-        
-        if not verticalAxisKeyPressed or horizontalAxisKeyPressed then
-            If protaDirection = 1 or horizontalAxisKeyPressed = 1 Then
-                #ifdef IDLE_ENABLED
-                    'updateProtaData( protaY, protaX, 1, 1)
-                    protaTile = 1
 
-                    #ifndef OVERHEAD_VIEW
-                        protaDirection = 1
-                    #endif
+    end if
+    
+    if not verticalAxisKeyPressed or horizontalAxisKeyPressed then
+        If protaDirection = 1 or horizontalAxisKeyPressed = 1 Then
+            #ifdef IDLE_ENABLED
+                protaTile = PROTA_TILE_RIGHT
+
+                #ifndef OVERHEAD_VIEW
+                    protaDirection = 1
                 #endif
-                
-                bulletDirection = BULLET_DIRECTION_RIGHT
-                
-                #ifndef BULLET_ANIMATION
-                    currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-                #endif
-                bulletPositionX = protaX + 2
-                
-                #ifndef BULLET_DISTANCE_FULL
-                    bulletEndPositionX = protaX + BULLET_DISTANCE
-                    If bulletEndPositionX > PLAYER_BOUNDS_RIGHT Then
-                        bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-                    End If
-                #Else
+            #endif
+            
+            bulletDirection = BULLET_DIRECTION_RIGHT
+            
+            #ifndef BULLET_ANIMATION
+                currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
+            #endif
+            bulletPositionX = protaX + 2
+            
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionX = protaX + BULLET_DISTANCE
+                If bulletEndPositionX > PLAYER_BOUNDS_RIGHT Then
                     bulletEndPositionX = PLAYER_BOUNDS_RIGHT
-                #EndIf
-            Elseif protaDirection = 0 or horizontalAxisKeyPressed = -1 then
-                #ifdef IDLE_ENABLED
-                    'updateProtaData( protaY, protaX, 5, 0)
-                    #ifdef OVERHEAD_VIEW
-                        protaTile = 3
-                    #else
-                        protaTile = 5
-                        protaDirection = 0
-                    #endif
+                End If
+            #Else
+                bulletEndPositionX = PLAYER_BOUNDS_RIGHT
+            #EndIf
+        Elseif protaDirection = 0 or horizontalAxisKeyPressed = -1 then
+            #ifdef IDLE_ENABLED
+                protaTile = PROTA_TILE_LEFT
+                #ifndef OVERHEAD_VIEW
+                    protaDirection = 0
                 #endif
-                
-                bulletDirection = BULLET_DIRECTION_LEFT
+            #endif
+            
+            bulletDirection = BULLET_DIRECTION_LEFT
 
-                #ifndef BULLET_ANIMATION
-                    currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-                #endif
-                bulletPositionX = protaX
-                
-                #ifndef BULLET_DISTANCE_FULL
-                    bulletEndPositionX = protaX - BULLET_DISTANCE
-                    If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
-                        bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-                    End If
-                #Else
+            #ifndef BULLET_ANIMATION
+                currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
+            #endif
+            bulletPositionX = protaX
+            
+            #ifndef BULLET_DISTANCE_FULL
+                bulletEndPositionX = protaX - BULLET_DISTANCE
+                If bulletEndPositionX < (PLAYER_BOUNDS_LEFT+2) Then
                     bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
-                #EndIf
-            End If
-        end if
+                End If
+            #Else
+                bulletEndPositionX = PLAYER_BOUNDS_LEFT+2
+            #EndIf
+        End If
+    end if
 
-        BeepFX_Play(2)
-    End Sub
-' #endif
+    BeepFX_Play(2)
+End Sub
 
 Sub leftKey(animate as ubyte)
     horizontalAxisKeyPressed = -1
 
-    If animate and protaDirection <> 0 Then
-        #ifdef SIDE_VIEW
-            protaFrame = 4
-        #Else
-            protaFrame = 2
-        #endif
-    End If
+    if animate then
+        if protaDirection <> 0 Then
+            protaFrame = PROTA_FRAME_LEFT
+        End If
+
+        protaTile = protaFrame + 1 
+        protaDirection = 0
+    end if
     
     If protaX <= PLAYER_BOUNDS_LEFT Then
         #ifdef ARCADE_MODE
@@ -511,26 +279,18 @@ Sub leftKey(animate as ubyte)
             moveScreen = 4
         #endif
     Else
+        #ifdef GLUE_SLOW_DOWN
+            if isOnGlue and (enemiesFrame band 1) then return
+        #endif
+
         #ifdef SIDE_VIEW
             if isInStep(protaX) then
                 protaY = protaY - 1
-                ' elseif isInStep(protaX + 4, protaY + 4) then
-                '     if not isInStep(protaX, protaY + 4) then protaY = protaY + 1
             end if
-
-            #ifdef GLUE_SLOW_DOWN
-                if isOnGlue and (enemiesFrame band 1 )then return
-            #endif
         #endif
         
         if Not CheckCollision(protaX - 1, protaY) then 
-            'updateProtaData( protaY, protaX - 1, protaFrame + 1, 0)
             protaX = protaX - 1
-
-            if animate then
-                protaTile = protaFrame + 1 
-                protaDirection = 0
-            end if
         end if
     End If
 End Sub
@@ -538,10 +298,19 @@ End Sub
 Sub rightKey(animate as ubyte)
     horizontalAxisKeyPressed = 1
 
-    If animate and protaDirection <> 1 Then
-        protaFrame = 0
-    End If
-    
+    ' If animate and protaDirection <> 1 Then
+    '     protaFrame = PROTA_FRAME_RIGHT
+    ' End If
+
+    if animate then
+        if protaDirection <> 1 Then
+            protaFrame = PROTA_FRAME_RIGHT
+        End If
+
+        protaTile = protaFrame + 1 
+        protaDirection = 1
+    end if
+
     If protaX >= PLAYER_BOUNDS_RIGHT Then
         #ifdef ARCADE_MODE
             protaX = MAX_SCREEN_LEFT
@@ -550,26 +319,16 @@ Sub rightKey(animate as ubyte)
             moveScreen = 6
         #endif
     Else
+        #ifdef GLUE_SLOW_DOWN
+            if isOnGlue and (enemiesFrame band 1) then return
+        #endif    
+            
         #ifdef SIDE_VIEW
-            if isInStep(protaX+3) then
-                protaY = protaY - 1
-                ' elseif isInStep(protaX+1, protaY + 4) then
-                '     if not isInStep(protaX + 4, protaY + 4) then protaY = protaY + 1
-            end if
-
-            #ifdef GLUE_SLOW_DOWN
-                if isOnGlue and (enemiesFrame band 1) then return
-            #endif
+            if isInStep(protaX+3) then protaY = protaY - 1
         #endif
         
         if Not CheckCollision(protaX + 1, protaY) then 
-            'updateProtaData( protaY, protaX + 1, protaFrame + 1, 1)
             protaX = protaX + 1
-
-            if animate then
-                protaTile = protaFrame + 1 
-                protaDirection = 1
-            end if
         end if
     End If
 End Sub
@@ -584,6 +343,7 @@ Sub upKey()
 
         #ifdef LADDERS_ANIMATION_ENABLED
             If checkIsLadder(protaY + 3, 1) Then
+                protaDirection = 8
                 checkProtaTop()
                 
                 if Not CheckCollision(protaX, protaY - 1) Then
@@ -593,14 +353,25 @@ Sub upKey()
                 jump()
             End If
         #Else
-            jump()
+            #ifdef SCREEN_TERRAIN_ENABLED
+                If screenIsTerrain then
+                    checkProtaTop()
+                    
+                    if Not CheckCollision(protaX, protaY - 1) Then
+                        protaY = protaY - 1
+                    End If
+                else
+                    jump()
+                end if
+            #else
+                jump()
+            #endif
         #endif
     #Else
         If protaDirection <> 8 Then
             protaFrame = 4
         End If
         If canMoveUp() Then
-            'updateProtaData( protaY - 1, protaX, protaFrame + 1, 8)
             protaY = protaY - 1
             protaTile = protaFrame + 1
             protaDirection = 8
@@ -625,7 +396,6 @@ Sub downKey()
                     #endif
                 #endif
             Else
-                'updateProtaData( protaY + 1, protaX, protaFrame + 1, 2)
                 protaY = protaY + 1
                 protaTile = protaFrame + 1
                 protaDirection = 2
@@ -636,21 +406,16 @@ Sub downKey()
             jumpCurrentKey = jumpStopValue
         #endif
         
-        ' #ifdef PLATFORM_MOVEABLE
-            ' verticalAxisKeyPressed = -1
-        ' #endif
-        
-        if protaY bAnd 1 Then protaY = protaY + 1
+        ' if protaY bAnd 1 Then protaY = protaY + 1
         
         If not CheckCollision(protaX, protaY + 1) Then
             #ifdef LADDERS_ANIMATION_ENABLED
-                If checkIsLadder(protaY + 4, 1) Then
-                    protaY = protaY + 2
-                End If
+                ' If checkIsLadder(protaY + 4, 2) Then
+                '     protaY = protaY + 1
+                ' End If
+                protaY = protaY + checkIsLadder(protaY + 4, 2)
             #Else
-                If checkIsLadder(protaY + 4, 0) Then
-                    protaY = protaY + 2
-                End If
+                protaY = protaY + checkIsLadder(protaY + 4, 0)
             #endif
         end if
     #endif
@@ -659,8 +424,9 @@ End Sub
 #ifdef IN_GAME_TEXT_ENABLED
     Sub muestraDialogo(texto as ubyte, tile as ubyte)
         #ifdef FULLSCREEN_TEXTS
-            #ifdef SCREEN_ATTRIBUTES
-                FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+            #ifdef ADVENTURETEXTS_SCREEN_ENABLED
+            '     FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+                loadScreen(ADVENTURETEXTS_SCREEN_ADDRESS)
             #else
                 FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
             #endif
@@ -675,15 +441,19 @@ End Sub
 
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
             dim textId as ubyte = textsCoord(texto, 3)
-            SetBank(fxBank)
+            SetBank(textsBank)
             for letra=0 to 14
                 #ifndef FULLSCREEN_TEXTS
                     if fila = 0 Then Print AT 5, 9 + letra; " "
                 #endif
 
                 Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
+
+                #ifdef ADVENTURE_TEXTS_SOUND
+                    PAUSE 2: BEEP .01, 8
+                #endif
             Next letra
-            SetBank(0)
+            SetBank(gameBank)
             #ifndef FULLSCREEN_TEXTS
                 #ifndef MAP_COLOR_TEXT_ENABLED
                     SetTile(tile, attrSet(tile), 16, 5)
@@ -696,8 +466,28 @@ End Sub
         #else
             pauseUntilPressEnter()
         #endif
-        
-        mapDraw()
+    
+        #ifdef FULLSCREEN_TEXTS
+            #ifdef ADVENTURETEXTS_SCREEN_ENABLED
+                #ifdef HUD2_SCREEN_ENABLED
+                    #ifdef SCREEN_HUD2_ENABLED
+                        loadHUDScreen()
+                    #Else
+                        loadScreen(HUD_SCREEN_ADDRESS)
+                    #EndIf
+                #Else
+                    loadScreen(HUD_SCREEN_ADDRESS)
+                #endif
+
+                ' #ifdef HISCORE_ENABLED
+                '     Print AT 22, 13; TEXT_HI_SCORE_ZERO
+                '     Print AT 23, 13; TEXT_HI_SCORE_ZERO
+                ' #endif
+
+                ' printHud()
+            #endif
+        #endif
+        mapDraw(1)
     end sub
     
     Function validaTexto(validateTile as ubyte) as ubyte
@@ -762,35 +552,18 @@ End Sub
 #endif
 
 Sub fireKey()
-    #ifdef TELEPORT_ENABLED
-    dim tileTeleport as ubyte = GetTile((protaX+1)>>1, (protaY+1)>>1)
-
-    if tileTeleport = 186 then
-        currentScreen = currentTeleportTo - 1
-        moveScreen = 10
-
-        BeepFX_Play(6)
-        
-        #ifdef TELEPORT_ANIMATION
-            for color=1 to 7
-                mapColor(color)
-            next color
-        #endif
-    else
+    isActionPerformed = 0
+    
+    #ifdef FIRED_ITEMS_ENABLED
+    checkObjectContact(0)
     #endif
-        #ifdef IN_GAME_TEXT_ENABLED
-            #ifdef SHOOTING_ENABLED
-                if not validaTexto(0) then shoot()
-            #Else
-                validaTexto(0)
-            #endif
-        #else
-            #ifdef SHOOTING_ENABLED
-                shoot()
-            #endif
-        #endif
-    #ifdef TELEPORT_ENABLED
-    end if
+    
+    #ifdef IN_GAME_TEXT_ENABLED
+        if not isActionPerformed then isActionPerformed = validaTexto(0)
+    #endif
+    
+    #ifdef SHOOTING_ENABLED
+        if not isActionPerformed then shoot()
     #endif
 End Sub
 
@@ -844,164 +617,185 @@ Sub keyboardListen()
     #endif
 End Sub
 
-Function checkTileObject(tile As Ubyte) As Ubyte
-    If tile = ITEM_TILE Then
-        ' #ifndef ARCADE_MODE
-        '     If Not screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-        '         Return 0
-        '     End If
-        ' #endif
-        #ifdef SHOULD_PICKUP_ITEMS
-            screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
-            removeTilesFromScreen(ENEMY_DOOR_TILE)
-        #endif
-        currentItems = currentItems + ITEMS_INCREMENT
-        #ifdef HISCORE_ENABLED
-            score = score + 100
-            If score > hiScore Then
-                hiScore = score
-            End If
-        #endif
-        printLife()
-        #ifdef MESSAGES_ENABLED
-            printMessage(TEXT_NEW_ITEM, 4, 0)
-        #endif
-        #ifdef ARCADE_MODE
-            If currentItems = itemsToFind Then
-                SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
-            End If
-        #Else
-            #ifndef LEVELS_MODE
-                If currentItems = GOAL_ITEMS Then
-                    ending()
+Function checkTileObject(tile As Ubyte, oneUse as ubyte) As Ubyte
+    #ifdef GLUE_TILE_ENABLED
+        if tile = GLUE_TERRAIN_TILE then isOnGlue = 1
+    #endif
+
+    if oneUse then
+        If tile = ITEM_TILE Then
+            #ifdef SHOULD_PICKUP_ITEMS
+                screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
+                removeTilesFromScreen(ENEMY_DOOR_TILE)
+            #endif
+            currentItems = currentItems + ITEMS_INCREMENT
+            #ifdef HISCORE_ENABLED
+                score = score + 100
+                If score > hiScore Then
+                    hiScore = score
                 End If
             #endif
-        #endif
-        screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
-        BeepFX_Play(5)
-        Return tile
-        #ifndef ARCADE_MODE
-            #ifdef CHECKPOINTS_ENABLED
-            ElseIf tile = FLAG_TILE Then
-                #ifdef MESSAGES_ENABLED
-                    if protaScreenRespawn <> currentScreen Then printMessage(TEXT_CHECK_POINT, 4, 0)
-                #endif
-                
-                protaXRespawn = protaX
-                protaYRespawn = protaY - 1
-                protaScreenRespawn = currentScreen
+            printHud()
+            #ifdef MESSAGES_ENABLED
+                printMessage(TEXT_NEW_ITEM, 4, 0)
             #endif
-        #endif
-        #ifdef KEYS_ENABLED
-        Elseif tile = KEY_TILE Then
             #ifdef ARCADE_MODE
-                If currentScreen = SCREENS_COUNT Then
-                    ending()
-                Else
-                    moveScreen = 6
-                    Return 1
+                If currentItems = itemsToFind Then
+                    SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
                 End If
+            #Else
+                #ifndef LEVELS_MODE
+                    If currentItems = GOAL_ITEMS Then
+                        ending()
+                    End If
+                #endif
             #endif
-            currentKeys = currentKeys + 1
-            printLife()
-            #ifdef MESSAGES_ENABLED
-                printMessage(TEXT_KEY_FOUND, 4, 0)
-            #endif
-            screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
-            BeepFX_Play(3)
+            screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
+            BeepFX_Play(5)
             Return tile
-        #endif
-    Elseif tile = LIFE_TILE Then
-        #ifdef ENERGY_ENABLED
-            if currentEnergy = INITIAL_ENERGY Then
+            #ifndef ARCADE_MODE
+                #ifdef CHECKPOINTS_ENABLED
+                ElseIf tile = FLAG_TILE Then
+                    #ifdef MESSAGES_ENABLED
+                        if protaScreenRespawn <> currentScreen Then printMessage(TEXT_CHECK_POINT, 4, 0)
+                    #endif
+                    
+                    protaXRespawn = protaX
+                    protaYRespawn = protaY - 1
+                    protaScreenRespawn = currentScreen
+                #endif
+            #endif
+            #ifdef KEYS_ENABLED
+            Elseif tile = KEY_TILE Then
+                #ifdef ARCADE_MODE
+                    If currentScreen = SCREENS_COUNT Then
+                        ending()
+                    Else
+                        moveScreen = 6
+                        Return 1
+                    End If
+                #endif
+                currentKeys = currentKeys + 1
+                printHud()
+                #ifdef MESSAGES_ENABLED
+                    printMessage(TEXT_KEY_FOUND, 4, 0)
+                #endif
+                screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
+                BeepFX_Play(3)
+                Return tile
+            #endif
+        ' #ifdef GLUE_TILE_ENABLED
+        '     Elseif tile = GLUE_TERRAIN_TILE then 
+        '         isOnGlue = 1
+        ' #endif
+        Elseif tile = LIFE_TILE Then
+            #ifdef ENERGY_ENABLED
+                if currentEnergy = INITIAL_ENERGY Then
+                    currentLife = currentLife + LIFE_AMOUNT
+                else
+                    currentEnergy = INITIAL_ENERGY
+                End if
+            #else
                 currentLife = currentLife + LIFE_AMOUNT
-            else
-                currentEnergy = INITIAL_ENERGY
-            End if
-        #else
-            currentLife = currentLife + LIFE_AMOUNT
-        #endif
-        
-        printLife()
-        
-        #ifdef MESSAGES_ENABLED
-            printMessage(TEXT_LIFE, 2, 0)
-        #endif
-        
-        screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
-        BeepFX_Play(6)
-        Return tile
-        #ifdef AMMO_ENABLED
-        Elseif tile = AMMO_TILE Then
-            currentAmmo = currentAmmo + AMMO_INCREMENT
-            printLife()
-            
-            #ifdef MESSAGES_ENABLED
-                printMessage(TEXT_AMMO, 2, 0)
             #endif
             
-            screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
+            printHud()
+            
+            #ifdef MESSAGES_ENABLED
+                printMessage(TEXT_LIFE, 2, 0)
+            #endif
+            
+            screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
             BeepFX_Play(6)
             Return tile
+            #ifdef AMMO_ENABLED
+            Elseif tile = AMMO_TILE Then
+                currentAmmo = currentAmmo + AMMO_INCREMENT
+                printHud()
+                
+                #ifdef MESSAGES_ENABLED
+                    printMessage(TEXT_AMMO, 2, 0)
+                #endif
+                
+                screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
+                BeepFX_Play(6)
+                Return tile
+            #endif
+        End If
+    #ifdef FIRED_ITEMS_ENABLED
+    else if not isActionPerformed then
+        #ifdef SCREEN_DARK_ENABLED
+            if tile = SWITCHER_TILE Then
+                screenIsDark = not screenIsDark
+                BEEP 0.01, 14
+                mapDraw(0)
+                isActionPerformed = tile
+                return tile
+            end if
         #endif
-    End If
+        #ifdef TELEPORT_ENABLED
+            if tile = TELEPORT_TILE then
+                currentScreen = currentTeleportTo - 1
+                moveScreen = 10
+                isActionPerformed = tile
+                ' BeepFX_Play(6)
+                
+                #ifdef TELEPORT_ANIMATION
+                    for color=1 to 7
+                        #ifdef TELEPORT_SOUND
+                            BEEP 0.01, color
+                        #endif
+                        mapColor(7-color)
+                    next color
+                #endif
+            End if
+        #endif
+    #endif
+    End if
+
     Return 0
 End Function
 
-Sub checkObjectContact()
-    Dim col As Ubyte = protaX >> 1
-    Dim lin As Ubyte = protaY >> 1
-    
-    for c=col to (col+1)
-        for l=lin to (lin+1)
+Sub checkObjectContact(oneUse as ubyte)
+    ' for cc=(protaCol-1) to (protaCol+2)
+    '     for lc=(protaLin-1) to (protaLin+2)
+    '         if not GetTile(cc, lc) then
+    '             if cc > (protaCol-1) and cc < (protaCol+2) and lc > (protaLin-1)  and lc < (protaLin+2) then
+    '                 SetTileColor(cc, lc, 5)
+    '             else
+    '                 SetTileColor(cc, lc, currentScreenBackground)
+    '             end if
+    '         end if
+    '     next lc
+    ' next cc
+
+    for c=protaCol to (protaCol+1)
+        for l=protaLin to (protaLin+1)
+            If isADamageTile(c, l) Then decrementLife()
+
             #ifdef IN_GAME_TEXT_ENABLED
-                dim tile = GetTile(c, l)
+                dim tile as ubyte = GetTile(c, l)
                 
-                if checkTileObject(tile) then
+                if checkTileObject(tile, oneUse) then
                     validaTexto(tile)
                     
                     #ifdef SCREEN_ATTRIBUTES
-                        SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        if oneUse then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                        if oneUse then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #else
-                If checkTileObject(GetTile(c, l)) Then
+                If checkTileObject(GetTile(c, l), oneUse) Then
                     #ifdef SCREEN_ATTRIBUTES
-                        SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        if oneUse then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                        if oneUse then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #endif
         next l
     next c
-End Sub
-
-
-Sub checkDamageByTile()
-    If invincible Then Return
-    
-    Dim col As Ubyte = protaX >> 1
-    Dim lin As Ubyte = protaY >> 1
-    
-    for c=0 to 1
-        for l=0 to 1
-            If isADamageTile(col+c, lin+l) Then
-                decrementLife()
-                Return
-            End If
-        next l
-    next c
-    ' If isADamageTile(col, lin) Or isADamageTile(col + 1, lin) Then
-    '     decrementLife()
-    '     Return
-    ' End If
-    ' if isADamageTile(col, lin + 1) Or isADamageTile(col + 1, lin + 1) Then
-    '     decrementLife()
-    '     Return
-    ' End If
 End Sub
 
 Sub protaMovement()
@@ -1019,21 +813,25 @@ Sub protaMovement()
     keyboardListen()
 
     if moveScreen then return
-    checkObjectContact()
+
+    protaCol = protaX >> 1
+    protaLin = protaY >> 1
+    
+    #ifdef GLUE_TILE_ENABLED
+        isOnGlue = 0
+    #endif
+    
+    checkObjectContact(1)
     
     #ifdef SIDE_VIEW
-        #ifndef JETPACK_FUEL
-            checkIsJumping()
-        #Else
-            checkIsFlying()
-        #endif
-        gravity()
+        #include "functionsBas/checkJumpGravity.bas"
         
         #ifdef IDLE_ENABLED
             If protaLoopCounter >= IDLE_TIME Then
                 If jumpCurrentKey <> jumpStopValue Then Return
-                If isFalling() Then Return
-                
+                ' If isFalling() Then Return
+                if not landed then return
+
                 protaTile = 13 + animatedFrame
             End If
         #endif
@@ -1046,6 +844,12 @@ Sub protaMovement()
     #endif
     
     #ifdef MESSAGES_ENABLED
-        checkMessageForDelete()
+        ' checkMessageForDelete()
+        if messageLoopCounter Then
+            messageLoopCounter = messageLoopCounter - 1
+            If not messageLoopCounter Then
+                PRINT AT 21, 11; TEXT_EMPTY_STRING
+            End If
+        End if
     #endif
 End Sub

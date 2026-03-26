@@ -29,7 +29,7 @@ def buildingFilesAndConfig():
     return Builder().execute()
 
 def compilingGame():
-    runCommand("zxbc -W160 -W170 -W130 -W190 -W150 -W100 -H 128 --heap-address 23755 -S 24576 -O 4 " + str(Path("boriel/main.bas")) + " --mmap " + str(Path("output/map.txt")) + " -D HIDE_LOAD_MSG -o " + str(Path("output/main.bin")))
+    runCommand("zxbc -W160 -W170 -W130 -W190 -W150 -W100 -H 128 --heap-address 23755 -S 24576 -O 4 " + str(Path("boriel/main.bas")) + " --mmap " + str(Path(OUTPUT_FOLDER + "map.txt")) + " -D HIDE_LOAD_MSG -o " + str(Path(OUTPUT_FOLDER + "main.bin")))
 
 def checkMemory():
     runPythonScript("bin/check-memory.py")
@@ -37,23 +37,21 @@ def checkMemory():
 def tapsBuild():
     OUTPUT_FILE = str(Path(DIST_FOLDER + getProjectFileName() + ".tap"))
     
-    runCommand("bin2tap " + str(Path("bin/loader.bin")) + " " + str(Path("output/loader.tap")) + " 10 --header \"" + getProjectName() + "\" --block_type 1")
-    runCommand("bin2tap " + str(Path("output/loading.bin")) + " " + str(Path("output/loading.tap")) + " 16384")
-    runCommand("bin2tap " + str(Path("output/main.bin")) + " " + str(Path("output/main.tap")) + " 24576")
+    runCommand("bin2tap " + str(Path("bin/loader.bin")) + " " + str(Path(OUTPUT_FOLDER + "loader.tap")) + " 10 --header \"" + getProjectName() + "\" --block_type 1")
+    runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "loading.bin")) + " " + str(Path(OUTPUT_FOLDER + "loading.tap")) + " 16384")
+    runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "main.bin")) + " " + str(Path(OUTPUT_FOLDER + "main.tap")) + " 24576")
 
     if getEnabled128K():
-        runCommand("bin2tap " + str(Path("output/title.scr.zx0")) + " " + str(Path("output/title.tap")) + " 49152")
-        runCommand("bin2tap " + str(Path("output/ending.scr.zx0")) + " " + str(Path("output/ending.tap")) + " 16384")
-        runCommand("bin2tap " + str(Path("output/hud.scr.zx0")) + " " + str(Path("output/hud.tap")) + " 24576")
+        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "title.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "title.tap")) + " 49152")
+        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "ending.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "ending.tap")) + " 16384")
+        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "hud.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "hud.tap")) + " 24576")
 
-        runCommand("bin2tap " + str(Path("output/texts.bin")) + " " + str(Path("output/textsalt.tap")) + " 49152")
-        
         input_files = [
-            str(Path("output/loader.tap")),
-            str(Path("output/loading.tap")),
-            str(Path("output/main.tap")),
+            str(Path(OUTPUT_FOLDER + "loader.tap")),
+            str(Path(OUTPUT_FOLDER + "loading.tap")),
+            str(Path(OUTPUT_FOLDER + "main.tap")),
             # str(Path(ASSETS_FOLDER + "fx/fx.tap")),
-            str(Path("output/files.tap")),
+            str(Path(OUTPUT_FOLDER + "files.tap")),
             str(Path(BIN_FOLDER + "vtplayer.tap")),
             str(Path(OUTPUT_FOLDER + "music.tap")),
             str(Path(OUTPUT_FOLDER + "music-title.tap")),
@@ -61,11 +59,12 @@ def tapsBuild():
             str(Path(OUTPUT_FOLDER + "music3.tap")),
             str(Path(OUTPUT_FOLDER + "music-ending.tap")),
             str(Path(OUTPUT_FOLDER + "music-gameover.tap")),
-            str(Path("output/title.tap")),
-            str(Path("output/ending.tap")),
-            str(Path("output/hud.tap")),
+            str(Path(OUTPUT_FOLDER + "title.tap")),
+            str(Path(OUTPUT_FOLDER + "ending.tap")),
+            str(Path(OUTPUT_FOLDER + "hud.tap")),
         ]
 
+        # banco de músicas
         if not getMusicEnabled():
             input_files.remove(str(Path(BIN_FOLDER + "vtplayer.tap")))
             input_files.remove(str(Path(OUTPUT_FOLDER + "music.tap")))
@@ -90,31 +89,57 @@ def tapsBuild():
             if not musicExists("gameover"):
                 input_files.remove(str(Path(OUTPUT_FOLDER + "music-gameover.tap")))
 
-        if os.path.isfile("output/intro.scr.zx0"):
-            runCommand("bin2tap " + str(Path("output/intro.scr.zx0")) + " " + str(Path("output/intro.tap")) + " 49152")
-            input_files.append("output/intro.tap")
+        # banco de scr
+        if os.path.isfile(OUTPUT_FOLDER + "intro.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "intro.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "intro.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "intro.tap")
         
-        if os.path.isfile("output/gameover.scr.zx0"):
-            runCommand("bin2tap " + str(Path("output/gameover.scr.zx0")) + " " + str(Path("output/gameover.tap")) + " 49152")
-            input_files.append("output/gameover.tap")
+        if os.path.isfile(OUTPUT_FOLDER + "gameover.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "gameover.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "gameover.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "gameover.tap")
         
-        if os.path.isfile("output/gamemap.scr.zx0"):
-            runCommand("bin2tap " + str(Path("output/gamemap.scr.zx0")) + " " + str(Path("output/gamemap.tap")) + " 49152")
-            input_files.append("output/gamemap.tap")
+        if os.path.isfile(OUTPUT_FOLDER + "gamemap.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "gamemap.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "gamemap.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "gamemap.tap")
 
-        if os.path.isfile("output/credits.scr.zx0"):
-            runCommand("bin2tap " + str(Path("output/credits.scr.zx0")) + " " + str(Path("output/credits.tap")) + " 49152")
-            input_files.append("output/credits.tap")
+        if os.path.isfile(OUTPUT_FOLDER + "credits.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "credits.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "credits.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "credits.tap")
+        
+        if os.path.isfile(OUTPUT_FOLDER + "redefine.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "redefine.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "redefine.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "redefine.tap")
 
+        if os.path.isfile(OUTPUT_FOLDER + "instructions.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "instructions.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "instructions.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "instructions.tap")
+
+        if os.path.isfile(OUTPUT_FOLDER + "hud2.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "hud2.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "hud2.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "hud2.tap")
+
+        if os.path.isfile(OUTPUT_FOLDER + "adventuretexts.scr.zx0"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "adventuretexts.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "adventuretexts.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "adventuretexts.tap")
+
+        # Pal banco de sonidos/mapas        
         input_files.append(str(Path(ASSETS_FOLDER + "fx/fx.tap")))
-        input_files.append("output/textsalt.tap")
+        
+        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "map.bin.zx0")) + " " + str(Path(OUTPUT_FOLDER + "mapsNew.tap")) + " 49152")
+        input_files.append(OUTPUT_FOLDER + "mapsNew.tap")
+
+        # para el banco de textos 
+        if os.path.isfile(OUTPUT_FOLDER + "texts.bin"):
+            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "texts.bin")) + " " + str(Path(OUTPUT_FOLDER + "textsalt.tap")) + " 49152")
+            input_files.append(OUTPUT_FOLDER + "textsalt.tap")
+
     else:
         input_files = [
-            str(Path("output/loader.tap")),
-            str(Path("output/loading.tap")),
-            str(Path("output/main.tap")),
+            str(Path(OUTPUT_FOLDER + "loader.tap")),
+            str(Path(OUTPUT_FOLDER + "loading.tap")),
+            str(Path(OUTPUT_FOLDER + "main.tap")),
             str(Path(ASSETS_FOLDER + "fx/fx.tap")),
-            str(Path("output/files.tap")),
+            str(Path(OUTPUT_FOLDER + "files.tap")),
         ]
 
     concatenateFiles(OUTPUT_FILE, input_files)

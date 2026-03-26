@@ -1,56 +1,69 @@
-Sub mapDraw()
-    ' Dim index As Uinteger
-    Dim y, x As Ubyte
-    
-    x = SKIP_WIDTH_SIZE
-    y = SKIP_HEIGHT_SIZE
+Sub mapDraw(withHud as ubyte)
+    'Ink INK_VALUE: Paper PAPER_VALUE: BRIGHT BRIGHT_VALUE: FLASH 0
+    if withHud Then
+        #ifdef HISCORE_ENABLED
+            Print AT 22, 13; TEXT_HI_SCORE_ZERO
+            Print AT 23, 13; TEXT_HI_SCORE_ZERO
+        #endif
+
+        printHud()
+    end if
+
+    if screenIsDark then
+        SetTileset(@darkTileSet(0,0))
+    else
+        SetTileset(@tileSet(0,0))
+    end if
+
+    Dim index As Uinteger = 0
     
     #ifdef FADE_TILES_ENABLED
     maxFadeTile = 0
     #endif
 
-    For index=0 To SCREEN_LENGTH
-        dim nextTile as ubyte = Peek(dmAddress + index) - 1
+    for y = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
+        for x = SKIP_WIDTH_SIZE to SKIP_WIDTH_SIZE + screenWidth - 1
+            dim nextTile as ubyte = Peek(arrayBasePtr(decompressedMap) + index)
             
-        #ifdef FADE_TILES_ENABLED
-            ' drawTile(nextTile, x, y)
-            
-            if maxFadeTile < FADE_TILE_TOTAL and (nextTile = FADE_TILE or nextTile = FADE_TILE_END) then
-                fadeTileStatus(maxFadeTile, 0) = x
-                fadeTileStatus(maxFadeTile, 1) = y
-                fadeTileStatus(maxFadeTile, 2) = FADE_TILE_FRAMES
-                maxFadeTile = maxFadeTile + 1
-            end if
-        ' #else
-        '     drawTile(nextTile, x, y)
-        #endif
-
-        #ifdef TELEPORT_ENABLED
-            if nextTile = 186 then
-                if moveScreen = 10 then
-                    protaX = x*2
-                    protaY = y*2
-                    protaXRespawn = protaX
-                    protaYRespawn = protaY
-                    moveScreen = 0
+            #ifdef FADE_TILES_ENABLED
+                if maxFadeTile < FADE_TILE_TOTAL and (nextTile = FADE_TILE or nextTile = FADE_TILE_END) then
+                    fadeTileStatus(maxFadeTile, 0) = x
+                    fadeTileStatus(maxFadeTile, 1) = y
+                    fadeTileStatus(maxFadeTile, 2) = FADE_TILE_FRAMES
+                    maxFadeTile = maxFadeTile + 1
                 end if
-                
-                #ifdef TELEPORT_DISABLED_TILE
-                    if not currentTeleportTo then nextTile = 185
-                #else
-                    if not currentTeleportTo then nextTile = 0
-                #endif
-            end if
-        #endif
+            #endif
 
-        drawTile(nextTile, x, y)
+            #ifdef TELEPORT_ENABLED
+                if nextTile = TELEPORT_TILE then
+                    if moveScreen = 10 then
+                        protaX = x*2
+                        protaY = y*2
 
-        x = x + 1
-        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
-            x = SKIP_WIDTH_SIZE
-            y = y + 1
-        End If
-    Next index
+                        #ifdef LIVES_MODE_ENABLED
+                            #ifndef CHECKPOINTS_ENABLED
+                                protaXRespawn = protaX
+                                protaYRespawn = protaY
+                                protaScreenRespawn = currentScreen
+                            #endif
+                        #endif
+                       
+                        moveScreen = 0
+                    end if
+                    
+                    #ifdef TELEPORT_DISABLED_TILE
+                        if not currentTeleportTo then nextTile = TELEPORT_QUIT_TILE
+                    #else
+                        if not currentTeleportTo then nextTile = 0
+                    #endif
+                end if
+            #endif
+
+            drawTile(nextTile, x, y)
+
+            index = index + 1
+        next x
+    next y
     
     #ifdef ANIMATED_TILES_ENABLED
         lastFrameTiles = ANIMATE_PERIOD_TILE
@@ -62,7 +75,7 @@ Sub mapDraw()
 
     #ifdef IN_GAME_TEXT_ENABLED
         #ifdef IS_TEXT_ADVENTURE
-            #ifdef ADVENTURE_TEXTS_HIDE_TILES
+            #ifdef ADVENTURE_TEXTS_MANAGE_TILES
                 for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
                     if textsCoord(texto, 0) <> currentScreen Then exit for
                     dim textState as ubyte = textsCoord(texto, 5)
@@ -72,15 +85,22 @@ Sub mapDraw()
                         dim cordY as ubyte = textsCoord(texto, 2) >> 1
                         
                         if textState >= currentAdventureState Then
-                            dim textTile as ubyte = textsCoord(texto, 4)
-                            
-                            if textTile Then SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
+                            #ifdef ADVENTURE_TEXTS_SHOW_TILES
+                                dim textTile as ubyte = textsCoord(texto, 4)
+                                #ifdef SCREEN_ATTRIBUTES
+                                    if textTile Then SetTileChecked(textTile, tileAttrWithBackground(textTile), cordX, cordY)
+                                #else
+                                    if textTile Then SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
+                                #endif
+                            #endif
+                        #ifdef ADVENTURE_TEXTS_HIDE_TILES
                         Else
                             #ifdef SCREEN_ATTRIBUTES
                                 SetTileChecked(currentTileBackground, currentScreenBackground, cordX, cordY)
                             #else
                                 SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
                             #endif
+                        #endif
                         End if
                     End if
                 Next texto
@@ -90,20 +110,11 @@ Sub mapDraw()
 End Sub
 
 Sub mapColor(color As Ubyte)
-    Dim y, x As Ubyte
-    
-    x = SKIP_WIDTH_SIZE
-    y = SKIP_HEIGHT_SIZE
-    
-    For index=0 To SCREEN_LENGTH
-        SetTileColor(x, y, color)
-        
-        x = x + 1
-        If x = (screenWidth+SKIP_WIDTH_SIZE) Then
-            x = SKIP_WIDTH_SIZE
-            y = y + 1
-        End If
-    Next index
+    for tmpX = SKIP_WIDTH_SIZE to SKIP_WIDTH_SIZE + screenWidth - 1
+        for tmpY = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
+            SetTileColor(tmpX, tmpY, color)
+        next tmpY
+    next tmpX
 End Sub
 
 ' const MAP_X_ADJUSTMENT as ubyte = 14
@@ -163,14 +174,12 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             #ifdef USE_BREAKABLE_TILE
             ElseIf tile = BREAKABLE_TILE Then
                 If not brokenTiles(currentScreen) Then
-                '     #ifdef SCREEN_ATTRIBUTES
-                '         SetTile(currentTileBackground, currentScreenBackground, x, y)
-                '     #else
-                '         SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
-                '     #endif
-                ' Else
                     SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 End If
+            #endif
+            #ifdef SCREEN_DARK_ENABLED
+            ElseIf tile = SWITCHER_TILE Then
+                SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
             #endif
         Else
             SetTile(tile, tileAttrWithBackground(tile), x, y)
@@ -202,16 +211,9 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
     
 End Sub
 
-' #ifdef ARCADE_MODE
-'     Sub drawKey()
-'         SetTile(KEY_TILE, attrSet(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
-'     End Sub
-' #endif
-
 Sub moveToScreen(direction As Ubyte)
     If direction = 6 Then
         ' EXITING RIGHT
-        'updateProtaData( protaY, 0 + SCREEN_ADJUSTMENT, protaTile, protaDirection)
         
         protaX = PLAYER_BOUNDS_LEFT + SCREEN_ADJUSTMENT
         
@@ -225,7 +227,6 @@ Sub moveToScreen(direction As Ubyte)
         #endif
     Elseif direction = 4 Then
         ' EXITING LEFT
-        'updateProtaData( protaY, 60 - SCREEN_ADJUSTMENT, protaTile, protaDirection)
         protaX = PLAYER_BOUNDS_RIGHT - SCREEN_ADJUSTMENT
 
         currentScreen = currentScreen - 1
@@ -239,8 +240,7 @@ Sub moveToScreen(direction As Ubyte)
             Else
                 Print AT 13,8;TEXT_LEVEL_COMPLETE
                 Print AT 15,8;GENERIC_ENTER_CONTINUE
-                'Do
-                'Loop Until MultiKeys(KEYENTER)
+                
                 pauseUntilPressEnter()
                 
                 jumpCurrentKey = jumpStopValue
@@ -256,9 +256,7 @@ Sub moveToScreen(direction As Ubyte)
                 #endif
             End if
         #else
-            'updateProtaData( 0+ SCREEN_ADJUSTMENT, protaX , protaTile, protaDirection)
             protaY = SKIP_HEIGHT_SIZE + SCREEN_ADJUSTMENT
-        
             currentScreen = currentScreen + MAP_SCREENS_WIDTH_COUNT
         #endif
     Elseif direction = 8 Then
@@ -305,12 +303,6 @@ Sub drawSprites()
             Draw1x1Sprite(currentBulletSpriteId, bulletPositionX, bulletPositionY)
         End If
     #endif
-    
-    ' #ifdef BULLET_ENEMIES movido a enemies
-    '     If enemyBulletPositionX <> 0 Then
-    '         Draw1x1Sprite(BULLET_SPRITE_ENEMY_ID, enemyBulletPositionX, enemyBulletPositionY)
-    '     End If
-    ' #endif
     
     RenderFrame()
 End Sub

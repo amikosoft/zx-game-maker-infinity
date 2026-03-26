@@ -20,10 +20,11 @@ class SizesGetter:
         sizes.TITLE_SCREEN = self.__getOutputFileSize("title.scr.zx0")
         sizes.ENDING_SCREEN = self.__getOutputFileSize("ending.scr.zx0")
         sizes.HUD_SCREEN = self.__getOutputFileSize("hud.scr.zx0")
-        sizes.MAPS_DATA = self.__getOutputFileSize("map.bin.zx0")
         sizes.ENEMIES_DATA = self.__getOutputFileSize("enemies.bin.zx0")
         sizes.TILESET_DATA = self.__getOutputFileSize("tiles.bin")
-        sizes.ATTR_DATA = self.__getOutputFileSize("attrs.bin")
+        sizes.ATTR_DATA = self.__getOutputFileSize("tiles_attrs.bin")
+        sizes.DARKTILESET_DATA = self.__getOutputFileSize("darktiles.bin")
+        sizes.DARKATTR_DATA = self.__getOutputFileSize("darktiles_attrs.bin")
         sizes.SCREEN_OBJECTS_INITIAL_DATA = self.__getOutputFileSize("objectsInScreen.bin")
         sizes.SCREEN_OFFSETS_DATA = self.__getOutputFileSize("screenOffsets.bin")
         sizes.ENEMIES_IN_SCREEN_OFFSETS_DATA = self.__getOutputFileSize("enemiesInScreenOffsets.bin")
@@ -33,6 +34,7 @@ class SizesGetter:
         sizes.SCREEN_OBJECTS_DATA = self.__getOutputFileSize("screenObjects.bin")
         sizes.SCREENS_WON_DATA = self.__getOutputFileSize("screensStatus.bin")
         sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA = self.__getOutputFileSize("decompressedEnemiesScreen.bin")
+        sizes.MAPS_DATA = self.__getOutputFileSize("map.bin.zx0")
         
         if self.adventureTexts:
             sizes.TEXTS_COORD_DATA = self.__getOutputFileSize("textsCoord.bin")
@@ -59,6 +61,10 @@ class SizesGetter:
             sizes.GAMEOVER_SCREEN = self.__getOutputFileSize("gameover.scr.zx0") if screenExists("gameover") else 0
             sizes.GAMEMAP_SCREEN = self.__getOutputFileSize("gamemap.scr.zx0") if screenExists("gamemap") else 0
             sizes.CREDITS_SCREEN = self.__getOutputFileSize("credits.scr.zx0") if screenExists("credits") else 0
+            sizes.REDEFINE_SCREEN = self.__getOutputFileSize("redefine.scr.zx0") if screenExists("redefine") else 0
+            sizes.INSTRUCTIONS_SCREEN = self.__getOutputFileSize("instructions.scr.zx0") if screenExists("instructions") else 0
+            sizes.HUD2_SCREEN = self.__getOutputFileSize("hud2.scr.zx0") if screenExists("hud2") else 0
+            sizes.ADVENTURETEXTS_SCREEN = self.__getOutputFileSize("adventuretexts.scr.zx0") if screenExists("adventuretexts") else 0
             
         return sizes
     

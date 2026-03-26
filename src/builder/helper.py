@@ -74,9 +74,10 @@ def getProjectFileName():
     return getProjectName().replace(" ", "-")
 
 def getEnabled128K():
-    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
-        maps_json = json.load(f)
-    return any(prop["name"] == "128Kenabled" and prop["value"] for prop in maps_json["properties"])
+    # with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+    #     maps_json = json.load(f)
+    # return any(prop["name"] == "128Kenabled" and prop["value"] for prop in maps_json["properties"])
+    return True
 
 def getGameView():
     with open(OUTPUT_FOLDER + "maps.json", "r") as f:

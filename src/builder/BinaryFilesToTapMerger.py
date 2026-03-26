@@ -9,24 +9,16 @@ class BinaryFilesToTapMerger:
         if os.path.isfile(output_file):
             os.remove(output_file)
 
-        if not is128k:
-            sizeFx = os.path.getsize(Path(ASSETS_FOLDER + "fx/fx.tap"))
-            tapAddress = INITIAL_ADDRESS + sizeFx
-            input_files = [
-                OUTPUT_FOLDER + "title.scr.zx0",
-                OUTPUT_FOLDER + "ending.scr.zx0",
-                OUTPUT_FOLDER + "hud.scr.zx0",
-            ]
-        else:
-            tapAddress = INITIAL_ADDRESS
-            input_files = []
+        tapAddress = INITIAL_ADDRESS
+        input_files = []
 
         input_files += [
-            OUTPUT_FOLDER + "map.bin.zx0",
             OUTPUT_FOLDER + "enemies.bin.zx0",
             # OUTPUT_FOLDER + "sprites.bin",
             OUTPUT_FOLDER + "tiles.bin",
-            OUTPUT_FOLDER + "attrs.bin",
+            OUTPUT_FOLDER + "tiles_attrs.bin",
+            OUTPUT_FOLDER + "darktiles.bin",
+            OUTPUT_FOLDER + "darktiles_attrs.bin",
             OUTPUT_FOLDER + "objectsInScreen.bin",
             OUTPUT_FOLDER + "screenOffsets.bin",
             OUTPUT_FOLDER + "enemiesInScreenOffsets.bin",
@@ -35,7 +27,9 @@ class BinaryFilesToTapMerger:
             OUTPUT_FOLDER + "enemiesPerScreen.bin",
             OUTPUT_FOLDER + "screenObjects.bin",
             OUTPUT_FOLDER + "screensStatus.bin",
-            OUTPUT_FOLDER + "decompressedEnemiesScreen.bin"
+            OUTPUT_FOLDER + "decompressedEnemiesScreen.bin",
+            # OUTPUT_FOLDER + "map.bin.zx0",
+            # OUTPUT_FOLDER + "decompressedMap.bin"
         ]
 
         if enableAdventureTexts:

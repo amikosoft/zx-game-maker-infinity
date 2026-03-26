@@ -1,5 +1,7 @@
 Sub clearScreen()
-    Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
+    'Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
+
+    Ink INK_VALUE: Paper PAPER_VALUE: Border BORDER_VALUE: BRIGHT 0: FLASH 0: Cls
 end sub
 
 #ifdef ENABLED_128k
@@ -14,20 +16,10 @@ end sub
 #endif
 
 Sub showMenu()
-    ' #ifdef ENABLED_128k
-    '     #ifdef MUSIC_ENABLED
-    '         VortexTracker_Stop()
-    '     #endif
-    ' #endif
-
-    ' clearScreen()
-
+    Ink INK_VALUE: Paper PAPER_VALUE: Border BORDER_VALUE: BRIGHT BRIGHT_VALUE: FLASH 0
     loadScreen(TITLE_SCREEN_ADDRESS)
         
     #ifdef ENABLED_128k
-        ' SetBank(DATA_BANK)
-        ' dzx0Standard(TITLE_SCREEN_ADDRESS, $4000)
-        ' SetBank(0)
         #ifdef MUSIC_ENABLED
             #ifdef MUSIC_TITLE_ENABLED
                 VortexTracker_Play(MUSIC_TITLE_ADDRESS)
@@ -90,8 +82,6 @@ Sub showMenu()
     Loop
 End Sub
 
-
-
 #ifdef REDEFINE_KEYS_ENABLED
     Function LeerTecla() As Uinteger
         ' Do Loop While GetKeyScanCode()
@@ -101,56 +91,68 @@ End Sub
     End Function
     
     Sub redefineKeys()
-        clearScreen()
-        
-        #ifdef MUSIC_ENABLED
-            #ifdef MUSIC_TITLE_ENABLED
-                ' VortexTracker_Stop()
-            #endif
-        #endif
-        
-        Print AT 7,5;REDEFINE_PRESS_KEY_FOR
-        
-        Print AT 9,10;REDEFINE_LEFT
-        keyArray(LEFT) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 8,20; keyOption
-        
-        Print AT 10,10;REDEFINE_RIGHT
-        keyArray(RIGHT) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 10,20; keyOption
-        
-        Print AT 11,10;REDEFINE_UP
-        keyArray(UP) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 12,20; keyOption
-        
-        Print AT 12,10;REDEFINE_DOWN
-        keyArray(DOWN) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 14,20; keyOption
-        
-        Print AT 13,10;REDEFINE_FIRE
-        keyArray(FIRE) = LeerTecla()
-        ' keyOption = Inkey$
-        ' Print AT 16,20; keyOption
-        '
-        ' keyOption = ""
-        
-        #ifdef BUTTON_PAUSE_ENABLED
-        Print AT 15,10;REDEFINE_PAUSE
-        keyArray(PAUSE_BUTTON) = LeerTecla()
-        
-            #ifdef BUTTON_QUIT_ENABLED
-                Print AT 16,10;REDEFINE_QUIT
-                keyArray(QUIT_BUTTON) = LeerTecla()
-            #endif        
-        #endif
+        #ifdef REDEFINE_SCREEN_ENABLED
+            loadScreen(REDEFINE_SCREEN_ADDRESS)
 
-        Print AT 19,2;GENERIC_ENTER_CONTINUE
-        ' Do
-        ' Loop Until MultiKeys(KEYENTER)
+            keyArray(LEFT) = LeerTecla()
+            Print AT 6,20;REDEFINE_X
+
+            keyArray(RIGHT) = LeerTecla()
+            Print AT 8,20;REDEFINE_X
+
+            keyArray(UP) = LeerTecla()
+            Print AT 10,20;REDEFINE_X
+
+            keyArray(DOWN) = LeerTecla()
+            Print AT 12,20;REDEFINE_X
+
+            keyArray(FIRE) = LeerTecla()
+            Print AT 14,20;REDEFINE_X
+
+            #ifdef BUTTON_PAUSE_ENABLED
+                keyArray(PAUSE_BUTTON) = LeerTecla()
+                Print AT 16,20;REDEFINE_X
+
+                #ifdef BUTTON_QUIT_ENABLED
+                    keyArray(QUIT_BUTTON) = LeerTecla()
+                    Print AT 18,20;REDEFINE_X
+                #endif        
+            #endif
+        #else
+            'clearScreen()
+            Ink INK_VALUE: Paper PAPER_VALUE: Border BORDER_VALUE: BRIGHT BRIGHT_VALUE: FLASH 0: Cls
+            
+            Print AT 7,5;REDEFINE_PRESS_KEY_FOR
+
+            Print AT 9,10;REDEFINE_LEFT
+            keyArray(LEFT) = LeerTecla()
+
+            Print AT 10,10;REDEFINE_RIGHT
+            keyArray(RIGHT) = LeerTecla()
+            
+            Print AT 11,10;REDEFINE_UP
+            keyArray(UP) = LeerTecla()
+            
+            Print AT 12,10;REDEFINE_DOWN
+            keyArray(DOWN) = LeerTecla()
+            
+            Print AT 13,10;REDEFINE_FIRE
+            keyArray(FIRE) = LeerTecla()
+
+            #ifdef BUTTON_PAUSE_ENABLED
+                Print AT 15,10;REDEFINE_PAUSE
+                keyArray(PAUSE_BUTTON) = LeerTecla()
+                
+                #ifdef BUTTON_QUIT_ENABLED
+                    Print AT 16,10;REDEFINE_QUIT
+                    keyArray(QUIT_BUTTON) = LeerTecla()
+                #endif        
+            #endif
+        
+        #endif
+        
+        Print AT 21,10;GENERIC_ENTER_CONTINUE
+
         pauseUntilPressEnter()
         
         showMenu()
@@ -188,16 +190,19 @@ Sub playGame()
             #endif
         #endif
         
+        #ifdef INSTRUCTIONS_SCREEN_ENABLED
+            loadScreen(INSTRUCTIONS_SCREEN_ADDRESS)
+            pauseUntilPressKey()
+        #endif
+        
         #ifdef INTRO_SCREEN_ENABLED
             ' SetBank(DATA_BANK)
             ' dzx0Standard(INTRO_SCREEN_ADDRESS, $4000)
-            ' SetBank(0)
+            ' SetBank(gameBank)
             loadScreen(INTRO_SCREEN_ADDRESS)
-            pauseUntilPressEnter()
+            pauseUntilPressKey()
         #endif
     #endif
-    
-    Ink INK_VALUE: Paper PAPER_VALUE: Border BORDER_VALUE
     
     #ifdef ARCADE_MODE
         currentScreen = 0
@@ -206,14 +211,18 @@ Sub playGame()
     #endif
     
     #ifndef PLAYER_READY_CONFIRMATION
-        loadScreen(HUD_SCREEN_ADDRESS)
+        #ifdef HUD2_SCREEN_ENABLED
+            #ifdef SCREEN_HUD2_ENABLED
+                loadHUDScreen()
+            #Else
+                loadScreen(HUD_SCREEN_ADDRESS)
+            #EndIf
+        #Else
+            loadScreen(HUD_SCREEN_ADDRESS)
+        #endif
     #endif
     
     #ifdef ENABLED_128k
-        ' SetBank(DATA_BANK)
-        ' dzx0Standard(HUD_SCREEN_ADDRESS, $4000)
-        ' SetBank(0)
-
         #ifdef MUSIC_ENABLED
             VortexTracker_Play(MUSIC_ADDRESS)
         #endif
@@ -233,7 +242,7 @@ Sub playGame()
         updateProtaData(INITIAL_MAIN_CHARACTER_Y, INITIAL_MAIN_CHARACTER_X, 1, 1)
     #endif
     
-    resetValues()
+    #include "functionsBas/resetValues.bas"
     swapScreen(1)
     
     ' Let lastFrameProta = framec
@@ -272,7 +281,6 @@ Sub playGame()
                     if not messageLoopCounter then printMessage(TEXT_PAUSE, 2, 0)
                     #endif
                 #endif
-
             
                 if MultiKeys(keyArray(PAUSE_BUTTON)) then
                     isPaused = 0
@@ -295,17 +303,29 @@ Sub playGame()
             ' DesactivarBuffer()
             ' switch2NormalScreen()
             #ifdef GAMEMAP_SCREEN_ENABLED
-                loadScreen(HUD_SCREEN_ADDRESS)
-                mapDraw()
-
-                #ifdef HISCORE_ENABLED
-                    Print AT 22, 13; TEXT_HI_SCORE_ZERO
-                    Print AT 23, 13; TEXT_HI_SCORE_ZERO
+                'loadScreen(HUD_SCREEN_ADDRESS)
+                #ifdef HUD2_SCREEN_ENABLED
+                    #ifdef SCREEN_HUD2_ENABLED
+                        loadHUDScreen()
+                    #Else
+                        loadScreen(HUD_SCREEN_ADDRESS)
+                    #EndIf
+                #Else
+                    loadScreen(HUD_SCREEN_ADDRESS)
                 #endif
-                printLife()
+
+                ' #ifdef HISCORE_ENABLED
+                '     Ink INK_VALUE: Paper PAPER_VALUE: BRIGHT BRIGHT_VALUE: FLASH 0
+                '     Print AT 22, 13; TEXT_HI_SCORE_ZERO
+                '     Print AT 23, 13; TEXT_HI_SCORE_ZERO
+                ' #endif
+                ' printHud()
+
+                mapDraw(1)
             #else
                 #ifdef GAMEMAP_SHOW_ENABLED
-                    mapDraw()
+                    Ink INK_VALUE: Paper PAPER_VALUE: BRIGHT BRIGHT_VALUE: FLASH 0
+                    mapDraw(0)
                 #endif
             #endif
         end if
@@ -384,28 +404,21 @@ Sub playGame()
 
         If currentLife Then
             protaMovement()
-            checkDamageByTile()
         End if
 
-        ' moveEnemies()
-
-        ' #ifdef SHOOTING_ENABLED
-        '     moveBullet()
-        ' #endif
         If moveScreen Then
             moveToScreen(moveScreen)
-            ' enemiesScreen = enemiesPerScreen(currentScreen)
         else
             moveEnemies()
 
             #ifdef SHOOTING_ENABLED
                 moveBullet()
             #endif
-
-            drawSprites()
         End If
         
-        If currentLife = 0 and not invincible Then gameOver()
+        If currentLife = 0 and not invincible Then
+            #include "functionsBas/gameOver.bas"
+        end if
         
         If invincible Then
             invincible = invincible - 1
@@ -419,30 +432,35 @@ Sub playGame()
             #ifdef LIVES_MODE_GRAVEYARD
             Else
                 #ifdef ENERGY_ENABLED
-                if not currentEnergy and not invincible Then
-                #Else
-                if Not invincible Then
+                if not currentEnergy then
+                    protaTile = 15
                 #endif
-                    jumpCurrentKey = jumpStopValue
+                    if Not invincible Then
+                        jumpCurrentKey = jumpStopValue
 
-                    #ifdef ENERGY_ENABLED
-                    currentEnergy = INITIAL_ENERGY
-                    #endif
-                    updateProtaData(protaYRespawn, protaXRespawn, 1, protaDirection)
-                    ' printLife()
-
-                    #ifndef ARCADE_MODE
-                        #ifdef CHECKPOINTS_ENABLED
-                            currentScreen = protaScreenRespawn
+                        #ifdef ENERGY_ENABLED
+                        currentEnergy = INITIAL_ENERGY
                         #endif
-                    #endif
+                        updateProtaData(protaYRespawn, protaXRespawn, 1, protaDirection)
 
-                    swapScreen(1)   
-                End if
+                        #ifndef ARCADE_MODE
+                            #ifdef CHECKPOINTS_ENABLED
+                                currentScreen = protaScreenRespawn
+                            #endif
+                        #endif
+
+                        swapScreen(1)   
+                    End if
+                #ifdef ENERGY_ENABLED
+                    End if
+                #endif
             #endif
             End if
         End If
         
+        'drawSprites()
+        #include "functionsBas/drawSprites.bas"
+
         #ifdef NEW_BEEPER_PLAYER
             BeepFX_NextNote()
         #endif
@@ -466,122 +484,25 @@ Sub ending()
     showMenu()
 End Sub
 
-Sub gameOver()
-    #ifdef ENABLED_128k
-        #ifdef MUSIC_ENABLED
-            #ifdef MUSIC_GAMEOVER_ENABLED
-                VortexTracker_Play(MUSIC_GAMEOVER_ADDRESS)
-            #else
-                VortexTracker_Stop()
-            #endif
-        #endif
-    #endif
-    
-    #ifdef NEW_BEEPER_PLAYER
-        BeepFX_Reset()
-    #endif
-    
-    #ifdef ENABLED_128k
-        #ifdef GAMEOVER_SCREEN_ENABLED
-            ' SetBank(DATA_BANK)
-            ' dzx0Standard(GAMEOVER_SCREEN_ADDRESS, $4000)
-            ' SetBank(0)
-            loadScreen(GAMEOVER_SCREEN_ADDRESS)
-        #Else
-            'updateProtaData( protaY, protaX, 15, 0)
-            protaTile = 15
-            Print AT 7, 12; TEXT_GAME_OVER
-        #endif
-    #Else
-        ' updateProtaData( protaY, protaX, 15, 0)
-        protaTile = 15
-        Print at 7, 12; TEXT_GAME_OVER
-    #endif
-    
-    ' Do
-    ' Loop Until MultiKeys(KEYENTER)
-    pauseUntilPressEnter()
-    showMenu()
-End Sub
-
-Sub resetValues()
-    #ifdef SHOOTING_ENABLED
-    bulletPositionX = 0
-    #endif
-    #ifdef SIDE_VIEW
-        jumpCurrentKey = jumpStopValue
-    #endif
-    
-    invincible = 0
-    
-    currentLife = INITIAL_LIFE
-
-    #ifdef ENERGY_ENABLED
-        currentEnergy = INITIAL_ENERGY
-    #endif
-
-    #ifdef KEYS_ENABLED
-        currentKeys = 0
-    #EndIf
-    
-    #ifdef LEVELS_MODE
-        currentLevel = 0
-    #endif
-    
-    #ifdef ARCADE_MODE
-        currentItems = 0
-    #Else
-        If ITEMS_COUNTDOWN Then
-            currentItems = itemsToFind
-        Else
-            currentItems = 0
-        End If
-    #endif
-    
-    ' #ifdef LIVES_MODE_ENABLED
-    '     protaXRespawn = INITIAL_MAIN_CHARACTER_X
-    '     protaYRespawn = INITIAL_MAIN_CHARACTER_Y
-    ' #endif
-    
-    ' removeScreenObjectFromBuffer()
-    screenObjects = screenObjectsInitial
-
-    For i = 0 To SCREENS_COUNT
-        screensStatus(i) = SCREEN_STATUS_NOT_VISITED
-    
-        #ifdef USE_BREAKABLE_TILE
-            brokenTiles(i) = 0
-        #endif
-    Next i
-    #ifdef HISCORE_ENABLED
-        score = 0
-    #endif
-    
-    #ifdef AMMO_ENABLED
-        currentAmmo = INITIAL_AMMO
-    #endif
-    
-    #ifdef IN_GAME_TEXT_ENABLED
-        #ifndef ARCADE_MODE
-            #ifdef IS_TEXT_ADVENTURE
-                currentAdventureState = 1
-            #endif
-        #endif
-    #endif
-
-    #ifdef MUSIC_ENABLED
-        musicPlayed = 0
-    #endif
-End Sub
-
 Sub swapScreen(waitReady as ubyte)
-    dzx0Standard(MAPS_DATA_ADDRESS + screensOffsets(currentScreen), dmAddress)
+    ' #ifdef HUD2_SCREEN_ENABLED
+    '     #ifdef SCREEN_HUD2_ENABLED
+    dim mustPrintHud as ubyte = 0
+    '     #endif
+    ' #endif
+
+    dim offsetTmp as uinteger = screensOffsets(currentScreen)
+
+    SetBank(fxBank)
+    dzx0Standard(MAPS_DATA_ADDRESS + offsetTmp, arrayBasePtr(decompressedMap))
+    SetBank(gameBank)
+
     dzx0Standard(ENEMIES_DATA_ADDRESS + enemiesInScreenOffsets(currentScreen), arrayBasePtr(decompressedEnemiesScreen))
-    
+
     enemiesScreen = enemiesPerScreen(currentScreen)
 
     if screensStatus(currentScreen) < SCREEN_STATUS_COMPLETED then screensStatus(currentScreen) = SCREEN_STATUS_VISITED
-    
+
     ' #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
         firstTimeEnemiesScreen = 1
     ' #endif
@@ -633,8 +554,20 @@ Sub swapScreen(waitReady as ubyte)
         
         #ifdef SCREEN_TELEPORTTO_ENABLED
             currentTeleportTo = screenAttributes(currentScreen, SCREEN_TELEPORTTO)
-        #else
-            currentTeleportTo = 0
+        #endif
+
+        #ifdef SCREEN_DARK_ENABLED
+            screenIsDark = screenAttributes(currentScreen, SCREEN_DARK)
+        #endif
+
+        #ifdef SCREEN_TERRAIN_ENABLED
+            screenIsTerrain = screenAttributes(currentScreen, SCREEN_TERRAIN)
+        #endif
+
+        #ifdef HUD2_SCREEN_ENABLED
+            #ifdef SCREEN_HUD2_ENABLED
+                screenHud = screenAttributes(currentScreen, SCREEN_HUD2)
+            #endif
         #endif
 
         #ifdef ENABLED_128k
@@ -685,29 +618,54 @@ Sub swapScreen(waitReady as ubyte)
 
     #ifdef PLAYER_READY_CONFIRMATION
         if waitReady Then
-            loadScreen(HUD_SCREEN_ADDRESS)
-            
-            #ifdef HISCORE_ENABLED
-                Print AT 22, 13; TEXT_HI_SCORE_ZERO
-                Print AT 23, 13; TEXT_HI_SCORE_ZERO
+            mustPrintHud = 1
+            #ifdef HUD2_SCREEN_ENABLED
+                #ifdef SCREEN_HUD2_ENABLED
+                    loadHUDScreen()
+                #Else
+                    loadScreen(HUD_SCREEN_ADDRESS)
+                #EndIf
+            #Else
+                loadScreen(HUD_SCREEN_ADDRESS)
             #endif
-            
-            printLife()
+        #ifdef HUD2_SCREEN_ENABLED
+            #ifdef SCREEN_HUD2_ENABLED
+            else if currentHud <> screenHud then
+                loadHUDScreen()
+                mustPrintHud = 1
+            #endif
+        #endif
+        end if
+    #else
+        #ifdef HUD2_SCREEN_ENABLED
+            #ifdef SCREEN_HUD2_ENABLED
+            if currentHud <> screenHud then 
+                loadHUDScreen()
+                mustPrintHud = 1
+            end if
+            #endif
+        #endif
+    #endif
 
+    if mustPrintHud then 
+        #ifdef HISCORE_ENABLED
+            Print AT 22, 13; TEXT_HI_SCORE_ZERO
+            Print AT 23, 13; TEXT_HI_SCORE_ZERO
+        #endif
+
+        printHud()
+    end if
+
+    if waitReady then 
+        #ifdef PLAYER_READY_CONFIRMATION
             #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
                 pauseUntilPressFire()
             #else
                 pauseUntilPressEnter()
             #endif
-        end if 
-    #else
-        #ifdef HISCORE_ENABLED
-            Print AT 22, 13; TEXT_HI_SCORE_ZERO
-            Print AT 23, 13; TEXT_HI_SCORE_ZERO
         #endif
-        
-        printLife()
-    #endif
+    end if
+    'printHud()
 
     asm
     call CLEAR_SCREEN
@@ -721,5 +679,5 @@ Sub swapScreen(waitReady as ubyte)
         #endif
     #endif
 
-    mapDraw()    
+    mapDraw(0)    
 End Sub

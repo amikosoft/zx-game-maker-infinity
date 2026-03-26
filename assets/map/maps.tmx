@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="142">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="163">
  <editorsettings>
   <chunksize width="30" height="19"/>
  </editorsettings>
  <properties>
-  <property name="128Kenabled" type="bool" value="true"/>
   <property name="adventureTexts" type="bool" value="true"/>
-  <property name="adventureTextsAcceptWithFire" type="bool" value="false"/>
+  <property name="adventureTextsAcceptWithFire" type="bool" value="true"/>
   <property name="adventureTextsBackgroundColor" type="int" value="1"/>
-  <property name="adventureTextsClearScreen" type="bool" value="false"/>
-  <property name="adventureTextsHideTiles" type="bool" value="true"/>
-  <property name="adventureTextsLength" value="60"/>
+  <property name="adventureTextsClearScreen" type="bool" value="true"/>
+  <property name="adventureTextsHideTiles" type="bool" value="false"/>
+  <property name="adventureTextsLength" propertytype="adventureTextsLength" value="60"/>
+  <property name="adventureTextsShowTiles" type="bool" value="true"/>
+  <property name="adventureTextsSound" type="bool" value="true"/>
   <property name="ammo" type="int" value="100"/>
   <property name="animatePeriodMain" type="int" value="1"/>
   <property name="animatePeriodTile" type="int" value="20"/>
   <property name="animatedTilesMode" propertytype="animatedTilesModes" value="Solid tiles disappears"/>
   <property name="backgroundAttribute" type="int" value="71"/>
-  <property name="borderDamageColor" value="3"/>
+  <property name="borderDamageColor" value="2"/>
+  <property name="bright" type="int" value="1"/>
   <property name="bulletAnimation" type="bool" value="true"/>
   <property name="bulletDisableCollisions" type="bool" value="false"/>
   <property name="bulletDistance" type="int" value="20"/>
-  <property name="bulletType" propertytype="bulletType" value="bullet"/>
+  <property name="bulletType" propertytype="bulletType" value="boomerang"/>
   <property name="bulletsCollisionWithBullets" type="bool" value="true"/>
   <property name="buttonPauseEnabled" type="bool" value="true"/>
   <property name="buttonQuitEnabled" type="bool" value="true"/>
   <property name="checkpointsEnabled" type="bool" value="true"/>
   <property name="damageAmount" type="int" value="1"/>
-  <property name="dropTile" type="int" value="143"/>
+  <property name="dropTile" type="int" value="175"/>
   <property name="enemiesAlertDistance" value="medium"/>
   <property name="enemiesBulletCollision" type="bool" value="true"/>
   <property name="enemiesNormalCollide" type="bool" value="false"/>
@@ -39,7 +41,9 @@
   <property name="enemiesShootSpeed" value="slow"/>
   <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
   <property name="enemiesSlowDown" type="bool" value="false"/>
-  <property name="fadeTilesFramesCount" type="int" value="10"/>
+  <property name="enemiesSound" type="bool" value="true"/>
+  <property name="enemiesTrapShowWhileStatic" type="bool" value="true"/>
+  <property name="fadeTilesFramesCount" type="int" value="20"/>
   <property name="fadeTilesInScreenMax" type="int" value="5"/>
   <property name="fontCustom" propertytype="fontCustom" value="default"/>
   <property name="fullChangeScreenAnimation" type="bool" value="true"/>
@@ -53,8 +57,9 @@
   <property name="goalItems" type="int" value="4"/>
   <property name="graphicsModeUnshifted" type="bool" value="true"/>
   <property name="hiScore" type="bool" value="true"/>
-  <property name="idleTime" type="int" value="0"/>
+  <property name="idleTime" type="int" value="25"/>
   <property name="initialLife" type="int" value="5"/>
+  <property name="ink" value="7"/>
   <property name="itemsCountdown" type="bool" value="true"/>
   <property name="itemsEnabled" type="bool" value="true"/>
   <property name="jumpCancelAllowed" type="bool" value="false"/>
@@ -71,7 +76,7 @@
   <property name="livesDeadBackgroundColor" type="int" value="2"/>
   <property name="livesEnergy" type="int" value="5"/>
   <property name="livesMode" propertytype="livesMode" value="show graveyard"/>
-  <property name="mainCharacterExtraFrame" type="bool" value="false"/>
+  <property name="mainCharacterExtraFrame" type="bool" value="true"/>
   <property name="maxAnimatedTilesPerScreen" type="int" value="5"/>
   <property name="maxEnemiesPerScreen" type="int" value="3"/>
   <property name="mechanicalBeltEnabled" type="bool" value="true"/>
@@ -89,15 +94,17 @@
   <property name="shouldKillEnemies" type="bool" value="true"/>
   <property name="shouldPickUpItems" type="bool" value="true"/>
   <property name="teleportAnimation" type="bool" value="true"/>
+  <property name="teleportDisabledTile" type="bool" value="true"/>
   <property name="teleportEnabled" type="bool" value="true"/>
+  <property name="teleportSound" type="bool" value="true"/>
   <property name="trampolinEnabled" type="bool" value="true"/>
   <property name="transpasableItems" type="int" value="16"/>
   <property name="ulaPlusValidation" type="bool" value="true"/>
   <property name="useBreakableTile" type="bool" value="true"/>
   <property name="waitPressKeyAfterLoad" type="bool" value="true"/>
  </properties>
- <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="192" columns="32">
-  <image source="tiles.png" width="256" height="48"/>
+ <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="256" columns="32">
+  <image source="tiles.png" width="256" height="64"/>
   <tile id="2" type="solid"/>
   <tile id="3" type="solid"/>
   <tile id="12" type="solid"/>
@@ -111,114 +118,160 @@
   <tile id="44" type="solid"/>
   <tile id="45" type="solid"/>
   <tile id="52" type="animated"/>
-  <tile id="60" type="trampolin"/>
-  <tile id="61" type="door"/>
-  <tile id="96" type="animated"/>
-  <tile id="97" type="animated"/>
-  <tile id="98" type="animated"/>
-  <tile id="128" type="damage"/>
-  <tile id="129" type="damage"/>
-  <tile id="130" type="damage"/>
-  <tile id="134" type="damage"/>
+  <tile id="92" type="trampolin"/>
+  <tile id="93" type="door"/>
+  <tile id="94" type="breakable"/>
+  <tile id="95" type="unlockable"/>
+  <tile id="127" type="terrain_wall_glue"/>
+  <tile id="128" type="animated"/>
+  <tile id="130" type="animated"/>
+  <tile id="160" type="damage"/>
   <tile id="161" type="damage"/>
+  <tile id="162" type="damage"/>
   <tile id="166" type="damage"/>
-  <tile id="173" type="animated"/>
-  <tile id="174" type="damage"/>
-  <tile id="175" type="animated"/>
-  <tile id="187" type="flag"/>
-  <tile id="188" type="ammo"/>
-  <tile id="189" type="life"/>
-  <tile id="190" type="item"/>
-  <tile id="191" type="key"/>
+  <tile id="167" type="damage"/>
+  <tile id="193" type="damage"/>
+  <tile id="205" type="animated"/>
+  <tile id="206" type="damage"/>
+  <tile id="207" type="animated-damage"/>
+  <tile id="248" type="switcher"/>
+  <tile id="250" type="teleport"/>
+  <tile id="251" type="flag"/>
+  <tile id="252" type="ammo"/>
+  <tile id="253" type="life"/>
+  <tile id="254" type="item"/>
+  <tile id="255" type="key"/>
  </tileset>
- <tileset firstgid="193" name="sprites" tilewidth="16" tileheight="16" tilecount="48" columns="16" objectalignment="topleft">
+ <tileset firstgid="257" name="sprites" tilewidth="16" tileheight="16" tilecount="48" columns="16" objectalignment="topleft">
   <image source="sprites.png" width="256" height="48"/>
  </tileset>
  <layer id="1" name="map" width="132" height="116">
   <data encoding="csv">
    <chunk x="0" y="0" width="30" height="19">
 8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,8,
-9,1,134,134,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,149,1,1,114,1,149,1,1,1,1,1,
-8,1,187,187,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,148,1,1,114,1,148,1,1,1,1,1,
-9,1,187,187,1,124,125,114,1,1,1,1,1,1,1,1,1,1,1,148,1,1,114,1,148,1,1,1,1,1,
-8,1,14,15,1,1,1,114,1,1,1,1,1,1,1,124,125,1,1,148,1,1,114,1,148,1,1,1,1,1,
-9,1,46,47,1,1,1,191,1,1,1,1,1,1,1,1,1,1,1,148,1,1,115,1,148,1,1,1,74,70,
-8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,148,1,1,1,1,148,1,1,1,1,1,
-9,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,44,1,1,148,1,1,1,1,148,1,1,1,1,1,
-8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,148,1,174,174,1,148,1,1,1,1,1,
+9,1,166,166,1,1,1,146,1,1,1,1,1,1,1,1,1,1,1,181,1,1,1,1,181,1,1,1,1,1,
+8,1,251,251,1,1,1,146,1,1,1,1,1,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+9,1,251,251,1,124,125,146,1,1,1,1,1,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+8,1,14,15,1,1,1,146,1,1,1,1,1,1,1,124,125,1,1,180,1,1,1,1,180,1,1,1,1,1,
+9,1,46,47,1,1,1,255,1,1,1,1,1,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+9,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,44,1,1,180,1,1,1,1,180,1,1,1,1,1,
+8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,180,1,131,131,1,180,1,1,1,1,1,
 9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,42,43,16,17,42,43,1,1,1,1,1,
 8,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,42,48,49,43,1,1,1,1,124,125,
 9,1,1,1,1,1,125,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,
 8,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-9,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,131,131,1,1,1,1,1,1,1,
-8,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,42,43,42,43,1,1,1,1,1,1,
-9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,42,43,42,43,42,43,1,1,1,1,1,
-8,64,64,64,64,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54
+9,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,206,208,1,1,1,1,1,1,1,
+8,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,98,42,43,42,43,97,1,1,1,1,1,
+9,1,1,1,1,1,1,1,205,1,1,1,1,1,1,1,1,1,98,42,43,42,43,42,43,97,1,1,1,1,
+8,96,96,96,96,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54
 </chunk>
    <chunk x="30" y="0" width="30" height="19">
 8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,8,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,9,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,114,1,1,1,124,125,1,1,1,1,1,1,8,
-1,1,1,1,1,1,1,1,1,124,125,1,1,1,191,1,1,114,1,1,1,1,1,1,1,1,1,1,1,9,
-70,75,1,1,1,1,1,1,1,1,1,1,1,158,61,1,1,115,1,1,1,1,33,1,1,1,1,1,1,8,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,146,1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,146,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,146,1,1,1,1,1,1,124,125,1,1,1,1,1,1,8,
+1,1,1,1,1,1,1,1,1,124,125,1,1,1,255,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,93,1,1,1,1,1,1,1,33,1,1,1,1,1,1,8,
 1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,
-1,1,1,1,33,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,69,73,69,8,
-1,1,1,1,1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,73,1,9,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,1,73,1,8,
-1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,9,
-1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,8,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,124,125,1,1,1,73,1,9,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,124,125,1,1,1,1,73,1,8,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,9,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,8,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,73,1,9,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,190,124,125,1,1,1,1,1,1,1,1,1,73,1,8,
-55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,1,1,73,1,9
+1,1,1,1,33,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,103,102,104,8,
+1,1,1,1,1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,102,1,9,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,33,1,1,1,1,1,1,1,1,1,102,1,8,
+1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,102,1,9,
+1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,102,1,8,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,124,125,1,1,1,102,1,9,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,124,125,1,1,1,1,102,1,8,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,102,1,9,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,102,1,8,
+1,1,1,1,1,1,1,1,100,3,1,1,3,99,1,124,125,1,1,1,1,1,1,1,1,1,1,102,1,9,
+1,1,1,1,1,205,1,100,3,3,3,3,3,3,99,190,124,125,1,1,1,1,1,1,1,1,1,102,1,8,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,1,1,102,1,9
+</chunk>
+   <chunk x="60" y="0" width="30" height="19">
+35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,
+35,1,1,1,1,1,1,1,1,1,1,1,1,42,43,42,43,1,1,1,1,1,1,1,1,1,1,1,1,35,
+35,1,1,1,1,1,1,1,1,144,144,144,1,35,251,251,35,1,1,1,1,1,1,1,144,1,1,254,1,35,
+35,1,144,1,255,1,1,1,1,144,144,1,1,35,251,251,35,1,1,1,1,1,1,144,144,1,144,1,1,35,
+35,1,144,144,144,144,1,1,1,1,1,1,1,94,94,94,94,1,1,1,1,1,1,1,144,1,144,1,1,35,
+35,1,1,1,1,1,1,16,17,1,1,1,1,1,1,1,1,1,1,1,1,16,17,1,1,144,144,1,1,35,
+35,1,1,1,1,1,144,48,49,1,1,1,1,144,144,1,1,1,1,1,1,48,49,1,1,1,1,1,1,35,
+35,1,1,1,1,1,1,144,1,1,198,1,144,144,144,1,1,1,1,1,1,198,1,1,166,1,1,1,1,35,
+35,1,1,1,166,1,144,1,144,1,1,1,1,1,1,1,144,1,144,1,1,1,1,1,1,1,1,1,1,35,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,16,17,144,1,144,1,1,1,1,1,1,144,144,1,1,35,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,48,49,1,1,1,1,1,1,1,1,1,1,144,1,1,35,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,144,1,1,35,
+35,1,1,144,144,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,198,1,1,1,144,144,144,35,
+35,1,1,144,144,1,166,1,1,1,144,144,1,1,1,1,198,1,1,1,1,1,1,1,1,1,1,1,1,35,
+35,1,1,144,1,1,1,1,1,144,1,1,1,1,1,1,198,1,1,1,1,144,144,1,1,1,1,1,1,35,
+35,1,1,1,1,1,198,1,1,1,144,1,144,1,1,1,1,1,1,1,1,144,144,144,144,144,1,1,1,35,
+35,1,1,1,1,1,1,1,249,1,1,1,1,1,1,1,1,1,1,1,1,1,144,144,1,1,1,1,1,35,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,35,
+12,12,12,12,12,12,12,12,12,12,1,1,1,1,1,1,1,1,1,1,12,12,12,12,12,12,12,12,12,12
 </chunk>
    <chunk x="0" y="19" width="30" height="19">
 41,1,1,1,1,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,51,
-40,1,1,1,1,1,1,114,1,1,63,63,63,63,63,63,149,63,63,149,63,63,63,64,134,134,64,1,1,40,
-41,1,1,1,1,1,1,114,1,1,1,1,1,1,1,1,148,1,192,148,1,1,1,64,187,187,64,1,1,41,
-40,1,1,124,125,1,1,114,1,1,1,1,1,44,1,1,20,21,21,22,1,1,1,64,187,187,64,1,1,40,
-41,1,1,1,124,125,1,114,1,53,1,1,1,124,125,1,1,1,1,1,1,1,1,64,52,52,64,1,1,41,
-40,1,1,1,1,1,1,114,1,1,1,1,124,125,1,1,1,140,1,1,1,1,1,1,1,1,1,1,140,40,
-41,1,1,1,1,1,1,115,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,
-40,1,1,1,1,1,44,1,1,140,1,1,1,1,1,1,1,134,1,1,1,1,1,140,1,124,125,1,191,40,
-41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,52,52,1,1,1,1,1,124,125,1,61,61,41,
-40,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,40,
-41,1,1,1,140,1,1,1,52,52,52,1,1,1,1,1,1,1,1,1,1,1,66,52,52,1,1,1,1,41,
-40,1,1,1,1,1,1,1,1,1,52,52,52,65,1,1,1,1,1,1,1,66,1,1,1,1,1,1,1,40,
-41,1,1,1,99,1,1,1,1,1,1,1,1,1,65,1,1,1,1,1,66,1,1,124,1,1,1,1,1,41,
-40,1,1,1,30,30,30,1,1,1,1,1,1,1,1,65,1,1,1,66,1,1,124,125,1,1,1,1,1,40,
-41,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,52,52,52,1,1,1,1,1,1,1,1,1,1,41,
-40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,140,1,1,140,1,1,1,40,
-41,131,1,131,1,164,164,164,164,164,164,164,164,164,164,164,164,164,164,1,1,1,1,1,1,1,1,1,1,62,
-40,163,131,134,131,31,31,31,31,129,130,129,32,32,32,32,130,129,10,11,1,1,190,1,1,189,1,1,1,62,
+40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,95,181,1,1,181,95,1,1,1,166,166,1,1,1,40,
+41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,95,180,1,256,180,95,1,1,1,251,251,1,1,1,41,
+40,1,1,124,125,1,1,1,1,1,1,1,1,44,1,95,20,21,21,22,95,1,1,1,251,251,1,1,1,40,
+41,1,1,1,124,125,1,1,1,53,1,1,1,124,125,1,1,1,1,1,1,1,1,1,52,52,1,1,1,41,
+40,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,172,1,1,1,1,1,1,1,1,1,1,1,40,
+41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,
+40,1,1,1,1,1,44,1,1,172,1,1,1,1,1,1,1,166,1,1,1,1,1,172,1,124,125,1,1,40,
+41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,52,52,1,1,1,1,1,124,125,1,93,93,41,
+40,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,166,1,1,1,128,128,40,
+41,1,1,1,172,1,1,1,52,52,52,97,1,1,1,1,1,1,1,1,1,1,98,52,52,1,1,128,128,41,
+40,1,1,1,1,1,1,1,1,1,52,52,52,97,1,1,1,1,1,1,1,98,1,1,1,1,1,128,128,40,
+41,1,1,1,129,1,1,1,1,1,1,1,1,1,97,1,1,1,1,1,98,1,1,124,1,1,1,128,128,41,
+40,1,1,1,30,30,30,1,1,1,1,1,1,1,1,97,1,1,1,98,1,1,124,125,1,1,1,128,128,40,
+41,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,52,52,52,1,1,1,1,1,1,1,1,128,128,41,
+40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,172,1,1,172,1,128,128,40,
+41,163,1,163,1,196,196,196,196,196,196,196,196,196,196,196,196,196,196,1,1,1,1,1,1,1,1,128,128,94,
+40,195,166,195,163,31,31,31,31,161,161,162,32,32,32,32,161,162,10,11,1,1,254,1,1,253,1,128,128,94,
 41,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,11
 </chunk>
    <chunk x="30" y="19" width="30" height="19">
-11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,1,1,73,1,18,
-19,114,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,73,1,19,
-18,114,1,1,1,1,1,114,1,1,1,1,1,1,1,1,1,1,1,64,1,1,1,1,1,1,1,73,1,18,
-19,114,1,1,1,1,1,114,1,1,1,1,1,1,1,1,166,1,1,1,174,174,1,1,1,188,1,73,1,19,
-18,114,87,88,89,90,1,114,1,73,69,69,69,69,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,18,
-19,114,119,1,1,1,1,114,1,73,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,114,1,1,1,19,
-18,115,1,1,124,125,1,114,1,73,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,114,1,1,1,18,
-19,1,1,124,125,1,1,115,1,73,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,115,1,1,1,19,
-18,1,1,1,1,1,1,1,1,73,1,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,18,
-19,1,1,89,1,1,13,13,13,13,65,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
-18,1,1,1,1,1,1,1,1,1,1,65,1,1,1,1,13,13,13,13,1,1,1,1,1,1,1,1,1,18,
-19,1,1,1,1,1,1,124,125,1,1,1,65,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
-18,1,1,1,1,1,124,125,1,1,1,1,1,65,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,18,
-19,1,1,1,1,1,1,1,1,1,1,1,1,1,13,13,13,1,1,1,1,1,1,1,1,1,124,125,1,19,
+11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,1,1,102,1,18,
+19,128,128,128,128,128,128,128,128,128,128,128,128,128,1,1,1,1,1,1,1,1,1,1,1,1,1,102,1,19,
+18,128,128,128,128,128,128,128,128,128,128,128,128,128,1,1,1,1,96,1,1,1,1,1,1,1,1,102,1,18,
+19,128,128,128,128,128,128,128,128,128,128,128,128,128,1,1,198,1,1,1,206,206,1,1,1,252,1,102,1,19,
+18,106,106,106,106,106,106,106,106,101,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,18,
+19,1,1,1,1,1,1,1,1,101,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
+18,1,1,1,124,125,1,1,1,101,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,
+19,1,1,124,125,1,1,1,1,101,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,19,
+18,1,1,1,1,1,1,1,1,101,1,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,18,
+19,1,1,1,1,1,13,13,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
+18,1,1,1,1,1,1,1,1,13,13,97,1,1,1,1,13,13,13,13,1,1,1,1,1,1,1,1,1,18,
+19,1,1,1,1,1,1,124,125,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
+18,1,1,1,1,1,124,125,1,1,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,18,
+19,1,1,1,1,1,1,1,1,1,1,1,13,13,13,13,13,1,1,1,1,1,1,1,1,1,124,125,1,19,
 18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,
-19,1,140,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,73,13,13,13,73,1,1,1,1,19,
-1,1,1,1,1,1,68,3,1,1,3,67,1,1,124,125,1,1,1,1,73,1,1,1,73,1,1,191,1,18,
-1,1,173,1,1,68,3,3,3,3,3,3,67,1,1,192,1,1,1,1,73,1,1,1,73,1,131,61,131,19,
+19,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,101,13,13,13,101,1,1,1,1,19,
+1,1,1,1,249,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,101,1,1,1,101,1,1,255,1,18,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,256,1,1,1,1,101,1,1,1,101,1,163,93,163,19,
 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+</chunk>
+   <chunk x="60" y="19" width="30" height="19">
+12,12,12,12,12,12,12,12,12,12,1,1,1,1,1,1,1,144,144,1,12,12,12,12,12,12,12,12,12,12,
+171,171,171,171,171,171,171,171,171,35,1,1,1,201,202,1,1,1,144,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,171,171,171,171,171,171,35,1,1,201,171,171,171,202,1,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,152,153,171,171,171,171,171,35,1,201,171,152,153,171,171,202,1,1,35,171,152,153,171,171,171,171,171,171,
+171,171,184,185,171,171,171,171,171,35,201,171,171,184,185,171,171,171,1,1,35,171,184,185,171,171,171,171,171,171,
+171,171,171,171,171,171,171,171,171,35,203,171,171,171,171,171,171,204,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,171,171,152,153,171,171,35,1,1,203,171,171,171,204,1,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,171,171,184,185,171,171,35,1,1,1,203,171,204,1,1,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,171,171,171,171,171,171,35,1,1,1,1,1,1,1,1,1,198,35,171,171,171,171,171,152,153,171,171,
+171,171,171,171,171,171,171,171,171,35,1,1,1,166,1,1,1,1,1,1,35,171,171,171,171,171,184,185,171,171,
+171,171,171,171,171,171,171,171,171,35,1,144,1,42,43,42,43,1,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,152,153,171,171,171,171,35,1,144,144,35,251,251,35,1,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,184,185,171,171,171,171,35,1,144,1,35,251,251,35,1,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,171,171,171,171,171,171,35,1,1,1,1,1,1,1,1,1,1,35,171,171,152,153,171,171,171,171,171,
+171,171,171,171,171,171,171,171,171,35,1,166,1,1,1,1,1,1,1,1,35,171,171,184,185,171,171,171,171,171,
+171,152,153,171,171,171,171,171,171,35,1,1,1,249,1,198,1,144,144,1,35,171,171,171,171,171,171,171,171,171,
+171,184,185,171,171,171,171,171,171,35,1,1,1,1,1,1,1,144,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,171,171,171,171,171,171,35,1,1,1,1,1,1,1,1,1,1,35,171,171,171,171,171,171,171,171,171,
+171,171,171,171,171,171,171,171,171,35,35,35,35,35,35,35,35,35,35,35,35,171,171,171,171,171,171,171,171,171
 </chunk>
   </data>
  </layer>
@@ -229,36 +282,17 @@
    </properties>
    <point/>
   </object>
-  <object id="17" name="enemy_4" type="enemy" gid="209" x="400" y="88" width="16" height="16"/>
+  <object id="17" name="enemy_4" type="enemy" gid="273" x="400" y="88" width="16" height="16"/>
   <object id="18" name="enemy_4_end" x="280" y="64">
    <properties>
     <property name="enemy" type="object" value="17"/>
    </properties>
    <point/>
   </object>
-  <object id="30" gid="217" x="384" y="216" width="16" height="16">
-   <properties>
-    <property name="mode" value="alert"/>
-    <property name="speed" type="int" propertytype="enemySpeed" value="1"/>
-   </properties>
-  </object>
-  <object id="31" x="368" y="216">
-   <properties>
-    <property name="enemy" type="object" value="30"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="51" type="text" x="224" y="208">
-   <properties>
-    <property name="es" value="Menudo tesoro"/>
-    <property name="itemAction" type="int" value="190"/>
-   </properties>
-   <point/>
-  </object>
   <object id="53" type="text" x="144" y="168">
    <properties>
     <property name="es" value="Con esta llave puedes abrir   caminos. Usalo con cabeza"/>
-    <property name="itemAction" type="int" value="191"/>
+    <property name="itemAction" type="int" value="255"/>
    </properties>
    <point/>
   </object>
@@ -266,14 +300,14 @@
    <properties>
     <property name="en" value="This increased my life!!!"/>
     <property name="es" value="Esto me da la  vida... lit lit"/>
-    <property name="itemAction" type="int" value="189"/>
+    <property name="itemAction" type="int" value="253"/>
    </properties>
    <point/>
   </object>
   <object id="58" type="text" x="200" y="288">
    <properties>
     <property name="es" value="Municion de    mentira"/>
-    <property name="itemAction" type="int" value="188"/>
+    <property name="itemAction" type="int" value="252"/>
    </properties>
    <point/>
   </object>
@@ -281,7 +315,7 @@
    <properties>
     <property name="adventureState" type="int" value="2"/>
     <property name="es" value="Con uno mas ya puedo tocar la bateria"/>
-    <property name="itemAction" type="int" value="165"/>
+    <property name="itemAction" type="int" value="197"/>
    </properties>
    <point/>
   </object>
@@ -303,14 +337,18 @@
    <properties>
     <property name="adventureState" type="int" value="1"/>
     <property name="es" value="Esto me sirve  para tocar.    Faltan palos"/>
-    <property name="itemAction" type="int" value="133"/>
+    <property name="itemAction" type="int" value="165"/>
    </properties>
    <point/>
   </object>
-  <object id="70" type="screen_attributes" x="344" y="96">
+  <object id="70" type="screen_attributes" x="560" y="200">
    <properties>
-    <property name="background" type="int" value="2"/>
+    <property name="background" type="int" value="70"/>
+    <property name="dark" type="bool" value="true"/>
+    <property name="hud2" type="bool" value="true"/>
     <property name="music" value="music3"/>
+    <property name="teleportTo" type="int" value="4"/>
+    <property name="terrain" type="bool" value="true"/>
    </properties>
    <point/>
   </object>
@@ -318,11 +356,11 @@
    <properties>
     <property name="adventureState" type="int" value="3"/>
     <property name="es" value="Ya tengo todo!!"/>
-    <property name="itemAction" type="int" value="165"/>
+    <property name="itemAction" type="int" value="197"/>
    </properties>
    <point/>
   </object>
-  <object id="73" type="text" x="256" y="288">
+  <object id="73" type="text" x="280" y="136">
    <properties>
     <property name="es" value="Instrucciones  plataforma.    Abajo y subes."/>
     <property name="itemAction" type="int" value="0"/>
@@ -336,7 +374,7 @@
    </properties>
    <point/>
   </object>
-  <object id="75" name="gota1" gid="215" x="216" y="160" width="16" height="16">
+  <object id="75" name="gota1" gid="279" x="216" y="216" width="16" height="16">
    <properties>
     <property name="life" type="int" value="99"/>
     <property name="mode" propertytype="enemyMovement" value="one direction"/>
@@ -352,11 +390,11 @@
    <properties>
     <property name="adventureState" type="int" value="4"/>
     <property name="es" value="Vamos a tocar!!"/>
-    <property name="itemAction" type="int" value="133"/>
+    <property name="itemAction" type="int" value="165"/>
    </properties>
    <point/>
   </object>
-  <object id="79" name="reloj1" gid="221" x="112" y="160" width="16" height="16">
+  <object id="79" name="reloj1" gid="285" x="112" y="160" width="16" height="16">
    <properties>
     <property name="life" type="int" value="99"/>
     <property name="mode" propertytype="enemyMovement" value="clockwise"/>
@@ -369,7 +407,7 @@
    </properties>
    <point/>
   </object>
-  <object id="91" gid="201" x="304" y="280" width="16" height="16"/>
+  <object id="91" gid="265" x="320" y="128" width="16" height="16"/>
   <object id="98" type="text" x="440" y="176">
    <properties>
     <property name="es" value="Cuando mueras  resucitas aqui"/>
@@ -385,15 +423,15 @@
    </properties>
    <point/>
   </object>
-  <object id="110" name="trap1" gid="221" x="168" y="72" width="16" height="16">
+  <object id="110" name="trap1" gid="285" x="168" y="72" width="16" height="16">
    <properties>
     <property name="life" type="int" value="99"/>
-    <property name="mode" propertytype="enemyMovement" value="trap all directions"/>
+    <property name="mode" propertytype="enemyMovement" value="trap vertical"/>
     <property name="speed" type="int" propertytype="enemySpeed" value="2"/>
-    <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="all including diagonals"/>
+    <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="no"/>
    </properties>
   </object>
-  <object id="121" name="plataf1" gid="201" x="16" y="168" width="16" height="16"/>
+  <object id="121" name="plataf1" gid="265" x="16" y="168" width="16" height="16"/>
   <object id="122" x="16" y="272">
    <properties>
     <property name="enemy" type="object" value="121"/>
@@ -404,11 +442,11 @@
    <properties>
     <property name="adventureState" type="int" value="1"/>
     <property name="es" value="No se que hacercon esto.      Buscare algo   que aporrear"/>
-    <property name="itemAction" type="int" value="0"/>
+    <property name="itemAction" type="int" value="197"/>
    </properties>
    <point/>
   </object>
-  <object id="124" type="text" x="136" y="136">
+  <object id="124" type="text" x="160" y="112">
    <properties>
     <property name="adventureState" type="int" value="1"/>
     <property name="es" value="No se que hacercon esto.      Buscare algo   que aporrear"/>
@@ -416,7 +454,7 @@
    </properties>
    <point/>
   </object>
-  <object id="125" name="enemy_5" type="enemy" gid="213" x="48" y="128" width="16" height="16"/>
+  <object id="125" name="enemy_5" type="enemy" gid="277" x="48" y="128" width="16" height="16"/>
   <object id="126" x="120" y="128">
    <properties>
     <property name="enemy" type="object" value="125"/>
@@ -425,22 +463,19 @@
   </object>
   <object id="129" type="screen_attributes" x="456" y="208">
    <properties>
-    <property name="background" type="int" value="79"/>
+    <property name="dark" type="bool" value="true"/>
     <property name="music" value="music2"/>
    </properties>
    <point/>
   </object>
-  <object id="136" name="enemy_4" type="enemy" gid="209" x="280" y="8" width="16" height="16"/>
+  <object id="136" name="enemy_4" type="enemy" gid="273" x="280" y="8" width="16" height="16"/>
   <object id="137" name="enemy_4_end" x="416" y="8">
    <properties>
     <property name="enemy" type="object" value="136"/>
    </properties>
    <point/>
   </object>
-  <object id="138" name="mainCharacter" type="mainCharacter" x="136" y="248">
-   <point/>
-  </object>
-  <object id="139" name="enemyPuntos" type="enemy" gid="219" x="392" y="256" width="16" height="16">
+  <object id="139" name="enemyPuntos" type="enemy" gid="283" x="392" y="256" width="16" height="16">
    <properties>
     <property name="life" type="int" value="3"/>
     <property name="mode" propertytype="enemyMovement" value="anticlockwise"/>
@@ -449,16 +484,111 @@
   <object id="140" name="pantalla 3" type="screen_attributes" x="184" y="192">
    <properties>
     <property name="music" value="music1"/>
-    <property name="teleportTo" type="int" value="1"/>
+    <property name="teleportTo" type="int" value="6"/>
    </properties>
    <point/>
   </object>
   <object id="141" name="pantalla 1" type="screen_attributes" x="104" y="48">
    <properties>
+    <property name="background" type="int" value="79"/>
     <property name="music" value="no_music"/>
     <property name="teleportTo" type="int" value="0"/>
    </properties>
    <point/>
+  </object>
+  <object id="142" name="1" type="text" x="272" y="280">
+   <properties>
+    <property name="adventureState" type="int" value="0"/>
+    <property name="es" value="Un interruptor en una piramideQue modernidad!"/>
+    <property name="itemAction" type="int" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="144" type="screen_attributes" x="392" y="64">
+   <properties>
+    <property name="background" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="145" type="screen_attributes" x="568" y="96">
+   <properties>
+    <property name="background" type="int" value="70"/>
+    <property name="hud2" type="bool" value="true"/>
+    <property name="music" value="music3"/>
+    <property name="teleportTo" type="int" value="1"/>
+    <property name="terrain" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="147" type="text" x="512" y="24">
+   <properties>
+    <property name="es" value="Menudo tesoro"/>
+    <property name="itemAction" type="int" value="254"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="153" name="trap1" gid="285" x="592" y="72" width="16" height="16">
+   <properties>
+    <property name="life" type="int" value="99"/>
+    <property name="mode" propertytype="enemyMovement" value="trap all directions"/>
+    <property name="speed" type="int" propertytype="enemySpeed" value="2"/>
+    <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="all including diagonals"/>
+   </properties>
+  </object>
+  <object id="154" gid="281" x="512" y="216" width="16" height="16">
+   <properties>
+    <property name="mode" value="alert"/>
+    <property name="speed" type="int" propertytype="enemySpeed" value="1"/>
+   </properties>
+  </object>
+  <object id="155" x="496" y="216">
+   <properties>
+    <property name="enemy" type="object" value="154"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="156" gid="281" x="384" y="216" width="16" height="16">
+   <properties>
+    <property name="mode" value="alert"/>
+    <property name="speed" type="int" propertytype="enemySpeed" value="1"/>
+   </properties>
+  </object>
+  <object id="157" x="368" y="216">
+   <properties>
+    <property name="enemy" type="object" value="156"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="158" gid="281" x="688" y="216" width="16" height="16">
+   <properties>
+    <property name="mode" value="alert"/>
+    <property name="speed" type="int" propertytype="enemySpeed" value="1"/>
+   </properties>
+  </object>
+  <object id="159" x="672" y="216">
+   <properties>
+    <property name="enemy" type="object" value="158"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="160" name="mainCharacter" type="mainCharacter" x="136" y="248">
+   <point/>
+  </object>
+  <object id="161" name="trap1" gid="285" x="536" y="40" width="16" height="16">
+   <properties>
+    <property name="life" type="int" value="99"/>
+    <property name="mode" propertytype="enemyMovement" value="trap all directions"/>
+    <property name="speed" type="int" propertytype="enemySpeed" value="2"/>
+    <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="no"/>
+   </properties>
+  </object>
+  <object id="162" name="trap1" gid="285" x="648" y="40" width="16" height="16">
+   <properties>
+    <property name="life" type="int" value="99"/>
+    <property name="mode" propertytype="enemyMovement" value="trap all directions"/>
+    <property name="speed" type="int" propertytype="enemySpeed" value="2"/>
+    <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="no"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

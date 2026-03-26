@@ -206,6 +206,28 @@
   
   
   
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="color-generator-tool.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Herramientas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -365,12 +387,72 @@
       
   
   
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="color-generator-tool.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    Herramientas
+    
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
   
     
     
+      
+        
+      
+        
       
         
       
@@ -408,10 +490,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -424,8 +506,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Configuración
           </label>
@@ -644,6 +726,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dark-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dark mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hud-alternativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      HUD Alternativo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pantalla-en-modo-cenital-side-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pantalla en modo cenital (side mode)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#musica-in-game-por-pantallas" class="md-nav__link">
     <span class="md-ellipsis">
       Música in-game por pantallas
@@ -764,6 +873,52 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lives-mode.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modo de vidas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="zxgm_configuration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuración heredada ZXGM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -868,6 +1023,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dark-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dark mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hud-alternativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      HUD Alternativo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pantalla-en-modo-cenital-side-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pantalla en modo cenital (side mode)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#musica-in-game-por-pantallas" class="md-nav__link">
     <span class="md-ellipsis">
       Música in-game por pantallas
@@ -962,6 +1144,14 @@ Se puede combinar con el atributo <em>tile</em>.</p>
 <p>El atributo <strong>tile</strong> hace la misma función que background sólo que altera el tile de fondo (el tile 0 vacío) por el aquí indicado.
 Por ejemplo, si tu juego tiene distintos entornos, entre ellos edificios, puedes usar un tile de pared con distintos colores para cada edificio. ¡¡¡Tienes un tile con distintos colores sin usar espacio en tus tiles!!!
 Se debe combinar con el atributo <em>background</em>.</p>
+<h2 id="dark-mode">Dark mode</h2>
+<p>El atributo <strong>dark</strong> te permite indicar al motor que la pantalla esté oscura al entrar en ella. Junto con los nuevos tiles de interruptor podrás hacer que esto cambie durante tu estancia en la pantalla</p>
+<p>Cabe recordar que el juego de tiles oscuros se encuentra en el fichero <strong>tiles_dark.zxp</strong>. La lógica de sólidos, etc etc se mantiene igual. Por lo que si tienes un tile sólido en tiles.zxp, tendrás que tener el mismo tile sólido en tiles_dark.zxp pero no tiene por qué pintarse igual. Por otro lado, aunque se llame dark puedes simplemente poner otros colores y ocultar algunos tiles para simular otras cosas. Por ejemplo, puedes usarlo para simular que el jugador entra en una habitación con una luz de neón.</p>
+<h2 id="hud-alternativo">HUD Alternativo</h2>
+<p>El atributo <strong>hud2</strong> te permite indicar al motor que la pantalla use un HUD alternativo en esa pantalla. El scr asociado que debe existir es <em>hud2.scr</em>. Por defecto se usa el HUD normal de siempre.</p>
+<h2 id="pantalla-en-modo-cenital-side-mode">Pantalla en modo cenital (side mode)</h2>
+<p>Para los juegos en vista lateral ahora se puede indicar que una pantalla funcione en modo cenital. Para ello se debe usar el atributo <strong>terrain</strong> (modo terreno). </p>
+<p>En estas pantallas no se puede saltar y los tiles de escalera no tienen efecto. Hay que tener en cuenta de no introducir plataformas en este modo pues no cambian su comportamiento y puede quedar raro</p>
 <h2 id="musica-in-game-por-pantallas">Música in-game por pantallas</h2>
 <p>El atributo <strong>music</strong> permite definir qué música cargar al entrar en esa pantalla</p>
 <h3 id="configuracion-original-a-tener-en-cuenta">Configuración original a tener en cuenta</h3>

@@ -1,24 +1,8 @@
 const BURST_SPRITE_ID as ubyte = 16
 const BULLET_SPEED as ubyte = 2
 
-' sub createBullet(directionRight as ubyte)
-'     if directionRight
-'         spritesSet(BULLET_SPRITE_RIGHT_ID) = Create1x1Sprite(@bulletRight)
-'     else
-'         spritesSet(BULLET_SPRITE_RIGHT_ID) = Create1x1Sprite(@bulletLeft)
-'     end if
-' end sub
-
 Function checkBulletTileCollision(posx as ubyte, posy as ubyte) as ubyte
-    ' dim xToCheck as ubyte = posx
-    ' dim yToCheck as ubyte = posy
-    
-    ' if direction = BULLET_DIRECTION_RIGHT then xToCheck = posx + 1
-    ' if directionV = BULLET_DIRECTION_DOWN then yToCheck = posy + 1
-    
-    ' dim tile as ubyte = isSolidTileByColLin(xToCheck >> 1, yToCheck >> 1)
-    
-    ' if not tile then return isSolidTileByColLin(xToCheck >> 1, (yToCheck + 1) >> 1)
+
     dim tile as ubyte = 0
 
     for c=0 to 1
@@ -36,7 +20,7 @@ End Function
         if not bulletPositionX then return
         
     #ifdef BULLET_BOOMERANG
-        if bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }} Then
+        if bulletDirection = BULLET_DIRECTION_BOOMERANG Then
             bulletPositionX = bulletPositionX + (sgn((protaX+1) - bulletPositionX)*BULLET_SPEED)
             bulletPositionY = bulletPositionY + (sgn((protaY+1) - bulletPositionY)*BULLET_SPEED)
             if bulletPositionX >= protaX and bulletPositionX <= (protaX+4) Then
@@ -45,7 +29,7 @@ End Function
                     
                     #ifdef AMMO_ENABLED
                         currentAmmo = currentAmmo + 1
-                        printLife()
+                        printHud()
                     #endif
                     Return
                 end if
@@ -56,7 +40,7 @@ End Function
         if bulletDirection = BULLET_DIRECTION_RIGHT then
             if bulletPositionX > bulletEndPositionX then
                 #ifdef BULLET_BOOMERANG
-                    bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
+                    bulletDirection = BULLET_DIRECTION_BOOMERANG
                     bulletPositionX = bulletEndPositionX
                 #else
                     resetBullet()
@@ -65,22 +49,10 @@ End Function
             Else
                 bulletPositionX = bulletPositionX + BULLET_SPEED
             end if
-            
-            ' #ifndef BULLET_BOOMERANG
-                ' #ifdef SIDE_VIEW
-                '     #ifdef BULLET_ANIMATION
-                '         if currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID Then
-                '             currentBulletSpriteId = BULLET_SPRITE_RIGHT_2_ID
-                '         Else
-                '             currentBulletSpriteId = BULLET_SPRITE_RIGHT_ID
-                '         End if
-                '     #endif
-                ' #endif
-            ' #endif
         elseif bulletDirection = BULLET_DIRECTION_LEFT then
             if bulletPositionX < bulletEndPositionX then
                 #ifdef BULLET_BOOMERANG
-                    bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
+                    bulletDirection = BULLET_DIRECTION_BOOMERANG
                     bulletPositionX = bulletEndPositionX
                 #else
                     resetBullet()
@@ -89,28 +61,16 @@ End Function
             else
                 bulletPositionX = bulletPositionX - BULLET_SPEED
             end if
-            
-            ' #ifndef BULLET_BOOMERANG
-            '     #ifdef SIDE_VIEW
-            '         #ifdef BULLET_ANIMATION
-            '             if currentBulletSpriteId = BULLET_SPRITE_LEFT_ID Then
-            '                 currentBulletSpriteId = BULLET_SPRITE_LEFT_2_ID
-            '             Else
-            '                 currentBulletSpriteId = BULLET_SPRITE_LEFT_ID
-            '             End if
-            '         #endif
-            '     #endif
-            ' #endif
         end if
         
         ' #ifdef SHOOT_ALL
         #ifdef BULLET_BOOMERANG
-        if bulletDirection <> {{ BULLET_DIRECTION_BOOMERANG }} then
+        if bulletDirection <> BULLET_DIRECTION_BOOMERANG then
         #endif
             if bulletDirectionVertical = BULLET_DIRECTION_DOWN then
                 if bulletPositionY > bulletEndPositionY then
                     #ifdef BULLET_BOOMERANG
-                        bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
+                        bulletDirection = BULLET_DIRECTION_BOOMERANG
                         bulletPositionY = bulletEndPositionY
                     #else
                         resetBullet()
@@ -122,7 +82,7 @@ End Function
             elseif bulletDirectionVertical = BULLET_DIRECTION_UP then
                 if bulletPositionY < bulletEndPositionY then
                     #ifdef BULLET_BOOMERANG
-                        bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
+                        bulletDirection = BULLET_DIRECTION_BOOMERANG
                         bulletPositionY = bulletEndPositionY
                     #else
                         resetBullet()
@@ -158,7 +118,7 @@ End Function
                 #endif
                 
                 #ifdef BULLET_BOOMERANG
-                    bulletDirection = {{ BULLET_DIRECTION_BOOMERANG }}
+                    bulletDirection = BULLET_DIRECTION_BOOMERANG
                 #else
                     resetBullet()
                 #endif
@@ -273,7 +233,7 @@ sub damageEnemy(enemyToKill as Ubyte)
             If score > hiScore Then
                 hiScore = score
             End If
-            printLife()
+            printHud()
         #endif
         
         BeepFX_Play(1)
@@ -288,7 +248,7 @@ sub damageEnemy(enemyToKill as Ubyte)
             If score > hiScore Then
                 hiScore = score
             End If
-            printLife()
+            printHud()
         #endif
         
         decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
@@ -302,21 +262,30 @@ sub damageEnemy(enemyToKill as Ubyte)
                 dim eneY as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN) >> 1
 
                 if enemiesFrame band 2 = 2 Then
-                    #ifdef SCREEN_ATTRIBUTES
-                        if DROP_TILE < MAX_GENERIC_TILE Then
-                            drawDrop(eneX, eneY)
-                        elseif GetTile(eneX, eneY) = currentTileBackground Then
-                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
-                        End if
+                    #ifdef DROP_DRAW_SIMPLE
+                        'drawDrop(eneX, eneY)
+                        for tx=eneX to (eneX + 1)
+                            for ty=eneY to (eneY + 1)
+                                #ifdef SCREEN_ATTRIBUTES
+                                    if GetTile(tx, ty) = currentTileBackground Then 
+                                        SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tx, ty)
+                                    end if
+                                #Else
+                                    if not GetTile(tx, ty) Then 
+                                        SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tx, ty)
+                                    end if
+                                #endif
+                            next ty
+                        next tx
                     #else
-                        if DROP_TILE < MAX_GENERIC_TILE Then
-                            drawDrop(eneX, eneY)
-                        elseif not GetTile(eneX, eneY) Then
-                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
+                        if not GetTile(eneX, eneY) Then
+                            #ifdef SCREEN_ATTRIBUTES
+                                SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
+                            #else
+                                SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
+                            #endif
                         End if
                     #endif
-                ' Else
-                '     Draw2x2Sprite(BURST_SPRITE_ID, eneX, eneY)
                 End if
                 Draw2x2Sprite(BURST_SPRITE_ID, eneX << 1, eneY << 1)
             #else

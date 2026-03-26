@@ -4,7 +4,7 @@
 #include <memorybank.bas>
 
 #include "definitions.bas"
-#include "dataLoader.bas"
+' #include "dataLoader.bas"
 
 ' #ifdef GAME_LANGUAGE_ES
 '     #include "texts_es.bas"
@@ -23,13 +23,14 @@
     #endif
 #endif
 
-loadDataFromTape()
+#include "functionsBas/dataLoader.bas"
+'loadDataFromTape()
 
 ' #include "graphicsInitializer.bas"
 #include "lib/GuSpritesConfig.bas"
 #include "lib/GuSprites.zxbas"
 
-#include "beepFx.bas"
+#include "functionsBas/beepFx.bas"
 
 #ifdef CUSTOM_FONT_ENABLED
     #ifdef CUSTOM_FONT_BOLD_ALL
@@ -45,10 +46,10 @@ loadDataFromTape()
     #endif
 #endif
 
-#include "functions.bas"
+#include "functionsBas/functions.bas"
 
-#INCLUDE <scrbuffer.bas>
-#include "screens.bas"
+' #INCLUDE <scrbuffer.bas>
+' #include "screens.bas"
 
 #include "bullet.bas"
 #include "enemies.bas"
@@ -75,7 +76,7 @@ SetTileset(@tileSet(0,0))
 #endif
 
 #ifdef ULA_PLUS_VALIDATION
-    #include "../output/ulacolors.bas"
+    #include "../output/tiles_ulacolors.bas"
 #endif
 
 #ifdef WAIT_PRESS_KEY_AFTER_LOAD
@@ -92,8 +93,12 @@ SetTileset(@tileSet(0,0))
 
 ' waitretrace
 
+
 #ifdef PASSWORD_ENABLED
     passwordScreen()
 #else
+    'Ink INK_VALUE: Paper PAPER_VALUE: Border BORDER_VALUE; BRIGHT 0: FLASH 0: Cls
+    'clearScreen()
+    'Ink 7: Paper 0: Border 0: BRIGHT 0: FLASH 0: Cls
     showMenu()
 #endif

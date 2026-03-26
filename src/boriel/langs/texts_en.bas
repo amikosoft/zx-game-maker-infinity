@@ -11,6 +11,7 @@ Const TEXT_AMMO as String = " AMMO!!! "
 Const TEXT_PAUSE as String = "-=PAUSE=-"
 
 ' Free length, less for lower memmory
+Const REDEFINE_X as String = "X"
 Const REDEFINE_PRESS_KEY_FOR as String = "Press key For:"
 Const REDEFINE_LEFT as String = "Left"
 Const REDEFINE_RIGHT as String = "Right"

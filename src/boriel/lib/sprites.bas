@@ -16,40 +16,40 @@ S01_ADDRESS:
     DEFB 01Ah, 002h, 002h, 004h, 078h, 0C0h, 020h, 018h
 
 S02_ADDRESS:
-    DEFB 00Eh, 010h, 006h, 01Fh, 03Fh, 07Fh, 07Fh, 03Fh
-    DEFB 03Fh, 03Fh, 01Fh, 00Fh, 002h, 002h, 004h, 00Ch
-    DEFB 038h, 004h, 030h, 0F8h, 0FCh, 0FCh, 0FEh, 0FEh
-    DEFB 0FCh, 0FCh, 0F8h, 0F0h, 040h, 060h, 000h, 000h
-
-S03_ADDRESS:
-    DEFB 00Fh, 000h, 003h, 01Fh, 034h, 077h, 047h, 063h
-    DEFB 060h, 020h, 010h, 00Fh, 001h, 002h, 006h, 004h
-    DEFB 03Ch, 000h, 018h, 0BCh, 0E4h, 0BCh, 0BCh, 01Ah
-    DEFB 042h, 0A2h, 044h, 078h, 0C0h, 040h, 0C0h, 080h
-
-S04_ADDRESS:
     DEFB 01Ch, 002h, 018h, 03Dh, 02Fh, 02Dh, 03Dh, 058h
     DEFB 040h, 041h, 020h, 01Eh, 003h, 002h, 004h, 00Ch
     DEFB 0E0h, 010h, 0C0h, 0F8h, 06Ch, 06Eh, 0E2h, 0C6h
     DEFB 016h, 0E4h, 008h, 0F0h, 080h, 080h, 040h, 0C0h
 
-S05_ADDRESS:
+S03_ADDRESS:
     DEFB 000h, 01Ch, 002h, 018h, 03Dh, 02Fh, 02Dh, 03Dh
     DEFB 058h, 040h, 040h, 020h, 01Eh, 003h, 004h, 018h
     DEFB 000h, 0E0h, 010h, 0C0h, 0F8h, 06Ch, 06Eh, 0E2h
     DEFB 0C6h, 016h, 0E4h, 008h, 0F0h, 080h, 070h, 010h
 
+S04_ADDRESS:
+    DEFB 01Ch, 002h, 018h, 03Dh, 03Fh, 03Fh, 03Fh, 07Fh
+    DEFB 07Fh, 07Fh, 03Fh, 01Fh, 002h, 006h, 000h, 000h
+    DEFB 0E0h, 010h, 0C0h, 0F8h, 0FCh, 0FEh, 0FEh, 0FEh
+    DEFB 0FEh, 0FCh, 0F8h, 0F0h, 040h, 040h, 020h, 030h
+
+S05_ADDRESS:
+    DEFB 01Ch, 002h, 018h, 03Dh, 03Fh, 03Fh, 03Fh, 07Fh
+    DEFB 07Fh, 07Fh, 03Fh, 01Fh, 002h, 002h, 004h, 00Ch
+    DEFB 0E0h, 010h, 0C0h, 0F8h, 0FCh, 0FEh, 0FEh, 0FEh
+    DEFB 0FEh, 0FCh, 0F8h, 0F0h, 040h, 060h, 000h, 000h
+
 S06_ADDRESS:
-    DEFB 01Ch, 020h, 00Ch, 01Fh, 03Fh, 03Fh, 07Fh, 07Fh
-    DEFB 03Fh, 03Fh, 01Fh, 00Fh, 002h, 006h, 000h, 000h
-    DEFB 070h, 008h, 060h, 0F8h, 0FCh, 0FEh, 0FEh, 0FCh
-    DEFB 0FCh, 0FCh, 0F8h, 0F0h, 040h, 040h, 020h, 030h
+    DEFB 007h, 008h, 003h, 01Fh, 035h, 075h, 047h, 063h
+    DEFB 068h, 027h, 010h, 00Fh, 002h, 006h, 000h, 000h
+    DEFB 038h, 040h, 018h, 0BCh, 0ECh, 0ACh, 0BCh, 01Ah
+    DEFB 002h, 082h, 004h, 0F8h, 040h, 040h, 020h, 030h
 
 S07_ADDRESS:
-    DEFB 03Ch, 000h, 018h, 03Dh, 027h, 03Dh, 03Dh, 058h
-    DEFB 042h, 045h, 022h, 01Eh, 003h, 002h, 003h, 001h
-    DEFB 0F0h, 000h, 0C0h, 0F8h, 02Ch, 0EEh, 0E2h, 0C6h
-    DEFB 006h, 004h, 008h, 0F0h, 080h, 040h, 060h, 020h
+    DEFB 007h, 008h, 003h, 01Fh, 035h, 075h, 047h, 063h
+    DEFB 068h, 027h, 010h, 00Fh, 002h, 002h, 004h, 00Ch
+    DEFB 038h, 040h, 018h, 0BCh, 0ECh, 0ACh, 0BCh, 01Ah
+    DEFB 002h, 082h, 004h, 0F8h, 040h, 060h, 000h, 000h
 
 S08_ADDRESS:
     DEFB 07Fh, 0FFh, 087h, 0FFh, 087h, 097h, 083h, 0DFh
@@ -64,16 +64,16 @@ S09_ADDRESS:
     DEFB 0FEh, 000h, 000h, 000h, 0E0h, 000h, 080h, 000h
 
 S10_ADDRESS:
-    DEFB 037h, 07Fh, 0F7h, 0C3h, 081h, 081h, 021h, 081h
-    DEFB 001h, 081h, 008h, 001h, 000h, 011h, 000h, 000h
-    DEFB 074h, 0FEh, 0EFh, 0C3h, 081h, 089h, 011h, 081h
-    DEFB 000h, 001h, 090h, 081h, 080h, 008h, 080h, 080h
+    DEFB 00Fh, 000h, 003h, 01Fh, 034h, 077h, 047h, 063h
+    DEFB 060h, 020h, 010h, 00Fh, 001h, 002h, 006h, 004h
+    DEFB 03Ch, 000h, 018h, 0BCh, 0E4h, 0BCh, 0BCh, 01Ah
+    DEFB 042h, 0A2h, 044h, 078h, 0C0h, 040h, 0C0h, 080h
 
 S11_ADDRESS:
-    DEFB 02Eh, 07Fh, 0F7h, 0C3h, 081h, 091h, 088h, 081h
-    DEFB 000h, 080h, 009h, 081h, 001h, 010h, 001h, 001h
-    DEFB 0ECh, 0FEh, 0EFh, 0C3h, 081h, 081h, 084h, 081h
-    DEFB 080h, 081h, 010h, 080h, 000h, 088h, 000h, 000h
+    DEFB 03Ch, 000h, 018h, 03Dh, 027h, 03Dh, 03Dh, 058h
+    DEFB 042h, 045h, 022h, 01Eh, 003h, 002h, 003h, 001h
+    DEFB 0F0h, 000h, 0C0h, 0F8h, 02Ch, 0EEh, 0E2h, 0C6h
+    DEFB 006h, 004h, 008h, 0F0h, 080h, 040h, 060h, 020h
 
 S12_ADDRESS:
     DEFB 007h, 008h, 003h, 01Fh, 035h, 075h, 047h, 063h

@@ -6,9 +6,11 @@
         Return 0
     End Function
     
-    Function checkPlatformByXY(protaX As Ubyte, protaY4 As Ubyte) As Ubyte
+    Function checkPlatformByXY() As Ubyte
         If not enemiesScreen Then Return 0
         
+        dim protaY4 As Ubyte = protaY + 4
+
         For enemyId=0 To enemiesScreen - 1
             If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
                 Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
@@ -295,6 +297,10 @@ Sub moveEnemies()
                     If enemyColEndBucle = enemyColBucle And enemyLinEndBucle = enemyLinBucle Then
                         enemyColBucle = enemyColIniBucle
                         enemyLinBucle = enemyLinIniBucle
+
+                        #ifdef ENEMIES_SOUND
+                            BEEP .01, 4
+                        #endif
                     End If
                 #endif
                 #ifdef ENEMIES_TRAP_ENABLED
@@ -314,6 +320,12 @@ Sub moveEnemies()
                                     horizontalDirectionBucle = Sgn(protaX - enemyColBucle)
                                 end if
                             end if
+                        #endif
+                        
+                        #ifdef ENEMIES_SOUND
+                        if horizontalDirectionBucle or verticalDirectionBucle then
+                            BEEP .01, 4
+                        end if
                         #endif
                     Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle <= PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle <= PLAYER_BOUNDS_LEFT Then
                         enemyColBucle = enemyColIniBucle
@@ -335,8 +347,8 @@ Sub moveEnemies()
                             #ifdef PLATFORM_MOVEABLE
                                 if enemySpeedBucle = 3 and not verticalDirectionBucle and not horizontalDirectionBucle Then
                                     if verticalAxisKeyPressed = -1 Then
-                                        If protaY - 1 > 2 and Not CheckCollision(protaX, protaY - 1) Then enemyLinBucle = enemyLinBucle - 1
-                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < MAX_SCREEN_BOTTOM Then
+                                        If (protaY - 1) > (PLAYER_BOUNDS_TOP + 2) and Not CheckCollision(protaX, protaY - 1) Then enemyLinBucle = enemyLinBucle - 1
+                                    ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < PLAYER_BOUNDS_BOTTOM Then
                                         enemyLinBucle = enemyLinBucle + 1
                                     End If
                                     
@@ -384,9 +396,11 @@ Sub moveEnemies()
             decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN) = enemyLinBucle
 
             #ifdef ENEMIES_TRAP_ENABLED
+            #ifndef ENEMIES_TRAP_SHOW_STATIC
             If enemyModeBucle >= ENEMY_MODE_TRAP_ALL Then
                 if not horizontalDirectionBucle and not verticalDirectionBucle Then Continue For
             End if
+            #endif
             #endif
 
             if tileBucle > 16 and horizontalDirectionBucle = -1 Then tileBucle = tileBucle + 16

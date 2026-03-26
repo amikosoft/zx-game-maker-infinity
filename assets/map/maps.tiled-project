@@ -130,7 +130,9 @@
         "values": [
             "30",
             "45",
-            "60"
+            "60",
+            "75",
+            "90"
         ],
         "valuesAsFlags": false
     },
@@ -189,11 +191,6 @@
         "drawFill": true,
         "id": 2,
         "members": [
-            {
-                "name": "128Kenabled",
-                "type": "bool",
-                "value": false
-            },
             {
                 "name": "ammo",
                 "type": "int",
@@ -257,6 +254,16 @@
                 "value": false
             },
             {
+                "name": "adventureTextsShowTiles",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "adventureTextsSound",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "arcadeMode",
                 "type": "bool",
                 "value": false
@@ -272,9 +279,14 @@
                 "value": 7
             },
             {
+                "name": "bright",
+                "type": "int",
+                "value": 0
+            },
+            {
                 "name": "border",
-                "type": "string",
-                "value": "0"
+                "type": "int",
+                "value": 0
             },
             {
                 "name": "fontCustom",
@@ -350,6 +362,16 @@
                 "value": "all"
             },
             {
+                "name": "enemiesSound",
+                "type": "bool",
+                "value": true
+            },
+            {
+                "name": "enemiesTrapShowWhileStatic",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "enemiesBulletCollision",
                 "type": "bool",
                 "value": true
@@ -423,8 +445,8 @@
             },
             {
                 "name": "ink",
-                "type": "string",
-                "value": "7"
+                "type": "int",
+                "value": 7
             },
             {
                 "name": "itemsCountdown",
@@ -510,11 +532,6 @@
                 "value": false
             },
             {
-                "name": "mainCharacterExtraFrame",
-                "type": "bool",
-                "value": true
-            },
-            {
                 "name": "maxAnimatedTilesPerScreen",
                 "type": "int",
                 "value": 6
@@ -551,8 +568,8 @@
             },
             {
                 "name": "paper",
-                "type": "string",
-                "value": "0"
+                "type": "int",
+                "value": 0
             },
             {
                 "name": "password",
@@ -677,6 +694,11 @@
             },
             {
                 "name": "teleportAnimation",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "teleportSound",
                 "type": "bool",
                 "value": false
             },
