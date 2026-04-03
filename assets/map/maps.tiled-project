@@ -419,6 +419,11 @@
                 "value": false
             },
             {
+                "name": "graphicsSpriteColors",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "goalItems",
                 "type": "int",
                 "value": 2
@@ -646,6 +651,11 @@
                 "name": "waitPressKeyAfterLoad",
                 "type": "bool",
                 "value": false
+            },
+            {
+                "name": "playerColor",
+                "type": "int",
+                "value": 0
             },
             {
                 "name": "playerReadyConfirmation",

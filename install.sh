@@ -9,7 +9,7 @@ fi
 
 source venv/bin/activate
 
-pip install -r requeriments.txt
+pip install -r requirements.txt
 
 rm venv/bin/bin2tap.py
 

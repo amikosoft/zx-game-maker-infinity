@@ -39,7 +39,7 @@
   <property name="enemiesShootDirection" propertytype="enemiesShootDirection" value="all"/>
   <property name="enemiesShootOnlyLookingPlayer" type="bool" value="false"/>
   <property name="enemiesShootSpeed" value="slow"/>
-  <property name="enemiesShootingLookAtPlayer" type="bool" value="true"/>
+  <property name="enemiesShootingLookAtPlayer" type="bool" value="false"/>
   <property name="enemiesSlowDown" type="bool" value="false"/>
   <property name="enemiesSound" type="bool" value="true"/>
   <property name="enemiesTrapShowWhileStatic" type="bool" value="true"/>
@@ -56,6 +56,7 @@
   <property name="glueTileEnabled" type="bool" value="true"/>
   <property name="goalItems" type="int" value="4"/>
   <property name="graphicsModeUnshifted" type="bool" value="true"/>
+  <property name="graphicsSpriteColors" type="bool" value="false"/>
   <property name="hiScore" type="bool" value="true"/>
   <property name="idleTime" type="int" value="25"/>
   <property name="initialLife" type="int" value="5"/>
@@ -87,6 +88,7 @@
   <property name="newBeeperPlayer" type="bool" value="true"/>
   <property name="password" value=""/>
   <property name="platformMoveable" type="bool" value="true"/>
+  <property name="playerColor" type="int" value="67"/>
   <property name="playerReadyConfirmation" type="bool" value="true"/>
   <property name="redefineKeysEnabled" type="bool" value="true"/>
   <property name="shooting" type="bool" value="true"/>
@@ -344,7 +346,7 @@
   <object id="70" type="screen_attributes" x="560" y="200">
    <properties>
     <property name="background" type="int" value="70"/>
-    <property name="dark" type="bool" value="true"/>
+    <property name="dark" type="bool" value="false"/>
     <property name="hud2" type="bool" value="true"/>
     <property name="music" value="music3"/>
     <property name="teleportTo" type="int" value="4"/>
@@ -431,7 +433,11 @@
     <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="no"/>
    </properties>
   </object>
-  <object id="121" name="plataf1" gid="265" x="16" y="168" width="16" height="16"/>
+  <object id="121" name="plataf1" gid="265" x="16" y="168" width="16" height="16">
+   <properties>
+    <property name="color" type="int" value="4"/>
+   </properties>
+  </object>
   <object id="122" x="16" y="272">
    <properties>
     <property name="enemy" type="object" value="121"/>
@@ -477,6 +483,7 @@
   </object>
   <object id="139" name="enemyPuntos" type="enemy" gid="283" x="392" y="256" width="16" height="16">
    <properties>
+    <property name="color" type="int" value="6"/>
     <property name="life" type="int" value="3"/>
     <property name="mode" propertytype="enemyMovement" value="anticlockwise"/>
    </properties>
@@ -549,6 +556,7 @@
   </object>
   <object id="156" gid="281" x="384" y="216" width="16" height="16">
    <properties>
+    <property name="color" type="int" value="2"/>
     <property name="mode" value="alert"/>
     <property name="speed" type="int" propertytype="enemySpeed" value="1"/>
    </properties>

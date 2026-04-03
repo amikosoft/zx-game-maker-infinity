@@ -364,9 +364,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-esta-version-5" class="md-nav__link">
+  <a href="#nuevo-en-version-510" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en esta versión 5
+      Nuevo en versión 5.1.0
     </span>
   </a>
   
@@ -657,9 +657,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-esta-version-5" class="md-nav__link">
+  <a href="#nuevo-en-version-510" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en esta versión 5
+      Nuevo en versión 5.1.0
     </span>
   </a>
   
@@ -702,7 +702,12 @@
 <h1 id="zxgm-infinity-5">ZXGM Infinity 5</h1>
 <p>Manual para configurar las características de Infinity</p>
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
-<h2 id="nuevo-en-esta-version-5">Nuevo en esta versión 5</h2>
+<h2 id="nuevo-en-version-510">Nuevo en versión 5.1.0</h2>
+<ul>
+<li>Ahora se puede configurar un color para el jugador así como para cada uno de los enemigos independientemente</li>
+<li>Optimización de código/memoria (en todas las versiones)</li>
+</ul>
+<h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
 <ul>
 <li>Se ha dejado de dar soporte a ZX Spectrum 48K con el fin de mejorar el rendimiento y poder implementar nuevas características</li>
 <li>El número de tiles ha subido a 512 (255 tiles de color y 255 para modo oscuro)</li>
@@ -719,9 +724,6 @@
 <li>Los tiles animados ocultables van alternos entre los pares y los impares</li>
 <li>Sprites para balas se queda en 2 ficheros: bullet.zxp (boomerang o animadas) y bullet_overhead.zxp (no animadas)</li>
 <li>Mapa del juego in-game</li>
-</ul>
-<h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
-<ul>
 <li>Más movimientos de enemigos disponibles y configurables</li>
 <li>Nuevo modo de juego por niveles</li>
 <li>Los enemigos tienen la habilidad de disparar (con múltiples configuraciones)</li>
@@ -741,36 +743,18 @@
 <li>Se permite saltar en los enemigos sin matarlos</li>
 <li>Posibilidad de indicar que los enemigos colisiones con el escenario</li>
 <li>Los enemigos pueden reaparecer en la pantalla</li>
-<li>
-<p>Se puede indicar que los enemigos se ralenticen en lugar de morir</p>
-</li>
-<li>
-<p>Selección de modo gráfico</p>
-</li>
+<li>Se puede indicar que los enemigos se ralenticen en lugar de morir</li>
+<li>Selección de modo gráfico</li>
 <li>Enemigos trampa</li>
 <li>Escaleras diagonales (de momento los 2 primeros tiles traspasables)</li>
 <li>Selección de número de tiles traspasables</li>
-<li>
-<p>Configuración de propiedades por pantalla</p>
-</li>
-<li>
-<p>Trampolines</p>
-</li>
+<li>Configuración de propiedades por pantalla</li>
+<li>Trampolines</li>
 <li>Cintas automáticas</li>
 <li>Tile pegamento</li>
 <li>Pasmo ya no es requerido para generar Fx</li>
-<li>
-<p>Se ha corregido el bug por el cual al poner un tile rompible en los bordes de la pantalla a veces no se rompía</p>
-</li>
-<li>
-<p>Corrección de bugs</p>
-</li>
-<li>
-<p>Optimización de código/memoria (en todas las versiones)</p>
-</li>
-<li>
-<p>Botón de pausa y botón de salir del juego</p>
-</li>
+<li>Se ha corregido el bug por el cual al poner un tile rompible en los bordes de la pantalla a veces no se rompía</li>
+<li>Botón de pausa y botón de salir del juego</li>
 <li>Botón para activar/desactivar la música</li>
 <li>Modos de funcionamiento para tile pegamento</li>
 <li>Velocidad configurable para cintas automáticas</li>
@@ -873,6 +857,10 @@ Con el parámetro **graphicsModeUnshifted** indicas al motor cómo debe tratar l
 
 Es el developer el que debe valorar activar/desactivar esta opción en función de sus necesidades
 
+### Configuración del módo de sprites con colores
+
+Activa **graphicsSpritesColors** para activar los colores en los sprites. Por defecto está desactivado. Si se activa, se puede configurar el color de los sprites en los atributos del mapa.
+
 ### Opciones genéricas
 
 * **bright** valor numérico para indicar si se quiere la combinación de colores (ink, paper y background) con brillo
@@ -935,6 +923,10 @@ Hay que tener en cuenta que ahora los 2 primeros tiles (de momento) se usarán p
 
 * **playerReadyConfirmation** permite al desarrollador usar la parte que no visible de la imagen del HUD (hud.scr) como mensaje de inicio de nueva vida entre muertes (requiere modo graveyard de vidas). Lo que hace es esperar antes de empezar tras morir a que el usuario pulse disparo o enter (según configures *adventureTextsAcceptWithFire*).
 En esa pantalla puedes meter información adicional como ayuda contextual, un mensaje de ánimo, etc etc... muy útil si quieres meter una pausa entre muertes para el player.
+
+* **playerColor** permite dar un color al sprite del jugador. Por defecto es el color marcado en background. Puedes usar cualquier color del Spectrum.
+
+NOTA: Para activar los colores de sprites debes tener activado **graphicsSpritesColors** en la configuración general del mapa.
 
 * **fullChangeScreenAnimation** con esta opción cambias el modo en el que se repintan las nuevas pantallas. 
 *Desactivado* pintará el cambio de pantalla sobre la pantalla anterior haciéndo más rápido el cambio y parece una transición
@@ -1207,7 +1199,11 @@ Puedes establecer la velocidad del enemigo, para ello solo tienes que añadir en
 
 ![](images/enemyspeed.png)
 
+### Color
 
+Con el atributo **color** puedes dar un color a los enemigos. Por defecto es el color marcado en background. Puedes usar cualquier color del Spectrum.
+
+NOTA: Para activar los colores de sprites debes tener activado **graphicsSpritesColors** en la configuración general del mapa.
 
 # Configura tu aventura
 

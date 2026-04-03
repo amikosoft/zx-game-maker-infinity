@@ -287,9 +287,18 @@ sub damageEnemy(enemyToKill as Ubyte)
                         End if
                     #endif
                 End if
-                Draw2x2Sprite(BURST_SPRITE_ID, eneX << 1, eneY << 1)
+
+                #ifdef SPRITES_COLOR_ENABLED
+                    drawSpriteWithColor(BURST_SPRITE_ID, eneX << 1, eneY << 1, 2)
+                #else
+                    Draw2x2Sprite(BURST_SPRITE_ID, eneX << 1, eneY << 1)
+                #endif
             #else
-                Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
+                #ifdef SPRITES_COLOR_ENABLED
+                    drawSpriteWithColor(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN), 2)
+                #else
+                    Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
+                #endif
             #endif
             
             ' si ambos estan definidos

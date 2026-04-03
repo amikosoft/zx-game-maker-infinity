@@ -219,6 +219,10 @@ enemiesShootOnlyLookingPlayer = False
 enemiesSound = False
 enemiesTrapShowWhileStatic = False
 
+graphicsSpriteColors = False
+playerColor = 0
+enemiesColor = False
+
 bulletAnimation = 0
 bulletsCollisionWithBullets = False
 messagesEnabled = 0
@@ -507,6 +511,10 @@ if 'properties' in data:
             gameMapIfNoImage = property['value']
         elif property['name'] == 'gameMapOnlyVisited':
             gameMapOnlyVisited = property['value']
+        elif property['name'] == 'playerColor':
+            playerColor = property['value']
+        elif property['name'] == 'graphicsSpriteColors':
+            graphicsSpriteColors = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -1142,7 +1150,8 @@ for layer in data['layers']:
                     'life': '1',
                     'speed': '3',
                     'mode': '0',
-                    'trapContinousMode': 'no'
+                    'trapContinousMode': 'no',
+                    'color': str(backgroundAttribute)
                 }
 
                 print(objects[str(object['id'])])
@@ -1162,6 +1171,9 @@ for layer in data['layers']:
                                 objects[str(object['id'])]['speed'] = str(property['value'] + 1)
                         elif property['name'] == 'trapContinousMode':
                             objects[str(object['id'])]['trapContinousMode'] = str(property['value'])
+                        elif property['name'] == 'color':
+                            objects[str(object['id'])]['color'] = str(property['value'])
+                            enemiesColor = True
                         elif property['name'] == 'mode':
                             if property['value'] == 'alert':
                                 objects[str(object['id'])]['mode'] = '1'
@@ -1192,7 +1204,21 @@ for layer in data['layers']:
                                 objects[str(object['id'])]['mode'] = '12'
                                 enemiesTrap = 1
                                 enemiesTrapHorizontal = 1
-                            
+
+if graphicsSpriteColors:
+    configStr += "#DEFINE SPRITES_COLOR_ENABLED\n"
+
+    if enemiesColor:
+        configStr += "#DEFINE ENEMIES_COLOR_ENABLED\n"
+
+    if playerColor != 0:
+        configStr += "#DEFINE PLAYER_COLOR_ENABLED\n"
+        configStr += "const PLAYER_COLOR as ubyte = " + str(playerColor) + "\n"
+    else:
+        configStr += "const PLAYER_COLOR as ubyte = " + str(backgroundAttribute) + "\n" 
+else:
+    configStr += "const PLAYER_COLOR as ubyte = " + str(backgroundAttribute) + "\n"
+
 if enemiesPursuit == 1:
     configStr += "#DEFINE ENEMIES_PURSUIT_ENABLED\n"
     if enemiesPursuitCollide == True:
@@ -1580,6 +1606,10 @@ configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(int(initialMainC
 
 configStr += "\n\n"
 
+if enemiesColor:
+    configStr += "const ENEMIES_ATTRIBUTES_TOTAL as ubyte =  12\n"
+else:
+    configStr += "const ENEMIES_ATTRIBUTES_TOTAL as ubyte =  11\n"
 enemiesArray = []
 
 for layer in data['layers']:
@@ -1653,7 +1683,10 @@ for layer in data['layers']:
                         arrayBuffer.append(int(enemy['life']))
                         arrayBuffer.append(int(enemy['mode']))
                         arrayBuffer.append(int(verticalDirection))                  
-                        arrayBuffer.append(int(enemy['speed']))                  
+                        arrayBuffer.append(int(enemy['speed']))
+
+                        if enemiesColor:
+                            arrayBuffer.append(int(enemy['color']))
                     else:
                         arrayBuffer.append(0)
                         arrayBuffer.append(0)
@@ -1667,6 +1700,8 @@ for layer in data['layers']:
                         arrayBuffer.append(0)
                         arrayBuffer.append(0) 
                         arrayBuffer.append(0)
+                        if enemiesColor:
+                            arrayBuffer.append(0)
             else:
                 for i in range(maxEnemiesPerScreen):
                     arrayBuffer.append(0)
@@ -1681,6 +1716,8 @@ for layer in data['layers']:
                     arrayBuffer.append(1)
                     arrayBuffer.append(0)
                     arrayBuffer.append(0)
+                    if enemiesColor:
+                        arrayBuffer.append(0)
                 enemiesPerScreen.append(0)
             enemiesArray.append(array.array('b', arrayBuffer))
 

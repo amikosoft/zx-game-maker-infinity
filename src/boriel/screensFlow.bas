@@ -409,7 +409,11 @@ Sub playGame()
         If moveScreen Then
             moveToScreen(moveScreen)
         else
-            moveEnemies()
+            #ifdef ENERGY_ENABLED
+                if currentEnergy then moveEnemies()
+            #else
+                moveEnemies()
+            #endif
 
             #ifdef SHOOTING_ENABLED
                 moveBullet()
@@ -543,7 +547,7 @@ Sub swapScreen(waitReady as ubyte)
         #ifdef SCREEN_BACKGROUND_ENABLED
             currentScreenBackground = screenAttributes(currentScreen, SCREEN_BACKGROUND)
         #else
-            currentScreenBackground = 0
+            currentScreenBackground = BACKGROUND_ATTRIBUTE
         #endif
 
         #ifdef SCREEN_TILE_ENABLED
@@ -671,13 +675,13 @@ Sub swapScreen(waitReady as ubyte)
     call CLEAR_SCREEN
     end asm
 
-    #ifdef FULL_SCREEN_CHANGE_ANIMATION
-        #ifdef SCREEN_ATTRIBUTES
-            FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
-        #else
-            FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
-        #endif
-    #endif
+    ' #ifdef FULL_SCREEN_CHANGE_ANIMATION
+    '     #ifdef SCREEN_ATTRIBUTES
+    '         FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+    '     #else
+    '         FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+    '     #endif
+    ' #endif
 
     mapDraw(0)    
 End Sub

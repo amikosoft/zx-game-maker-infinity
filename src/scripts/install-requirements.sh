@@ -29,24 +29,24 @@ if [ -z "$VIRTUAL_ENV" ]; then
     source venv/bin/activate
 fi
 
-requirementsFile="./requeriments.txt"
+requirementsFile="./requirements.txt"
 
-# Comprobar si el archivo requeriments.txt existe
+# Comprobar si el archivo requirements.txt existe
 if [ ! -f "$requirementsFile" ]; then
-    echo "No se encontró el archivo requeriments.txt"
+    echo "No se encontró el archivo requirements.txt"
     read -p "Pulse una tecla para cerrar..."
     exit 1
 fi
 
-# Leer las dependencias de requeriments.txt
-requeriments=$(cat "$requirementsFile")
+# Leer las dependencias de requirements.txt
+requirements=$(cat "$requirementsFile")
 
 # Obtener las dependencias instaladas
 installed_packages=$(pip freeze)
 
 # Comprobar si todas las dependencias están instaladas
 all_installed=true
-for requirement in $requeriments; do
+for requirement in $requirements; do
     requirement_name=$(echo $requirement | sed 's/==.*//')
     if ! echo "$installed_packages" | grep -iq "$requirement_name"; then
         echo "Falta instalar: $requirement_name"

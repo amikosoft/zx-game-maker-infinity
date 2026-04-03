@@ -68,6 +68,10 @@ Sub moveEnemies()
         isOnPlatform = 0
     #endif
 
+    #ifdef SPRITES_COLOR_ENABLED
+        Dim colorBucle as ubyte = currentScreenBackground
+    #endif 
+
     enemiesFrame = enemiesFrame + 1
     if enemiesFrame > 9 Then enemiesFrame = 1
     
@@ -111,6 +115,12 @@ Sub moveEnemies()
             enemyColIniBucle = decompressedEnemiesScreen(enemyId, ENEMY_COL_INI)
             enemyLinIniBucle = decompressedEnemiesScreen(enemyId, ENEMY_LIN_INI)
             enemySpeedBucle = decompressedEnemiesScreen(enemyId, ENEMY_SPEED)
+
+            #ifdef SPRITES_COLOR_ENABLED
+                #ifdef ENEMIES_COLOR_ENABLED
+                    if decompressedEnemiesScreen(enemyId, ENEMY_COLOR) then colorBucle = decompressedEnemiesScreen(enemyId, ENEMY_COLOR)
+                #endif
+            #endif
 
             #ifdef ENEMIES_SLOW_DOWN
                 if enemyLiveBucle > -100 and enemyLiveBucle < 0 then
@@ -410,17 +420,30 @@ Sub moveEnemies()
             If enemyLiveBucle = -100 or enemyLiveBucle > 0 Then
                 #ifdef BULLET_ENEMIES
                     #ifndef BULLET_ENEMIES_MUST_LOOK
-                        if tileBucle < 17 then Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
+                        ' if tileBucle < 17 then Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                         #ifndef BULLET_ENEMIES_LOOK_AT
+                            #ifdef SPRITES_COLOR_ENABLED
+                                drawSpriteWithColor(tileBucle, enemyColBucle, enemyLinBucle, colorBucle)
+                            #else
+                                Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
+                            #endif
+                        ' #Else
+                        '     if tileBucle < 17 then drawSpriteWithColor(tileBucle, enemyColBucle, enemyLinBucle, 6)
+                        #endif
+                    #else
+                        #ifdef SPRITES_COLOR_ENABLED
+                            drawSpriteWithColor(tileBucle, enemyColBucle, enemyLinBucle, colorBucle)
+                        #else
                             Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                         #endif
+                    #endif
+                #Else
+                    #ifdef SPRITES_COLOR_ENABLED
+                        drawSpriteWithColor(tileBucle, enemyColBucle, enemyLinBucle, colorBucle)
                     #else
                         Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                     #endif
-                #Else
-                    Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                 #endif
-                
                 
                 if tileBucle > 16 and Not invincible Then
                     checkProtaCollision(enemyId, enemyColBucle, enemyLinBucle, enemyLiveBucle)
@@ -444,7 +467,11 @@ Sub moveEnemies()
                                         End if
                                         
                                         #ifdef BULLET_ENEMIES_LOOK_AT
-                                            Draw2x2Sprite(lookDirection, enemyColBucle, enemyLinBucle)
+                                            #ifdef SPRITES_COLOR_ENABLED
+                                                drawSpriteWithColor(lookDirection, enemyColBucle, enemyLinBucle, colorBucle)
+                                            #else
+                                                Draw2x2Sprite(lookDirection, enemyColBucle, enemyLinBucle)
+                                            #endif
                                         #endif
                                         
                                         continue for
@@ -463,7 +490,11 @@ Sub moveEnemies()
                                 if enemyColBucle > (protaX-2) and enemyColBucle < (protaX+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
                                         #ifdef BULLET_ENEMIES_LOOK_AT
-                                            Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
+                                            #ifdef SPRITES_COLOR_ENABLED
+                                                drawSpriteWithColor(tileBucle, enemyColBucle, enemyLinBucle, colorBucle)
+                                            #else
+                                                Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
+                                            #endif
                                         #endif
                                     #endif
                                     
@@ -493,18 +524,22 @@ Sub moveEnemies()
                 #ifdef BULLET_ENEMIES
                     #ifndef BULLET_ENEMIES_MUST_LOOK
                         #ifdef BULLET_ENEMIES_LOOK_AT
-                            Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
+                            #ifdef SPRITES_COLOR_ENABLED
+                                drawSpriteWithColor(tileBucle, enemyColBucle, enemyLinBucle, colorBucle)
+                            #else
+                                Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
+                            #endif
                         #endif
                     #endif
                 #endif
             Else
-                ' #ifdef ENEMIES_SLOW_DOWN
-                '     Draw2x2Sprite(tile, enemyColBucle, enemyLin)
-                ' #else
-                    #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+                #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+                    #ifdef SPRITES_COLOR_ENABLED
+                        if enemyLiveBucle > -30 and enemiesFrame bAnd 1 Then drawSpriteWithColor(tileBucle, enemyColBucle, enemyLinBucle, colorBucle)
+                    #else
                         if enemyLiveBucle > -30 and enemiesFrame bAnd 1 Then Draw2x2Sprite(tileBucle, enemyColBucle, enemyLinBucle)
                     #endif
-                ' #endif
+                #endif
             End if
         Next enemyId
 

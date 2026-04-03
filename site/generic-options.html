@@ -598,6 +598,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#configuracion-del-modo-de-sprites-con-colores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración del módo de sprites con colores
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#opciones-genericas" class="md-nav__link">
     <span class="md-ellipsis">
       Opciones genéricas
@@ -1045,6 +1054,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#configuracion-del-modo-de-sprites-con-colores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración del módo de sprites con colores
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#opciones-genericas" class="md-nav__link">
     <span class="md-ellipsis">
       Opciones genéricas
@@ -1167,6 +1185,8 @@
 <li><em>Activado</em> ganarás mucho más espacio para activar funcionalidades pero bajando el rendimiento en el renderizado.</li>
 </ul>
 <p>Es el developer el que debe valorar activar/desactivar esta opción en función de sus necesidades</p>
+<h3 id="configuracion-del-modo-de-sprites-con-colores">Configuración del módo de sprites con colores</h3>
+<p>Activa <strong>graphicsSpritesColors</strong> para activar los colores en los sprites. Por defecto está desactivado. Si se activa, se puede configurar el color de los sprites en los atributos del mapa.</p>
 <h3 id="opciones-genericas">Opciones genéricas</h3>
 <ul>
 <li>
@@ -1241,6 +1261,12 @@
 <p><strong>playerReadyConfirmation</strong> permite al desarrollador usar la parte que no visible de la imagen del HUD (hud.scr) como mensaje de inicio de nueva vida entre muertes (requiere modo graveyard de vidas). Lo que hace es esperar antes de empezar tras morir a que el usuario pulse disparo o enter (según configures <em>adventureTextsAcceptWithFire</em>).
 En esa pantalla puedes meter información adicional como ayuda contextual, un mensaje de ánimo, etc etc... muy útil si quieres meter una pausa entre muertes para el player.</p>
 </li>
+<li>
+<p><strong>playerColor</strong> permite dar un color al sprite del jugador. Por defecto es el color marcado en background. Puedes usar cualquier color del Spectrum.</p>
+</li>
+</ul>
+<p>NOTA: Para activar los colores de sprites debes tener activado <strong>graphicsSpritesColors</strong> en la configuración general del mapa.</p>
+<ul>
 <li>
 <p><strong>fullChangeScreenAnimation</strong> con esta opción cambias el modo en el que se repintan las nuevas pantallas. 
 <em>Desactivado</em> pintará el cambio de pantalla sobre la pantalla anterior haciéndo más rápido el cambio y parece una transición

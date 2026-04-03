@@ -428,7 +428,8 @@ End Sub
             '     FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
                 loadScreen(ADVENTURETEXTS_SCREEN_ADDRESS)
             #else
-                FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+                'FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+                CleanWithTile(0, BACKGROUND_ATTRIBUTE)
             #endif
             
             SetTile(tile, attrSet(tile), 16, 4)
@@ -447,10 +448,17 @@ End Sub
                     if fila = 0 Then Print AT 5, 9 + letra; " "
                 #endif
 
-                Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
-
                 #ifdef ADVENTURE_TEXTS_SOUND
-                    PAUSE 2: BEEP .01, 8
+                    dim nextChar as ubyte = textToDisplay(textId, (fila*15)+letra)
+                    
+                    if nextChar <> 32 then 
+                        ' PAUSE 2: 
+                        BEEP .05, 8
+
+                        Print AT 6+fila, 9 + letra; Chr$(nextChar)
+                    end if
+                #Else
+                    Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
                 #endif
             Next letra
             SetBank(gameBank)
@@ -757,18 +765,6 @@ Function checkTileObject(tile As Ubyte, oneUse as ubyte) As Ubyte
 End Function
 
 Sub checkObjectContact(oneUse as ubyte)
-    ' for cc=(protaCol-1) to (protaCol+2)
-    '     for lc=(protaLin-1) to (protaLin+2)
-    '         if not GetTile(cc, lc) then
-    '             if cc > (protaCol-1) and cc < (protaCol+2) and lc > (protaLin-1)  and lc < (protaLin+2) then
-    '                 SetTileColor(cc, lc, 5)
-    '             else
-    '                 SetTileColor(cc, lc, currentScreenBackground)
-    '             end if
-    '         end if
-    '     next lc
-    ' next cc
-
     for c=protaCol to (protaCol+1)
         for l=protaLin to (protaLin+1)
             If isADamageTile(c, l) Then decrementLife()

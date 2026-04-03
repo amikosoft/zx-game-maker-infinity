@@ -35,7 +35,7 @@ $scriptRoot = $PSScriptRoot
 if ([string]::IsNullOrEmpty($scriptRoot)) { $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition }
 $parentDir = Split-Path $scriptRoot -Parent
 $venvPath = Join-Path $parentDir "venv"
-$buildFile = Join-Path $parentDir "build.py"
+$requirementsFile = Join-Path $parentDir "requirements.txt"
 
 # Venv Management
 if (-not (Test-Path $venvPath)) {
@@ -45,36 +45,42 @@ if (-not (Test-Path $venvPath)) {
 
 # Venv Activation (Must dot-source to affect current session)
 if (-not $env:VIRTUAL_ENV) {
-    # Detect venv activation script (Windows vs. Linux/macOS)
     $activateScript = Join-Path $venvPath "Scripts\Activate.ps1"
-    if (-not (Test-Path $activateScript)) {
-        $activateScript = Join-Path $venvPath "bin\Activate.ps1"
-    }
-
     if (Test-Path $activateScript) {
         Write-Host "Activando entorno virtual venv..." -ForegroundColor Yellow
+        # Try to dot-source. If it fails due to execution policy, warn the user.
         try {
             . $activateScript
         } catch {
-            Write-Warning "No se pudo activar el entorno virtual automáticamente."
+            Write-Warning "No se pudo activar el entorno virtual automáticamente. Es posible que necesites ejecutar: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
         }
     }
 }
 
-# Check build.py
-if (-not (Test-Path $buildFile)) {
-    Write-Host "No se encontró el archivo build.py en $buildFile" -ForegroundColor Red
+# Check requirements
+if (-not (Test-Path $requirementsFile)) {
+    Write-Host "No se encontró el archivo requirements.txt en $requirementsFile" -ForegroundColor Red
     Read-Host "Pulse una tecla para cerrar..."
     exit 1
 }
 
-Write-Host "Compilando juego..." -ForegroundColor Cyan
-& $pythonExe $buildFile $args
+Write-Host "Comprobando dependencias..." -ForegroundColor Cyan
+$requirements = Get-Content $requirementsFile | Where-Object { $_ -match '\S' -and $_ -notmatch '^#' }
+$installed_packages = & pip freeze
+$installed_package_names = $installed_packages -replace '[=<>!].*', ''
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Error durante la compilación." -ForegroundColor Red
-} else {
-    Write-Host "Compilación finalizada con éxito." -ForegroundColor Green
+$all_installed = $true
+foreach ($requirement in $requirements) {
+    $reqName = ($requirement -replace '[=<>!].*', '').Trim()
+    if ($null -ne $reqName -and $reqName -ne "" -and -not ($installed_package_names -contains $reqName)) {
+        Write-Host "Falta: $reqName" -ForegroundColor Yellow
+        $all_installed = $false
+    }
 }
 
-Read-Host "Pulse una tecla para cerrar..."
+if (-not $all_installed) {
+    Write-Host "Instalando requerimientos..." -ForegroundColor Yellow
+    & pip install -r $requirementsFile
+} else {
+    Write-Host "Todos los requerimientos ya están instalados." -ForegroundColor Green
+}

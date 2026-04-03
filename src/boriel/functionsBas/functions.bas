@@ -212,14 +212,8 @@ function allEnemiesKilled() as ubyte
     return 1
 end function
 
-Function tileAttrWithBackground(tile As Ubyte) As Ubyte
-    #ifdef SCREEN_DARK_ENABLED
-        Dim attr As Ubyte = tileAttrSet(tile)
-    #Else
-        Dim attr As Ubyte = attrSet(tile)
-    #endif
-    
-    #ifdef SCREEN_ATTRIBUTES
+Function attrWithBackground(attr As Ubyte) As Ubyte
+     #ifdef SCREEN_ATTRIBUTES
         Dim backgroundAttr as ubyte = currentScreenBackground
     #else
         Dim backgroundAttr as ubyte = BACKGROUND_ATTRIBUTE
@@ -236,6 +230,14 @@ Function tileAttrWithBackground(tile As Ubyte) As Ubyte
     if ((attr bAnd 56) / 8) or not papelBack Then return attr
 
     Return (papelBack * 8) + (attr bAnd 7) + (((backgroundAttr bAnd 64) / 64) * 64) + (((attr bAnd 128) / 128) * 128)
+End Function
+
+Function tileAttrWithBackground(tile As Ubyte) As Ubyte
+    #ifdef SCREEN_DARK_ENABLED
+        return attrWithBackground(tileAttrSet(tile))
+    #Else
+        return attrWithBackground(attrSet(tile))
+    #endif
 End Function
 
 function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte

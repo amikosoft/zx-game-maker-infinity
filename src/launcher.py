@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 
-version = "5.0.0"
+version = "5.1.0"
 
 def printBanner():
     output_text.insert(tk.END, f"\n")
@@ -71,9 +71,9 @@ def install_requirements():
         script_name = ""
 
         if current_os == "Windows":
-            script_name = "install-requeriments.ps1"
+            script_name = "install-requirements.ps1"
         elif current_os in ["Linux", "Darwin"]:  # Linux o macOS
-            script_name = "install-requeriments.sh"
+            script_name = "install-requirements.sh"
         else:
             print(f"Sistema operativo no soportado: {current_os}")
             sys.exit(1)
@@ -469,7 +469,6 @@ build_menu.add_command(label="Build", command=lambda: run_script("make-game"))
 build_menu.add_command(label="Build (verbose)", command=lambda: run_script("make-game", ["--verbose"]))
 build_menu.add_separator()
 build_menu.add_command(label="Build Tiles+Sprites", command=lambda: run_script("make-graphics"))
-# build_menu.add_command(label="Build FX", command=lambda: run_script("make-fx"))
 build_menu.add_command(label="Build FX", command=lambda: fxBuild())
 
 menu_bar.add_cascade(label="-= Game =-", menu=build_menu)

@@ -1,3 +1,16 @@
+sub CleanWithTile(TileIndex as uByte, Attribute as uByte)
+
+    ' Dim tmpX as uByte
+    ' Dim tmpY as uByte
+
+    for tmpX = SKIP_WIDTH_SIZE to SKIP_WIDTH_SIZE + screenWidth - 1
+        for tmpY = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
+            SetTile(TileIndex, Attribute, tmpX, tmpY)
+        next tmpY
+    next tmpX
+
+end sub
+
 Sub mapDraw(withHud as ubyte)
     'Ink INK_VALUE: Paper PAPER_VALUE: BRIGHT BRIGHT_VALUE: FLASH 0
     if withHud Then
@@ -14,6 +27,26 @@ Sub mapDraw(withHud as ubyte)
     else
         SetTileset(@tileSet(0,0))
     end if
+
+    #ifdef FULL_SCREEN_CHANGE_ANIMATION
+        #ifdef SCREEN_ATTRIBUTES
+            #ifdef PLAYER_COLOR_ENABLED
+                'FillWithTile(currentTileBackground, screenWidth, screenHeight, attrWithBackground(PLAYER_COLOR), SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+                CleanWithTile(currentTileBackground, attrWithBackground(PLAYER_COLOR))
+            #else
+                'FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+                CleanWithTile(currentTileBackground, currentScreenBackground)
+            #endif
+        #else
+            #ifdef PLAYER_COLOR_ENABLED
+                'FillWithTile(0, screenWidth, screenHeight, attrWithBackground(PLAYER_COLOR), SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+                CleanWithTile(0, attrWithBackground(PLAYER_COLOR))
+            #else
+                'FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
+                CleanWithTile(0, BACKGROUND_ATTRIBUTE)
+            #endif
+        #endif
+    #endif
 
     Dim index As Uinteger = 0
     
@@ -150,10 +183,20 @@ End Sub
 
 Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
     'Revisar draws de vacío innecesarios
-    #ifdef SCREEN_ATTRIBUTES
-        SetTile(currentTileBackground, currentScreenBackground, x, y)
-    #else
-        SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+    #ifndef FULL_SCREEN_CHANGE_ANIMATION
+        #ifdef SCREEN_ATTRIBUTES
+            #ifdef PLAYER_COLOR_ENABLED
+                SetTile(currentTileBackground, attrWithBackground(PLAYER_COLOR), x, y)
+            #else
+                SetTile(currentTileBackground, currentScreenBackground, x, y)
+            #endif
+        #else
+            #ifdef PLAYER_COLOR_ENABLED
+                SetTile(0, attrWithBackground(PLAYER_COLOR), x, y)
+            #else
+                SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+            #endif
+        #endif
     #endif
     
     If not tile Then Return
@@ -281,28 +324,14 @@ Sub moveToScreen(direction As Ubyte)
     moveScreen = 0
 End Sub
 
-Sub drawSprites()
-    If protaY < MAX_SCREEN_BOTTOM_PRINT Then
-        #ifdef LIVES_MODE_GRAVEYARD
-            #ifdef ENERGY_ENABLED
-                If not currentEnergy or Not invincible Or invincible bAnd 2 Then
-                    Draw2x2Sprite(protaTile, protaX, protaY)
-                End If
-            #else
-                Draw2x2Sprite(protaTile, protaX, protaY)
-            #endif
-        #else
-            If not currentLife or Not invincible Or (invincible bAnd 2) Then
-                Draw2x2Sprite(protaTile, protaX, protaY)
-            End If
-        #endif
-    End If
-    
-    #ifdef SHOOTING_ENABLED
-        If bulletPositionX <> 0 Then
-            Draw1x1Sprite(currentBulletSpriteId, bulletPositionX, bulletPositionY)
-        End If
-    #endif
-    
-    RenderFrame()
-End Sub
+Sub drawSpriteWithColor(spriteId as ubyte, spriteX as ubyte, spriteY as ubyte, color as ubyte)
+    dim spriteCol as ubyte = spriteX >> 1
+    dim spriteLin as ubyte = spriteY >> 1
+    for cc=spriteCol to (spriteCol+1)
+        for lc=spriteLin to (spriteLin+1)
+            if not GetTile(cc, lc) then SetTileColor(cc, lc, attrWithBackground(color))
+        next lc
+    next cc
+
+    Draw2x2Sprite(spriteId, spriteX, spriteY)
+end sub
