@@ -118,7 +118,9 @@ Sub moveEnemies()
 
             #ifdef SPRITES_COLOR_ENABLED
                 #ifdef ENEMIES_COLOR_ENABLED
-                    if decompressedEnemiesScreen(enemyId, ENEMY_COLOR) then colorBucle = decompressedEnemiesScreen(enemyId, ENEMY_COLOR)
+                    if decompressedEnemiesScreen(enemyId, ENEMY_COLOR) then 
+                        colorBucle = decompressedEnemiesScreen(enemyId, ENEMY_COLOR)
+                    end if
                 #endif
             #endif
 
@@ -449,7 +451,8 @@ Sub moveEnemies()
                     checkProtaCollision(enemyId, enemyColBucle, enemyLinBucle, enemyLiveBucle)
                     
                     #ifdef BULLET_ENEMIES
-                        if not enemyBullets(enemyId, 0) and (tileBucle mod 17) < BULLET_ENEMIES_RANGE then
+                        ' if not enemyBullets(enemyId, 0) and (tileBucle mod 17) < BULLET_ENEMIES_RANGE then
+                        if not enemyBullets(enemyId, 0) and decompressedEnemiesScreen(enemyId, ENEMY_SHOOT) then
                             #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
                                 if enemyLinBucle > (protaY-2) and enemyLinBucle < (protaY+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK

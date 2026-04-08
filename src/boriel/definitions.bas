@@ -297,7 +297,8 @@ Const ENEMY_ALIVE As Ubyte = 8
 Const ENEMY_MODE As Ubyte = 9
 Const ENEMY_VERTICAL_DIRECTION As Ubyte = 10
 Const ENEMY_SPEED As Ubyte = 11
-Const ENEMY_COLOR As Ubyte = 12
+' Const ENEMY_COLOR As Ubyte = 12
+' Const ENEMY_SHOOT As Ubyte = 13
 
 Const ENEMY_MODE_NORMAL = 0
 Const ENEMY_MODE_ALERT = 1

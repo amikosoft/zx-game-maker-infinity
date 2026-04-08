@@ -982,7 +982,7 @@ if enemiesSound:
 
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"
-    configStr += "const BULLET_ENEMIES_RANGE as ubyte = " + str((enemiesShoot*2)) + "\n"
+    # configStr += "const BULLET_ENEMIES_RANGE as ubyte = " + str((enemiesShoot*2)) + "\n"
     configStr += "const BULLET_ENEMIES_SPEED as ubyte = " + str(enemiesShootSpeed) + "\n"
     
     if enemiesShootingLookAtPlayer == True:
@@ -1151,7 +1151,8 @@ for layer in data['layers']:
                     'speed': '3',
                     'mode': '0',
                     'trapContinousMode': 'no',
-                    'color': str(backgroundAttribute)
+                    'color': str(backgroundAttribute),
+                    'shoot': '0'
                 }
 
                 print(objects[str(object['id'])])
@@ -1174,6 +1175,9 @@ for layer in data['layers']:
                         elif property['name'] == 'color':
                             objects[str(object['id'])]['color'] = str(property['value'])
                             enemiesColor = True
+                        elif property['name'] == 'shoot':
+                            if property['value']:
+                                objects[str(object['id'])]['shoot'] = '1'
                         elif property['name'] == 'mode':
                             if property['value'] == 'alert':
                                 objects[str(object['id'])]['mode'] = '1'
@@ -1606,10 +1610,16 @@ configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(int(initialMainC
 
 configStr += "\n\n"
 
+enemiesAttributesTotal = 11
 if enemiesColor:
-    configStr += "const ENEMIES_ATTRIBUTES_TOTAL as ubyte =  12\n"
-else:
-    configStr += "const ENEMIES_ATTRIBUTES_TOTAL as ubyte =  11\n"
+    enemiesAttributesTotal += 1
+    configStr += "const ENEMY_COLOR as ubyte = " + str(enemiesAttributesTotal) + "\n"
+
+if enemiesShoot > 0:
+    enemiesAttributesTotal += 1
+    configStr += "const ENEMY_SHOOT as ubyte = " + str(enemiesAttributesTotal) + "\n"
+
+configStr += "const ENEMIES_ATTRIBUTES_TOTAL as ubyte = " + str(enemiesAttributesTotal) + "\n"
 enemiesArray = []
 
 for layer in data['layers']:
@@ -1687,6 +1697,9 @@ for layer in data['layers']:
 
                         if enemiesColor:
                             arrayBuffer.append(int(enemy['color']))
+
+                        if enemiesShoot > 0:
+                            arrayBuffer.append(int(enemy['shoot']))
                     else:
                         arrayBuffer.append(0)
                         arrayBuffer.append(0)
@@ -1700,8 +1713,12 @@ for layer in data['layers']:
                         arrayBuffer.append(0)
                         arrayBuffer.append(0) 
                         arrayBuffer.append(0)
+                        
                         if enemiesColor:
-                            arrayBuffer.append(0)
+                            arrayBuffer.append(int(enemy['color']))
+
+                        if enemiesShoot > 0:
+                            arrayBuffer.append(int(enemy['shoot']))
             else:
                 for i in range(maxEnemiesPerScreen):
                     arrayBuffer.append(0)
@@ -1716,8 +1733,13 @@ for layer in data['layers']:
                     arrayBuffer.append(1)
                     arrayBuffer.append(0)
                     arrayBuffer.append(0)
+
                     if enemiesColor:
-                        arrayBuffer.append(0)
+                        arrayBuffer.append(int(enemy['color']))
+
+                    if enemiesShoot > 0:
+                        arrayBuffer.append(int(enemy['shoot']))
+
                 enemiesPerScreen.append(0)
             enemiesArray.append(array.array('b', arrayBuffer))
 
@@ -1741,7 +1763,7 @@ with open("output/enemiesPerScreen.bin", "wb") as f:
 
 with open("output/decompressedEnemiesScreen.bin", "wb") as f:
     for i in range(maxEnemiesPerScreen):
-        f.write(bytearray([0] * 12))
+        f.write(bytearray([0] * enemiesAttributesTotal))
 
 with open(outputDir + "config.bas", "w") as text_file:
     print(configStr, file=text_file)

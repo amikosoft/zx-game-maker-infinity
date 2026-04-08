@@ -56,7 +56,7 @@
   <property name="glueTileEnabled" type="bool" value="true"/>
   <property name="goalItems" type="int" value="4"/>
   <property name="graphicsModeUnshifted" type="bool" value="true"/>
-  <property name="graphicsSpriteColors" type="bool" value="false"/>
+  <property name="graphicsSpriteColors" type="bool" value="true"/>
   <property name="hiScore" type="bool" value="true"/>
   <property name="idleTime" type="int" value="25"/>
   <property name="initialLife" type="int" value="5"/>
@@ -284,7 +284,11 @@
    </properties>
    <point/>
   </object>
-  <object id="17" name="enemy_4" type="enemy" gid="273" x="400" y="88" width="16" height="16"/>
+  <object id="17" name="enemy_4" type="enemy" gid="273" x="400" y="88" width="16" height="16">
+   <properties>
+    <property name="color" type="int" value="5"/>
+   </properties>
+  </object>
   <object id="18" name="enemy_4_end" x="280" y="64">
    <properties>
     <property name="enemy" type="object" value="17"/>
@@ -474,7 +478,12 @@
    </properties>
    <point/>
   </object>
-  <object id="136" name="enemy_4" type="enemy" gid="273" x="280" y="8" width="16" height="16"/>
+  <object id="136" name="enemy_4" type="enemy" gid="273" x="280" y="8" width="16" height="16">
+   <properties>
+    <property name="color" type="int" value="3"/>
+    <property name="shoot" type="bool" value="true"/>
+   </properties>
+  </object>
   <object id="137" name="enemy_4_end" x="416" y="8">
    <properties>
     <property name="enemy" type="object" value="136"/>
@@ -579,7 +588,7 @@
    </properties>
    <point/>
   </object>
-  <object id="160" name="mainCharacter" type="mainCharacter" x="136" y="248">
+  <object id="160" name="mainCharacter" type="mainCharacter" x="256" y="128">
    <point/>
   </object>
   <object id="161" name="trap1" gid="285" x="536" y="40" width="16" height="16">
