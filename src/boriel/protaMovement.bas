@@ -649,7 +649,8 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
             #endif
             #ifdef ARCADE_MODE
                 If currentItems = itemsToFind Then
-                    SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
+                    'SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
+                    SetTileWithBackground(KEY_TILE, currentScreenKeyX, currentScreenKeyY)
                 End If
             #Else
                 #ifndef LEVELS_MODE

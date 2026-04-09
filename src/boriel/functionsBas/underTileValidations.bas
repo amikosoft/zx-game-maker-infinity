@@ -57,8 +57,9 @@
                                 #else
                                     SetTile(0, BACKGROUND_ATTRIBUTE, c, lin)
                                 #endif
-                            else if tileStatus < (FADE_TILE_FRAMES/3) and tileFound = FADE_TILE then
-                                SetTile(FADE_TILE_END, tileAttrWithBackground(FADE_TILE_END), c, lin)
+                            else if tileStatus < (FADE_TILE_FRAMES/2) and tileFound = FADE_TILE then
+                                ' SetTile(FADE_TILE_END, tileAttrWithBackground(FADE_TILE_END), c, lin)
+                                SetTileWithBackground(FADE_TILE_END, c, lin)
                             end if
                             fadeTileStatus(i, 2) = tileStatus
                         end if

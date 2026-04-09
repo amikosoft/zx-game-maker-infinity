@@ -416,6 +416,17 @@ end sub
     end sub
 #endif
 
+Sub SetTileWithBackground(tile as uByte, x as ubyte, y as ubyte)
+    #ifdef SCREEN_ATTRIBUTES
+        SetTile(tile, tileAttrWithBackground(tile), x, y)
+    #else
+        #ifdef SCREEN_DARK_ENABLED
+            SetTile(tile, tileAttrSet(tile), cordX, cordY)
+        #Else
+            SetTile(tile, attrSet(tile), cordX, cordY)
+        #endif
+    #endif
+end sub
 
 sub debugA(value as uBYTE)
     PRINT AT 0, 0; "----"
