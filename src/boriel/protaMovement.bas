@@ -510,8 +510,8 @@ End Sub
             dim cordX as ubyte = textsCoord(texto, 1)
             dim cordY as ubyte = textsCoord(texto, 2)
             
-            If (protaX-1) <= cordX And (protaX+5) >= cordX Then
-                If (protaY-1) <= cordY And (protaY+5) >= cordY Then
+            If (protaX-1) <= cordX And (protaX+4) >= cordX Then
+                If (protaY-1) <= cordY And (protaY+4) >= cordY Then
                     dim tileText as ubyte = GetTile(cordX>>1, cordY>>1)
                     
                     if tileText Then
@@ -625,12 +625,12 @@ Sub keyboardListen()
     #endif
 End Sub
 
-Function checkTileObject(tile As Ubyte, oneUse as ubyte) As Ubyte
+Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
     #ifdef GLUE_TILE_ENABLED
         if tile = GLUE_TERRAIN_TILE then isOnGlue = 1
     #endif
 
-    if oneUse then
+    if withoutFire then
         If tile = ITEM_TILE Then
             #ifdef SHOULD_PICKUP_ITEMS
                 screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
@@ -764,29 +764,29 @@ Function checkTileObject(tile As Ubyte, oneUse as ubyte) As Ubyte
     Return 0
 End Function
 
-Sub checkObjectContact(oneUse as ubyte)
+Sub checkObjectContact(withoutFire as ubyte)
     for c=protaCol to (protaCol+1)
         for l=protaLin to (protaLin+1)
             If isADamageTile(c, l) Then decrementLife()
 
             #ifdef IN_GAME_TEXT_ENABLED
                 dim tile as ubyte = GetTile(c, l)
-                
-                if checkTileObject(tile, oneUse) then
+                    
+                if checkTileObject(tile, withoutFire) then
                     validaTexto(tile)
                     
                     #ifdef SCREEN_ATTRIBUTES
-                        if oneUse then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        if withoutFire then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        if oneUse then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                        if withoutFire then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #else
-                If checkTileObject(GetTile(c, l), oneUse) Then
+                If checkTileObject(GetTile(c, l), withoutFire) Then
                     #ifdef SCREEN_ATTRIBUTES
-                        if oneUse then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        if withoutFire then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
                     #else
-                        if oneUse then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                        if withoutFire then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
                 End if
             #endif

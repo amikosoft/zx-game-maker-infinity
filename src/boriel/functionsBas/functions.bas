@@ -203,12 +203,19 @@ function isADamageTile(x as ubyte, y as ubyte) as UBYTE
 end function
 
 function allEnemiesKilled() as ubyte
-    if Not enemiesScreen then return 1
+    'if Not enemiesScreen then return 1
     
-    for enemyId=0 TO enemiesScreen - 1
-        if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then continue for
-        if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) > 0 then return 0
-    next enemyId
+    if enemiesScreen then
+        for enemyId=0 TO enemiesScreen - 1
+            'ENEMY_PLATFORM
+            #ifdef ENEMIES_PLATFORM_ENABLED
+                if decompressedEnemiesScreen(enemyId, ENEMY_PLATFORM) then continue for
+            #else
+                if decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 then continue for
+            #endif
+            if decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) > 0 then return 0
+        next enemyId
+    end if
     return 1
 end function
 
@@ -361,9 +368,9 @@ sub removeTilesFromScreen(tile as ubyte)
         for tmpY = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
             if GetTile(tmpX, tmpY) = tile then
                 #ifdef SCREEN_ATTRIBUTES
-                    SetTile(currentTileBackground, currentScreenBackground, tmpX, tmpY)
+                    SetTileChecked(currentTileBackground, currentScreenBackground, tmpX, tmpY)
                 #else
-                    SetTile(0, BACKGROUND_ATTRIBUTE, tmpX, tmpY)
+                    SetTileChecked(0, BACKGROUND_ATTRIBUTE, tmpX, tmpY)
                 #endif
             end if
         next tmpY

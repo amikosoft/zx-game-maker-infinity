@@ -121,17 +121,17 @@ Sub mapDraw(withHud as ubyte)
                             #ifdef ADVENTURE_TEXTS_SHOW_TILES
                                 dim textTile as ubyte = textsCoord(texto, 4)
                                 #ifdef SCREEN_ATTRIBUTES
-                                    if textTile Then SetTileChecked(textTile, tileAttrWithBackground(textTile), cordX, cordY)
+                                    if textTile Then SetTile(textTile, tileAttrWithBackground(textTile), cordX, cordY)
                                 #else
-                                    if textTile Then SetTileChecked(textTile, attrSet(textTile), cordX, cordY)
+                                    if textTile Then SetTile(textTile, attrSet(textTile), cordX, cordY)
                                 #endif
                             #endif
                         #ifdef ADVENTURE_TEXTS_HIDE_TILES
                         Else
                             #ifdef SCREEN_ATTRIBUTES
-                                SetTileChecked(currentTileBackground, currentScreenBackground, cordX, cordY)
+                                SetTile(currentTileBackground, currentScreenBackground, cordX, cordY)
                             #else
-                                SetTileChecked(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
+                                SetTile(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
                             #endif
                         #endif
                         End if

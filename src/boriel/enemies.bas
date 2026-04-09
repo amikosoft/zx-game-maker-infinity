@@ -12,7 +12,12 @@
         dim protaY4 As Ubyte = protaY + 4
 
         For enemyId=0 To enemiesScreen - 1
-            If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
+             'ENEMY_PLATFORM
+            #ifdef ENEMIES_PLATFORM_ENABLED
+                If decompressedEnemiesScreen(enemyId, ENEMY_PLATFORM) Then
+            #else
+                If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
+            #endif
                 Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
                 Dim enemyLin As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
                 
@@ -63,6 +68,10 @@ Dim enemyModeBucle, enemyColBucle, enemyLinBucle, enemyColIniBucle, enemyLinIniB
     enemyLiveBucle, enemyColEndBucle, enemyLinEndBucle, horizontalDirectionBucle, verticalDirectionBucle, _
     tileBucle As Byte
 
+#ifdef ENEMIES_PLATFORM_ENABLED
+Dim enemyPlatformBucle as byte
+#endif
+
 Sub moveEnemies()
     #ifdef PLATFORM_MOVEABLE
         isOnPlatform = 0
@@ -101,11 +110,22 @@ Sub moveEnemies()
             
             If not enemyLiveBucle Then continue For
             
+            #ifdef ENEMIES_PLATFORM_ENABLED
+                enemyPlatformBucle = decompressedEnemiesScreen(enemyId, ENEMY_PLATFORM)
+            #endif
+
             #ifndef ENEMIES_SLOW_DOWN
                 #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                    If enemyLiveBucle > 0 and tileBucle > 16 Then
-                        If screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED Then continue For
-                    End If
+                    'ENEMY_PLATFORM
+                    #ifdef ENEMIES_PLATFORM_ENABLED
+                        If enemyLiveBucle > 0 and not enemyPlatformBucle Then
+                            If screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED Then continue For
+                        End If
+                    #else
+                        If enemyLiveBucle > 0 and tileBucle > 16 Then
+                            If screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED Then continue For
+                        End If
+                    #endif
                 #endif
             #endif
 
@@ -353,7 +373,11 @@ Sub moveEnemies()
             
             ' Is a platform Not an enemy, only 2 frames, 1 direction
             #ifdef SIDE_VIEW
-                If tileBucle < 17 Then
+                #ifdef ENEMIES_PLATFORM_ENABLED
+                    If enemyPlatformBucle Then
+                #else
+                    If tileBucle < 17 Then
+                #endif
                     if jumpCurrentKey = jumpStopValue Then
                         If checkPlatformHasProtaOnTop(enemyColBucle, enemyLinBucle) Then
                             #ifdef PLATFORM_MOVEABLE
@@ -415,7 +439,16 @@ Sub moveEnemies()
             #endif
             #endif
 
-            if tileBucle > 16 and horizontalDirectionBucle = -1 Then tileBucle = tileBucle + 16
+            #ifdef ENEMIES_SPRITES_ENABLED
+                if decompressedEnemiesScreen(enemyId, ENEMY_SPRITE) and horizontalDirectionBucle = -1 Then tileBucle = tileBucle + 16
+            #else
+                'ENEMY_PLATFORM
+                #ifdef ENEMIES_PLATFORM_ENABLED
+                    if not enemyPlatformBucle and horizontalDirectionBucle = -1 Then tileBucle = tileBucle + 16
+                #else
+                    if tileBucle > 16 and horizontalDirectionBucle = -1 Then tileBucle = tileBucle + 16
+                #endif
+            #endif
             
             If enemiesFrame > 4 Then tileBucle = tileBucle + 1
             
@@ -447,8 +480,13 @@ Sub moveEnemies()
                     #endif
                 #endif
                 
-                if tileBucle > 16 and Not invincible Then
-                    checkProtaCollision(enemyId, enemyColBucle, enemyLinBucle, enemyLiveBucle)
+                 'ENEMY_PLATFORM
+                #ifdef ENEMIES_PLATFORM_ENABLED
+                    if not enemyPlatformBucle Then
+                #else
+                    if tileBucle > 16 Then
+                #endif
+                    if Not invincible then checkProtaCollision(enemyId, enemyColBucle, enemyLinBucle, enemyLiveBucle)
                     
                     #ifdef BULLET_ENEMIES
                         ' if not enemyBullets(enemyId, 0) and (tileBucle mod 17) < BULLET_ENEMIES_RANGE then

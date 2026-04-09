@@ -222,6 +222,8 @@ enemiesTrapShowWhileStatic = False
 graphicsSpriteColors = False
 playerColor = 0
 enemiesColor = False
+enemiesSprites = False
+enemiesPlatform = False
 
 bulletAnimation = 0
 bulletsCollisionWithBullets = False
@@ -1152,12 +1154,15 @@ for layer in data['layers']:
                     'mode': '0',
                     'trapContinousMode': 'no',
                     'color': str(backgroundAttribute),
-                    'shoot': '0'
+                    'shoot': '0',
+                    'sprites': '1',
+                    'platform': False
                 }
 
                 print(objects[str(object['id'])])
                 # a las plataformas se le pone vida -100
-                if objects[str(object['id'])]['tile'] == "8":
+
+                if objects[str(object['id'])]['tile'] == "8" or objects[str(object['id'])]['platform']:
                     objects[str(object['id'])]['life'] = "-100"
 
                 if 'properties' in object and len(object['properties']) > 0:
@@ -1175,6 +1180,12 @@ for layer in data['layers']:
                         elif property['name'] == 'color':
                             objects[str(object['id'])]['color'] = str(property['value'])
                             enemiesColor = True
+                        elif property['name'] == 'sprites':
+                            objects[str(object['id'])]['sprites'] = str(property['value'])
+                            enemiesSprites = True
+                        elif property['name'] == 'platform':
+                            objects[str(object['id'])]['platform'] = property['value']
+                            enemiesPlatform = True
                         elif property['name'] == 'shoot':
                             if property['value']:
                                 objects[str(object['id'])]['shoot'] = '1'
@@ -1619,6 +1630,17 @@ if enemiesShoot > 0:
     enemiesAttributesTotal += 1
     configStr += "const ENEMY_SHOOT as ubyte = " + str(enemiesAttributesTotal) + "\n"
 
+if enemiesSprites:
+    enemiesAttributesTotal += 1
+    configStr += "const ENEMY_SPRITE as ubyte = " + str(enemiesAttributesTotal) + "\n"
+    configStr += "#DEFINE ENEMIES_SPRITES_ENABLED\n"
+
+if enemiesPlatform:
+    enemiesAttributesTotal += 1
+    configStr += "const ENEMY_PLATFORM as ubyte = " + str(enemiesAttributesTotal) + "\n"
+    configStr += "#DEFINE ENEMIES_PLATFORM_ENABLED\n"
+
+
 configStr += "const ENEMIES_ATTRIBUTES_TOTAL as ubyte = " + str(enemiesAttributesTotal) + "\n"
 enemiesArray = []
 
@@ -1700,6 +1722,18 @@ for layer in data['layers']:
 
                         if enemiesShoot > 0:
                             arrayBuffer.append(int(enemy['shoot']))
+
+                        if enemiesSprites:
+                            # if int(enemy['tile']) < 16:
+                            #     arrayBuffer.append(0)
+                            # else:
+                            arrayBuffer.append(int(enemy['sprites']))
+
+                        if enemiesPlatform:
+                            if enemy['platform']:
+                                arrayBuffer.append(1)
+                            else:
+                                arrayBuffer.append(0)
                     else:
                         arrayBuffer.append(0)
                         arrayBuffer.append(0)
@@ -1715,10 +1749,16 @@ for layer in data['layers']:
                         arrayBuffer.append(0)
                         
                         if enemiesColor:
-                            arrayBuffer.append(int(enemy['color']))
+                            arrayBuffer.append(0)
 
                         if enemiesShoot > 0:
-                            arrayBuffer.append(int(enemy['shoot']))
+                            arrayBuffer.append(0)
+
+                        if enemiesSprites:
+                            arrayBuffer.append(0)
+
+                        if enemiesPlatform:
+                            arrayBuffer.append(0)
             else:
                 for i in range(maxEnemiesPerScreen):
                     arrayBuffer.append(0)
@@ -1735,10 +1775,16 @@ for layer in data['layers']:
                     arrayBuffer.append(0)
 
                     if enemiesColor:
-                        arrayBuffer.append(int(enemy['color']))
+                        arrayBuffer.append(0)
 
                     if enemiesShoot > 0:
-                        arrayBuffer.append(int(enemy['shoot']))
+                        arrayBuffer.append(0)
+
+                    if enemiesSprites:
+                        arrayBuffer.append(0)
+                    
+                    if enemiesPlatform:
+                        arrayBuffer.append(0)
 
                 enemiesPerScreen.append(0)
             enemiesArray.append(array.array('b', arrayBuffer))
@@ -1763,7 +1809,7 @@ with open("output/enemiesPerScreen.bin", "wb") as f:
 
 with open("output/decompressedEnemiesScreen.bin", "wb") as f:
     for i in range(maxEnemiesPerScreen):
-        f.write(bytearray([0] * enemiesAttributesTotal))
+        f.write(bytearray([0] * (enemiesAttributesTotal + 1)))
 
 with open(outputDir + "config.bas", "w") as text_file:
     print(configStr, file=text_file)
