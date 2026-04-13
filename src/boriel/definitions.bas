@@ -257,6 +257,14 @@ dim isActionPerformed as ubyte = 0
 #endif
 #endif
 
+#ifdef MULTICOLOR_ENABLED
+    dim multicolorCurrent as ubyte = 1
+
+    #ifdef ITEMS_MULTICOLOR_ENABLED
+        dim multicolorItem(1) as ubyte
+    #endif
+#endif
+
 #ifdef SCREEN_ATTRIBUTES
     #ifdef TELEPORT_ENABLED
     Dim currentTeleportTo as ubyte = 0

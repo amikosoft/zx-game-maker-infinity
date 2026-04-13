@@ -254,6 +254,17 @@ Sub playGame()
     
     ' enemiesScreen = enemiesPerScreen(currentScreen)
     Do
+        #ifdef MULTICOLOR_ENABLED
+            multicolorCurrent = multicolorCurrent + 1
+            if multicolorCurrent > 7 then multicolorCurrent = 1
+
+            #ifdef ITEMS_MULTICOLOR_ENABLED
+                If multicolorItem(0) Then
+                    SetTileColor(multicolorItem(0), multicolorItem(1), attrWithBackground(multicolorCurrent))
+                end if
+            #endif
+        #endif
+
         #ifdef BUTTON_PAUSE_ENABLED
         if MultiKeys(keyArray(PAUSE_BUTTON)) then
             isPaused = 1

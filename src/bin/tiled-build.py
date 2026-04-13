@@ -71,7 +71,6 @@ glueMode = "prevent jump and slow down player"
 glueTile = 0
 glueTerrainTile = 0
 
-
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
@@ -179,6 +178,8 @@ borderDamageColor = 0
 keysEnabled = 1
 itemsEnabled = 1
 
+itemsMulticolor = False
+
 itemsCountdown = 0
 
 useBreakableTile = 0
@@ -270,6 +271,9 @@ gameMapXAdjustment = 14
 gameMapYAdjustment = 10
 gameMapOnlyVisited = False
 
+multicolorEnabled = False
+multicolorItem = False
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -357,6 +361,8 @@ if 'properties' in data:
             itemsEnabled = 1 if property['value'] else 0
         elif property['name'] == 'itemsCountdown':
             itemsCountdown = 1 if property['value'] else 0
+        elif property['name'] == 'itemsMulticolor':
+            itemsMulticolor = property['value']
         elif property['name'] == 'useBreakableTile':
             useBreakableTile = 1 if property['value'] else 0
         elif property['name'] == 'maxAnimatedTilesPerScreen':
@@ -739,8 +745,18 @@ if newBeeperPlayer == 1:
 if keysEnabled == 1:
     configStr += "#DEFINE KEYS_ENABLED\n"
 
+# MULTICOLOR
+
 if itemsEnabled == 1:
     configStr += "#DEFINE ITEMS_ENABLED\n"
+
+    if itemsMulticolor:
+        multicolorEnabled = True
+
+        configStr += "#DEFINE ITEMS_MULTICOLOR_ENABLED\n"
+
+if multicolorEnabled:
+    configStr += "#DEFINE MULTICOLOR_ENABLED\n"
 
 configStr += "const BACKGROUND_ATTRIBUTE as ubyte = " + str(backgroundAttribute) + "\n"
 

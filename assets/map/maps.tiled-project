@@ -464,6 +464,11 @@
                 "value": true
             },
             {
+                "name": "itemsMulticolor",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "jetPackFuel",
                 "type": "int",
                 "value": 0

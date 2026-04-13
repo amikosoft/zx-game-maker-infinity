@@ -63,6 +63,7 @@
   <property name="ink" value="7"/>
   <property name="itemsCountdown" type="bool" value="true"/>
   <property name="itemsEnabled" type="bool" value="true"/>
+  <property name="itemsMulticolor" type="bool" value="true"/>
   <property name="jumpCancelAllowed" type="bool" value="false"/>
   <property name="jumpDouble" type="bool" value="false"/>
   <property name="jumpOnEnemies" type="bool" value="true"/>

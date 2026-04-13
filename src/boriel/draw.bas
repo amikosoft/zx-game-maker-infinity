@@ -22,6 +22,10 @@ Sub mapDraw(withHud as ubyte)
         printHud()
     end if
 
+    #ifdef ITEMS_MULTICOLOR_ENABLED
+        multicolorItem(0) = 0
+    #endif
+
     if screenIsDark then
         SetTileset(@darkTileSet(0,0))
     else
@@ -238,6 +242,11 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
                 'SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 SetTileWithBackground(tile, x, y)
+
+                #ifdef ITEMS_MULTICOLOR_ENABLED
+                    multicolorItem(0) = x
+                    multicolorItem(1) = y
+                #endif
             End If
         Elseif tile = KEY_TILE then
             #ifdef ARCADE_MODE
