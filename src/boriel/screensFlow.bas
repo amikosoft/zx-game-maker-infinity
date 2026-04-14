@@ -413,18 +413,19 @@ Sub playGame()
             End If
         #endif
 
-        If currentLife Then
+        ' If currentLife Then
             protaMovement()
-        End if
+        ' End if
 
         If moveScreen Then
             moveToScreen(moveScreen)
         else
-            #ifdef ENERGY_ENABLED
-                if currentEnergy then moveEnemies()
-            #else
-                moveEnemies()
-            #endif
+            ' #ifdef ENERGY_ENABLED
+            '     if currentEnergy then moveEnemies()
+            ' #else
+            '     moveEnemies()
+            ' #endif
+            moveEnemies()
 
             #ifdef SHOOTING_ENABLED
                 moveBullet()
@@ -464,7 +465,9 @@ Sub playGame()
                             #endif
                         #endif
 
-                        swapScreen(1)   
+                        swapScreen(1)
+                    else
+                        protaTile = 15 
                     End if
                 #ifdef ENERGY_ENABLED
                     End if

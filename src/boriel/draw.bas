@@ -344,6 +344,16 @@ Sub moveToScreen(direction As Ubyte)
 End Sub
 
 Sub drawSpriteWithColor(spriteId as ubyte, spriteX as ubyte, spriteY as ubyte, color as ubyte)
+    #ifdef LIVES_MODE_GRAVEYARD
+        #ifdef MAP_COLOR_DEAD_ENABLED
+            #ifdef ENERGY_ENABLED
+                if currentEnergy then
+            #else
+                if not invincible then
+            #endif
+        #endif
+    #endif
+
     dim spriteCol as ubyte = spriteX >> 1
     dim spriteLin as ubyte = spriteY >> 1
     for cc=spriteCol to (spriteCol+1)
@@ -351,6 +361,14 @@ Sub drawSpriteWithColor(spriteId as ubyte, spriteX as ubyte, spriteY as ubyte, c
             if not GetTile(cc, lc) then SetTileColor(cc, lc, attrWithBackground(color))
         next lc
     next cc
+
+    #ifdef LIVES_MODE_GRAVEYARD
+        #ifdef MAP_COLOR_DEAD_ENABLED
+            ' #ifdef ENERGY_ENABLED
+                end if
+            ' #endif
+        #endif
+    #endif
 
     Draw2x2Sprite(spriteId, spriteX, spriteY)
 end sub

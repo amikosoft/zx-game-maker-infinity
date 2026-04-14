@@ -72,6 +72,10 @@
                 Else
                     protaTile = getNextFrameJumpingFalling()
                     
+                    #ifdef JUMP_FALLING_SPRITE
+                        protaTile = protaTile - 2
+                    #endif
+
                     #ifndef JETPACK_FUEL
                         #ifndef LOW_GRAVITY
                             protaY = protaY + 2
@@ -130,6 +134,10 @@
                     #endif
                 Else
                     protaTile = getNextFrameJumpingFalling()
+                    
+                    #ifdef JUMP_FALLING_SPRITE
+                        protaTile = protaTile - 2
+                    #endif
                     
                     #ifndef JETPACK_FUEL
                         #ifndef LOW_GRAVITY

@@ -274,6 +274,8 @@ gameMapOnlyVisited = False
 multicolorEnabled = False
 multicolorItem = False
 
+jumpFallingSprite = False
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -398,6 +400,8 @@ if 'properties' in data:
             duobleJump = property['value'] 
         elif property['name'] == 'jumpWalls':
             jumpWalls = property['value'] 
+        elif property['name'] == 'jumpFallingSprite':
+            jumpFallingSprite = property['value'] 
         elif property['name'] == 'jumpCancelAllowed':
             jumpCancelAllowed = property['value'] 
         elif property['name'] == 'livesMode':
@@ -928,6 +932,9 @@ configStr += "  #ifndef JETPACK_FUEL\n"
 if jumpWalls == True:
     configStr += "#define WALL_JUMP\n"
 
+if jumpFallingSprite:
+    configStr += "#define JUMP_FALLING_SPRITE\n"
+
 if duobleJump == True:
     configStr += "#define DOUBLE_JUMP\n"
     configStr += "Dim otherJump As Ubyte = 0\n"
@@ -1181,6 +1188,10 @@ for layer in data['layers']:
                 if objects[str(object['id'])]['tile'] == "8" or objects[str(object['id'])]['platform']:
                     objects[str(object['id'])]['life'] = "-100"
 
+                if object['type'] == 'platform':
+                    objects[str(object['id'])]['platform'] = True
+                    enemiesPlatform = True
+
                 if 'properties' in object and len(object['properties']) > 0:
                     for property in object['properties']:
                         if property['name'] == 'life':
@@ -1199,9 +1210,9 @@ for layer in data['layers']:
                         elif property['name'] == 'sprites':
                             objects[str(object['id'])]['sprites'] = str(property['value'])
                             enemiesSprites = True
-                        elif property['name'] == 'platform':
-                            objects[str(object['id'])]['platform'] = property['value']
-                            enemiesPlatform = True
+                        # elif property['name'] == 'platform':
+                        #     objects[str(object['id'])]['platform'] = property['value']
+                        #     enemiesPlatform = True
                         elif property['name'] == 'shoot':
                             if property['value']:
                                 objects[str(object['id'])]['shoot'] = '1'

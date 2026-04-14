@@ -113,7 +113,7 @@ Dim framec As Ubyte AT 23672
 ' Dim lastFrameProta As Ubyte = 0
 ' Dim lastFrameEnemies As Ubyte = 0
 
-Const INVINCIBLE_FRAMES As Ubyte = 25
+Const INVINCIBLE_FRAMES As Ubyte = 30
 Dim invincible As Ubyte = 0
 
 Dim protaX As Ubyte
@@ -131,6 +131,9 @@ Const PROTA_TILE_RIGHT as ubyte = 1
 Const PROTA_TILE_LEFT as ubyte = 3
 Const PROTA_TILE_UP as ubyte = 5
 Const PROTA_TILE_DOWN as ubyte = 7
+
+Const PROTA_FRAME_FALL_RIGHT as ubyte = 09
+Const PROTA_FRAME_FALL_LEFT as ubyte = 10
 
 Const PROTA_FRAME_JUMP_RIGHT as ubyte = 11
 Const PROTA_FRAME_JUMP_LEFT as ubyte = 12
