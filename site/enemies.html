@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configuracion-de-enemigos" class="md-skip">
+        <a href="#configuracion-de-enemigos-y-plataformas" class="md-skip">
           Skip to content
         </a>
       
@@ -626,6 +626,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#enemigo-o-plataforma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enemigo o plataforma
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#configuraciones-generales" class="md-nav__link">
     <span class="md-ellipsis">
       Configuraciones generales
@@ -676,13 +685,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuracion-individual-de-cada-enemigo" class="md-nav__link">
+  <a href="#configuracion-individual-de-cada-enemigoplataforma" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuración individual de cada enemigo
+      Configuración individual de cada enemigo/plataforma
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Configuración individual de cada enemigo">
+    <nav class="md-nav" aria-label="Configuración individual de cada enemigo/plataforma">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -752,6 +761,24 @@
   <a href="#color" class="md-nav__link">
     <span class="md-ellipsis">
       Color
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disparo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disparo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animacion-del-enemigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Animación del enemigo
     </span>
   </a>
   
@@ -1051,6 +1078,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#enemigo-o-plataforma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enemigo o plataforma
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#configuraciones-generales" class="md-nav__link">
     <span class="md-ellipsis">
       Configuraciones generales
@@ -1101,13 +1137,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuracion-individual-de-cada-enemigo" class="md-nav__link">
+  <a href="#configuracion-individual-de-cada-enemigoplataforma" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuración individual de cada enemigo
+      Configuración individual de cada enemigo/plataforma
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Configuración individual de cada enemigo">
+    <nav class="md-nav" aria-label="Configuración individual de cada enemigo/plataforma">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1182,6 +1218,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#disparo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disparo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animacion-del-enemigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Animación del enemigo
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1203,9 +1257,13 @@
 
 
 
-<h1 id="configuracion-de-enemigos">Configuración de enemigos</h1>
-<p>Toda la información sobre la personalización del comportamiento de enemigos</p>
+<h1 id="configuracion-de-enemigos-y-plataformas">Configuración de enemigos y plataformas</h1>
+<p>Toda la información sobre la personalización del comportamiento de enemigos y plataformas móviles.</p>
 <h2 id="configuracion-general-en-atributos-del-mapa-tiled">Configuración general en atributos del mapa (tiled)</h2>
+<h3 id="enemigo-o-plataforma">Enemigo o plataforma</h3>
+<p>Desde la versión 5.2 ya no hay una sola plataforma configurable.
+Lo único que hay que hacer es marcar el objeto configurando el <em>class</em> a <strong>platform</strong> para que se convierta en una plataforma móvil. Para los enemigos se dejar vacío.
+El sprite seleccionado será el usado para la plataforma pudiendo usarse cualquiera de los sprites.</p>
 <h3 id="configuraciones-generales">Configuraciones generales</h3>
 <ul>
 <li>
@@ -1229,11 +1287,9 @@
 <li><strong>enemiesAlertDistance</strong> permite indicar la distancia a la que etarán alerta los enemigos en este modo. Los valores son <strong>near</strong>, <strong>medium</strong> y <strong>far</strong></li>
 </ul>
 <h3 id="enemigos-que-disparan">Enemigos que disparan</h3>
-<p>Con estas opciones podrás configurar qué enemigos te dispararán al tenerte en su linea de tiro.</p>
-<p><em>NOTA</em>: Sólo puede haber un disparo enemigo a la vez por lo que el primero que te vea te disparará.</p>
-<p>Para habilitar este modo indicaremos en el atributo <strong>enemiesShoot</strong> un número del 1 al 8 que marcarán dentro de los sprites de enemigos quienes dispararán, siendo agrupadores entre ellos. </p>
-<p>Esto quiere decir que si marco 3, todos los enemigos iguales o menores al grupo 3 te dispararán. Hay que tenerlo en cuenta al poner los sprites de enemigos que disparan primero</p>
-<p><img alt="Enemies shoot configuration graph" src="imgs/enemies_shoot_index.png" /></p>
+<ul>
+<li><strong>enemiesShoot</strong> Habilita la capacidad de disparar a los enemigos. Para habilitar este modo indicaremos en el atributo <strong>enemiesShoot</strong> con el valor <strong>1</strong> o superior, para lo contrario dejarlo en <strong>0</strong>.</li>
+</ul>
 <p><strong>enemiesBulletCollision</strong> permite indicar si las balas enemigas chocarán o no contra tiles no traspasables.</p>
 <p><strong>enemiesShootDirection</strong> indica la dirección a la que dispararán los enemigos. Hay que tener en cuenta que, de momento, no distinguen si te están viendo o no, por lo que te dispararán por delante y por detrás así como arriba y abajo.</p>
 <p><strong>enemiesShootSpeed</strong> cambia la velocidad de la bala de los enemigos entre <em>slow</em> (lenta) y <em>fast</em> (rápida)</p>
@@ -1249,8 +1305,8 @@
 <li><strong>enemiesPursuitCollide</strong> permite indicar si los enemigos que te persiguen atraviesan o no tiles no traspasables</li>
 </ul>
 <h3 id="limitacion">Limitación</h3>
-<p>Puedes añadir hasta <strong>3 enemigos en cada pantalla</strong> y configurar su movimiento.</p>
-<h2 id="configuracion-individual-de-cada-enemigo">Configuración individual de cada enemigo</h2>
+<p>Puedes añadir hasta <strong>3 enemigos/plataformas en cada pantalla</strong> y configurar su movimiento.</p>
+<h2 id="configuracion-individual-de-cada-enemigoplataforma">Configuración individual de cada enemigo/plataforma</h2>
 <h3 id="posicion-inicial">Posición inicial</h3>
 <p>Para ello deberás seleccionar la capa objects y arrastrar el 1er sprite del enemigo a posicionar donde quieras que aparezca inicialmente.</p>
 <p>Como truco, si pulsas la tecla Ctrl el enemigo se situará respetado la rejilla.</p>
@@ -1332,6 +1388,18 @@
 <h3 id="color">Color</h3>
 <p>Con el atributo <strong>color</strong> puedes dar un color a los enemigos. Por defecto es el color marcado en background. Puedes usar cualquier color del Spectrum.</p>
 <p>NOTA: Para activar los colores de sprites debes tener activado <strong>graphicsSpritesColors</strong> en la configuración general del mapa.</p>
+<h3 id="disparo">Disparo</h3>
+<p>Para habilitar el disparo individual del enemigo se debe usar el atributo <strong>shoot</strong> de tipo <strong>bool</strong>. Por defecto este atributo esta deshabilitado.</p>
+<p>NOTA: Para que el enemigo pueda disparar el atributo <strong>enemiesShoot</strong> debe estar en 1 o superior. Si no lo está no disparará aunque tenga este atributo habilitado.</p>
+<h3 id="animacion-del-enemigo">Animación del enemigo</h3>
+<p>Se puede configurar la animación de cada enemigo/plataforma de forma individual de tal manera que use una animación simple(2 sprites) o normal(4 sprites).</p>
+<p>Con el atributo <strong>sprites</strong> podemos configurar el número de sprites que queremos usar. Indicando 0 usará sólo 2 sprites (el seleccionado y el de su derecha). No configurándolo o indicando 1 usará 4 sprites (sistema tradicional, el seleccionado y el de su derecha y los 2 de la siguiente fila de sprites).</p>
+<p>Ejemplo de 2 sprites:
+* Plataformas
+* Enemigos que no distinguen direcciones</p>
+<p>Ejemplo de 4 sprites:
+* Enemigos que distinguen direcciones
+* Plataformas que distinguen direcciones</p>
 
 
 

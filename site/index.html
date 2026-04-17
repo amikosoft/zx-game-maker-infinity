@@ -364,9 +364,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-version-510" class="md-nav__link">
+  <a href="#nuevo-en-version-520" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en versión 5.1.0
+      Nuevo en versión 5.2.0
     </span>
   </a>
   
@@ -657,9 +657,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-version-510" class="md-nav__link">
+  <a href="#nuevo-en-version-520" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en versión 5.1.0
+      Nuevo en versión 5.2.0
     </span>
   </a>
   
@@ -702,14 +702,18 @@
 <h1 id="zxgm-infinity-5">ZXGM Infinity 5</h1>
 <p>Manual para configurar las características de Infinity</p>
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
-<h2 id="nuevo-en-version-510">Nuevo en versión 5.1.0</h2>
+<h2 id="nuevo-en-version-520">Nuevo en versión 5.2.0</h2>
 <ul>
-<li>Ahora se puede configurar un color para el jugador así como para cada uno de los enemigos independientemente</li>
-<li>Optimización de código/memoria (en todas las versiones)</li>
+<li>Ahora el jugador tiene un sprite diferente cuando salta y cae.</li>
+<li>Los enemigos pueden configurarse para usar 2 ó 4 sprites</li>
+<li>Los enemigos y plataformas comparten configuración</li>
+<li>Ahora puedes configurar que un enemigo dispare o no por pantalla</li>
+<li>Los items pueden configurarse para que se pinten multicolor</li>
 </ul>
 <h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
 <ul>
-<li>Se ha dejado de dar soporte a ZX Spectrum 48K con el fin de mejorar el rendimiento y poder implementar nuevas características</li>
+<li>Ahora se puede configurar un color para el jugador así como para cada uno de los enemigos independientemente</li>
+<li>Optimización de código/memoria (en todas las versiones)* Se ha dejado de dar soporte a ZX Spectrum 48K con el fin de mejorar el rendimiento y poder implementar nuevas características</li>
 <li>El número de tiles ha subido a 512 (255 tiles de color y 255 para modo oscuro)</li>
 <li>Ahora se puede indicar en una pantalla que esté oscura al entrar cambiando entre los tiles normales y los tiles oscuros</li>
 <li>Item interruptor que cambia (en la pantalla actual) entre oscuro y normal</li>
@@ -917,6 +921,8 @@ Hay que tener en cuenta que ahora los 2 primeros tiles (de momento) se usarán p
 
 ![Drop tile](imgs/droptile.png)
 
+* **itemsMulticolor** indica que los items de juego cambiarán de color continuamente (al estilo bombas de Dynamite Dan)
+
 * **checkpointsEnabled** permite revivir a tu personaje (en modo vidas) desde el último item de bandera (en tiles a la izquierda de la bala) por el que haya pasado el player
 
 * **shouldPickUpItems** habilita la posibilidad de que los bloques de enemigos (los que desaparecen al matar todos los enemigos) se quiten también al coger un item en pantalla. Puede usarse de manera independiente.
@@ -947,6 +953,8 @@ NOTA: Para activar los colores de sprites debes tener activado **graphicsSprites
 * **teleportDisabledTile** hace que los portales que no funcionan se muestren con un tile distinto. Por defecto es el tile anterior al del portal.
 
 * **shootingPreventJump** si activas esto tu personaje no saltará cuando dispares (secuencia de botones: disparo+salto)
+
+* **jumpFallingSprite** si activas esto tu personaje mostrará un sprite distinto cuando esté cayendo. Los sprites donde se representa esto son los que anteriormente se usaban para plataformas.
 
 ### Idioma del juego
 
@@ -1044,11 +1052,17 @@ A continuación se enumeran aquellas pantallas que pueden ser sustituidas por SC
 
 * Tanto *animatePeriodEnemy* como *animatePeriodMain* no tienen efecto puesto que han sido eliminados y unificados.
 
-# Configuración de enemigos
+# Configuración de enemigos y plataformas
 
-Toda la información sobre la personalización del comportamiento de enemigos
+Toda la información sobre la personalización del comportamiento de enemigos y plataformas móviles.
 
 ## Configuración general en atributos del mapa (tiled)
+
+### Enemigo o plataforma
+
+Desde la versión 5.2 ya no hay una sola plataforma configurable.
+Lo único que hay que hacer es marcar el objeto configurando el *class* a **platform** para que se convierta en una plataforma móvil. Para los enemigos se dejar vacío.
+El sprite seleccionado será el usado para la plataforma pudiendo usarse cualquiera de los sprites.
 
 ### Configuraciones generales
 
@@ -1068,15 +1082,7 @@ Toda la información sobre la personalización del comportamiento de enemigos
 
 ### Enemigos que disparan
 
-Con estas opciones podrás configurar qué enemigos te dispararán al tenerte en su linea de tiro.
-
-_NOTA_: Sólo puede haber un disparo enemigo a la vez por lo que el primero que te vea te disparará.
-
-Para habilitar este modo indicaremos en el atributo **enemiesShoot** un número del 1 al 8 que marcarán dentro de los sprites de enemigos quienes dispararán, siendo agrupadores entre ellos. 
-
-Esto quiere decir que si marco 3, todos los enemigos iguales o menores al grupo 3 te dispararán. Hay que tenerlo en cuenta al poner los sprites de enemigos que disparan primero
-
-![Enemies shoot configuration graph](imgs/enemies_shoot_index.png)
+* **enemiesShoot** Habilita la capacidad de disparar a los enemigos. Para habilitar este modo indicaremos en el atributo **enemiesShoot** con el valor **1** o superior, para lo contrario dejarlo en **0**.
 
 **enemiesBulletCollision** permite indicar si las balas enemigas chocarán o no contra tiles no traspasables.
 
@@ -1104,9 +1110,9 @@ Para configurar el sprite de bala tenemos el fichero bullet.zxp y bullet_overhea
 
 ### Limitación
 
-Puedes añadir hasta **3 enemigos en cada pantalla** y configurar su movimiento.
+Puedes añadir hasta **3 enemigos/plataformas en cada pantalla** y configurar su movimiento.
 
-## Configuración individual de cada enemigo
+## Configuración individual de cada enemigo/plataforma
 
 ### Posición inicial
 
@@ -1204,6 +1210,28 @@ Puedes establecer la velocidad del enemigo, para ello solo tienes que añadir en
 Con el atributo **color** puedes dar un color a los enemigos. Por defecto es el color marcado en background. Puedes usar cualquier color del Spectrum.
 
 NOTA: Para activar los colores de sprites debes tener activado **graphicsSpritesColors** en la configuración general del mapa.
+
+### Disparo
+
+Para habilitar el disparo individual del enemigo se debe usar el atributo **shoot** de tipo **bool**. Por defecto este atributo esta deshabilitado.
+
+NOTA: Para que el enemigo pueda disparar el atributo **enemiesShoot** debe estar en 1 o superior. Si no lo está no disparará aunque tenga este atributo habilitado.
+
+### Animación del enemigo
+
+Se puede configurar la animación de cada enemigo/plataforma de forma individual de tal manera que use una animación simple(2 sprites) o normal(4 sprites).
+
+Con el atributo **sprites** podemos configurar el número de sprites que queremos usar. Indicando 0 usará sólo 2 sprites (el seleccionado y el de su derecha). No configurándolo o indicando 1 usará 4 sprites (sistema tradicional, el seleccionado y el de su derecha y los 2 de la siguiente fila de sprites).
+
+Ejemplo de 2 sprites:
+* Plataformas
+* Enemigos que no distinguen direcciones
+
+Ejemplo de 4 sprites:
+* Enemigos que distinguen direcciones
+* Plataformas que distinguen direcciones
+
+
 
 # Configura tu aventura
 
