@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="175">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="199">
  <editorsettings>
   <chunksize width="30" height="19"/>
  </editorsettings>
@@ -11,7 +11,7 @@
   <property name="adventureTextsHideTiles" type="bool" value="false"/>
   <property name="adventureTextsLength" propertytype="adventureTextsLength" value="60"/>
   <property name="adventureTextsShowTiles" type="bool" value="true"/>
-  <property name="adventureTextsSound" type="bool" value="true"/>
+  <property name="adventureTextsSound" type="bool" value="false"/>
   <property name="ammo" type="int" value="100"/>
   <property name="animatePeriodMain" type="int" value="1"/>
   <property name="animatePeriodTile" type="int" value="20"/>
@@ -42,7 +42,7 @@
   <property name="enemiesShootingLookAtPlayer" type="bool" value="false"/>
   <property name="enemiesSlowDown" type="bool" value="false"/>
   <property name="enemiesSound" type="bool" value="true"/>
-  <property name="enemiesTrapShowWhileStatic" type="bool" value="true"/>
+  <property name="enemiesTrapShowWhileStatic" type="bool" value="false"/>
   <property name="fadeTilesFramesCount" type="int" value="20"/>
   <property name="fadeTilesInScreenMax" type="int" value="5"/>
   <property name="fontCustom" propertytype="fontCustom" value="default"/>
@@ -52,7 +52,7 @@
   <property name="gameMapOnlyVisited" type="bool" value="true"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
-  <property name="glueMode" propertytype="glueModes" value="prevent jump and slow down"/>
+  <property name="glueMode" propertytype="glueModes" value="slow down"/>
   <property name="glueTileEnabled" type="bool" value="true"/>
   <property name="goalItems" type="int" value="4"/>
   <property name="graphicsModeUnshifted" type="bool" value="true"/>
@@ -216,20 +216,20 @@
 </chunk>
    <chunk x="0" y="19" width="30" height="19">
 41,1,1,1,1,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,50,51,51,
-40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,95,181,1,1,181,95,1,1,1,166,166,1,1,1,40,
-41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,95,180,1,256,180,95,1,1,1,251,251,1,1,1,41,
-40,1,1,124,125,1,1,1,1,1,1,1,1,44,1,95,20,21,21,22,95,1,1,1,251,251,1,1,1,40,
-41,1,1,1,124,125,1,1,1,53,1,1,1,124,125,1,1,1,1,1,1,1,1,1,52,52,1,1,1,41,
+40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,181,1,1,181,1,1,1,95,166,166,95,1,1,40,
+41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,180,1,256,180,1,1,1,95,251,251,95,1,1,41,
+40,1,1,124,125,1,1,1,1,1,1,1,1,44,1,1,20,21,21,22,1,1,1,95,251,251,95,1,1,40,
+41,1,1,1,124,125,1,1,1,53,1,1,1,124,125,1,1,1,1,1,1,1,1,95,52,52,95,1,1,41,
 40,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,172,1,1,1,1,1,1,1,1,1,1,1,40,
 41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,
 40,1,1,1,1,1,44,1,1,172,1,1,1,1,1,1,1,166,1,1,1,1,1,172,1,124,125,1,1,40,
 41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,52,52,1,1,1,1,1,124,125,1,93,93,41,
 40,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,166,1,1,1,128,128,40,
 41,1,1,1,172,1,1,1,52,52,52,97,1,1,1,1,1,1,1,1,1,1,98,52,52,1,1,128,128,41,
-40,1,1,1,1,1,1,1,1,1,52,52,52,97,1,1,1,1,1,1,1,98,1,1,1,1,1,128,128,40,
-41,1,1,1,129,1,1,1,1,1,1,1,1,1,97,1,1,1,1,1,98,1,1,124,1,1,1,128,128,41,
-40,1,1,1,30,30,30,1,1,1,1,1,1,1,1,97,1,1,1,98,1,1,124,125,1,1,1,128,128,40,
-41,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,52,52,52,1,1,1,1,1,1,1,1,128,128,41,
+40,1,1,1,1,1,1,1,1,1,52,52,97,1,1,1,1,1,1,1,1,98,1,1,1,1,1,128,128,40,
+41,1,1,1,129,1,1,1,1,1,1,1,1,97,1,1,1,1,1,1,98,1,1,124,1,1,1,128,128,41,
+40,1,1,1,30,30,30,1,1,1,1,1,1,1,97,1,1,1,1,98,1,1,124,125,1,1,1,128,128,40,
+41,1,1,1,1,1,1,1,1,1,1,124,125,1,1,52,52,52,52,1,1,1,1,1,1,1,1,128,128,41,
 40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,172,1,1,172,1,128,128,40,
 41,163,1,163,1,196,196,196,196,196,196,196,196,196,196,196,196,196,196,1,1,1,1,1,1,1,1,128,128,94,
 40,195,166,195,163,31,31,31,31,161,161,162,32,32,32,32,161,162,10,11,1,1,254,1,1,253,1,128,128,94,
@@ -242,14 +242,14 @@
 19,128,128,128,128,128,128,128,128,128,128,128,128,128,1,1,198,1,1,1,206,206,1,1,1,252,1,102,1,19,
 18,106,106,106,106,106,106,106,106,101,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,18,
 19,1,1,1,1,1,1,1,1,101,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
-18,1,1,1,124,125,1,1,1,101,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,
-19,1,1,124,125,1,1,1,1,101,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,19,
-18,1,1,1,1,1,1,1,1,101,1,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,18,
-19,1,1,1,1,1,13,13,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
+18,1,1,1,1,1,1,1,1,101,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,
+19,1,1,1,1,1,1,1,1,101,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,19,
+18,1,124,125,1,1,1,1,1,101,1,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,18,
+19,1,1,124,125,1,13,13,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
 18,1,1,1,1,1,1,1,1,13,13,97,1,1,1,1,13,13,13,13,1,1,1,1,1,1,1,1,1,18,
-19,1,1,1,1,1,1,124,125,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
-18,1,1,1,1,1,124,125,1,1,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,18,
-19,1,1,1,1,1,1,1,1,1,1,1,13,13,13,13,13,1,1,1,1,1,1,1,1,1,124,125,1,19,
+19,1,1,1,1,1,1,1,1,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
+18,1,1,1,1,124,125,1,1,1,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,18,
+19,1,1,1,124,125,1,1,1,1,1,1,13,13,13,13,13,1,1,1,1,1,1,1,1,1,124,125,1,19,
 18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,
 19,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,101,13,13,13,101,1,1,1,1,19,
 1,1,1,1,249,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,101,1,1,1,101,1,1,255,1,18,
@@ -435,7 +435,7 @@
   <object id="110" name="trap1" gid="285" x="168" y="72" width="16" height="16">
    <properties>
     <property name="life" type="int" value="99"/>
-    <property name="mode" propertytype="enemyMovement" value="trap vertical"/>
+    <property name="mode" propertytype="enemyMovement" value="trap diagonal"/>
     <property name="speed" type="int" propertytype="enemySpeed" value="2"/>
     <property name="sprites" type="int" value="0"/>
     <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="no"/>
@@ -603,14 +603,18 @@
     <property name="trapContinousMode" propertytype="enemyTrapContinousMode" value="no"/>
    </properties>
   </object>
-  <object id="171" name="mainCharacter" type="mainCharacter" x="136" y="248">
-   <point/>
-  </object>
   <object id="172" name="plataf1" type="platform" gid="287" x="16" y="168" width="16" height="16">
    <properties>
     <property name="sprites" type="int" value="0"/>
    </properties>
   </object>
   <object id="173" name="plataf2" type="platform" gid="287" x="320" y="128" width="16" height="16"/>
+  <object id="186" name="player" type="player" gid="257" x="128" y="248" width="16" height="16">
+   <properties>
+    <property name="color" type="int" value="1"/>
+    <property name="energy" type="int" value="8"/>
+    <property name="lives" type="int" value="10"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -32,6 +32,12 @@ class BinaryFilesToTapMerger:
             # OUTPUT_FOLDER + "decompressedMap.bin"
         ]
 
+        if os.path.isfile(OUTPUT_FOLDER + "enemiesInitialLife.bin"):
+            input_files.append(OUTPUT_FOLDER + "enemiesInitialLife.bin")
+        
+        if os.path.isfile(OUTPUT_FOLDER + "enemyBullets.bin"):
+            input_files.append(OUTPUT_FOLDER + "enemyBullets.bin")
+            
         if enableAdventureTexts:
             input_files.append(OUTPUT_FOLDER + "textsCoord.bin")
             if not is128k:

@@ -276,6 +276,8 @@ multicolorItem = False
 
 jumpFallingSprite = False
 
+enemiesCollisionProtaDamage = False
+
 if 'properties' in data:
     for property in data['properties']:
         if property['name'] == 'gameName':
@@ -313,10 +315,10 @@ if 'properties' in data:
         elif property['name'] == 'hiScore':
             hiScore = 1 if property['value'] else 0
         elif property['name'] == 'maxEnemiesPerScreen':
-            if property['value'] < 7:
+            if property['value'] < 8:
                 maxEnemiesPerScreen = property['value']
             else:
-                maxEnemiesPerScreen = 6
+                maxEnemiesPerScreen = 8
         elif property['name'] == 'spritesMergeModeXor':
             spritesMergeModeXor = 1 if property['value'] else 0
         elif property['name'] == 'spritesWithColors':
@@ -432,6 +434,8 @@ if 'properties' in data:
             enemiesBulletCollision = property['value']
         elif property['name'] == 'enemiesPursuitCollide':
             enemiesPursuitCollide = property['value']
+        elif property['name'] == 'enemiesCollisionProtaDamage':
+            enemiesCollisionProtaDamage = property['value']
         elif property['name'] == 'enemiesShootSpeed':
             if property['value'] == 'slow':
                 enemiesShootSpeed = 1
@@ -660,36 +664,36 @@ if fadeTilesInScreenMax > 0 and fadeTilesFramesCount > 0:
     configStr += "const FADE_TILE_FRAMES as ubyte = " + str(fadeTilesFramesCount) + "\n"
     configStr += "const FADE_TILE_TOTAL as ubyte = " + str(fadeTilesInScreenMax) + "\n"
 
-if livesMode == 1:
-    configStr += "#DEFINE LIVES_MODE_ENABLED\n"
-    configStr += "#DEFINE LIVES_MODE_RESPAWN\n"
+# if livesMode == 1:
+#     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
+#     configStr += "#DEFINE LIVES_MODE_RESPAWN\n"
 
-    if int(livesEnergy) > 0:
-        configStr += "#DEFINE ENERGY_ENABLED\n"
-        configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
+#     if int(livesEnergy) > 0:
+#         configStr += "#DEFINE ENERGY_ENABLED\n"
+#         configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
 
-    if checkpointsEnabled == True:
-        configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
-        configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
-elif livesMode == 2:
-    configStr += "#DEFINE LIVES_MODE_ENABLED\n"
-    configStr += "#DEFINE LIVES_MODE_GRAVEYARD\n"
-    if checkpointsEnabled == True:
-        configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
-        configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
+#     if checkpointsEnabled == True:
+#         configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
+#         configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
+# elif livesMode == 2:
+#     configStr += "#DEFINE LIVES_MODE_ENABLED\n"
+#     configStr += "#DEFINE LIVES_MODE_GRAVEYARD\n"
+#     if checkpointsEnabled == True:
+#         configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
+#         configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
     
-    if int(livesEnergy) > 0:
-        configStr += "#DEFINE ENERGY_ENABLED\n"
-        configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
+#     if int(livesEnergy) > 0:
+#         configStr += "#DEFINE ENERGY_ENABLED\n"
+#         configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
     
-    if livesDeadBackgroundColor > 0:
-        configStr += "#DEFINE MAP_COLOR_DEAD_ENABLED\n"
-        configStr += "const MAP_COLOR_DEAD_COLOR as ubyte = " + str(livesDeadBackgroundColor) + "\n"
-else:
-    configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
+#     if livesDeadBackgroundColor > 0:
+#         configStr += "#DEFINE MAP_COLOR_DEAD_ENABLED\n"
+#         configStr += "const MAP_COLOR_DEAD_COLOR as ubyte = " + str(livesDeadBackgroundColor) + "\n"
+# else:
+#     configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
 
-configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
-configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
+# configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
+# configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 
 configStr += "const BULLET_DISTANCE as ubyte = " + str(bulletDistance) + "\n"
 
@@ -905,7 +909,7 @@ for layer in data['layers']:
                     screenObjects[idx]['life'] = 1
                 elif tile == ammoTile:
                     screenObjects[idx]['ammo'] = 1
-                
+     
 configStr += "const MAP_SCREENS_WIDTH_COUNT as ubyte = " + str(mapCols) + "\n"
 configStr += "const SCREEN_OBJECT_ITEM_INDEX as ubyte = 0 \n"
 configStr += "const SCREEN_OBJECT_KEY_INDEX as ubyte = 1 \n"
@@ -913,6 +917,63 @@ configStr += "const SCREEN_OBJECT_DOOR_INDEX as ubyte = 2 \n"
 configStr += "const SCREEN_OBJECT_LIFE_INDEX as ubyte = 3 \n"
 configStr += "const SCREEN_OBJECT_AMMO_INDEX as ubyte = 4 \n"
 configStr += "const SCREENS_COUNT as ubyte = " + str(screensCount - 1) + "\n\n"
+
+# Lectura de los datos del player
+for layer in data['layers']:
+    if layer['type'] == 'objectgroup':
+        for object in layer['objects']:
+            if object['type'] == 'player':
+                xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
+                yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
+                initialScreen = xScreenPosition + (yScreenPosition * mapCols)
+                initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
+                initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
+
+                # if int(initialMainCharacterX) < 2 or int(initialMainCharacterX) > ((screenWidth*2)-8) or int(initialMainCharacterY) < 0 or int(initialMainCharacterY) > ((screenHeight*2)-8):
+                #     exitWithErrorMessage('Main character initial position is out of bounds. X: ' + initialMainCharacterX + ', Y: ' + initialMainCharacterY)
+                
+                if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
+                    keys[str(screenId)] = [int(initialMainCharacterX+widthSkip), int(initialMainCharacterY+heightSkip)]
+
+                if 'properties' in object and len(object['properties']) > 0:
+                    for property in object['properties']:
+                        if property['name'] == 'lives':
+                            initialLife = property['value']
+                        elif property['name'] == 'energy':
+                            livesEnergy = property['value']
+                        elif property['name'] == 'color':
+                            playerColor = property['value']
+
+if livesMode == 1:
+    configStr += "#DEFINE LIVES_MODE_ENABLED\n"
+    configStr += "#DEFINE LIVES_MODE_RESPAWN\n"
+
+    if int(livesEnergy) > 0:
+        configStr += "#DEFINE ENERGY_ENABLED\n"
+        configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
+
+    if checkpointsEnabled == True:
+        configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
+        configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
+elif livesMode == 2:
+    configStr += "#DEFINE LIVES_MODE_ENABLED\n"
+    configStr += "#DEFINE LIVES_MODE_GRAVEYARD\n"
+    if checkpointsEnabled == True:
+        configStr += "#DEFINE CHECKPOINTS_ENABLED\n"
+        configStr += "const FLAG_TILE as ubyte = " + str(flagTile) + "\n"
+    
+    if int(livesEnergy) > 0:
+        configStr += "#DEFINE ENERGY_ENABLED\n"
+        configStr += "const INITIAL_ENERGY as ubyte = " + str(livesEnergy) + "\n"
+    
+    if livesDeadBackgroundColor > 0:
+        configStr += "#DEFINE MAP_COLOR_DEAD_ENABLED\n"
+        configStr += "const MAP_COLOR_DEAD_COLOR as ubyte = " + str(livesDeadBackgroundColor) + "\n"
+else:
+    configStr += "const DAMAGE_AMOUNT as ubyte = " + str(damageAmount) + "\n"
+
+configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
+configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 
 if gameMapOnlyVisited:
     configStr += "#define GAMEMAP_ONLY_VISITED\n"
@@ -1007,6 +1068,11 @@ if enemiesSound:
 
 if enemiesShoot > 0:
     configStr += "#define BULLET_ENEMIES\n"
+
+    with open("output/enemyBullets.bin", "wb") as f:
+        for i in range(maxEnemiesPerScreen):
+            f.write(bytearray([0]*4))
+
     # configStr += "const BULLET_ENEMIES_RANGE as ubyte = " + str((enemiesShoot*2)) + "\n"
     configStr += "const BULLET_ENEMIES_SPEED as ubyte = " + str(enemiesShootSpeed) + "\n"
     
@@ -1025,10 +1091,13 @@ if enemiesShoot > 0:
     if enemiesShootDirection == "all":
         configStr += "#define BULLET_ENEMIES_DIRECTION_HORIZONTAL\n"
         configStr += "#define BULLET_ENEMIES_DIRECTION_VERTICAL\n"
+        configStr += "#define BULLET_ENEMIES_DIRECTION_DIAGONAL\n"
     elif enemiesShootDirection == "horizontal":
         configStr += "#define BULLET_ENEMIES_DIRECTION_HORIZONTAL\n"
     elif enemiesShootDirection == "vertical":
         configStr += "#define BULLET_ENEMIES_DIRECTION_VERTICAL\n"
+    elif enemiesShootDirection == "diagonal":
+        configStr += "#define BULLET_ENEMIES_DIRECTION_DIAGONAL\n"
 
 with open("output/screenObjects.bin", "wb") as f:
     for screen in screenObjects:
@@ -1095,6 +1164,10 @@ else:
     if enemiesRespawnInScreen:
         configStr += "#DEFINE ENEMIES_RESPAWN_IN_SCREEN_ENABLED\n"
 
+        with open("output/enemiesInitialLife.bin", "wb") as f:
+            for i in range(maxEnemiesPerScreen):
+                f.write(bytearray([0]))
+
 if enemiesNormalCollide:
     configStr += "#DEFINE ENEMIES_NORMAL_COLLIDE\n"
 
@@ -1139,6 +1212,7 @@ enemiesOneDirection = 0
 enemiesTrap = 0
 enemiesTrapVertical = 0
 enemiesTrapHorizontal = 0
+enemiesTrapDiagonal = 0
 enemiesClockwise = 0
 enemiesAnticlockwise = 0
 
@@ -1238,6 +1312,7 @@ for layer in data['layers']:
                                 enemiesTrap = 1
                                 enemiesTrapVertical = 1
                                 enemiesTrapHorizontal = 1
+                                enemiesTrapDiagonal = 1
                             elif property['value'] == 'trap vertical':
                                 objects[str(object['id'])]['mode'] = '11'
                                 enemiesTrap = 1
@@ -1246,6 +1321,10 @@ for layer in data['layers']:
                                 objects[str(object['id'])]['mode'] = '12'
                                 enemiesTrap = 1
                                 enemiesTrapHorizontal = 1
+                            elif property['value'] == 'trap diagonal':
+                                objects[str(object['id'])]['mode'] = '13'
+                                enemiesTrap = 1
+                                enemiesTrapDiagonal = 1                  
 
 if graphicsSpriteColors:
     configStr += "#DEFINE SPRITES_COLOR_ENABLED\n"
@@ -1266,6 +1345,9 @@ if enemiesPursuit == 1:
     if enemiesPursuitCollide == True:
         configStr += "#DEFINE ENEMIES_PURSUIT_COLLIDE\n"
 
+if enemiesCollisionProtaDamage:
+    configStr += "#DEFINE ENEMY_COLLISION_PROTA_DAMAGE\n"
+
 if enemiesAlert == 1:
     configStr += "#DEFINE ENEMIES_ALERT_ENABLED\n"
     configStr += "#DEFINE ENEMIES_ALERT_DISTANCE " + str(enemiesAlertDistance) + "\n"
@@ -1279,6 +1361,10 @@ if enemiesTrap == 1:
 
     if enemiesTrapHorizontal == 1:
         configStr += "#DEFINE ENEMIES_TRAP_HORIZONTAL_ENABLED\n"
+
+    if enemiesTrapDiagonal == 1:
+        configStr += "#DEFINE ENEMIES_TRAP_DIAGONAL_ENABLED\n"
+
 
     if enemiesTrapShowWhileStatic:
         configStr += "#define ENEMIES_TRAP_SHOW_STATIC\n"
@@ -1317,7 +1403,7 @@ for layer in data['layers']:
                             linEnd = objects[str(object['properties'][0]['value'])]['linIni'] 
                             objects[str(object['properties'][0]['value'])]['linEnd'] = linEnd
                             objects[str(object['properties'][0]['value'])]['linIni'] = linIni
-                elif object['type'] == 'mainCharacter':
+                elif object['type'] == 'player':
                     initialScreen = screenId
                     initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
                     initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
@@ -1444,7 +1530,7 @@ for layer in data['layers']:
                                     attributesSort.append('teleportTo')
                 else:
                     print(object)
-                    errorMessage = 'Unknown object type. Only "enemy", "text", "screen_attributes" or "mainCharacter" are allowed. Found: ' + object['type']
+                    errorMessage = 'Unknown object type. Only "enemy", "text", "screen_attributes" or "player" are allowed. Found: ' + object['type']
                     exitWithErrorMessage(errorMessage)   
 
 # CONTROL DE MUSICAS
@@ -1695,11 +1781,11 @@ for layer in data['layers']:
                                 verticalDirection = '1'
                             else:
                                 verticalDirection = '0'
-                        elif enemy['mode'] == '5' or enemy['mode'] == '6' or enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
+                        elif enemy['mode'] == '5' or enemy['mode'] == '6' or enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12' or enemy['mode'] == '13':
                             horizontalDirection = '0'
                             verticalDirection = '0'
 
-                            if enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12':
+                            if enemy['mode'] == '10' or enemy['mode'] == '11' or enemy['mode'] == '12' or enemy['mode'] == '13':
                                 enemy['colEnd'] = "0"
                                 enemy['linEnd'] = "0"
                                 
@@ -1707,7 +1793,7 @@ for layer in data['layers']:
                                     enemy['colEnd'] = "1"
                                 elif enemy['trapContinousMode'] == 'vertical':
                                     enemy['linEnd'] = "1"
-                                elif enemy['trapContinousMode'] == 'all including diagonals':
+                                elif enemy['trapContinousMode'] == 'diagonal' or enemy['trapContinousMode'] == 'all including diagonals':
                                     enemy['linEnd'] = "1"
                                     enemy['colEnd'] = "1"
                         else:

@@ -1,3 +1,7 @@
+Dim enemyModeBucle, enemyColBucle, enemyLinBucle, enemyColIniBucle, enemyLinIniBucle, enemySpeedBucle, _ 
+    enemyLiveBucle, enemyColEndBucle, enemyLinEndBucle, horizontalDirectionBucle, verticalDirectionBucle, _
+    tileBucle As Byte
+
 #ifdef SIDE_VIEW
     Function checkPlatformHasProtaOnTop(x As Ubyte, y As Ubyte) As Ubyte
         If (protaX + 3) < x Or protaX > (x + 3) Then Return 0
@@ -33,22 +37,40 @@
 #endif
 
 #ifdef BULLET_ENEMIES
-    Sub enemyShoot(bulletId as ubyte, posX as ubyte, posY as ubyte, direction as byte)
-        If direction = BULLET_DIRECTION_RIGHT Then
-            enemyBullets(bulletId, 0) = posX + 2
-            enemyBullets(bulletId, 1) = posY + 1
-        Elseif direction = BULLET_DIRECTION_LEFT
-            enemyBullets(bulletId, 0) = posX
-            enemyBullets(bulletId, 1) = posY + 1
-        Elseif direction = BULLET_DIRECTION_UP
-            enemyBullets(bulletId, 0) = posX + 1
-            enemyBullets(bulletId, 1) = posY + 1
-        Else
-            enemyBullets(bulletId, 0) = posX + 1
-            enemyBullets(bulletId, 1) = posY + 2
-        End If
+    ' Sub enemyShoot(bulletId as ubyte, posX as ubyte, posY as ubyte, direction as byte)
+    '     If direction = BULLET_DIRECTION_RIGHT Then
+    '         enemyBullets(bulletId, 0) = posX + 2
+    '         enemyBullets(bulletId, 1) = posY + 1
+    '     Elseif direction = BULLET_DIRECTION_LEFT
+    '         enemyBullets(bulletId, 0) = posX
+    '         enemyBullets(bulletId, 1) = posY + 1
+    '     Elseif direction = BULLET_DIRECTION_UP
+    '         enemyBullets(bulletId, 0) = posX + 1
+    '         enemyBullets(bulletId, 1) = posY + 1
+    '     Else
+    '         enemyBullets(bulletId, 0) = posX + 1
+    '         enemyBullets(bulletId, 1) = posY + 2
+    '     End If
         
-        enemyBullets(bulletId, 2) = direction
+    '     enemyBullets(bulletId, 2) = direction
+    '     BeepFX_Play(2)
+    ' End Sub
+
+    Sub enemyShoot(bulletId as ubyte, direction as byte)
+        enemyBullets(bulletId, 2) = 0
+        enemyBullets(bulletId, 3) = 0
+
+        if not direction or direction = 1 then
+            enemyBullets(bulletId, 2) = sgn(protaX - enemyColBucle)
+        end if
+        
+        if not direction or direction = 2 then
+            enemyBullets(bulletId, 3) = sgn(protaY - enemyLinBucle)
+        end if
+        
+        enemyBullets(bulletId, 0) = enemyColBucle + 1 + enemyBullets(bulletId, 2)
+        enemyBullets(bulletId, 1) = enemyLinBucle + 1 + enemyBullets(bulletId, 3)
+        
         BeepFX_Play(2)
     End Sub
 #endif
@@ -64,9 +86,6 @@
     end function
 #endif
 
-Dim enemyModeBucle, enemyColBucle, enemyLinBucle, enemyColIniBucle, enemyLinIniBucle, enemySpeedBucle, _ 
-    enemyLiveBucle, enemyColEndBucle, enemyLinEndBucle, horizontalDirectionBucle, verticalDirectionBucle, _
-    tileBucle As Byte
 
 #ifdef ENEMIES_PLATFORM_ENABLED
 Dim enemyPlatformBucle as byte
@@ -353,11 +372,20 @@ Sub moveEnemies()
                                 end if
                             end if
                         #endif
-                        
+
+                        #ifdef ENEMIES_TRAP_DIAGONAL_ENABLED
+                            if ABS(protaX - enemyColBucle) = ABS(protaY - enemyLinBucle) Then
+                                if enemyModeBucle = ENEMY_MODE_TRAP_DIAGONAL or enemyModeBucle = ENEMY_MODE_TRAP_ALL Then
+                                    verticalDirectionBucle = Sgn(protaY - enemyLinBucle)
+                                    horizontalDirectionBucle = Sgn(protaX - enemyColBucle)
+                                end if
+                            end if
+                        #endif
+
                         #ifdef ENEMIES_SOUND
-                        if horizontalDirectionBucle or verticalDirectionBucle then
-                            BEEP .01, 4
-                        end if
+                            if horizontalDirectionBucle or verticalDirectionBucle then
+                                BEEP .01, 4
+                            end if
                         #endif
                     Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle <= PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle <= PLAYER_BOUNDS_LEFT Then
                         enemyColBucle = enemyColIniBucle
@@ -486,28 +514,24 @@ Sub moveEnemies()
                 #else
                     if tileBucle > 16 Then
                 #endif
-                    if Not invincible then checkProtaCollision(enemyId, enemyColBucle, enemyLinBucle, enemyLiveBucle)
+                    ' if Not invincible then checkProtaCollision(enemyId, enemyColBucle, enemyLinBucle, enemyLiveBucle)
+                    if Not invincible then checkProtaCollision(enemyId)
                     
                     #ifdef BULLET_ENEMIES
-                        ' if not enemyBullets(enemyId, 0) and (tileBucle mod 17) < BULLET_ENEMIES_RANGE then
                         if not enemyBullets(enemyId, 0) and decompressedEnemiesScreen(enemyId, ENEMY_SHOOT) then
                             #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
                                 if enemyLinBucle > (protaY-2) and enemyLinBucle < (protaY+4) Then
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
+                                        ' forzar dirección en horizontal
+                                        enemyShoot(enemyId, 1)
+                                        
                                         #ifdef BULLET_ENEMIES_LOOK_AT
                                             dim lookDirection as ubyte = decompressedEnemiesScreen(enemyId, ENEMY_TILE) + 1
-                                        #endif
-                                        
-                                        if enemyColBucle < protaX Then
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_RIGHT)
-                                        else
-                                            #ifdef BULLET_ENEMIES_LOOK_AT
+                                            
+                                            if enemyColBucle > protaX Then
                                                 lookDirection = lookDirection + 16
-                                            #endif
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_LEFT)
-                                        End if
-                                        
-                                        #ifdef BULLET_ENEMIES_LOOK_AT
+                                            end if
+
                                             #ifdef SPRITES_COLOR_ENABLED
                                                 drawSpriteWithColor(lookDirection, enemyColBucle, enemyLinBucle, colorBucle)
                                             #else
@@ -518,10 +542,10 @@ Sub moveEnemies()
                                         continue for
                                     #else
                                         if enemyColBucle < protaX and horizontalDirectionBucle = 1 Then
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_RIGHT)
+                                            enemyShoot(enemyId, 1)
                                             continue for
                                         elseif enemyColBucle > protaX and horizontalDirectionBucle = -1 Then
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_LEFT)
+                                           enemyShoot(enemyId, 1)
                                             continue for
                                         end if
                                     #endif
@@ -540,23 +564,26 @@ Sub moveEnemies()
                                     #endif
                                     
                                     #ifndef BULLET_ENEMIES_MUST_LOOK
-                                        if enemyLinBucle < protaY Then
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_DOWN)
-                                        else
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_UP)
-                                        end if
-                                        
+                                        enemyShoot(enemyId, 2)
                                         continue for
                                     #Else
                                         if enemyLinBucle < protaY and verticalDirectionBucle = 1 Then
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_DOWN)
+                                            ' enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_DOWN)
+                                            enemyShoot(enemyId, 2)
                                             continue for
                                         elseif enemyLinBucle > protaY and verticalDirectionBucle = -1 Then
-                                            enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_UP)
+                                            ' enemyShoot(enemyId,enemyColBucle, enemyLinBucle, BULLET_DIRECTION_UP)
+                                            enemyShoot(enemyId, 2)
                                             continue for
                                         end if
                                     #endif
                                 end if
+                            #endif
+                            #ifdef BULLET_ENEMIES_DIRECTION_DIAGONAL
+                                if ABS(protaX - enemyColBucle) = ABS(protaY - enemyLinBucle) THEN
+                                    enemyShoot(enemyId, 0)
+                                    continue for
+                                END IF
                             #endif
                         end if
                     #endif
@@ -590,16 +617,17 @@ Sub moveEnemies()
     End if
 End Sub
 
-Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte, enemyLive As Ubyte)
+' Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte, enemyLive As Ubyte)
+Sub checkProtaCollision(enemyId As Ubyte)
     'If invincible Then Return
     
-    If (protaX + 2) < enemyX0 Or protaX > (enemyX0 + 2) Then Return
+    If (protaX + 2) < enemyColBucle Or protaX > (enemyColBucle + 2) Then Return
     
     #ifdef SIDE_VIEW
         #ifdef JUMP_ON_ENEMIES
-            If (protaY + 4) > (enemyY0 - 2) And (protaY + 4) < (enemyY0 + 2) Then
+            If (protaY + 4) > (enemyLinBucle - 2) And (protaY + 4) < (enemyLinBucle + 2) Then
                 #ifdef KILL_JUMPING_ON_TOP
-                    if enemyLive <> -100 Then damageEnemy(enemyId)
+                    if enemyLiveBucle <> -100 Then damageEnemy(enemyId)
                 #endif
                 landed = 1
                 jumpCurrentKey = jumpStopValue
@@ -609,7 +637,11 @@ Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte, en
         #endif
     #endif
     
-    If (protaY + 2) < (enemyY0) Or protaY > (enemyY0 + 2) Then Return
+    If (protaY + 2) < (enemyLinBucle) Or protaY > (enemyLinBucle + 2) Then Return
+    
+    #ifdef ENEMY_COLLISION_PROTA_DAMAGE
+        if enemyLiveBucle <> -100 Then damageEnemy(enemyId)
+    #endif
     
     decrementLife()
 End Sub

@@ -21,6 +21,10 @@ class Sizes:
         self.SCREEN_OBJECTS_DATA = 0
         self.SCREENS_WON_DATA = 0
         self.DECOMPRESSED_ENEMIES_SCREEN_DATA = 0
+        
+        self.ENEMIES_INITIAL_LIFE_DATA = 0
+        self.ENEMIES_SHOOT_DATA = 0
+        
         self.MAPS_DATA = 0
         self.BROKEN_TILES_DATA = 0
         self.MUSIC = 0
@@ -124,6 +128,14 @@ class Sizes:
         return "DECOMPRESSED_ENEMIES_SCREEN_DATA"
     
     @staticmethod
+    def ENEMIES_INITIAL_LIFE_DATA_STRING():
+        return "ENEMIES_INITIAL_LIFE_DATA"
+    
+    @staticmethod
+    def ENEMIES_SHOOT_DATA_STRING():
+        return "ENEMIES_SHOOT_DATA"
+
+    @staticmethod
     def DECOMPRESSED_MAP_DATA_STRING():
         return "DECOMPRESSED_MAP_DATA"
     
@@ -221,6 +233,10 @@ class Sizes:
             self.ENEMIES_IN_SCREEN_OFFSETS_DATA_STRING(),
             self.ENEMIES_PER_SCREEN_INITIAL_DATA_STRING(),
             self.DECOMPRESSED_ENEMIES_SCREEN_DATA_STRING(),
+
+            self.ENEMIES_INITIAL_LIFE_DATA_STRING(),
+            self.ENEMIES_SHOOT_DATA_STRING(),
+
             # self.MAPS_DATA_STRING(),
             # self.DECOMPRESSED_MAP_DATA_STRING(),
             self.TEXTS_COORD_DATA_STRING(),
@@ -256,6 +272,10 @@ class Sizes:
             # self.ENEMIES_PER_SCREEN_DATA_STRING(),
             self.ENEMIES_PER_SCREEN_INITIAL_DATA_STRING(),
             self.DECOMPRESSED_ENEMIES_SCREEN_DATA_STRING(),
+
+            self.ENEMIES_INITIAL_LIFE_DATA_STRING(),
+            self.ENEMIES_SHOOT_DATA_STRING(),
+
             self.MAPS_DATA_STRING(),
             self.TEXTS_COORD_DATA_STRING(),
             self.TEXTS_DATA_STRING(),

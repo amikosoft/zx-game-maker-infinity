@@ -61,7 +61,8 @@
             "clockwise",
             "trap all directions",
             "trap vertical",
-            "trap horizontal"
+            "trap horizontal",
+            "trap diagonal"
         ],
         "valuesAsFlags": false
     },

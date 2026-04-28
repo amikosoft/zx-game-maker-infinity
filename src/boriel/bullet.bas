@@ -133,43 +133,60 @@ End Function
 
 #ifdef BULLET_ENEMIES
     Function moveEnemyBullet(bulletId as ubyte) as ubyte
-        Dim localBulletX as ubyte = enemyBullets(bulletId, 0)
+        Dim localBulletX as byte = enemyBullets(bulletId, 0)
         if Not localBulletX Then Return 0
                 
-        Dim localBulletY as ubyte = enemyBullets(bulletId, 1)
-        Dim localBulletDirection as ubyte = enemyBullets(bulletId, 2)
+        Dim localBulletY as byte = enemyBullets(bulletId, 1)
+        Dim localBulletDirection as byte = enemyBullets(bulletId, 2) * BULLET_ENEMIES_SPEED
+        Dim localBulletDirectionY as byte = enemyBullets(bulletId, 3) * BULLET_ENEMIES_SPEED
         
+        if localBulletDirection then
+            localBulletX = localBulletX + localBulletDirection
+            if localBulletX >= PLAYER_BOUNDS_RIGHT or localBulletX <= PLAYER_BOUNDS_LEFT then
+                enemyBullets(bulletId, 0) = 0
+                return 0
+            end if
+        end if
+
+        if localBulletDirectionY then
+            localBulletY = localBulletY + localBulletDirectionY
+            if localBulletY >= PLAYER_BOUNDS_BOTTOM or localBulletY <= PLAYER_BOUNDS_TOP then
+                enemyBullets(bulletId, 0) = 0
+                return 0
+            end if
+        end if
+
         ' desplazamiento de bala
-        #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
-            if localBulletDirection = BULLET_DIRECTION_RIGHT then
-                if localBulletX >= PLAYER_BOUNDS_RIGHT then
-                    enemyBullets(bulletId, 0) = 0
-                    return 0
-                end if
-                localBulletX = localBulletX + BULLET_ENEMIES_SPEED
-            elseif localBulletDirection = BULLET_DIRECTION_LEFT then
-                if localBulletX <= PLAYER_BOUNDS_LEFT then
-                    enemyBullets(bulletId, 0) = 0
-                    return 0
-                end if
-                localBulletX = localBulletX - BULLET_ENEMIES_SPEED
-            end if
-        #endif
-        #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
-            if localBulletDirection = BULLET_DIRECTION_DOWN then
-                if localBulletY >= PLAYER_BOUNDS_BOTTOM then
-                    enemyBullets(bulletId, 0) = 0
-                    return 0
-                end if
-                localBulletY = localBulletY + BULLET_ENEMIES_SPEED
-            elseif localBulletDirection = BULLET_DIRECTION_UP
-                if localBulletY <= PLAYER_BOUNDS_TOP then
-                    enemyBullets(bulletId, 0) = 0
-                    return 0
-                end if
-                localBulletY = localBulletY - BULLET_ENEMIES_SPEED
-            end if
-        #endif
+        ' #ifdef BULLET_ENEMIES_DIRECTION_HORIZONTAL
+        '     if localBulletDirection = BULLET_DIRECTION_RIGHT then
+        '         if localBulletX >= PLAYER_BOUNDS_RIGHT then
+        '             enemyBullets(bulletId, 0) = 0
+        '             return 0
+        '         end if
+        '         localBulletX = localBulletX + BULLET_ENEMIES_SPEED
+        '     elseif localBulletDirection = BULLET_DIRECTION_LEFT then
+        '         if localBulletX <= PLAYER_BOUNDS_LEFT then
+        '             enemyBullets(bulletId, 0) = 0
+        '             return 0
+        '         end if
+        '         localBulletX = localBulletX - BULLET_ENEMIES_SPEED
+        '     end if
+        ' #endif
+        ' #ifdef BULLET_ENEMIES_DIRECTION_VERTICAL
+        '     if localBulletDirection = BULLET_DIRECTION_DOWN then
+        '         if localBulletY >= PLAYER_BOUNDS_BOTTOM then
+        '             enemyBullets(bulletId, 0) = 0
+        '             return 0
+        '         end if
+        '         localBulletY = localBulletY + BULLET_ENEMIES_SPEED
+        '     elseif localBulletDirection = BULLET_DIRECTION_UP
+        '         if localBulletY <= PLAYER_BOUNDS_TOP then
+        '             enemyBullets(bulletId, 0) = 0
+        '             return 0
+        '         end if
+        '         localBulletY = localBulletY - BULLET_ENEMIES_SPEED
+        '     end if
+        ' #endif
         
         #ifdef BULLET_ENEMIES_COLLIDE
             if checkBulletTileCollision(localBulletX, localBulletY) Then 

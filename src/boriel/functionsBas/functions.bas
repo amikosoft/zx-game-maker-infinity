@@ -438,7 +438,7 @@ sub debugB(value as uBYTE)
     PRINT AT 0, 5; value
 end sub
 
-sub debugC(value as uBYTE)
+sub debugC(value as BYTE)
     PRINT AT 0, 10; "  "
     PRINT AT 0, 10; value
 end sub

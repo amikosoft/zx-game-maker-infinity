@@ -34,23 +34,27 @@ End Function
                         ' if anim then protaDirection = 2
                         #ifdef SCREEN_TERRAIN_ENABLED
                             if anim = 2 and screenIsTerrain Then
-                                protaDirection = 2
-                                If protaTile = PROTA_TILE_DOWN Then
-                                    protaTile = 8
-                                Else
-                                    protaTile = PROTA_TILE_DOWN
-                                End If
+                                if not horizontalAxisKeyPressed then
+                                    protaDirection = 2
+                                    If protaTile = PROTA_TILE_DOWN Then
+                                        protaTile = 8
+                                    Else
+                                        protaTile = PROTA_TILE_DOWN
+                                    End If
+                                end if
                                 return 1
                             end if
                         #endif
                         
                         if anim then
-                            protaDirection = 2
-                            If protaTile = PROTA_TILE_UP Then
-                                protaTile = 6
-                            Else
-                                protaTile = PROTA_TILE_UP
-                            End If
+                            if not horizontalAxisKeyPressed then
+                                protaDirection = 2
+                                If protaTile = PROTA_TILE_UP Then
+                                    protaTile = 6
+                                Else
+                                    protaTile = PROTA_TILE_UP
+                                End If
+                            end if
                         End If
                     end if
                     return 2
@@ -337,19 +341,19 @@ Sub upKey()
     verticalAxisKeyPressed = 1
 
     #ifdef SIDE_VIEW
-        #ifdef PREVENT_JUMP_ON_FIRE
-        if shootPressed then return
-        #endif
-
         #ifdef LADDERS_ANIMATION_ENABLED
             If checkIsLadder(protaY + 3, 1) Then
-                protaDirection = 8
+                if not horizontalAxisKeyPressed then protaDirection = 8
                 checkProtaTop()
                 
                 if Not CheckCollision(protaX, protaY - 1) Then
                     protaY = protaY - 1
                 End If
             Else
+                #ifdef PREVENT_JUMP_ON_FIRE
+                    if shootPressed then return
+                #endif
+
                 jump()
             End If
         #Else
@@ -361,9 +365,15 @@ Sub upKey()
                         protaY = protaY - 1
                     End If
                 else
+                    #ifdef PREVENT_JUMP_ON_FIRE
+                        if shootPressed then return
+                    #endif
                     jump()
                 end if
             #else
+                #ifdef PREVENT_JUMP_ON_FIRE
+                    if shootPressed then return
+                #endif
                 jump()
             #endif
         #endif
@@ -373,6 +383,7 @@ Sub upKey()
         End If
         If canMoveUp() Then
             protaY = protaY - 1
+
             protaTile = protaFrame + 1
             protaDirection = 8
             
@@ -600,7 +611,7 @@ Sub keyboardListen()
     Else
         If MultiKeys(keyArray(LEFT)) Then leftKey(1)
         If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
-
+        
         #ifdef PREVENT_JUMP_ON_FIRE
             If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
             If MultiKeys(keyArray(UP)) Then upKey()

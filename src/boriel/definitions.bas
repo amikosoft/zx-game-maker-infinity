@@ -48,7 +48,12 @@ const BULLET_DIRECTION_DOWN = 2
 #endif
 
 #ifdef BULLET_ENEMIES
-    Dim enemyBullets(MAX_ENEMIES_PER_SCREEN, 2) As Byte
+    Dim enemyBullets(MAX_ENEMIES_PER_SCREEN, 3) As Byte at ENEMIES_SHOOT_DATA_ADDRESS
+
+    ' const ENEMY_BULLET_X as ubyte = 0
+    ' const ENEMY_BULLET_Y as ubyte = 1
+    ' const ENEMY_BULLET_X_DIRECTION as ubyte = 2
+    ' const ENEMY_BULLET_Y_DIRECTION as ubyte = 3
 #endif
 
 #ifdef SHOOTING_ENABLED
@@ -207,7 +212,7 @@ Const SCREEN_STATUS_NOT_VISITED as ubyte = 1
 Const SCREEN_STATUS_COMPLETED as ubyte = 3
 
 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-    Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte
+    Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte at ENEMIES_INITIAL_LIFE_DATA_ADDRESS
 #endif
 
 ' Dim animatedTilesInScreen(SCREENS_COUNT, MAX_ANIMATED_TILES_PER_SCREEN, 2) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
@@ -319,6 +324,7 @@ Const ENEMY_MODE_CLOCKWISE = 6
 Const ENEMY_MODE_TRAP_ALL = 10
 Const ENEMY_MODE_TRAP_VERTICAL = 11
 Const ENEMY_MODE_TRAP_HORIZONAL = 12
+Const ENEMY_MODE_TRAP_DIAGONAL = 13
 
 #ifdef ARCADE_MODE
     Dim currentScreenKeyX As Ubyte

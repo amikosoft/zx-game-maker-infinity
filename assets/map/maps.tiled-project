@@ -72,7 +72,8 @@
             "clockwise",
             "trap all directions",
             "trap vertical",
-            "trap horizontal"
+            "trap horizontal",
+            "trap diagonal"
         ],
         "valuesAsFlags": false
     },
@@ -96,7 +97,8 @@
         "values": [
             "all",
             "horizontal",
-            "vertical"
+            "vertical",
+            "diagonal"
         ],
         "valuesAsFlags": false
     },
@@ -331,6 +333,11 @@
             },
             {
                 "name": "enemiesNormalCollide",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "enemiesCollisionProtaDamage",
                 "type": "bool",
                 "value": false
             },

@@ -51,7 +51,7 @@ Sub mapDraw(withHud as ubyte)
             #endif
         #endif
     #endif
-
+    
     Dim index As Uinteger = 0
     
     #ifdef FADE_TILES_ENABLED
