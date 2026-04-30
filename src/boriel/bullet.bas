@@ -259,6 +259,12 @@ sub damageEnemy(enemyToKill as Ubyte)
         if alive < 1 then return
         
         alive = alive - 1
+
+        #ifdef HUD_ENEMIES_ENERGY_BAR      
+            ' printEnergyBar(alive, 8, 22, 21)
+            printEnergyBar(alive, 8, 11, 21)
+            messageLoopCounter = MESSAGE_LOOPS_VISIBLE
+        #endif
         
         #ifdef HISCORE_ENABLED
             score = score + 5

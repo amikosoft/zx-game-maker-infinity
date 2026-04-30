@@ -446,6 +446,16 @@
                 "value": false
             },
             {
+                "name": "hudShowProtaEnergyBar",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "hudShowEnemiesEnergyBar",
+                "type": "bool",
+                "value": false
+            },
+            {
                 "name": "idleTime",
                 "type": "int",
                 "value": 0

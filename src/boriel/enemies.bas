@@ -186,7 +186,7 @@ Sub moveEnemies()
                 end if
 
                 #ifdef SHOOTING_ENABLED
-                    if bulletPositionX then
+                    if bulletPositionX and enemyLiveBucle > 0  then
                         checkEnemyBullet(enemyId, enemyColBucle, enemyLinBucle)
                     End If
                 #endif

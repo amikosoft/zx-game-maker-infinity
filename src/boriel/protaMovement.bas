@@ -656,7 +656,9 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
             #endif
             printHud()
             #ifdef MESSAGES_ENABLED
-                printMessage(TEXT_NEW_ITEM, 4, 0)
+                #ifdef HUD_SHOW_ITEMS_MESSAGE
+                    printMessage(TEXT_NEW_ITEM, 4, 0)
+                #endif
             #endif
             #ifdef ARCADE_MODE
                 If currentItems = itemsToFind Then
@@ -677,7 +679,9 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                 #ifdef CHECKPOINTS_ENABLED
                 ElseIf tile = FLAG_TILE Then
                     #ifdef MESSAGES_ENABLED
-                        if protaScreenRespawn <> currentScreen Then printMessage(TEXT_CHECK_POINT, 4, 0)
+                        #ifdef HUD_SHOW_CHECKS_MESSAGE
+                            if protaScreenRespawn <> currentScreen Then printMessage(TEXT_CHECK_POINT, 4, 0)
+                        #endif
                     #endif
                     
                     protaXRespawn = protaX
@@ -698,7 +702,9 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                 currentKeys = currentKeys + 1
                 printHud()
                 #ifdef MESSAGES_ENABLED
-                    printMessage(TEXT_KEY_FOUND, 4, 0)
+                    #ifdef HUD_SHOW_KEYS_MESSAGE
+                        printMessage(TEXT_KEY_FOUND, 4, 0)
+                    #endif
                 #endif
                 screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
                 BeepFX_Play(3)
@@ -722,7 +728,9 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
             printHud()
             
             #ifdef MESSAGES_ENABLED
-                printMessage(TEXT_LIFE, 2, 0)
+                #ifdef HUD_SHOW_LIVES_MESSAGE
+                    printMessage(TEXT_LIFE, 2, 0)
+                #endif
             #endif
             
             screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
@@ -734,7 +742,9 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                 printHud()
                 
                 #ifdef MESSAGES_ENABLED
-                    printMessage(TEXT_AMMO, 2, 0)
+                    #ifdef HUD_SHOW_AMMO_MESSAGE
+                        printMessage(TEXT_AMMO, 2, 0)
+                    #endif
                 #endif
                 
                 screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
@@ -851,13 +861,13 @@ Sub protaMovement()
         #endif
     #endif
     
-    #ifdef MESSAGES_ENABLED
-        ' checkMessageForDelete()
-        if messageLoopCounter Then
-            messageLoopCounter = messageLoopCounter - 1
-            If not messageLoopCounter Then
-                PRINT AT 21, 11; TEXT_EMPTY_STRING
-            End If
-        End if
-    #endif
+    ' #ifdef MESSAGES_ENABLED
+    '     ' checkMessageForDelete()
+    '     if messageLoopCounter Then
+    '         messageLoopCounter = messageLoopCounter - 1
+    '         If not messageLoopCounter Then
+    '             PRINT AT 21, 11; TEXT_EMPTY_STRING
+    '         End If
+    '     End if
+    ' #endif
 End Sub

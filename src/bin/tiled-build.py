@@ -210,6 +210,7 @@ livesMode = 0
 livesEnergy = 0
 livesDeadBackgroundColor = 0
 
+# enemies configuration
 enemiesShoot = 0
 enemiesShootDirection = 'all'
 enemiesBulletCollision = True
@@ -219,6 +220,7 @@ enemiesShootingLookAtPlayer = False
 enemiesShootOnlyLookingPlayer = False
 enemiesSound = False
 enemiesTrapShowWhileStatic = False
+enemiesCollisionProtaDamage = False
 
 graphicsSpriteColors = False
 playerColor = 0
@@ -276,7 +278,17 @@ multicolorItem = False
 
 jumpFallingSprite = False
 
-enemiesCollisionProtaDamage = False
+# Hud configuration
+hudShowProtaEnergyBar = False
+hudShowEnemiesEnergyBar = False
+
+hudShowLivesMessage = True
+hudShowItemsMessage = True
+hudShowAmmoMessage = True
+hudShowKeysMessage = True
+hudShowDoorMessage = True
+hudShowWallMessage = True
+hudShowChecksMessage = True
 
 if 'properties' in data:
     for property in data['properties']:
@@ -389,15 +401,6 @@ if 'properties' in data:
             gravityLow = property['value'] 
         elif property['name'] == 'jumpType':
             jumpType = property['value']
-            # if property['value'] == 'accelerated':
-            #     jumpArrayCount = 8
-            #     jumpArray = "{-2, -2, -2, -2, -2, 0, 0, 0}"
-            # elif property['value'] == 'smooth':
-            #     jumpArrayCount = 8
-            #     jumpArray = "{-2, -2, -2, -2, -1, -1, 0, 0}"
-            # elif property['value'] == 'mini':
-            #     jumpArrayCount = 5
-            #     jumpArray = "{-2, -2, -2, 0, 0}"
         elif property['name'] == 'jumpDouble':
             duobleJump = property['value'] 
         elif property['name'] == 'jumpWalls':
@@ -449,6 +452,8 @@ if 'properties' in data:
             enemiesSound = property['value']
         elif property['name'] == 'enemiesTrapShowWhileStatic':
             enemiesTrapShowWhileStatic = property['value']
+        elif property['name'] == 'enemiesDamageOnCollision':
+            enemiesDamageOnCollision = property['value'] 
         elif property['name'] == 'bulletsCollisionWithBullets':
             bulletsCollisionWithBullets = property['value']
         elif property['name'] == 'bulletType':
@@ -531,6 +536,23 @@ if 'properties' in data:
             playerColor = property['value']
         elif property['name'] == 'graphicsSpriteColors':
             graphicsSpriteColors = property['value']
+        elif property['name'] == 'hudShowProtaEnergyBar':
+            hudShowProtaEnergyBar = property['value']
+        elif property['name'] == 'hudShowEnemiesEnergyBar':
+            hudShowEnemiesEnergyBar = property['value']
+        # elif property['name'] == 'hudShowProtaEnergyBar':
+        #     hudShowProtaEnergyBar = property['value']
+        # elif property['name'] == 'hudShowProtaEnergyBar':
+        #     hudShowProtaEnergyBar = property['value']
+        # elif property['name'] == 'hudShowProtaEnergyBar':
+        #     hudShowProtaEnergyBar = property['value']
+        # elif property['name'] == 'hudShowProtaEnergyBar':
+        #     hudShowProtaEnergyBar = property['value']
+        # elif property['name'] == 'hudShowProtaEnergyBar':
+        #     hudShowProtaEnergyBar = property['value']
+        # elif property['name'] == 'hudShowProtaEnergyBar':
+        #     hudShowProtaEnergyBar = property['value']
+
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -775,9 +797,38 @@ if levelsMode == 1:
     configStr += "#DEFINE LEVELS_MODE\n"
 
 if messagesEnabled == 1:
+    if hudShowLivesMessage:
+        configStr += "#DEFINE HUD_SHOW_LIVES_MESSAGE\n"
+        
+    if hudShowItemsMessage:
+        configStr += "#DEFINE HUD_SHOW_ITEMS_MESSAGE\n"
+
+    if hudShowAmmoMessage:
+        configStr += "#DEFINE HUD_SHOW_AMMO_MESSAGE\n"
+
+    if hudShowKeysMessage:
+        configStr += "#DEFINE HUD_SHOW_KEYS_MESSAGE\n"
+
+    if hudShowDoorMessage:
+        configStr += "#DEFINE HUD_SHOW_DOOR_MESSAGE\n"
+
+    if hudShowWallMessage:
+        configStr += "#DEFINE HUD_SHOW_WALL_MESSAGE\n"
+
+    if hudShowChecksMessage:
+        configStr += "#DEFINE HUD_SHOW_CHECKS_MESSAGE\n"
+
+if hudShowProtaEnergyBar:
+    configStr += "#DEFINE HUD_PROTA_ENERGY_BAR\n"
+
+if hudShowEnemiesEnergyBar:
+    configStr += "#DEFINE HUD_ENEMIES_ENERGY_BAR\n"
+    messagesEnabled = 1
+
+if messagesEnabled == 1:
     configStr += "#DEFINE MESSAGES_ENABLED\n"
     configStr += "Dim messageLoopCounter As Ubyte = 0\n"
-    configStr += "#Define MESSAGE_LOOPS_VISIBLE 30\n"
+    configStr += "Const MESSAGE_LOOPS_VISIBLE as ubyte = 30\n"
 
 # if enabled128K == 1:
 configStr += "#DEFINE ENABLED_128k\n"
@@ -1265,6 +1316,7 @@ for layer in data['layers']:
                 if object['type'] == 'platform':
                     objects[str(object['id'])]['platform'] = True
                     enemiesPlatform = True
+                    objects[str(object['id'])]['life'] = "-100"
 
                 if 'properties' in object and len(object['properties']) > 0:
                     for property in object['properties']:
@@ -1403,16 +1455,6 @@ for layer in data['layers']:
                             linEnd = objects[str(object['properties'][0]['value'])]['linIni'] 
                             objects[str(object['properties'][0]['value'])]['linEnd'] = linEnd
                             objects[str(object['properties'][0]['value'])]['linIni'] = linIni
-                elif object['type'] == 'player':
-                    initialScreen = screenId
-                    initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
-                    initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
-
-                    # if int(initialMainCharacterX) < 2 or int(initialMainCharacterX) > ((screenWidth*2)-8) or int(initialMainCharacterY) < 0 or int(initialMainCharacterY) > ((screenHeight*2)-8):
-                    #     exitWithErrorMessage('Main character initial position is out of bounds. X: ' + initialMainCharacterX + ', Y: ' + initialMainCharacterY)
-                    
-                    if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
-                        keys[str(screenId)] = [int(initialMainCharacterX+widthSkip), int(initialMainCharacterY+heightSkip)]
                 elif object['type'] == 'text':
                     if adventureTexts == True:
                         xScreenPosition = int((object['x'] % (tileWidth * screenWidth))) // 4

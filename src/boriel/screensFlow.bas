@@ -413,9 +413,17 @@ Sub playGame()
             End If
         #endif
 
-        ' If currentLife Then
-            protaMovement()
-        ' End if
+        protaMovement()
+        
+        #ifdef MESSAGES_ENABLED
+            ' checkMessageForDelete()
+            if messageLoopCounter Then
+                messageLoopCounter = messageLoopCounter - 1
+                If not messageLoopCounter Then
+                    PRINT AT 21, 11; TEXT_EMPTY_STRING
+                End If
+            End if
+        #endif
 
         If moveScreen Then
             moveToScreen(moveScreen)

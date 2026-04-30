@@ -139,6 +139,23 @@ sub decrementLife()
     BeepFX_Play(1)
 end sub
 
+sub printEnergyBar(partial as ubyte, total as ubyte, x as ubyte, y as ubyte)
+    dim percent as uinteger = (partial*9)/total
+
+    if percent < 4 then flash 1
+    for posX=0 to 8
+        if posX < percent then
+            PAPER 4
+        else
+            PAPER 2
+        end if
+
+        PRINT AT y, x + posX; " "
+    next posX
+
+    Paper PAPER_VALUE: flash 0
+end sub
+
 sub printHud()
     Ink INK_VALUE: Paper PAPER_VALUE: BRIGHT BRIGHT_VALUE: FLASH 0
     
@@ -147,9 +164,14 @@ sub printHud()
 
     #ifdef ENERGY_ENABLED
         if currentEnergy > INITIAL_ENERGY Then currentEnergy = 0
-        
-        PRINT AT 23, 4; TEXT_3_SPACES
-        PRINT AT 23, 4; currentEnergy
+
+        #ifdef HUD_PROTA_ENERGY_BAR        
+            'printEnergyBar(currentEnergy, INITIAL_ENERGY, 1, 21)
+            printEnergyBar(currentEnergy, INITIAL_ENERGY, 3, 23)
+        #else
+            PRINT AT 23, 4; TEXT_3_SPACES
+            PRINT AT 23, 4; currentEnergy
+        #endif
     #endif
     
     #ifdef JETPACK_FUEL
@@ -279,17 +301,21 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
             printHud()
             BeepFX_Play(4)
             #ifdef MESSAGES_ENABLED
-            Else
-                printMessage(TEXT_NEED_KEYS, 2, 0)
+                #ifdef HUD_SHOW_DOOR_MESSAGE
+                    Else
+                        printMessage(TEXT_NEED_KEYS, 2, 0)
+                #endif
             #endif
         End If
     End If
     #endif
 
     #ifdef MESSAGES_ENABLED
-        If tile = ENEMY_DOOR_TILE Then
-            printMessage(TEXT_KILL_ALL, 2, 0)
-        End If
+        #ifdef HUD_SHOW_WALL_MESSAGE
+            If tile = ENEMY_DOOR_TILE Then
+                printMessage(TEXT_KILL_ALL, 2, 0)
+            End If
+        #endif    
     #endif
     ' end if
     
