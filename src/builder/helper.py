@@ -84,6 +84,16 @@ def getGameView():
         maps_json = json.load(f)
     return next((prop["value"] for prop in maps_json["properties"] if prop["name"] == "gameView"), 'side')
 
+def getGameLanguage():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return next((prop["value"] for prop in maps_json["properties"] if prop["name"] == "gameLanguage"), 'en')
+
+def getConsoleMode():
+    with open(OUTPUT_FOLDER + "maps.json", "r") as f:
+        maps_json = json.load(f)
+    return next((prop["value"] for prop in maps_json["properties"] if prop["name"] == "consoleMode"), 'No')
+
 def getMusicEnabled():
     with open(OUTPUT_FOLDER + "maps.json", "r") as f:
         maps_json = json.load(f)

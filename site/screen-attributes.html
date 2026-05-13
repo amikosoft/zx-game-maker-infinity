@@ -753,6 +753,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#energia-de-jefe-boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Energía de jefe (boss)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ultima-pantalla" class="md-nav__link">
+    <span class="md-ellipsis">
+      Última pantalla
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#musica-in-game-por-pantallas" class="md-nav__link">
     <span class="md-ellipsis">
       Música in-game por pantallas
@@ -1050,6 +1068,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#energia-de-jefe-boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Energía de jefe (boss)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ultima-pantalla" class="md-nav__link">
+    <span class="md-ellipsis">
+      Última pantalla
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#musica-in-game-por-pantallas" class="md-nav__link">
     <span class="md-ellipsis">
       Música in-game por pantallas
@@ -1132,9 +1168,9 @@
 
 
 <h1 id="configuracion-de-opciones-de-pantalla">Configuración de opciones de pantalla</h1>
-<p>A partir de v3 de ZX Infinity se pueden asignar atributos a las pantallas, entre ellos la música elegida.</p>
-<p>Recuerda que para que esto funcione debes tener activa la opciçon <strong>screenAttributes</strong> en los atributos de tu juego.</p>
-<p>Una vez activa esta opción ya podrás añadir un punto (point) por cada pantalla tipo/class <strong>screen_attributes</strong> y configurarle al menos un atributo de los aquí indicados:</p>
+<p>Cada pantalla tiene sus atributos que puedes configurar para darle un comportamiento especial.</p>
+<p>Para ello debes añadirle un punto (point), o no, del tipo/class <strong>screen_attributes</strong> y configurarle al menos un atributo de los aquí indicados:</p>
+<p><img alt="Screen properties" src="imgs/screen_properties.png" /></p>
 <h2 id="color-de-fondo">Color de fondo</h2>
 <p>El atributo <strong>background</strong> te permite indicar al motor que la pantalla use este color como fondo, en lugar del establecido en los atributos generales de tu juego. Con esto se soluciona un problema de v2 con <em>dropTile</em> que sólo funcionaba cuando no tenías un tile establecido en esa parte. Además te ahorras tener que poner un tile de color dentro de tu colección para los distintos entornos que tengas.
 Por ejemplo, esto se puede usar para establecer un fondo Azul si estás al aire libre y un fondo oscuro con la tinta roja si estás en una caverna.
@@ -1150,8 +1186,12 @@ Se debe combinar con el atributo <em>background</em>.</p>
 <h2 id="hud-alternativo">HUD Alternativo</h2>
 <p>El atributo <strong>hud2</strong> te permite indicar al motor que la pantalla use un HUD alternativo en esa pantalla. El scr asociado que debe existir es <em>hud2.scr</em>. Por defecto se usa el HUD normal de siempre.</p>
 <h2 id="pantalla-en-modo-cenital-side-mode">Pantalla en modo cenital (side mode)</h2>
-<p>Para los juegos en vista lateral ahora se puede indicar que una pantalla funcione en modo cenital. Para ello se debe usar el atributo <strong>terrain</strong> (modo terreno). </p>
+<p>Para los juegos en vista lateral ahora se puede indicar que una pantalla funcione en modo cenital. Para ello se debe usar el atributo <strong>cenital</strong> (modo cenital). </p>
 <p>En estas pantallas no se puede saltar y los tiles de escalera no tienen efecto. Hay que tener en cuenta de no introducir plataformas en este modo pues no cambian su comportamiento y puede quedar raro</p>
+<h2 id="energia-de-jefe-boss">Energía de jefe (boss)</h2>
+<p>Indicando el atributo <strong>bossEnergy</strong> harás que esta pantalla funcione con una barra de energía única para todos los enemigos de la pantalla. Cualquier enemigo que pueda recibir daño lo bajará del total de la barra. Una vez se consuma la barra desaparecerán todos los enemigos que no volverán a aparecer.</p>
+<h2 id="ultima-pantalla">Última pantalla</h2>
+<p>El atributo <strong>finalScreen</strong> marcado con <strong>true</strong>, junto con el atributo <strong>bossEnergy</strong> distinto de 0, indicará al motor que esta pantalla es la pantalla de jefe final. Es decir, cuando desaparezcan todos los enemigos de la pantalla, el juego terminará.</p>
 <h2 id="musica-in-game-por-pantallas">Música in-game por pantallas</h2>
 <p>El atributo <strong>music</strong> permite definir qué música cargar al entrar en esa pantalla</p>
 <h3 id="configuracion-original-a-tener-en-cuenta">Configuración original a tener en cuenta</h3>

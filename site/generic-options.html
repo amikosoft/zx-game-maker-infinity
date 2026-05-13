@@ -616,9 +616,45 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#modo-consola" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modo consola
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#idioma-del-juego" class="md-nav__link">
     <span class="md-ellipsis">
       Idioma del juego
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mensajes-del-hud" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mensajes del HUD
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fuente-personalizada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fuente personalizada
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final item
     </span>
   </a>
   
@@ -1072,9 +1108,45 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#modo-consola" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modo consola
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#idioma-del-juego" class="md-nav__link">
     <span class="md-ellipsis">
       Idioma del juego
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mensajes-del-hud" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mensajes del HUD
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fuente-personalizada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fuente personalizada
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final item
     </span>
   </a>
   
@@ -1225,18 +1297,6 @@
 </ul>
 <p><img alt="Mechanical belt tile" src="imgs/mechanicalBeltTile.png" /></p>
 <ul>
-<li><strong>fontCustom</strong> te permite cambiar la fuente para mostrar en los textos del juego dándole su toque especial.</li>
-</ul>
-<p>De serie se incluyen 3 fuentes preconfiguradas (gracias a Duefecto y sus fuentes de ejemplo del <a href="https://github.com/Duefectu/BorielBasicManualParaTorpes">Manual para torpes</a>)</p>
-<p>Las distintas opciones son:</p>
-<ul>
-<li><em>default</em> es la fuente de nuestro queridísimo ZX Spectrum</li>
-<li><em>medieval</em> le da su toque romántico a los textos</li>
-<li><em>bold all</em> muestra la fuente retorneada como si fuera negrita</li>
-<li><em>bold mayus</em> muestra la fuente retorneada sólo para las mayúsculas</li>
-</ul>
-<p>También puedes editar y sustituir cualquiera de ellas usando <a href="https://github.com/boriel-basic/ZXBasicStudio">ZXBasicStudio</a></p>
-<ul>
 <li><strong>transpasableItems</strong> esto indica al motor cuántos tiles traspasables quieres tener disponible en la zona dedicada.</li>
 </ul>
 <p>Hay que tener en cuenta que ahora los 2 primeros tiles (de momento) se usarán para las escaleras diagonales.</p>
@@ -1306,6 +1366,23 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 <p><strong>jumpFallingSprite</strong> si activas esto tu personaje mostrará un sprite distinto cuando esté cayendo. Los sprites donde se representa esto son los que anteriormente se usaban para plataformas.</p>
 </li>
 </ul>
+<h3 id="modo-consola">Modo consola</h3>
+<p>Habilitando el modo consola el compilador prepara el juego para que funcione como una consola, de momento viene preconfigurado para The Spectrum.</p>
+<p>En la carpeta de distribución encontrarás, además del tap de tu juego, un fichero .cfg con el mismo nombre que debes distribuir con tu juego.</p>
+<p>Además, el compilador buscará primero aquellos SCR que terminen en _console.scr, no pasando nada si no los encuentra ya que seguirá buscando los de siempre.</p>
+<p><img alt="Modo consola" src="imgs/modo_consola.png" /></p>
+<p>En el modo consola los controles cambian. De hecho, vienen preconfigurados y no pueden cambiarse. En el fichero .cfg anterior puedes encontrar el premapeado del mando para The Spectrum. En el proyecto de ejemplo encontrarás un ejemplo de ficheros SCR.</p>
+<p>Por último, si tu juego tiene ULA+ podrás activarlo para el modo consola o no desde la interfaz del compilador (hay que activarlo en ambos sitios)</p>
+<p>El comportamiento del juego cambia en modo consola y no hay manera de modificarlo. Se siguen las siguientes pautas:</p>
+<p><strong>Pagina de inicio</strong></p>
+<p>Pulsar disparo para iniciar y salto (en otro botón) para activar/desactivar la música,</p>
+<p><strong>Controles</strong>
+La cruceta sirve para las direcciones y además se tiene un salto y un dispaor mapeado en los botones</p>
+<p>El botón de menú se usa para pausar/ver mapa. 
+- Pulsando otra vez se sale de la partida.
+- Pulsando disparo se continúa.</p>
+<p><strong>Otras características</strong></p>
+<p>Todos los textos/acciones se confirman/realizan con el botón de disparo.</p>
 <h3 id="idioma-del-juego">Idioma del juego</h3>
 <p>Con infinity puedes generar tu juego en múltiples idiomas de manera sencilla y sin límite de idiomas.</p>
 <ul>
@@ -1314,6 +1391,35 @@ En esa pantalla puedes meter información adicional como ayuda contextual, un me
 <p>Para configurar un idioma nuevo sólo tienes que ir a la carpeta <em>boriel/langs</em> y coger uno de los ficheros de idiomas existentes y copiarlo a otro nuevo. El nombre tiene que tener la siguiente extructura: 'lang_' + (tu código de idioma en minúsculas y sin espacios) + '.bas'.</p>
 <p>Siguiendo las pequeñas instrucciones del fichero podrás tener tus propios textos.</p>
 <p>Para los textos de aventura hay que meterles un atributo por cada idioma en el que quieras que aparezca. Por ejemplo, si vas a generar en inglés y español deberás tener los textos en el atributo 'es' y también en 'en'. Si no tienes el atributo correspondiente al idioma el texto no será incluído en el juego.</p>
+<p>También puedes tener una traducción para cada SCR. Simplemente crea un fichero SCR con el mismo nombre que el original pero con el sufijo _(idioma), por ejemplo: intro_es.scr</p>
+<p>Para el modo consola sería _(idioma)_console.scr. Por ejemplo: intro_es_console.scr</p>
+<h3 id="mensajes-del-hud">Mensajes del HUD</h3>
+<ul>
+<li><strong>hudMessagesEnabled</strong>. Si se activa esta opción se mostrará un mensaje de ayuda cuando se entre en contacto con algún item, puerta...</li>
+</ul>
+<p>Una vez activado se puede configurar individualmente cada texto desde la interfaz del compilador. Además puedes activar/desactivar individualmente cada uno de los eventos. </p>
+<p><img alt="HUD messages config" src="imgs/hud_messages.png" /></p>
+<p>Cabe destacar estas configs: <strong>hudShowProtaEnergyBar</strong> y <strong>hudShowEnemyEnergyBar</strong>. La primera te permitirá ver la barra de energía del protagonista en lugar de un nuḿero y la segunda la de los enemigos que acabas de golpear y tienen energía.</p>
+<p><img alt="HUD energy bar" src="imgs/energy_bar.png" /></p>
+<h3 id="fuente-personalizada">Fuente personalizada</h3>
+<ul>
+<li><strong>fontCustom</strong> te permite cambiar la fuente para mostrar en los textos del juego dándole su toque especial.</li>
+</ul>
+<p>De serie se incluyen una amplia variedad de fuentes preconfiguradas (entre ellas las de Duefectu, fuentes de ejemplo del <a href="https://github.com/Duefectu/BorielBasicManualParaTorpes">Manual para torpes</a>)</p>
+<p><img alt="Font custom" src="imgs/font_custom.png" /></p>
+<p>También puedes editar fuentes usando <a href="https://github.com/boriel-basic/ZXBasicStudio">ZXBasicStudio</a> o añadir las de tu gusto</p>
+<p>Todas las fuentes pueden previsualizarse desde la interfaz del compilador, incluso si añades una nueva, desde la opción de previsualización de fuentes.</p>
+<p><img alt="Font preview" src="imgs/font_preview.png" /></p>
+<h3 id="final-item">Final item</h3>
+<p>Con esta opción podrás indicar que un objeto haga de final de partida. Es decir, cuando el jugador entre en contacto con este objeto se producirá la secuencia de fin del juego.</p>
+<p>El tile que se desea como último se indica en <strong>finalItemTile</strong>.</p>
+<p><img alt="Final item" src="imgs/final_item.png" /></p>
+<p>También se puede definir el comportamiento que se desea para este item final de modo que el juego puede terminar de diversas maneras. Para esto tendremos que configurar <strong>finalItemMode</strong>. Con esto tendremos las siguientes opciones:</p>
+<ul>
+<li><strong>Always shown</strong> El item aparecerá de manera normal</li>
+<li><strong>Hidden until finish</strong> El item no aparecerá hasta que se consiga el objetivo de items</li>
+<li><strong>Show until finish</strong> El item aparecerá al iniciar el juego y desaparecerá una vez se consiga el objetivo de items (ideal para poner un muro que se rompe al coger todos los items y continuar al boss final)</li>
+</ul>
 <h3 id="tiles-evanescentes-fade-tiles">Tiles evanescentes (fade tiles)</h3>
 <p>Con esto podrás activar la funcionalidad de los fade tiles que son aqueloos que al pisarlos se rompen con el tiempo.
 Si activas esta funcionalidad el tile 32 (más del 33% de energía) y 33 (menos del 33% de energía) quedan reservados para</p>

@@ -1,4 +1,4 @@
 @echo off
 
 :: Ejecutar el script de Python
-py zxsgm-infinity.py
+src\venv\Scripts\python.exe zxsgm-infinity.py

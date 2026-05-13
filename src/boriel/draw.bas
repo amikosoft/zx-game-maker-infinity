@@ -215,7 +215,7 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
                 End If
             #endif
             #ifdef KEYS_ENABLED
-            Elseif tile = DOOR_TILE
+            Elseif tile = DOOR_TILE then
                 If screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) Then
                     ' SetTile(tile, tileAttrWithBackground(tile), x, y)
                     SetTileWithBackground(tile, x, y)
@@ -232,6 +232,22 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             ElseIf tile = SWITCHER_TILE Then
                 'SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 SetTileWithBackground(tile, x, y)
+            #endif
+            #ifdef FINAL_ITEM_ENABLED
+            ElseIf tile = FINAL_ITEM_TILE Then
+                #ifdef FINAL_ITEM_ALWAYS_SHOWN
+                    SetTileWithBackground(tile, x, y)
+                #endif
+                #ifdef FINAL_ITEM_HIDE_UNTIL_FINISH
+                    If currentItems = GOAL_ITEMS Then
+                        SetTileWithBackground(tile, x, y)
+                    end if
+                #endif
+                #ifdef FINAL_ITEM_SHOW_UNTIL_FINISH
+                    If currentItems <> GOAL_ITEMS Then
+                        SetTileWithBackground(tile, x, y)
+                    end if
+                #endif
             #endif
         Else
             'SetTile(tile, tileAttrWithBackground(tile), x, y)
@@ -254,20 +270,23 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
                 currentScreenKeyY = y
             #Else
                 If screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
-                    'SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                     SetTileWithBackground(tile, x, y)
                 End If
             #endif
         Elseif tile = LIFE_TILE then
             If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
-                'SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 SetTileWithBackground(tile, x, y)
             End If
         Elseif tile = AMMO_TILE then
             If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
-                'SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 SetTileWithBackground(tile, x, y)
             End If
+        #ifdef COINS_ENABLED
+        ElseIf tile = COIN_TILE then
+            If screenObjects(currentScreen, SCREEN_OBJECT_COIN_INDEX) Then
+                SetTileWithBackground(tile, x, y)
+            End If
+        #endif
         End If
     End If
     

@@ -39,23 +39,33 @@ end sub
 #endif
 
 
-
 sub pauseUntilPressEnter()
-    Do
-    Loop Until MultiKeys(KEYENTER)
+    #ifdef CONSOLE_MODE
+        Do
+        Loop Until MultiKeys(KEYSPACE)
+    #else
+        Do
+        Loop Until MultiKeys(KEYENTER)
+    #endif
+    waitForReleaseKey()
 end sub
 
-Function pressingDown() As Ubyte
-    Return ((kempston = 0 And MultiKeys(keyArray(DOWN))) Or (kempston = 1 And (In(31) bAND %100)))
-End Function
+' Function pressingDown() As Ubyte
+'     Return ((kempston = 0 And MultiKeys(keyArray(DOWN))) Or (kempston = 1 And (In(31) bAND %100)))
+' End Function
 
-Function pressingUp() As Ubyte
-    Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
-End Function
+' Function pressingUp() As Ubyte
+'     Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
+' End Function
 
 sub pauseUntilPressFire()
-    Do
-    Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
+    #ifdef CONSOLE_MODE
+        Do
+        Loop Until MultiKeys(KEYSPACE)
+    #else
+        Do
+        Loop Until ((kempston = 0 And MultiKeys(keyArray(FIRE)) <> 0) Or (kempston = 1 And In(31) bAND %10000 <> 0))
+    #endif
     waitForReleaseKey()
 End Sub
 
@@ -140,10 +150,10 @@ sub decrementLife()
 end sub
 
 sub printEnergyBar(partial as ubyte, total as ubyte, x as ubyte, y as ubyte)
-    dim percent as uinteger = (partial*9)/total
+    dim percent as uinteger = (partial*10)/total
 
-    if percent < 4 then flash 1
-    for posX=0 to 8
+    ' if percent < 4 then flash 1
+    for posX=0 to 9
         if posX < percent then
             PAPER 4
         else
@@ -167,7 +177,7 @@ sub printHud()
 
         #ifdef HUD_PROTA_ENERGY_BAR        
             'printEnergyBar(currentEnergy, INITIAL_ENERGY, 1, 21)
-            printEnergyBar(currentEnergy, INITIAL_ENERGY, 3, 23)
+            printEnergyBar(currentEnergy, INITIAL_ENERGY, 2, 23)
         #else
             PRINT AT 23, 4; TEXT_3_SPACES
             PRINT AT 23, 4; currentEnergy
@@ -184,19 +194,24 @@ sub printHud()
     #endif
     #ifndef ARCADE_MODE
         #ifdef KEYS_ENABLED
-            PRINT AT 22, 22; currentKeys
+            PRINT AT 22, 21; currentKeys
         #endif
     #endif
+
+    #ifdef COINS_ENABLED
+        PRINT AT 23, 21; TEXT_3_SPACES
+        PRINT AT 23, 21; protaCoins
+    #endif
+
     #ifdef HISCORE_ENABLED
-        ' Print AT 22, 20; "00000"
-        ' Print AT 23, 20; "00000"
         PRINT AT 22, 18 - LEN(STR$(hiScore)); hiScore
         PRINT AT 23, 18 - LEN(STR$(score)); score
     #endif
+
     #ifndef ARCADE_MODE
         #ifdef ITEMS_ENABLED
-            PRINT AT 22, 28; TEXT_3_SPACES
-            PRINT AT 22, 28; currentItems
+            PRINT AT 22, 27; TEXT_3_SPACES
+            PRINT AT 22, 27; currentItems
         #endif
     #endif
     
@@ -209,6 +224,8 @@ end sub
 #ifdef MESSAGES_ENABLED
     sub printMessage(line1 as string, p as ubyte, i as ubyte)
         Paper p: Ink i: Flash 1
+        
+        PRINT AT 21, 11; TEXT_EMPTY_STRING
         PRINT AT 21, 11; line1
         Paper PAPER_VALUE: Ink INK_VALUE: Flash 0: Bright BRIGHT_VALUE
         messageLoopCounter = MESSAGE_LOOPS_VISIBLE

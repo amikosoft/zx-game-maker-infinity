@@ -26,13 +26,13 @@ End Function
         for i=0 to 2
             #ifdef LADDERS_ANIMATION_ENABLED
                 dim tile as ubyte = CheckStaticPlatform(protaX+i, y)
-                #ifdef SCREEN_TERRAIN_ENABLED
+                #ifdef SCREEN_CENITAL_ENABLED
                     if screenIsTerrain then tile = 255
                 #endif
                 if tile Then
                     if tile > STEPS_TILE_END Then
                         ' if anim then protaDirection = 2
-                        #ifdef SCREEN_TERRAIN_ENABLED
+                        #ifdef SCREEN_CENITAL_ENABLED
                             if anim = 2 and screenIsTerrain Then
                                 if not horizontalAxisKeyPressed then
                                     protaDirection = 2
@@ -60,7 +60,7 @@ End Function
                     return 2
                 End if
             #else
-                #ifdef SCREEN_TERRAIN_ENABLED
+                #ifdef SCREEN_CENITAL_ENABLED
                     if screenIsTerrain or CheckStaticPlatform(protaX+i, y) Then return 2
                 #Else
                     if CheckStaticPlatform(protaX+i, y) Then return 2
@@ -135,14 +135,6 @@ Function getNextFrameRunning() As Ubyte
         End If
     #endif
 End Function
-
-' Function pressingUp() As Ubyte
-'     Return ((kempston = 0 And MultiKeys(keyArray(UP)) <> 0) Or (kempston = 1 And In(31) bAND %1000 <> 0))
-' End Function
-
-' Function pressingDown() As Ubyte
-'     Return ((kempston = 0 And MultiKeys(keyArray(DOWN)) <> 0) Or (kempston = 1 And In(31) bAND %100 <> 0))
-' End Function
 
 Sub shoot()
     If bulletPositionX Then Return
@@ -337,27 +329,97 @@ Sub rightKey(animate as ubyte)
     End If
 End Sub
 
-Sub upKey()
-    verticalAxisKeyPressed = 1
+#ifdef SIDE_VIEW
+function goUp(isPureUp as ubyte) as ubyte
+    verticalAxisKeyPressed = isPureUp
 
-    #ifdef SIDE_VIEW
-        #ifdef LADDERS_ANIMATION_ENABLED
-            If checkIsLadder(protaY + 3, 1) Then
-                if not horizontalAxisKeyPressed then protaDirection = 8
-                checkProtaTop()
-                
-                if Not CheckCollision(protaX, protaY - 1) Then
-                    protaY = protaY - 1
-                End If
-            Else
-                #ifdef PREVENT_JUMP_ON_FIRE
-                    if shootPressed then return
-                #endif
+    #ifdef LADDERS_ANIMATION_ENABLED
+        If checkIsLadder(protaY + 3, 1) Then
+            if not horizontalAxisKeyPressed then protaDirection = 8
+            checkProtaTop()
 
-                jump()
+            if Not CheckCollision(protaX, protaY - 1) Then
+                protaY = protaY - 1
+
+                #ifdef SOUND_LADDERS_ENABLED
+                    #ifdef SCREEN_CENITAL_ENABLED
+                        if not screenIsTerrain and (enemiesFrame band 1) then
+                            BEEP 0.01, 1
+                        end if
+                    #else
+                        if (enemiesFrame band 1) then
+                            BEEP 0.01, 1
+                        end if
+                    #endif
+                #endif         
+            
+                return 1
             End If
+        End If
+    #endif
+
+    return 0
+end function
+#endif
+
+Sub upKey()
+    #ifdef OVERHEAD_VIEW
+        verticalAxisKeyPressed = 1
+
+        If canMoveUp() Then
+            protaY = protaY - 1
+
+            if not horizontalAxisKeyPressed then
+                protaDirection = 8
+                If protaTile = PROTA_TILE_UP Then
+                    protaTile = 6
+                Else
+                    protaTile = PROTA_TILE_UP
+                End If
+            end if
+            
+            checkProtaTop()
+        End If
+    #else
+        #ifndef CONSOLE_MODE
+            verticalAxisKeyPressed = 1
+        #endif
+
+        #ifdef LADDERS_ANIMATION_ENABLED
+            #ifdef CONSOLE_MODE
+                if not goUp(0) then
+                    jump()
+                end if
+            #else
+                If checkIsLadder(protaY + 3, 1) Then
+                    if not horizontalAxisKeyPressed then protaDirection = 8
+                    checkProtaTop()
+                    
+                    if Not CheckCollision(protaX, protaY - 1) Then
+                        protaY = protaY - 1
+
+                        #ifdef SOUND_LADDERS_ENABLED
+                            #ifdef SCREEN_CENITAL_ENABLED
+                                if not screenIsTerrain and (enemiesFrame band 1) then
+                                    BEEP 0.01, 1
+                                end if
+                            #else
+                                if (enemiesFrame band 1) then
+                                    BEEP 0.01, 1
+                                end if
+                            #endif
+                        #endif
+                    End If
+                Else
+                    #ifdef PREVENT_JUMP_ON_FIRE
+                        if shootPressed then return
+                    #endif
+
+                    jump()
+                End If
+            #endif
         #Else
-            #ifdef SCREEN_TERRAIN_ENABLED
+            #ifdef SCREEN_CENITAL_ENABLED
                 If screenIsTerrain then
                     checkProtaTop()
                     
@@ -377,18 +439,6 @@ Sub upKey()
                 jump()
             #endif
         #endif
-    #Else
-        If protaDirection <> 8 Then
-            protaFrame = 4
-        End If
-        If canMoveUp() Then
-            protaY = protaY - 1
-
-            protaTile = protaFrame + 1
-            protaDirection = 8
-            
-            checkProtaTop()
-        End If
     #endif
 End Sub
 
@@ -396,9 +446,6 @@ Sub downKey()
     verticalAxisKeyPressed = -1
 
     #ifdef OVERHEAD_VIEW
-        If protaDirection <> 2 Then
-            protaFrame = 6
-        End If
         If canMoveDown() Then
             If protaY >= MAX_SCREEN_BOTTOM Then
                 #ifndef LEVELS_MODE
@@ -408,8 +455,15 @@ Sub downKey()
                 #endif
             Else
                 protaY = protaY + 1
-                protaTile = protaFrame + 1
-                protaDirection = 2
+
+                if not horizontalAxisKeyPressed then
+                    protaDirection = 2
+                    If protaTile = PROTA_TILE_DOWN Then
+                        protaTile = 8
+                    Else
+                        protaTile = PROTA_TILE_DOWN
+                    End If
+                end if
             End If
         End If
     #Else
@@ -417,13 +471,20 @@ Sub downKey()
             jumpCurrentKey = jumpStopValue
         #endif
         
-        ' if protaY bAnd 1 Then protaY = protaY + 1
-        
         If not CheckCollision(protaX, protaY + 1) Then
+            #ifdef SOUND_LADDERS_ENABLED
+                #ifdef SCREEN_CENITAL_ENABLED
+                    if not screenIsTerrain and (enemiesFrame band 1) then
+                        BEEP 0.01, 1
+                    end if
+                #else
+                    if (enemiesFrame band 1) then
+                        BEEP 0.01, 1
+                    end if
+                #endif
+            #endif
+
             #ifdef LADDERS_ANIMATION_ENABLED
-                ' If checkIsLadder(protaY + 4, 2) Then
-                '     protaY = protaY + 1
-                ' End If
                 protaY = protaY + checkIsLadder(protaY + 4, 2)
             #Else
                 protaY = protaY + checkIsLadder(protaY + 4, 0)
@@ -469,7 +530,15 @@ End Sub
                         Print AT 6+fila, 9 + letra; Chr$(nextChar)
                     end if
                 #Else
-                    Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
+                    #ifdef CUSTOM_FONT_ENABLED
+                        dim nextChar as ubyte = textToDisplay(textId, (fila*15)+letra)
+
+                        SetBank(gameBank)
+                        Print AT 6+fila, 9 + letra; Chr$(nextChar)
+                        SetBank(textsBank)
+                    #else
+                        Print AT 6+fila, 9 + letra; Chr$(textToDisplay(textId, (fila*15)+letra))
+                    #endif
                 #endif
             Next letra
             SetBank(gameBank)
@@ -559,9 +628,11 @@ End Sub
         #ifdef IS_TEXT_ADVENTURE
             #ifndef ARCADE_MODE
                 #ifndef LEVELS_MODE
-                    If currentAdventureState > MAX_ADVENTURE_STATE Then
-                        ending()
-                    end if
+                    ' #ifndef FINAL_ITEM_ENABLED
+                    '     #ifndef FINAL_SCREEN_ENABLED
+                            If currentAdventureState > MAX_ADVENTURE_STATE Then ending()
+                    '     #EndIf
+                    ' #EndIf
                 #EndIf
             #EndIf
         #EndIf
@@ -594,34 +665,67 @@ Sub keyboardListen()
         if shootPressed then shootPressed = shootPressed - 1
     #endif
     
-    If kempston Then
-        Dim n As Ubyte = In(31)
-        If n bAND %10 Then leftKey(1)
-        If n bAND %1 Then rightKey(1)
+    #ifdef CONSOLE_MODE
+        If MultiKeys(KEYO) Then leftKey(1)
+        If MultiKeys(KEYP) Then rightKey(1)
         
         #ifdef PREVENT_JUMP_ON_FIRE
-            If n bAND %10000 Then shootPressed = 5
-            If n bAND %1000 Then upKey()
-            If n bAND %100 Then downKey()
+            If MultiKeys(KEYSPACE) Then shootPressed = 5
+
+            #ifdef SIDE_VIEW
+                If MultiKeys(KEYQ) Then 
+                    upKey()
+                else if MultiKeys(KEYW) Then 
+                    goUp(1)
+                end if
+            #Else
+                if MultiKeys(KEYW) Then upKey()
+            #endif
+
+            If MultiKeys(KEYA) Then downKey()
         #else
-            If n bAND %1000 Then upKey()
-            If n bAND %100 Then downKey()
-            If n bAND %10000 Then fireKey()
+            #ifdef SIDE_VIEW
+                If MultiKeys(KEYQ) Then 
+                    upKey()
+                else if MultiKeys(KEYW) Then 
+                    goUp(1)
+                end if
+            #Else
+                if MultiKeys(KEYW) Then upKey()
+            #endif
+            If MultiKeys(KEYA) Then downKey()
+            If MultiKeys(KEYSPACE) Then fireKey()
         #endif
-    Else
-        If MultiKeys(keyArray(LEFT)) Then leftKey(1)
-        If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
-        
-        #ifdef PREVENT_JUMP_ON_FIRE
-            If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
-            If MultiKeys(keyArray(UP)) Then upKey()
-            If MultiKeys(keyArray(DOWN)) Then downKey()
-        #else
-            If MultiKeys(keyArray(UP)) Then upKey()
-            If MultiKeys(keyArray(DOWN)) Then downKey()
-            If MultiKeys(keyArray(FIRE)) Then fireKey()
-        #endif
-    End If
+    #else
+        If kempston Then
+            Dim n As Ubyte = In(31)
+            If n bAND %10 Then leftKey(1)
+            If n bAND %1 Then rightKey(1)
+            
+            #ifdef PREVENT_JUMP_ON_FIRE
+                If n bAND %10000 Then shootPressed = 5
+                If n bAND %1000 Then upKey()
+                If n bAND %100 Then downKey()
+            #else
+                If n bAND %1000 Then upKey()
+                If n bAND %100 Then downKey()
+                If n bAND %10000 Then fireKey()
+            #endif
+        Else
+            If MultiKeys(keyArray(LEFT)) Then leftKey(1)
+            If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
+            
+            #ifdef PREVENT_JUMP_ON_FIRE
+                If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
+                If MultiKeys(keyArray(UP)) Then upKey()
+                If MultiKeys(keyArray(DOWN)) Then downKey()
+            #else
+                If MultiKeys(keyArray(UP)) Then upKey()
+                If MultiKeys(keyArray(DOWN)) Then downKey()
+                If MultiKeys(keyArray(FIRE)) Then fireKey()
+            #endif
+        End If
+    #endif
 
     #ifdef PREVENT_JUMP_ON_FIRE
         if shootPressed = 5 then fireKey()
@@ -647,7 +751,20 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                 screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
                 removeTilesFromScreen(ENEMY_DOOR_TILE)
             #endif
-            currentItems = currentItems + ITEMS_INCREMENT
+            
+            #ifdef ITEMS_MULTICOLOR_ENABLED
+                multicolorItem(0) = 0
+            #endif
+            
+            'ITEMS_INCREMENT
+            #ifdef ITEMS_COUNTDOWN_ENABLED
+                if currentItems > 0 then
+                    currentItems = currentItems - 1
+                End If
+            #else
+                currentItems = currentItems + 1
+            #endif
+            
             #ifdef HISCORE_ENABLED
                 score = score + 100
                 If score > hiScore Then
@@ -667,9 +784,23 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                 End If
             #Else
                 #ifndef LEVELS_MODE
-                    If currentItems = GOAL_ITEMS Then
-                        ending()
-                    End If
+                    #ifdef FINAL_ITEM_ENABLED
+                        #ifndef FINAL_ITEM_ALWAYS_SHOWN
+                            If currentItems = GOAL_ITEMS Then
+                                #ifdef FINAL_ITEM_SHOW_UNTIL_FINISH
+                                    removeTilesFromScreen(FINAL_ITEM_TILE)
+                                #else
+                                    mapDraw(1)
+                                #endif
+                            end if
+                        #endif
+                    #else
+                        #ifndef FINAL_SCREEN_ENABLED
+                            If currentItems = GOAL_ITEMS Then
+                                ending()
+                            End If
+                        #endif
+                    #endif
                 #endif
             #endif
             screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
@@ -689,68 +820,95 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                     protaScreenRespawn = currentScreen
                 #endif
             #endif
-            #ifdef KEYS_ENABLED
-            Elseif tile = KEY_TILE Then
-                #ifdef ARCADE_MODE
-                    If currentScreen = SCREENS_COUNT Then
-                        ending()
-                    Else
-                        moveScreen = 6
-                        Return 1
-                    End If
-                #endif
-                currentKeys = currentKeys + 1
+            #ifdef COINS_ENABLED
+            Elseif tile = COIN_TILE Then
+                protaCoins = protaCoins + PROTA_COINS_INCREMENT
+
+                if protaCoins > 999 then protaCoins = 999
                 printHud()
                 #ifdef MESSAGES_ENABLED
-                    #ifdef HUD_SHOW_KEYS_MESSAGE
-                        printMessage(TEXT_KEY_FOUND, 4, 0)
+                    #ifdef HUD_SHOW_COINS_MESSAGE
+                        printMessage(TEXT_COINS, 4, 0)
                     #endif
                 #endif
-                screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
+                screenObjects(currentScreen, SCREEN_OBJECT_COIN_INDEX) = 0
                 BeepFX_Play(3)
                 Return tile
             #endif
-        ' #ifdef GLUE_TILE_ENABLED
-        '     Elseif tile = GLUE_TERRAIN_TILE then 
-        '         isOnGlue = 1
-        ' #endif
-        Elseif tile = LIFE_TILE Then
-            #ifdef ENERGY_ENABLED
-                if currentEnergy = INITIAL_ENERGY Then
-                    currentLife = currentLife + LIFE_AMOUNT
-                else
-                    currentEnergy = INITIAL_ENERGY
-                End if
-            #else
-                currentLife = currentLife + LIFE_AMOUNT
-            #endif
-            
-            printHud()
-            
-            #ifdef MESSAGES_ENABLED
-                #ifdef HUD_SHOW_LIVES_MESSAGE
-                    printMessage(TEXT_LIFE, 2, 0)
+            #ifdef KEYS_ENABLED
+                #ifndef COINS_FOR_KEY_ENABLED
+                Elseif tile = KEY_TILE Then
+                    #ifdef ARCADE_MODE
+                        If currentScreen = SCREENS_COUNT Then
+                            ending()
+                        Else
+                            moveScreen = 6
+                            Return 1
+                        End If
+                    #endif
+
+                    currentKeys = currentKeys + 1
+                    printHud()
+                    #ifdef MESSAGES_ENABLED
+                        #ifdef HUD_SHOW_KEYS_MESSAGE
+                            printMessage(TEXT_KEY_FOUND, 4, 0)
+                        #endif
+                    #endif
+                    screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) = 0
+                    BeepFX_Play(3)
+                    Return tile
                 #endif
             #endif
-            
-            screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
-            BeepFX_Play(6)
-            Return tile
-            #ifdef AMMO_ENABLED
-            Elseif tile = AMMO_TILE Then
-                currentAmmo = currentAmmo + AMMO_INCREMENT
+        #ifndef COINS_FOR_LIVES_ENABLED
+            Elseif tile = LIFE_TILE Then
+                #ifdef ENERGY_ENABLED
+                    if currentEnergy = INITIAL_ENERGY Then
+                        currentLife = currentLife + LIFE_AMOUNT
+                    else
+                        currentEnergy = INITIAL_ENERGY
+                    End if
+                #else
+                    currentLife = currentLife + LIFE_AMOUNT
+                #endif
+                
                 printHud()
                 
                 #ifdef MESSAGES_ENABLED
-                    #ifdef HUD_SHOW_AMMO_MESSAGE
-                        printMessage(TEXT_AMMO, 2, 0)
+                    #ifdef HUD_SHOW_LIVES_MESSAGE
+                        printMessage(TEXT_LIFE, 2, 0)
                     #endif
                 #endif
                 
-                screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
+                screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) = 0
+            
                 BeepFX_Play(6)
                 Return tile
+        #endif
+        #ifdef AMMO_ENABLED
+            #ifndef COINS_FOR_AMMO_ENABLED
+                Elseif tile = AMMO_TILE Then
+                    currentAmmo = currentAmmo + AMMO_INCREMENT
+                    printHud()
+                    
+                    #ifdef MESSAGES_ENABLED
+                        #ifdef HUD_SHOW_AMMO_MESSAGE
+                            printMessage(TEXT_AMMO, 2, 0)
+                        #endif
+                    #endif
+                    
+                    screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) = 0
+                    
+                    BeepFX_Play(6)
+                    Return tile
             #endif
+        #endif
+        #ifdef FINAL_ITEM_ENABLED
+            #ifndef FINAL_ITEM_SHOW_UNTIL_FINISH
+                ElseIf tile = FINAL_ITEM_TILE Then
+                    ending()
+            #endif
+        #endif
+
         End If
     #ifdef FIRED_ITEMS_ENABLED
     else if not isActionPerformed then
@@ -780,6 +938,84 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                 #endif
             End if
         #endif
+        #ifdef KEYS_ENABLED
+            #ifdef COINS_FOR_KEY_ENABLED
+                if tile = KEY_TILE Then
+                debugB(tile)
+                    if protaCoins >= COINS_FOR_KEY_AMOUNT then
+                        protaCoins = protaCoins - COINS_FOR_KEY_AMOUNT
+
+                        currentKeys = currentKeys + 1
+                        printHud()
+                        #ifdef MESSAGES_ENABLED
+                            #ifdef HUD_SHOW_KEYS_MESSAGE
+                                printMessage(TEXT_KEY_FOUND, 4, 0)
+                            #endif
+                        #endif
+                        
+                        BeepFX_Play(3)
+                    else
+                        'printMessage(TEXT_KEY_COINS, 2, 0)
+                        printMessage(STR$(COINS_FOR_KEY_AMOUNT), 2, 0)
+                    end if
+                end if
+            #endif
+        #endif
+        #ifdef COINS_FOR_AMMO_ENABLED
+            if tile = AMMO_TILE Then
+                if protaCoins >= COINS_FOR_AMMO_AMOUNT then
+                    protaCoins = protaCoins - COINS_FOR_AMMO_AMOUNT
+                
+                    currentAmmo = currentAmmo + AMMO_INCREMENT
+                    printHud()
+                    
+                    #ifdef MESSAGES_ENABLED
+                        #ifdef HUD_SHOW_AMMO_MESSAGE
+                            printMessage(TEXT_AMMO, 2, 0)
+                        #endif
+                    #endif
+                    
+                    BeepFX_Play(6)
+                else
+                    ' printMessage(TEXT_AMMO_COINS, 2, 0)
+                    printMessage(STR$(COINS_FOR_AMMO_AMOUNT), 2, 0)
+                end if
+            end if
+        #endif
+        #ifdef COINS_FOR_LIVES_ENABLED
+            if tile = LIFE_TILE Then
+                if protaCoins >= COINS_FOR_LIVES_AMOUNT then
+                    protaCoins = protaCoins - COINS_FOR_LIVES_AMOUNT
+                    #ifdef ENERGY_ENABLED
+                        if currentEnergy = INITIAL_ENERGY Then
+                            if currentLife < INITIAL_LIFE then
+                                currentLife = currentLife + 1
+                            end if
+                        else
+                            currentEnergy = INITIAL_ENERGY
+                        End if
+                    #else
+                        if (currentLife + LIFE_AMOUNT) < INITIAL_LIFE then
+                            currentLife = currentLife + LIFE_AMOUNT
+                        else
+                            currentLife = INITIAL_LIFE
+                        end if
+                    #endif
+                    
+                    printHud()
+                    
+                    #ifdef MESSAGES_ENABLED
+                        #ifdef HUD_SHOW_LIVES_MESSAGE
+                            printMessage(TEXT_LIFE, 2, 0)
+                        #endif
+                    #endif
+                
+                    BeepFX_Play(6)        
+                else
+                    printMessage(STR$(COINS_FOR_LIVES_AMOUNT), 2, 0)
+                end if
+            end if
+        #endif
     #endif
     End if
 
@@ -789,7 +1025,7 @@ End Function
 Sub checkObjectContact(withoutFire as ubyte)
     for c=protaCol to (protaCol+1)
         for l=protaLin to (protaLin+1)
-            If isADamageTile(c, l) Then decrementLife()
+            If withoutFire and isADamageTile(c, l) Then decrementLife()
 
             #ifdef IN_GAME_TEXT_ENABLED
                 dim tile as ubyte = GetTile(c, l)
@@ -825,9 +1061,6 @@ Sub protaMovement()
         #endif
     #endif
     
-    ' If MultiKeys(keyArray(FIRE)) = 0 Then
-    '     noKeyPressedForShoot = 1
-    ' End If
     keyboardListen()
 
     if moveScreen then return

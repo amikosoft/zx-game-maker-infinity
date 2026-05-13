@@ -241,125 +241,162 @@ sub resetBullet()
 end sub
 
 sub damageEnemy(enemyToKill as Ubyte)
-    #ifdef ENEMIES_SLOW_DOWN
-        decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -50
-        decompressedEnemiesScreen(enemyToKill, ENEMY_SPEED) = 0
-        
-        #ifdef HISCORE_ENABLED
-            score = score + 5
-            If score > hiScore Then
-                hiScore = score
-            End If
-            printHud()
-        #endif
-        
-        BeepFX_Play(1)
-    #else
-        dim alive as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE)
-        if alive < 1 then return
-        
-        alive = alive - 1
+    #ifdef SCREEN_BOSSENERGY_ENABLED
+    if bossCurEnergy > 0 then
+        bossCurEnergy = bossCurEnergy - 1
 
         #ifdef HUD_ENEMIES_ENERGY_BAR      
-            ' printEnergyBar(alive, 8, 22, 21)
-            printEnergyBar(alive, 8, 11, 21)
+            printEnergyBar(bossCurEnergy, bossTotalEnergy, 11, 21)
             messageLoopCounter = MESSAGE_LOOPS_VISIBLE
         #endif
-        
-        #ifdef HISCORE_ENABLED
-            score = score + 5
-            If score > hiScore Then
-                hiScore = score
-            End If
-            printHud()
-        #endif
-        
-        decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
-        if not alive then
-            ' enemySpriteTempTile(enemyToKill) = 0
-            decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
+
+        if bossCurEnergy = 0 then
+            #ifdef FINAL_SCREEN_ENABLED
+                if currentScreen = FINAL_SCREEN then ending()
+            #endif
+
+            For enemyBoss=0 To enemiesScreen - 1
+                decompressedEnemiesScreen(enemyBoss, ENEMY_ALIVE) = 0
+            next enemyBoss
+
+            screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
+
+            #ifdef SHOULD_KILL_ENEMIES
+                removeTilesFromScreen(ENEMY_DOOR_TILE)
+            #endif
+
             BeepFX_Play(0)
-            
-            #ifdef DROP_ENABLED
-                dim eneX as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL) >> 1
-                dim eneY as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN) >> 1
-
-                if enemiesFrame band 2 = 2 Then
-                    #ifdef DROP_DRAW_SIMPLE
-                        'drawDrop(eneX, eneY)
-                        for tx=eneX to (eneX + 1)
-                            for ty=eneY to (eneY + 1)
-                                #ifdef SCREEN_ATTRIBUTES
-                                    if GetTile(tx, ty) = currentTileBackground Then 
-                                        SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tx, ty)
-                                    end if
-                                #Else
-                                    if not GetTile(tx, ty) Then 
-                                        SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tx, ty)
-                                    end if
-                                #endif
-                            next ty
-                        next tx
-                    #else
-                        if not GetTile(eneX, eneY) Then
-                            #ifdef SCREEN_ATTRIBUTES
-                                SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
-                            #else
-                                SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
-                            #endif
-                        End if
-                    #endif
-                End if
-
-                #ifdef SPRITES_COLOR_ENABLED
-                    drawSpriteWithColor(BURST_SPRITE_ID, eneX << 1, eneY << 1, 2)
-                #else
-                    Draw2x2Sprite(BURST_SPRITE_ID, eneX << 1, eneY << 1)
-                #endif
-            #else
-                #ifdef SPRITES_COLOR_ENABLED
-                    drawSpriteWithColor(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN), 2)
-                #else
-                    Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
-                #endif
-            #endif
-            
-            ' si ambos estan definidos
-            #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                #ifdef SHOULD_KILL_ENEMIES
-                    ' if not screensStatus(currentScreen) then
-                    if allEnemiesKilled() then
-                        screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
-                        removeTilesFromScreen(ENEMY_DOOR_TILE)
-                    end if
-                    ' end if
-                #endif
-            #endif
-            
-            ' si solo uno esta definido
-            #ifndef ENEMIES_NOT_RESPAWN_ENABLED
-                #ifdef SHOULD_KILL_ENEMIES
-                    ' if not screensStatus(currentScreen) then
-                    if allEnemiesKilled() then
-                        screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
-                        removeTilesFromScreen(ENEMY_DOOR_TILE)
-                    end if
-                    ' end if
-                #endif
-            #endif
-            
-            #ifndef SHOULD_KILL_ENEMIES_ENABLED
-                #ifdef ENEMIES_NOT_RESPAWN_ENABLED
-                    ' if not screensStatus(currentScreen) then
-                    if allEnemiesKilled() then
-                        screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
-                        removeTilesFromScreen(ENEMY_DOOR_TILE)
-                    end if
-                    ' end if
-                #endif
-            #endif
-        else
+        else 
             BeepFX_Play(1)
         end if
+    else
+    #endif
+        #ifdef ENEMIES_SLOW_DOWN
+            decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -50
+            decompressedEnemiesScreen(enemyToKill, ENEMY_SPEED) = 0
+            
+            #ifdef HISCORE_ENABLED
+                score = score + 5
+                If score > hiScore Then
+                    hiScore = score
+                End If
+                printHud()
+            #endif
+            
+            BeepFX_Play(1)
+        #else
+            dim alive as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE)
+            if alive < 1 then return
+            
+            alive = alive - 1
+
+            #ifdef HUD_ENEMIES_ENERGY_BAR      
+                ' printEnergyBar(alive, 8, 22, 21)
+                #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
+                    printEnergyBar(alive, enemiesInitialLife(enemyToKill), 11, 21)
+                #Else
+                    printEnergyBar(alive, ENEMIES_MAX_ENERGY, 11, 21)
+                #EndIf
+                messageLoopCounter = MESSAGE_LOOPS_VISIBLE
+            #endif
+            
+            #ifdef HISCORE_ENABLED
+                score = score + 5
+                If score > hiScore Then
+                    hiScore = score
+                End If
+                printHud()
+            #endif
+            
+            decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = alive
+            if not alive then
+                ' enemySpriteTempTile(enemyToKill) = 0
+                decompressedEnemiesScreen(enemyToKill, ENEMY_ALIVE) = -99
+                BeepFX_Play(0)
+                
+                #ifdef DROP_ENABLED
+                    dim eneX as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL) >> 1
+                    dim eneY as ubyte = decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN) >> 1
+
+                    if enemiesFrame band 2 = 2 Then
+                        #ifdef DROP_DRAW_SIMPLE
+                            'drawDrop(eneX, eneY)
+                            for tx=eneX to (eneX + 1)
+                                for ty=eneY to (eneY + 1)
+                                    #ifdef SCREEN_ATTRIBUTES
+                                        if GetTile(tx, ty) = currentTileBackground Then 
+                                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tx, ty)
+                                        end if
+                                    #Else
+                                        if not GetTile(tx, ty) Then 
+                                            SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tx, ty)
+                                        end if
+                                    #endif
+                                next ty
+                            next tx
+                        #else
+                            if not GetTile(eneX, eneY) Then
+                                #ifdef SCREEN_ATTRIBUTES
+                                    SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), eneX, eneY)
+                                #else
+                                    SetTileChecked(DROP_TILE, attrSet(DROP_TILE), eneX, eneY)
+                                #endif
+                            End if
+                        #endif
+                    End if
+
+                    #ifdef SPRITES_COLOR_ENABLED
+                        drawSpriteWithColor(BURST_SPRITE_ID, eneX << 1, eneY << 1, 2)
+                    #else
+                        Draw2x2Sprite(BURST_SPRITE_ID, eneX << 1, eneY << 1)
+                    #endif
+                #else
+                    #ifdef SPRITES_COLOR_ENABLED
+                        drawSpriteWithColor(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN), 2)
+                    #else
+                        Draw2x2Sprite(BURST_SPRITE_ID, decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_COL), decompressedEnemiesScreen(enemyToKill, ENEMY_CURRENT_LIN))
+                    #endif
+                #endif
+                
+                ' si ambos estan definidos
+                #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+                    #ifdef SHOULD_KILL_ENEMIES
+                        ' if not screensStatus(currentScreen) then
+                        if allEnemiesKilled() then
+                            screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
+                            removeTilesFromScreen(ENEMY_DOOR_TILE)
+                        end if
+                        ' end if
+                    #endif
+                #endif
+                
+                ' si solo uno esta definido
+                #ifndef ENEMIES_NOT_RESPAWN_ENABLED
+                    #ifdef SHOULD_KILL_ENEMIES
+                        ' if not screensStatus(currentScreen) then
+                        if allEnemiesKilled() then
+                            screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
+                            removeTilesFromScreen(ENEMY_DOOR_TILE)
+                        end if
+                        ' end if
+                    #endif
+                #endif
+                
+                #ifndef SHOULD_KILL_ENEMIES_ENABLED
+                    #ifdef ENEMIES_NOT_RESPAWN_ENABLED
+                        ' if not screensStatus(currentScreen) then
+                        if allEnemiesKilled() then
+                            screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
+                            removeTilesFromScreen(ENEMY_DOOR_TILE)
+                        end if
+                        ' end if
+                    #endif
+                #endif
+            else
+                BeepFX_Play(1)
+            end if
+        #endif
+    #ifdef SCREEN_BOSSENERGY_ENABLED
+    end if
     #endif
 end sub

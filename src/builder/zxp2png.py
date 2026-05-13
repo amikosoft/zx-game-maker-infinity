@@ -12,12 +12,12 @@ def generateSpritesPng(inFile, outFolder):
     else:
         bit_lines = lines[2:50]
 
-    # Crear una nueva imagen en escala de grises con el tamaño correcto
-    img = Image.new('RGB', (len(bit_lines[0])-1, len(bit_lines)))
+    # Crear una nueva imagen en modo RGBA para soportar transparencia
+    img = Image.new('RGBA', (len(bit_lines[0])-1, len(bit_lines)))
 
     # Definir los colores 'paper' y 'ink' (cambiar estos según sea necesario)
-    ink_color = (255, 255, 255)  # Blanco
-    paper_color = (0, 0, 0)  # Negro
+    ink_color = (255, 255, 255, 255)  # Blanco
+    paper_color = (0, 0, 0, 0)  # Transparente (antes Negro)
 
     # Rellenar la imagen con los datos del archivo ZXP
     for y, line in enumerate(bit_lines):

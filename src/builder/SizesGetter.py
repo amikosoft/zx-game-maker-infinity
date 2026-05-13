@@ -5,13 +5,13 @@ from builder.helper import ASSETS_FOLDER, BIN_FOLDER, OUTPUT_FOLDER, musicExists
 
 
 class SizesGetter:
-    def __init__(self, outputFolder, is128k, useBreakableTile, enableAdventureTexts, musicEnabled, screenAttrs):
+    def __init__(self, outputFolder, useBreakableTile, enableAdventureTexts, musicEnabled, screenAttrs, gameLanguage='en'):
         self.outputFolder = outputFolder
-        self.is128k = is128k
         self.useBreakableTile = useBreakableTile
         self.adventureTexts = enableAdventureTexts
         self.musicEnabled = musicEnabled
         self.screenAttrs = screenAttrs
+        self.gameLanguage = gameLanguage
 
     def execute(self):
         sizes = Sizes()
@@ -35,7 +35,8 @@ class SizesGetter:
         sizes.SCREENS_WON_DATA = self.__getOutputFileSize("screensStatus.bin")
         sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA = self.__getOutputFileSize("decompressedEnemiesScreen.bin")
         
-        sizes.ENEMIES_INITIAL_LIFE_DATA = self.__getOutputFileSize("enemiesInitialLife.bin")
+        sizes.ENEMIES_INITIAL_LIFE_DATA = self.__getOutputFileSize("enemiesInitialLife.bin") if os.path.isfile(OUTPUT_FOLDER + "enemiesInitialLife.bin") else 0
+        
         sizes.ENEMIES_SHOOT_DATA = self.__getOutputFileSize("enemyBullets.bin")
         
         sizes.MAPS_DATA = self.__getOutputFileSize("map.bin.zx0")
@@ -50,25 +51,27 @@ class SizesGetter:
         if self.screenAttrs:
             sizes.SCREEN_ATTRS_DATA = self.__getOutputFileSize("screenAttributes.bin")
         
-        if self.is128k:
-            # if self.musicEnabled:
-            #     sizes.SCREEN_MUSIC_DATA = self.__getOutputFileSize("screenMusic.bin")
+        if Path(OUTPUT_FOLDER + "customFont.fnt").exists():
+            sizes.CUSTOM_FONT = self.__getOutputFileSize("customFont.fnt")
+        else:
+            sizes.CUSTOM_FONT = 0
         
-            sizes.VTPLAYER = self.__getFileSize(BIN_FOLDER + "vtplayer.tap")
-            sizes.MUSIC = self.__getFileSize(OUTPUT_FOLDER + "music.tap")
-            sizes.MUSIC_TITLE = self.__getFileSize(OUTPUT_FOLDER + "music-title.tap") if musicExists("title") else 0
-            sizes.MUSIC_2 = self.__getFileSize(OUTPUT_FOLDER + "music2.tap") if musicExists("music2") else 0
-            sizes.MUSIC_3 = self.__getFileSize(OUTPUT_FOLDER + "music3.tap") if musicExists("music3") else 0
-            sizes.MUSIC_ENDING = self.__getFileSize(OUTPUT_FOLDER + "music-ending.tap") if musicExists("ending") else 0
-            sizes.MUSIC_GAMEOVER = self.__getFileSize(OUTPUT_FOLDER + "music-gameover.tap") if musicExists("gameover") else 0
-            sizes.INTRO_SCREEN = self.__getOutputFileSize("intro.scr.zx0") if screenExists("intro") else 0
-            sizes.GAMEOVER_SCREEN = self.__getOutputFileSize("gameover.scr.zx0") if screenExists("gameover") else 0
-            sizes.GAMEMAP_SCREEN = self.__getOutputFileSize("gamemap.scr.zx0") if screenExists("gamemap") else 0
-            sizes.CREDITS_SCREEN = self.__getOutputFileSize("credits.scr.zx0") if screenExists("credits") else 0
-            sizes.REDEFINE_SCREEN = self.__getOutputFileSize("redefine.scr.zx0") if screenExists("redefine") else 0
-            sizes.INSTRUCTIONS_SCREEN = self.__getOutputFileSize("instructions.scr.zx0") if screenExists("instructions") else 0
-            sizes.HUD2_SCREEN = self.__getOutputFileSize("hud2.scr.zx0") if screenExists("hud2") else 0
-            sizes.ADVENTURETEXTS_SCREEN = self.__getOutputFileSize("adventuretexts.scr.zx0") if screenExists("adventuretexts") else 0
+        sizes.VTPLAYER = self.__getFileSize(BIN_FOLDER + "vtplayer.tap")
+        sizes.MUSIC = self.__getFileSize(OUTPUT_FOLDER + "music.tap")
+        sizes.MUSIC_TITLE = self.__getFileSize(OUTPUT_FOLDER + "music-title.tap") if musicExists("title") else 0
+        sizes.MUSIC_2 = self.__getFileSize(OUTPUT_FOLDER + "music2.tap") if musicExists("music2") else 0
+        sizes.MUSIC_3 = self.__getFileSize(OUTPUT_FOLDER + "music3.tap") if musicExists("music3") else 0
+        sizes.MUSIC_ENDING = self.__getFileSize(OUTPUT_FOLDER + "music-ending.tap") if musicExists("ending") else 0
+        sizes.MUSIC_GAMEOVER = self.__getFileSize(OUTPUT_FOLDER + "music-gameover.tap") if musicExists("gameover") else 0
+        
+        sizes.INTRO_SCREEN = self.__getOutputFileSize("intro.scr.zx0") if screenExists("intro") or screenExists("intro_" + self.gameLanguage) else 0
+        sizes.GAMEOVER_SCREEN = self.__getOutputFileSize("gameover.scr.zx0") if screenExists("gameover") or screenExists("gameover_" + self.gameLanguage) else 0
+        sizes.GAMEMAP_SCREEN = self.__getOutputFileSize("gamemap.scr.zx0") if screenExists("gamemap") or screenExists("gamemap_" + self.gameLanguage) else 0
+        sizes.CREDITS_SCREEN = self.__getOutputFileSize("credits.scr.zx0") if screenExists("credits") or screenExists("credits_" + self.gameLanguage) else 0
+        sizes.REDEFINE_SCREEN = self.__getOutputFileSize("redefine.scr.zx0") if screenExists("redefine") or screenExists("redefine_" + self.gameLanguage) else 0
+        sizes.INSTRUCTIONS_SCREEN = self.__getOutputFileSize("instructions.scr.zx0") if screenExists("instructions") or screenExists("instructions_" + self.gameLanguage) else 0
+        sizes.HUD2_SCREEN = self.__getOutputFileSize("hud2.scr.zx0") if screenExists("hud2") or screenExists("hud2_" + self.gameLanguage) else 0
+        sizes.ADVENTURETEXTS_SCREEN = self.__getOutputFileSize("adventuretexts.scr.zx0") if screenExists("adventuretexts") or screenExists("adventuretexts_" + self.gameLanguage) else 0
             
         return sizes
     

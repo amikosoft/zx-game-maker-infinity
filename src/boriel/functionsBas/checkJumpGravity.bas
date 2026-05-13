@@ -10,7 +10,8 @@
     Function isFalling() As Ubyte
         If canMoveDown() Then
             #ifdef JETPACK_FUEL
-                If pressingUp() Then
+                'If pressingUp() Then
+                if verticalAxisKeyPressed = 1 then 
                     jumpCurrentKey = 0
                 End If
             #endif
@@ -38,7 +39,7 @@
     End Function
 
     #ifndef JETPACK_FUEL
-        #ifdef SCREEN_TERRAIN_ENABLED
+        #ifdef SCREEN_CENITAL_ENABLED
         If screenIsTerrain = 1 or jumpCurrentKey >= jumpStopValue or jumpCurrentKey >= jumpStepsCount - 1 Then
         #else
         If jumpCurrentKey >= jumpStopValue or jumpCurrentKey >= jumpStepsCount - 1 Then
@@ -46,7 +47,7 @@
             jumpCurrentKey = jumpStopValue
             
             'gravity()
-            #ifdef SCREEN_TERRAIN_ENABLED
+            #ifdef SCREEN_CENITAL_ENABLED
                 if screenIsTerrain then
                     ' jumpCurrentKey = jumpStopValue
                     if protaY >= MAX_SCREEN_BOTTOM then 
@@ -103,13 +104,13 @@
 
         jumpCurrentKey = jumpCurrentKey + 1
     #else
-        #ifdef SCREEN_TERRAIN_ENABLED
+        #ifdef SCREEN_CENITAL_ENABLED
         If screenIsTerrain = 1 or jumpCurrentKey = jumpStopValue Then
         #else
         If jumpCurrentKey = jumpStopValue Then
         #endif
             'gravity()
-            #ifdef SCREEN_TERRAIN_ENABLED
+            #ifdef SCREEN_CENITAL_ENABLED
                 if screenIsTerrain then
                     ' jumpCurrentKey = jumpStopValue
                     if protaY >= MAX_SCREEN_BOTTOM then 
@@ -162,7 +163,8 @@
             checkProtaTop()
         End if
         
-        If pressingUp() And jumpEnergy > 0 Then
+        'If pressingUp() And jumpEnergy > 0 Then
+        If verticalAxisKeyPressed = 1 And jumpEnergy > 0 Then
             If Not CheckCollision(protaX, protaY - 1) Then
                 protaY = protaY - 1
                 protaTile = getNextFrameJumpingFalling()

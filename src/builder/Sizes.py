@@ -27,6 +27,8 @@ class Sizes:
         
         self.MAPS_DATA = 0
         self.BROKEN_TILES_DATA = 0
+        self.CUSTOM_FONT = 0
+
         self.MUSIC = 0
         self.INTRO_SCREEN = 0
         self.GAMEOVER_SCREEN = 0
@@ -46,6 +48,7 @@ class Sizes:
         self.MUSIC_3 = 0
         self.MUSIC_ENDING = 0
         self.MUSIC_GAMEOVER = 0
+        
         
     @staticmethod
     def BEEP_FX_STRING():
@@ -107,7 +110,7 @@ class Sizes:
     def DAMAGE_TILES_DATA_STRING():
         return "DAMAGE_TILES_DATA"
 
-    # @staticmethod
+   # @staticmethod
     # def ENEMIES_PER_SCREEN_DATA_STRING():
     #     return "ENEMIES_PER_SCREEN_DATA"
     
@@ -158,6 +161,10 @@ class Sizes:
     @staticmethod
     def BROKEN_TILES_DATA_STRING():
         return "BROKEN_TILES_DATA"
+    
+    @staticmethod
+    def CUSTOM_FONT_STRING():
+        return "CUSTOM_FONT"
     
     @staticmethod
     def MUSIC_STRING():
@@ -221,7 +228,7 @@ class Sizes:
     
     @staticmethod
     def getKeysToMemoryBank():
-        return ["MAPS_DATA", "DECOMPRESSED_MAP_DATA", "BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "GAMEMAP_SCREEN", "INSTRUCTIONS_SCREEN", "HUD2_SCREEN", "ADVENTURETEXTS_SCREEN", "CREDITS_SCREEN", "REDEFINE_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "SCREEN_ATTRS", "TEXTS_DATA", "SCREEN_MUSIC", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
+        return ["MAPS_DATA", "DECOMPRESSED_MAP_DATA", "BEEP_FX", "TITLE_SCREEN", "ENDING_SCREEN", "HUD_SCREEN", "INTRO_SCREEN", "GAMEOVER_SCREEN", "GAMEMAP_SCREEN", "INSTRUCTIONS_SCREEN", "HUD2_SCREEN", "ADVENTURETEXTS_SCREEN", "CREDITS_SCREEN", "REDEFINE_SCREEN", "MUSIC", "BROKEN_TILES_DATA", "CUSTOM_FONT", "SCREEN_ATTRS", "TEXTS_DATA", "SCREEN_MUSIC", "MUSIC_TITLE", "MUSIC_2", "MUSIC_3", "MUSIC_ENDING", "MUSIC_GAMEOVER", "VTPLAYER"]
     
     def printAllSizesByMemoryBankFor128(self, musicEnabled):
 
@@ -249,8 +256,11 @@ class Sizes:
             self.ANIMATED_TILES_IN_SCREEN_DATA_STRING(),
             self.SCREEN_MUSIC_DATA_STRING(),
             self.SCREEN_ATTRS_DATA_STRING(),
-            self.BROKEN_TILES_DATA_STRING()
+            self.BROKEN_TILES_DATA_STRING(),
+            self.CUSTOM_FONT_STRING()
         ], "0")
+
+        self.__printSizesArraySum([self.TEXTS_COORD_DATA_STRING(), self.TEXTS_DATA_STRING()], "3")
 
         self.__printSizesArraySum([self.TITLE_SCREEN_STRING(), self.ENDING_SCREEN_STRING(), self.HUD_SCREEN_STRING(), self.GAMEOVER_SCREEN_STRING(), self.GAMEMAP_SCREEN_STRING(), self.CREDITS_SCREEN_STRING(), self.REDEFINE_SCREEN_STRING(), self.INSTRUCTIONS_SCREEN_STRING(), self.HUD2_SCREEN_STRING(), self.ADVENTURETEXTS_SCREEN_STRING(), self.INTRO_SCREEN_STRING()], "7")
         

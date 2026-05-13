@@ -670,15 +670,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#limitacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Limitación
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1122,15 +1113,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#limitacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Limitación
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1304,8 +1286,6 @@ El sprite seleccionado será el usado para la plataforma pudiendo usarse cualqui
 <ul>
 <li><strong>enemiesPursuitCollide</strong> permite indicar si los enemigos que te persiguen atraviesan o no tiles no traspasables</li>
 </ul>
-<h3 id="limitacion">Limitación</h3>
-<p>Puedes añadir hasta <strong>3 enemigos/plataformas en cada pantalla</strong> y configurar su movimiento.</p>
 <h2 id="configuracion-individual-de-cada-enemigoplataforma">Configuración individual de cada enemigo/plataforma</h2>
 <h3 id="posicion-inicial">Posición inicial</h3>
 <p>Para ello deberás seleccionar la capa objects y arrastrar el 1er sprite del enemigo a posicionar donde quieras que aparezca inicialmente.</p>
@@ -1376,7 +1356,7 @@ El sprite seleccionado será el usado para la plataforma pudiendo usarse cualqui
 <p>Para ello solo tienes que añadir una propiedad personalizada <strong>life</strong> <strong>de tipo int</strong> con el valor de la vida. Si no la defines, por defecto, el enemigo tiene una unidad de vida.</p>
 <p><img alt="" src="images/vida_enemigo.png" /></p>
 <h3 id="enemigos-invencibles">Enemigos invencibles</h3>
-<p>Para añadir enemigos invencibles solo tendras que ponerle en el atributo <strong>life</strong> el valor <strong>99</strong>.</p>
+<p>Para añadir enemigos invencibles solo tendras que ponerle en el atributo <strong>life</strong> el valor <strong>99</strong> o añadir la propiedad <strong>inmortal</strong> a <em>true</em></p>
 <h3 id="velocidad">Velocidad</h3>
 <p>Puedes establecer la velocidad del enemigo, para ello solo tienes que añadir en el mismo una propiedad personalizada <strong>speed</strong> de tipo <strong>enemySpeed</strong> y seleccionar entre 1, 2 o 3 de más lento a más rápido. Si no añades la propiedad se establecerá a 3 como venía funcionando hasta ahora.</p>
 <ol>

@@ -67,12 +67,6 @@ const BULLET_DIRECTION_DOWN = 2
 
 Dim protaLastFrame As Ubyte
 
-Const LEFT As Ubyte = 0
-Const RIGHT As Ubyte = 1
-Const UP As Ubyte = 2
-Const DOWN As Ubyte = 3
-Const FIRE As Ubyte = 4
-
 Dim currentLife As Ubyte = 100
 
 #ifdef ENERGY_ENABLED
@@ -91,24 +85,36 @@ Dim enemiesScreen as Ubyte = 0
 Dim protaFrame As Ubyte = 0
 dim enemiesFrame as ubyte = 0
 
-Dim kempston As Ubyte
-Dim keyOption As String
 
-#ifdef BUTTON_PAUSE_ENABLED
-Const PAUSE_BUTTON As Ubyte = 5
-dim isPaused as ubyte = 1
+Const LEFT As Ubyte = 0
+Const RIGHT As Ubyte = 1
+Const UP As Ubyte = 2
+Const DOWN As Ubyte = 3
+Const FIRE As Ubyte = 4
 
-    #ifdef BUTTON_QUIT_ENABLED
-        Const QUIT_BUTTON As Ubyte = 6
-        Dim keyArray(6) As Uinteger
-    #else
-        Dim keyArray(5) As Uinteger
-    #endif
+#ifdef CONSOLE_MODE
+    dim isPaused as ubyte
+    Const PAUSE_BUTTON As Ubyte = 0
+    Dim keyArray(0) As Uinteger = { KEYT }
 #else
-    Dim keyArray(4) As Uinteger
+    Dim kempston As Ubyte
+
+    #ifdef BUTTON_PAUSE_ENABLED
+        Const PAUSE_BUTTON As Ubyte = 5
+        dim isPaused as ubyte
+
+        #ifdef BUTTON_QUIT_ENABLED
+            Const QUIT_BUTTON As Ubyte = 6
+            Dim keyArray(6) As Uinteger = { KEYO, KEYP, KEYQ, KEYA, KEYSPACE, KEYT, KEYR }
+        #else
+            Dim keyArray(5) As Uinteger = { KEYO, KEYP, KEYQ, KEYA, KEYSPACE, KEYT }
+        #endif
+    #else
+        Dim keyArray(4) As Uinteger = { KEYO, KEYP, KEYQ, KEYA, KEYSPACE }
+    #endif
 #endif
 
-Dim framec As Ubyte AT 23672
+'Dim framec As Ubyte AT 23672
 
 ' #ifdef NEW_BEEPER_PLAYER
 '     Const BEEP_PERIOD As Ubyte = 1
@@ -194,11 +200,11 @@ Dim darkTileSet(255, 7) As Ubyte at DARKTILESET_DATA_ADDRESS
 Dim darkAttrSet(255) As Ubyte at DARKATTR_DATA_ADDRESS
 
 ' Dim sprites(47, 31) As Ubyte at SPRITES_DATA_ADDRESS
-Dim screenObjectsInitial(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
+Dim screenObjectsInitial(SCREENS_COUNT, MAX_ITEMS_COUNT_INDEX) As Ubyte at SCREEN_OBJECTS_INITIAL_DATA_ADDRESS
 Dim enemiesInScreenOffsets(SCREENS_COUNT) As Uinteger at ENEMIES_IN_SCREEN_OFFSETS_DATA_ADDRESS
 Dim damageTiles(DAMAGE_TILES_COUNT) As Ubyte at DAMAGE_TILES_DATA_ADDRESS
 Dim enemiesPerScreen(SCREENS_COUNT) As byte at ENEMIES_PER_SCREEN_INITIAL_DATA_ADDRESS
-Dim screenObjects(SCREENS_COUNT, 4) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
+Dim screenObjects(SCREENS_COUNT, MAX_ITEMS_COUNT_INDEX) As Ubyte at SCREEN_OBJECTS_DATA_ADDRESS
 Dim screensStatus(SCREENS_COUNT) As Ubyte at SCREENS_WON_DATA_ADDRESS
 Dim decompressedEnemiesScreen(MAX_ENEMIES_PER_SCREEN, ENEMIES_ATTRIBUTES_TOTAL) As Byte at DECOMPRESSED_ENEMIES_SCREEN_DATA_ADDRESS
 Dim screensOffsets(SCREENS_COUNT) As Uinteger at SCREEN_OFFSETS_DATA_ADDRESS
@@ -215,6 +221,10 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
     Dim enemiesInitialLife(MAX_ENEMIES_PER_SCREEN) As Byte at ENEMIES_INITIAL_LIFE_DATA_ADDRESS
 #endif
 
+#ifdef COINS_ENABLED
+    Dim protaCoins as Uinteger
+#endif
+    
 ' Dim animatedTilesInScreen(SCREENS_COUNT, MAX_ANIMATED_TILES_PER_SCREEN, 2) As Ubyte at ANIMATED_TILES_IN_SCREEN_DATA_ADDRESS
 
 #ifdef ANIMATED_TILES_ENABLED
@@ -285,7 +295,7 @@ dim isActionPerformed as ubyte = 0
     Dim screenIsDark as ubyte = 0
     #endif
 
-    #ifdef SCREEN_TERRAIN_ENABLED
+    #ifdef SCREEN_CENITAL_ENABLED
     Dim screenIsTerrain as ubyte = 0
     #endif
 
@@ -294,6 +304,11 @@ dim isActionPerformed as ubyte = 0
             Dim screenHud as ubyte = 0
             Dim currentHud as ubyte = 0
         #endif
+    #endif
+
+    #ifdef SCREEN_BOSSENERGY_ENABLED
+        Dim bossTotalEnergy As Ubyte
+        Dim bossCurEnergy As Ubyte
     #endif
 #endif
 

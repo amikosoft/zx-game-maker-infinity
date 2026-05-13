@@ -32,53 +32,63 @@ Sub showMenu()
         Print AT 0, 26; hiScore
     #endif
     
-    kempston = 0
-
-    #ifdef BUTTON_PAUSE_ENABLED
-    If Not keyArray(PAUSE_BUTTON) Then keyArray(PAUSE_BUTTON) = KEYT
-
-        #ifdef BUTTON_QUIT_ENABLED
-        If Not keyArray(QUIT_BUTTON) Then keyArray(QUIT_BUTTON) = KEYR
-        #endif
+    #ifndef CONSOLE_MODE
+        kempston = 0
     #endif
-            
+
     Do
-        If MultiKeys(KEY1) Then
-            If Not keyArray(LEFT) Then
-                keyArray(LEFT) = KEYO
-                keyArray(RIGHT) = KEYP
-                keyArray(UP) = KEYQ
-                keyArray(DOWN) = KEYA
-                keyArray(FIRE) = KEYSPACE
-            End If
-
-            playGame()
-        elseif MultiKeys(KEY2) Then
-            kempston = 1
-            playGame()
-        elseif MultiKeys(KEY3) Then
-            keyArray(LEFT)=KEY6
-            keyArray(RIGHT)=KEY7
-            keyArray(UP)=KEY9
-            keyArray(DOWN)=KEY8
-            keyArray(FIRE)=KEY0
-            
-            playGame()
-            #ifdef REDEFINE_KEYS_ENABLED
-            elseif MultiKeys(KEY4) Then
-                redefineKeys()
-            #endif
-
+        #ifdef CONSOLE_MODE
+            If MultiKeys(KEYSPACE) Then
+                waitForReleaseKey()
+                playGame()
             #ifdef ENABLED_128k
                 #ifdef MUSIC_ENABLED
                     #ifdef MUSIC_TOGGLE_ENABLED
-                        elseif MultiKeys(KEYM) Then
+                        elseif MultiKeys(KEYQ) Then
                             toggleMusic()
                             waitForReleaseKey()
                     #endif
                 #endif
             #endif
-        End If
+            End if
+        #else
+            If MultiKeys(KEY1) Then
+            ' If Not keyArray(LEFT) Then
+            '     keyArray(LEFT) = KEYO
+            '     keyArray(RIGHT) = KEYP
+            '     keyArray(UP) = KEYQ
+            '     keyArray(DOWN) = KEYA
+            '     keyArray(FIRE) = KEYSPACE
+            ' End If
+
+                playGame()
+            elseif MultiKeys(KEY2) Then
+                kempston = 1
+                playGame()
+            elseif MultiKeys(KEY3) Then
+                keyArray(LEFT)=KEY6
+                keyArray(RIGHT)=KEY7
+                keyArray(UP)=KEY9
+                keyArray(DOWN)=KEY8
+                keyArray(FIRE)=KEY0
+                
+                playGame()
+                #ifdef REDEFINE_KEYS_ENABLED
+                elseif MultiKeys(KEY4) Then
+                    redefineKeys()
+                #endif
+
+                #ifdef ENABLED_128k
+                    #ifdef MUSIC_ENABLED
+                        #ifdef MUSIC_TOGGLE_ENABLED
+                            elseif MultiKeys(KEYM) Then
+                                toggleMusic()
+                                waitForReleaseKey()
+                        #endif
+                    #endif
+                #endif
+            End If
+        #endif
     Loop
 End Sub
 
@@ -268,9 +278,6 @@ Sub playGame()
         #ifdef BUTTON_PAUSE_ENABLED
         if MultiKeys(keyArray(PAUSE_BUTTON)) then
             isPaused = 1
-            
-            ' ActivarBuffer()
-            ' switch2ShadowScreen()
 
             #ifdef GAMEMAP_SCREEN_ENABLED
                 loadScreen(GAMEMAP_SCREEN_ADDRESS)
@@ -283,10 +290,9 @@ Sub playGame()
                 #endif
             #endif
         
-            ' while GetKeyScanCode():wend
             waitForReleaseKey()
 
-            while isPaused
+            while isPaused > 0
                 #ifndef GAMEMAP_SCREEN_ENABLED
                     #ifdef MESSAGES_ENABLED
                     if not messageLoopCounter then printMessage(TEXT_PAUSE, 2, 0)
@@ -294,11 +300,24 @@ Sub playGame()
                 #endif
             
                 if MultiKeys(keyArray(PAUSE_BUTTON)) then
-                    isPaused = 0
+                    #ifdef CONSOLE_MODE
+                        isPaused = isPaused + 1
+                        if isPaused > 200 then 
+                            showMenu()
+                        end if
+                    #else
+                        isPaused = 0
+                    #endif
                 #ifdef BUTTON_QUIT_ENABLED
-                else if MultiKeys(keyArray(QUIT_BUTTON)) then
-                    showMenu()
-                #endif
+                    else if MultiKeys(keyArray(QUIT_BUTTON)) then
+                        showMenu()
+                    #endif
+                #ifdef CONSOLE_MODE
+                    else if MultiKeys(KEYSPACE) then
+                        isPaused = 0
+                    else
+                        isPaused = 1
+                #EndIf
                 end if
             wend
 
@@ -586,8 +605,8 @@ Sub swapScreen(waitReady as ubyte)
             screenIsDark = screenAttributes(currentScreen, SCREEN_DARK)
         #endif
 
-        #ifdef SCREEN_TERRAIN_ENABLED
-            screenIsTerrain = screenAttributes(currentScreen, SCREEN_TERRAIN)
+        #ifdef SCREEN_CENITAL_ENABLED
+            screenIsTerrain = screenAttributes(currentScreen, SCREEN_CENITAL)
         #endif
 
         #ifdef HUD2_SCREEN_ENABLED
@@ -601,7 +620,7 @@ Sub swapScreen(waitReady as ubyte)
                 #ifdef SCREEN_MUSIC_ENABLED
                     dim newScreenMusic as ubyte = screenAttributes(currentScreen, SCREEN_MUSIC)
 
-                    if newScreenMusic <> 0  and newScreenMusic <> musicPlayed Then
+                    if newScreenMusic <> 0 and newScreenMusic <> musicPlayed Then
                         musicPlayed = newScreenMusic
                         
                         #ifdef NO_MUSIC_SELECTED
@@ -678,9 +697,30 @@ Sub swapScreen(waitReady as ubyte)
             Print AT 22, 13; TEXT_HI_SCORE_ZERO
             Print AT 23, 13; TEXT_HI_SCORE_ZERO
         #endif
-
+        
         printHud()
     end if
+
+    #ifdef SCREEN_BOSSENERGY_ENABLED
+        bossTotalEnergy = screenAttributes(currentScreen, SCREEN_BOSSENERGY)
+        bossCurEnergy = bossTotalEnergy
+
+        #ifdef HUD_SHOW_BOSS_MESSAGE
+            if bossTotalEnergy > 0 then
+                if screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED then
+                    enemiesScreen = 0
+                Else
+                    printMessage(TEXT_BOSS, 2, 0)
+                end if
+            end if
+        #else
+            if bossTotalEnergy > 0 and screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED then
+                enemiesScreen = 0
+            end if
+        #endif
+    #endif
+    
+    
 
     if waitReady then 
         #ifdef PLAYER_READY_CONFIRMATION
@@ -691,6 +731,8 @@ Sub swapScreen(waitReady as ubyte)
             #endif
         #endif
     end if
+
+
     'printHud()
 
     asm

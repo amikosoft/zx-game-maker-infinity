@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 zxsgm-infinity.py
+./src/venv/bin/python3 zxsgm-infinity.py

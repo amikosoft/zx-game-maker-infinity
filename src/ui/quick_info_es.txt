@@ -1,0 +1,21 @@
+Información rápida
+
+- Ejecución: Jugar a tu proyecto
+    - Play Normal ejecuta tu última compilación
+    - Play RF ejecuta tu última compilación en modo RF
+    - Play experimental (sólo linux) ejecuta tu última compilación en el ejecutable experimental
+
+- Compilación: Compilar tu proyecto
+    - Build Game compila tu proyecto con salida simple
+    - Build Verbose compila tu proyecto con salida detallada
+    - Build Tiles+Sprites compila los últimos cambios en tiles y sprites para Tiled
+    - Build FX compila los últimos cambios en Fx
+    - Reload Fonts recarga/visualiza los últimos cambios en fuentes
+
+- Configuración del juego: Permite configurar el juego
+    - Open map abre el mapa en Tiled
+    - Edit game texts permite editar los textos del juego en diferentes idiomas
+    - Console mode permite configurar las opciones de este modo de juego
+    
+- Memoria:
+    - Consultar la asignación de RAM por banco

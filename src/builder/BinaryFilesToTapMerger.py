@@ -52,6 +52,9 @@ class BinaryFilesToTapMerger:
         if useBreakableTile:
             input_files.append(OUTPUT_FOLDER + "brokenTiles.bin")
 
+        if os.path.isfile(OUTPUT_FOLDER + "customFont.fnt"):
+            input_files.append(OUTPUT_FOLDER + "customFont.fnt")
+
         concatenateFiles(output_file, input_files)
 
         runCommand("bin2tap " + output_file + " " + OUTPUT_FOLDER + "files.tap " + str(tapAddress))

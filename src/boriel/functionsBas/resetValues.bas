@@ -59,3 +59,7 @@ Next i
 #ifdef MUSIC_ENABLED
     musicPlayed = 0
 #endif
+
+#ifdef COINS_ENABLED
+    protaCoins = PROTA_INITIAL_COINS
+#endif

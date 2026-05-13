@@ -76,9 +76,9 @@ Dim enemyModeBucle, enemyColBucle, enemyLinBucle, enemyColIniBucle, enemyLinIniB
 #endif
 
 #ifdef SHOOTING_ENABLED
-    function checkEnemyBullet(enemyId as ubyte, enemyCol as ubyte, enemyLin as ubyte) as Ubyte
-        if (bulletPositionX + 1) < enemyCol or bulletPositionX > (enemyCol + 2) then return 0
-        if (bulletPositionY + 1) < enemyLin or bulletPositionY > (enemyLin+2) then return 0
+    function checkEnemyBullet(enemyId as ubyte) as Ubyte
+        if (bulletPositionX + 1) < enemyColBucle or bulletPositionX > (enemyColBucle + 2) then return 0
+        if (bulletPositionY + 1) < enemyLinBucle or bulletPositionY > (enemyLinBucle + 2) then return 0
         
         resetBullet()
         damageEnemy(enemyId)
@@ -187,7 +187,7 @@ Sub moveEnemies()
 
                 #ifdef SHOOTING_ENABLED
                     if bulletPositionX and enemyLiveBucle > 0  then
-                        checkEnemyBullet(enemyId, enemyColBucle, enemyLinBucle)
+                        checkEnemyBullet(enemyId)
                     End If
                 #endif
             #else
@@ -209,7 +209,7 @@ Sub moveEnemies()
                         Else
                             ' Se comprueba si tiene colision de bala
                             if bulletPositionX and enemyLiveBucle > 0 then
-                                if checkEnemyBullet(enemyId, enemyColBucle, enemyLinBucle) Then
+                                if checkEnemyBullet(enemyId) Then
                                     enemyLiveBucle = enemyLiveBucle - 1
                                 End if
                             End If
@@ -219,7 +219,7 @@ Sub moveEnemies()
                     ' Se comprueba si tiene colision de bala
                     #ifdef SHOOTING_ENABLED
                         if bulletPositionX and enemyLiveBucle > 0 then
-                            if checkEnemyBullet(enemyId, enemyColBucle, enemyLinBucle) Then
+                            if checkEnemyBullet(enemyId) Then
                                 enemyLiveBucle = enemyLiveBucle - 1
                             End if
                         End If
@@ -410,7 +410,11 @@ Sub moveEnemies()
                         If checkPlatformHasProtaOnTop(enemyColBucle, enemyLinBucle) Then
                             #ifdef PLATFORM_MOVEABLE
                                 if enemySpeedBucle = 3 and not verticalDirectionBucle and not horizontalDirectionBucle Then
+                                    #ifdef CONSOLE_MODE
+                                    if verticalAxisKeyPressed = 1 Then
+                                    #else
                                     if verticalAxisKeyPressed = -1 Then
+                                    #endif
                                         If (protaY - 1) > (PLAYER_BOUNDS_TOP + 2) and Not CheckCollision(protaX, protaY - 1) Then enemyLinBucle = enemyLinBucle - 1
                                     ElseIf Not CheckCollision(protaX, protaY + 3) and enemyLinBucle < PLAYER_BOUNDS_BOTTOM Then
                                         enemyLinBucle = enemyLinBucle + 1

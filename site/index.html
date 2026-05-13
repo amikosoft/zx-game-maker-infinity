@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#zxgm-infinity-5" class="md-skip">
+        <a href="#zxgm-infinity-6" class="md-skip">
           Skip to content
         </a>
       
@@ -364,9 +364,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-version-520" class="md-nav__link">
+  <a href="#nuevo-en-version-6" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en versión 5.2.0
+      Nuevo en versión 6
     </span>
   </a>
   
@@ -657,9 +657,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-version-520" class="md-nav__link">
+  <a href="#nuevo-en-version-6" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en versión 5.2.0
+      Nuevo en versión 6
     </span>
   </a>
   
@@ -699,19 +699,28 @@
 
 
 
-<h1 id="zxgm-infinity-5">ZXGM Infinity 5</h1>
+<h1 id="zxgm-infinity-6">ZXGM Infinity 6</h1>
 <p>Manual para configurar las características de Infinity</p>
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
-<h2 id="nuevo-en-version-520">Nuevo en versión 5.2.0</h2>
+<h2 id="nuevo-en-version-6">Nuevo en versión 6</h2>
+<ul>
+<li>Nueva interfaz de usuario</li>
+<li>Configuración de pantalla boss y boss final</li>
+<li>Nuevo ITEM "Moneda/Coins" que habilita el modo items por dinero</li>
+<li>Nuevo modo consola!!!</li>
+<li>Textos custom ahora no ocupan memoria principal y permite añadir tu propio estilo de textos </li>
+<li>Mejorada la compilación. Ahora los scr pueden estar en multiidioma y modo consola.</li>
+<li>Edición de textos de juego integrada en interfaz de usuario</li>
+<li>Mayor personalización para los textos prefijados del juego</li>
+<li>Ahora el personaje principal se configura con su sprite y tiene sus propios atributos</li>
+</ul>
+<h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
 <ul>
 <li>Ahora el jugador tiene un sprite diferente cuando salta y cae.</li>
 <li>Los enemigos pueden configurarse para usar 2 ó 4 sprites</li>
 <li>Los enemigos y plataformas comparten configuración</li>
 <li>Ahora puedes configurar que un enemigo dispare o no por pantalla</li>
 <li>Los items pueden configurarse para que se pinten multicolor</li>
-</ul>
-<h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
-<ul>
 <li>Ahora se puede configurar un color para el jugador así como para cada uno de los enemigos independientemente</li>
 <li>Optimización de código/memoria (en todas las versiones)* Se ha dejado de dar soporte a ZX Spectrum 48K con el fin de mejorar el rendimiento y poder implementar nuevas características</li>
 <li>El número de tiles ha subido a 512 (255 tiles de color y 255 para modo oscuro)</li>
@@ -772,15 +781,36 @@
 
 Aquí encontrarás aquellos elementos diferenciadores sobre la versión oficial.
 
+![Visual Interface](imgs/visual_interface.png)
+
+La interfaz se ha realizado para facilitar la creación de juegos.
+
+Puedes cambiar el idioma entre inglés y castellano así como el tema claro u oscuro pulsando en el botón correspondiente. 
+
+Esta configuración se guardará para futuras sesiones.
+
+Desde la interfaz puedes acceder a diversos enlaces así como abrir la documentación en local.
+
 ## Build tiles+sprites
 
 Con esta acción podrás compilar tus tiles.zxp y sprites.zxp, sin necesidad de compilar el proyecto completo ni exportar en png, y así poder verlos en tu mapa (tiled)  
 
-![Build tiles+sprites](imgs/visual_interface.png)
+## Build FX
+
+Compila los FX para incluirlos en el juego.
+
+## Refrescar/Previsualizar fuentes
+
+Con esta acción podrás refrescar las fuentes para que sean seleccionables desde Tiled (customFont) y previsualizarlas para ver cómo son.
+Esto permite que incluyas tu propia fuente en el juego.
+
+NOTA: Las fuentes se cargan desde el directorio *src/bin/fnts* del proyecto y están en formato binario.
+
+![Refrescar/Previsualizar fuentes](imgs/font_preview.png)
 
 ## Migración
 
-Si vienes de una versión anterior de v5 es recomendable seguir estos pasos:
+Si vienes de una versión anterior de v6 es recomendable seguir estos pasos:
 
 * Descargar la última versión del ZXGM Infinity e instalar en una carpeta nueva
 * Copiar la carpeta assets de tu proyecto original teniendo en cuenta lo siguiente:
@@ -793,9 +823,6 @@ No hay migración desde versiones anteriores ni desde ZXGM.
 
 * Los usuarios de linux es posible que necesiten dar permisos de ejecución al compilado tras la primera instalación (dentro de la carpeta **dist**)
 
-## Documentación ZXGM oficial
-
-Puedes consultar el resto de opciones [aquí](https://gm.retrojuegos.org/mydoc_engine_use.html).
 
 
 # Configuración de tipos de juego
@@ -812,6 +839,22 @@ La vista del juego se puede configurar de 2 maneras usando **gameView**
 * **overhead** indica al motor que use vista "cenital" para tu juego (tipo zelda)
 
 Entre ambos juegos hay diferencias como el salto o el tipo de movimiento del personaje protagonista. El objetivo en ambos será el mismo.
+
+### Configuración del player
+
+El player debe estar posicionado en el mapa para indicar su posición inicial.
+
+![Player initial position](imgs/player_start.png)
+
+El player viene configurado por defecto (con el class **player**) y se pueden cambiar algunos de sus atributos desde aquí (sustituyendo a los indicados en los atributos globales).
+
+![Player attributes](imgs/player_properties.png)
+
+Los siguientes atributos son:
+
+* **color**: color del sprite
+* **energy**: energía del personaje
+* **lives**: vidas
 
 ### Modo de juego
 
@@ -896,19 +939,6 @@ Además del tile de la imagen, hay otro tile disponible, que es traspasable, que
 
 ![Mechanical belt tile](imgs/mechanicalBeltTile.png)
 
-* **fontCustom** te permite cambiar la fuente para mostrar en los textos del juego dándole su toque especial.
-
-De serie se incluyen 3 fuentes preconfiguradas (gracias a Duefecto y sus fuentes de ejemplo del [Manual para torpes](https://github.com/Duefectu/BorielBasicManualParaTorpes))
-
-Las distintas opciones son:
-
-- *default* es la fuente de nuestro queridísimo ZX Spectrum
-- *medieval* le da su toque romántico a los textos
-- *bold all* muestra la fuente retorneada como si fuera negrita
-- *bold mayus* muestra la fuente retorneada sólo para las mayúsculas
-
-También puedes editar y sustituir cualquiera de ellas usando [ZXBasicStudio](https://github.com/boriel-basic/ZXBasicStudio)
-
 * **transpasableItems** esto indica al motor cuántos tiles traspasables quieres tener disponible en la zona dedicada.
 
 Hay que tener en cuenta que ahora los 2 primeros tiles (de momento) se usarán para las escaleras diagonales.
@@ -956,6 +986,37 @@ NOTA: Para activar los colores de sprites debes tener activado **graphicsSprites
 
 * **jumpFallingSprite** si activas esto tu personaje mostrará un sprite distinto cuando esté cayendo. Los sprites donde se representa esto son los que anteriormente se usaban para plataformas.
 
+### Modo consola
+
+Habilitando el modo consola el compilador prepara el juego para que funcione como una consola, de momento viene preconfigurado para The Spectrum.
+
+En la carpeta de distribución encontrarás, además del tap de tu juego, un fichero .cfg con el mismo nombre que debes distribuir con tu juego.
+
+Además, el compilador buscará primero aquellos SCR que terminen en _console.scr, no pasando nada si no los encuentra ya que seguirá buscando los de siempre.
+
+![Modo consola](imgs/modo_consola.png)
+
+En el modo consola los controles cambian. De hecho, vienen preconfigurados y no pueden cambiarse. En el fichero .cfg anterior puedes encontrar el premapeado del mando para The Spectrum. En el proyecto de ejemplo encontrarás un ejemplo de ficheros SCR.
+
+Por último, si tu juego tiene ULA+ podrás activarlo para el modo consola o no desde la interfaz del compilador (hay que activarlo en ambos sitios)
+
+El comportamiento del juego cambia en modo consola y no hay manera de modificarlo. Se siguen las siguientes pautas:
+
+**Pagina de inicio**
+
+Pulsar disparo para iniciar y salto (en otro botón) para activar/desactivar la música,
+
+**Controles**
+La cruceta sirve para las direcciones y además se tiene un salto y un dispaor mapeado en los botones
+
+El botón de menú se usa para pausar/ver mapa. 
+- Pulsando otra vez se sale de la partida.
+- Pulsando disparo se continúa.
+
+**Otras características**
+
+Todos los textos/acciones se confirman/realizan con el botón de disparo.
+
 ### Idioma del juego
 
 Con infinity puedes generar tu juego en múltiples idiomas de manera sencilla y sin límite de idiomas.
@@ -967,6 +1028,50 @@ Para configurar un idioma nuevo sólo tienes que ir a la carpeta *boriel/langs* 
 Siguiendo las pequeñas instrucciones del fichero podrás tener tus propios textos.
 
 Para los textos de aventura hay que meterles un atributo por cada idioma en el que quieras que aparezca. Por ejemplo, si vas a generar en inglés y español deberás tener los textos en el atributo 'es' y también en 'en'. Si no tienes el atributo correspondiente al idioma el texto no será incluído en el juego.
+
+También puedes tener una traducción para cada SCR. Simplemente crea un fichero SCR con el mismo nombre que el original pero con el sufijo _(idioma), por ejemplo: intro_es.scr
+
+Para el modo consola sería _(idioma)_console.scr. Por ejemplo: intro_es_console.scr
+
+### Mensajes del HUD
+
+* **hudMessagesEnabled**. Si se activa esta opción se mostrará un mensaje de ayuda cuando se entre en contacto con algún item, puerta...
+
+Una vez activado se puede configurar individualmente cada texto desde la interfaz del compilador. Además puedes activar/desactivar individualmente cada uno de los eventos. 
+
+![HUD messages config](imgs/hud_messages.png)
+
+Cabe destacar estas configs: **hudShowProtaEnergyBar** y **hudShowEnemyEnergyBar**. La primera te permitirá ver la barra de energía del protagonista en lugar de un nuḿero y la segunda la de los enemigos que acabas de golpear y tienen energía.
+
+![HUD energy bar](imgs/energy_bar.png)
+
+### Fuente personalizada
+
+* **fontCustom** te permite cambiar la fuente para mostrar en los textos del juego dándole su toque especial.
+
+De serie se incluyen una amplia variedad de fuentes preconfiguradas (entre ellas las de Duefectu, fuentes de ejemplo del [Manual para torpes](https://github.com/Duefectu/BorielBasicManualParaTorpes))
+
+![Font custom](imgs/font_custom.png)
+
+También puedes editar fuentes usando [ZXBasicStudio](https://github.com/boriel-basic/ZXBasicStudio) o añadir las de tu gusto
+
+Todas las fuentes pueden previsualizarse desde la interfaz del compilador, incluso si añades una nueva, desde la opción de previsualización de fuentes.
+
+![Font preview](imgs/font_preview.png)
+
+### Final item
+
+Con esta opción podrás indicar que un objeto haga de final de partida. Es decir, cuando el jugador entre en contacto con este objeto se producirá la secuencia de fin del juego.
+
+El tile que se desea como último se indica en **finalItemTile**.
+
+![Final item](imgs/final_item.png)
+
+También se puede definir el comportamiento que se desea para este item final de modo que el juego puede terminar de diversas maneras. Para esto tendremos que configurar **finalItemMode**. Con esto tendremos las siguientes opciones:
+
+* **Always shown** El item aparecerá de manera normal
+* **Hidden until finish** El item no aparecerá hasta que se consiga el objetivo de items
+* **Show until finish** El item aparecerá al iniciar el juego y desaparecerá una vez se consiga el objetivo de items (ideal para poner un muro que se rompe al coger todos los items y continuar al boss final)
 
 ### Tiles evanescentes (fade tiles)
 
@@ -1108,10 +1213,6 @@ Para configurar el sprite de bala tenemos el fichero bullet.zxp y bullet_overhea
 
 * **enemiesPursuitCollide** permite indicar si los enemigos que te persiguen atraviesan o no tiles no traspasables
 
-### Limitación
-
-Puedes añadir hasta **3 enemigos/plataformas en cada pantalla** y configurar su movimiento.
-
 ## Configuración individual de cada enemigo/plataforma
 
 ### Posición inicial
@@ -1193,7 +1294,7 @@ Para ello solo tienes que añadir una propiedad personalizada **life** **de tipo
 
 ### Enemigos invencibles
 
-Para añadir enemigos invencibles solo tendras que ponerle en el atributo **life** el valor **99**.
+Para añadir enemigos invencibles solo tendras que ponerle en el atributo **life** el valor **99** o añadir la propiedad **inmortal** a *true*
 
 ### Velocidad
 

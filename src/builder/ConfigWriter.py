@@ -101,7 +101,9 @@ class ConfigWriter:
                 currentAddress = self.__writeDeclarationAndIncrement(key, currentAddress)
 
             if getUseBreakableTile() and not getBulletDisableCollisions():
-                self.__writeDeclarationAndIncrement(Sizes.BROKEN_TILES_DATA_STRING(), currentAddress)
+                currentAddress =self.__writeDeclarationAndIncrement(Sizes.BROKEN_TILES_DATA_STRING(), currentAddress)
+
+            self.__writeDeclarationAndIncrement(Sizes.CUSTOM_FONT_STRING(), currentAddress)
     
     def __setFileHandler(self, fileHandler):
         self.fileHandler = fileHandler

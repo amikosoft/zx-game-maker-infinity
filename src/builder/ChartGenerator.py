@@ -4,7 +4,7 @@ from builder.helper import BIN_FOLDER, runPythonScript
 
 class ChartGenerator:
     def execute(self, sizes: Sizes, is128k, adventureTexts, musicEnabled, breakableTiles, attrsEnabled):
-        enemiesSize = sizes.ENEMIES_DATA + sizes.ENEMIES_IN_SCREEN_OFFSETS_DATA + sizes.ENEMIES_PER_SCREEN_INITIAL_DATA + sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA
+        enemiesSize = sizes.ENEMIES_DATA + sizes.ENEMIES_IN_SCREEN_OFFSETS_DATA + sizes.ENEMIES_PER_SCREEN_INITIAL_DATA + sizes.DECOMPRESSED_ENEMIES_SCREEN_DATA + sizes.ENEMIES_INITIAL_LIFE_DATA + sizes.CUSTOM_FONT
 
         textsSize = 0
         if adventureTexts == True:
@@ -24,7 +24,7 @@ class ChartGenerator:
             # if musicEnabled:
             #     mapsScreenSize = sizes.SCREEN_MUSIC_DATA
 
-            paramsMap0 = "MapsExtra:" + str(mapsSize) + ",Enemies:" + str(enemiesSize) + ",Tileset:" + str(sizes.TILESET_DATA) + ",Attributes:" + str(sizes.ATTR_DATA) + ",DarkTileset:" + str(sizes.DARKTILESET_DATA) + ",DarkAttributes:" + str(sizes.DARKATTR_DATA) + ",Objects:" + str(sizes.SCREEN_OBJECTS_INITIAL_DATA) + ",Damage-Tiles:" + str(sizes.DAMAGE_TILES_DATA) + ",Animated-Tiles:" + str(sizes.ANIMATED_TILES_IN_SCREEN_DATA) + ",BreakableTiles-Sizes:" + str(breakableTilesSize) + ",ScreenAttributes-Sizes:" + str(attrsScreenSize) +" memory-bank-0-128K.png"
+            paramsMap0 = "MapsExtra:" + str(mapsSize) + ",Enemies:" + str(enemiesSize) + ",Tileset:" + str(sizes.TILESET_DATA) + ",Attributes:" + str(sizes.ATTR_DATA) + ",DarkTileset:" + str(sizes.DARKTILESET_DATA) + ",DarkAttributes:" + str(sizes.DARKATTR_DATA) + ",Objects:" + str(sizes.SCREEN_OBJECTS_INITIAL_DATA) + ",Damage-Tiles:" + str(sizes.DAMAGE_TILES_DATA) + ",Animated-Tiles:" + str(sizes.ANIMATED_TILES_IN_SCREEN_DATA) + ",BreakableTiles-Sizes:" + str(breakableTilesSize) + ",ScreenAttributes-Sizes:" + str(attrsScreenSize) + ",Custom-Font:" + str(sizes.CUSTOM_FONT) + " memory-bank-0-128K.png"
             paramsMap3 = "Texts-sizes:" + str(textsSize) + " memory-bank-3.png"
             paramsMap4 = "Vortex-Player:" + str(sizes.VTPLAYER) + ",Title-Music:" + str(sizes.MUSIC_TITLE) + ",Ingame-Music:" + str(sizes.MUSIC) + ",Ingame-2-Music:" + str(sizes.MUSIC_2) + ",Ingame-3-Music:" + str(sizes.MUSIC_3) + ",Ending-Music:" + str(sizes.MUSIC_ENDING) + ",GameOver-Music:" + str(sizes.MUSIC_GAMEOVER) + " memory-bank-4.png"
             paramsMap6 = "FX:" + str(sizes.BEEP_FX) + ",Map:" + str(sizes.MAPS_DATA) + " memory-bank-6.png"

@@ -11,19 +11,35 @@ from builder.MusicSetup import MusicSetup
 
 class Builder:
     def execute(self):
-        is128K = getEnabled128K()
+        is128K = True
         useBreakableTile = getUseBreakableTile() and not getBulletDisableCollisions()
         enableAdventureTexts = getAdventureTexts()
         musicEnabled = getMusicEnabled()
+        gameLanguage = getGameLanguage()
+        consoleMode = getConsoleMode()
+
         # attrsEnabled = getAttrsEnabled()
 
-        ScreensCompressor().execute(is128K, screenExists("intro"), screenExists("gameover"), screenExists("gamemap"), screenExists("credits"), screenExists("redefine"), screenExists("instructions"), screenExists("hud2"), screenExists("adventuretexts"))
+        screenList = [
+            "title",
+            "ending",
+            "hud",
+            "intro",
+            "gameover",
+            "gamemap",
+            "credits",
+            "redefine",
+            "instructions",
+            "hud2",
+            "adventuretexts"
+        ]
+        ScreensCompressor().execute(screenList, gameLanguage, consoleMode != "No")
         TilesGenerator().execute()
         SpritesGenerator().execute()
         MusicSetup().splitSongs()
         ConvertZXPToGuSprites.convert()
         BinaryFilesToTapMerger().execute(is128K, useBreakableTile, enableAdventureTexts, musicEnabled, True)
-        sizes = SizesGetter(OUTPUT_FOLDER, is128K, useBreakableTile, enableAdventureTexts, musicEnabled, True).execute()
+        sizes = SizesGetter(OUTPUT_FOLDER, useBreakableTile, enableAdventureTexts, musicEnabled, True, gameLanguage).execute()
         ChartGenerator().execute(sizes, is128K, enableAdventureTexts, musicEnabled, useBreakableTile, True)
         ConfigWriter(OUTPUT_FOLDER + "config.bas", INITIAL_ADDRESS, sizes).execute()
 

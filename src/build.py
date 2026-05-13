@@ -1,5 +1,5 @@
 import os
-# import shutil
+import shutil
 import sys
 from pathlib import Path
 import time
@@ -154,17 +154,20 @@ def exeBuild():
 def linuxBuild():
     concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + "-RF.linux")), [str(Path("bin/spectral-rf.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
     concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + ".linux")), [str(Path("bin/spectral.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])    
-    concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + "_infinity.linux")), [str(Path("bin/Spectral.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
+    concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + "_infinity.linux")), [str(Path("bin/SpectralExp.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
     
     # run_command("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + "-RF.linux")))
     # run_command("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + ".linux")))
+
+def consoleConfig():
+    shutil.copy(BIN_FOLDER + "keys.cfg", DIST_FOLDER + getProjectFileName() + ".cfg")
 
 def distBuild():
     tapsBuild()
     snaBuild()
     exeBuild()
     linuxBuild()
-
+    consoleConfig()
 
 def removeTempFiles():
     for file in os.listdir("output"):
@@ -183,6 +186,7 @@ def build():
     executeFunction(tiledExport, "Exporting game from Tiled")
     executeFunction(tiledBuild, "Building Tiled maps")
     sizes = executeFunction(buildingFilesAndConfig, "Building files and config")
+    executeFunction(consoleConfig, "Configuring console")
     executeFunction(compilingGame, "Compiling game")
     if getEnabled128K():
         executeFunction(checkMemory, "Checking memory")

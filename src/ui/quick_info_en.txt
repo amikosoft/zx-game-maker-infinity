@@ -1,0 +1,21 @@
+Quick info
+
+- Run: Play your project
+    - Play Normal runs your last compilation
+    - Play RF runs your last compilation in RF mode
+    - Play experimental (only linux) runs your last compilation in experimental executable
+
+- Build: Build your project
+    - Build Game compiles your project with simple output
+    - Build Verbose compiles your project with verbose output
+    - Build Tiles+Sprites build your last changes in tiles and sprites to use in Tiled
+    - Build FX compiles your last changes in Fx
+    - Reload Fonts reload/view your last changes in Fonts
+
+- Game configuration: Allows you to configure the game
+    - Open map opens map in Tiled
+    - Edit game texts allows you to edit game texts in different languages
+    - Console mode allows you to set options for this game mode
+    
+- Memory:
+    - Check RAM allocation per bank

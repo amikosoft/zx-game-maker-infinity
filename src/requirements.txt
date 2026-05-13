@@ -5,3 +5,5 @@ zxp2gus
 zxbasic
 skoolkit
 zxtaputils
+customtkinter
+pyfiglet
