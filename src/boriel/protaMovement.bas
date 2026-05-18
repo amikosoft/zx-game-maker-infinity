@@ -81,11 +81,15 @@ Function canMoveDown() As Ubyte
     #endif
     
     #ifdef SIDE_VIEW
-        If CheckCollision(protaX, protaY + 1) Then Return 0
+        If checkIsLadder(protaY + 4, 0) then Return 0
+
+        if protaY bAnd 1 then protaY = protaY + 1
+
+        If CheckCollision(protaX, protaY + 2) Then 
+            If not CheckCollision(protaX, protaY) Then Return 0
+        end if
         
         If checkPlatformByXY() Then Return 0
-        
-        if checkIsLadder(protaY + 4, 0) then return 0
     #else
         If CheckCollision(protaX, protaY + 1) Then Return 0
     #endif
@@ -751,18 +755,11 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                 screensStatus(currentScreen) = SCREEN_STATUS_COMPLETED
                 removeTilesFromScreen(ENEMY_DOOR_TILE)
             #endif
+
+            screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
             
             #ifdef ITEMS_MULTICOLOR_ENABLED
                 multicolorItem(0) = 0
-            #endif
-            
-            'ITEMS_INCREMENT
-            #ifdef ITEMS_COUNTDOWN_ENABLED
-                if currentItems > 0 then
-                    currentItems = currentItems - 1
-                End If
-            #else
-                currentItems = currentItems + 1
             #endif
             
             #ifdef HISCORE_ENABLED
@@ -771,39 +768,102 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                     hiScore = score
                 End If
             #endif
-            printHud()
-            #ifdef MESSAGES_ENABLED
-                #ifdef HUD_SHOW_ITEMS_MESSAGE
-                    printMessage(TEXT_NEW_ITEM, 4, 0)
+
+            'ITEMS_INCREMENT
+            #ifdef ITEMS_COUNTDOWN_ENABLED
+                if currentItems > 0 then
+                    currentItems = currentItems - 1
+                   
+                    #ifndef ARCADE_MODE
+                        #ifndef LEVELS_MODE
+                            #ifdef FINAL_ITEM_ENABLED
+                                #ifndef FINAL_ITEM_ALWAYS_SHOWN
+                                    If currentItems = GOAL_ITEMS Then
+                                        #ifdef FINAL_ITEM_SHOW_UNTIL_FINISH
+                                            removeTilesFromScreen(FINAL_ITEM_TILE)
+                                        #else
+                                            mapDraw(1)
+                                        #endif
+                                    end if
+                                #endif
+                            #else
+                                #ifndef FINAL_SCREEN_ENABLED
+                                    If currentItems = GOAL_ITEMS Then
+                                        ending()
+                                    End If
+                                #endif
+                            #endif
+                        #endif
+                    #endif
+                    printHud()
+                End If
+            #else
+                currentItems = currentItems + 1
+
+                #ifndef ARCADE_MODE
+                    #ifndef LEVELS_MODE
+                        #ifdef FINAL_ITEM_ENABLED
+                            #ifndef FINAL_ITEM_ALWAYS_SHOWN
+                                If currentItems = GOAL_ITEMS Then
+                                    #ifdef FINAL_ITEM_SHOW_UNTIL_FINISH
+                                        removeTilesFromScreen(FINAL_ITEM_TILE)
+                                    #else
+                                        mapDraw(1)
+                                    #endif
+                                end if
+                            #endif
+                        #else
+                            #ifndef FINAL_SCREEN_ENABLED
+                                If currentItems = GOAL_ITEMS Then
+                                    ending()
+                                End If
+                            #endif
+                        #endif
+                    #endif
                 #endif
+
+                printHud()
             #endif
+
             #ifdef ARCADE_MODE
                 If currentItems = itemsToFind Then
                     'SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
                     SetTileWithBackground(KEY_TILE, currentScreenKeyX, currentScreenKeyY)
                 End If
-            #Else
-                #ifndef LEVELS_MODE
-                    #ifdef FINAL_ITEM_ENABLED
-                        #ifndef FINAL_ITEM_ALWAYS_SHOWN
-                            If currentItems = GOAL_ITEMS Then
-                                #ifdef FINAL_ITEM_SHOW_UNTIL_FINISH
-                                    removeTilesFromScreen(FINAL_ITEM_TILE)
-                                #else
-                                    mapDraw(1)
-                                #endif
-                            end if
-                        #endif
-                    #else
-                        #ifndef FINAL_SCREEN_ENABLED
-                            If currentItems = GOAL_ITEMS Then
-                                ending()
-                            End If
-                        #endif
-                    #endif
+            #endif
+            
+            #ifdef MESSAGES_ENABLED
+                #ifdef HUD_SHOW_ITEMS_MESSAGE
+                    printMessage(TEXT_NEW_ITEM, 4, 0)
                 #endif
             #endif
-            screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) = 0
+            ' #ifdef ARCADE_MODE
+            '     If currentItems = itemsToFind Then
+            '         'SetTile(KEY_TILE, tileAttrWithBackground(KEY_TILE), currentScreenKeyX, currentScreenKeyY)
+            '         SetTileWithBackground(KEY_TILE, currentScreenKeyX, currentScreenKeyY)
+            '     End If
+            ' #Else
+            '     #ifndef LEVELS_MODE
+            '         #ifdef FINAL_ITEM_ENABLED
+            '             #ifndef FINAL_ITEM_ALWAYS_SHOWN
+            '                 If currentItems = GOAL_ITEMS Then
+            '                     #ifdef FINAL_ITEM_SHOW_UNTIL_FINISH
+            '                         removeTilesFromScreen(FINAL_ITEM_TILE)
+            '                     #else
+            '                         mapDraw(1)
+            '                     #endif
+            '                 end if
+            '             #endif
+            '         #else
+            '             #ifndef FINAL_SCREEN_ENABLED
+            '                 If currentItems = GOAL_ITEMS Then
+            '                     ending()
+            '                 End If
+            '             #endif
+            '         #endif
+            '     #endif
+            ' #endif
+
             BeepFX_Play(5)
             Return tile
             #ifndef ARCADE_MODE
