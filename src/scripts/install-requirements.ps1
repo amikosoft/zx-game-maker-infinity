@@ -33,9 +33,9 @@ if ($pythonVersion -lt 3.12) {
 # Resolve Paths Relative to Script
 $scriptRoot = $PSScriptRoot
 if ([string]::IsNullOrEmpty($scriptRoot)) { $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition }
-$parentDir = Split-Path $scriptRoot -Parent
-$venvPath = Join-Path $parentDir "venv"
-$requirementsFile = Join-Path $parentDir "requirements.txt"
+$srcDir = Split-Path $scriptRoot -Parent
+$venvPath = Join-Path $srcDir "venv"
+$requirementsFile = Join-Path $srcDir "requirements.txt"
 
 # Venv Management
 if (-not (Test-Path $venvPath)) {

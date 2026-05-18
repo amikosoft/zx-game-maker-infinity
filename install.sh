@@ -11,7 +11,5 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
-rm venv/bin/bin2tap.py
-
-pip uninstall -y opencv-python
-pip install opencv-python-headless
+# pip uninstall -y opencv-python
+# pip install opencv-python-headless
