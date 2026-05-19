@@ -90,3 +90,24 @@ class ConvertZXPToGuSprites:
             f.write("end asm\n")
             
             f.write("\n")
+
+    @staticmethod
+    def writeGuSpritesBinary(sprites, filename_16="boriel/lib/gusprites_16.bin", filename_8="boriel/lib/gusprites_8.bin"):
+        sprites_16 = bytearray()
+        sprites_8 = bytearray()
+        
+        for sprite in sprites:
+            charset = CharSet.createFromSprite(sprite.data, sprite.width // 8, sprite.height // 8)
+            
+            flat_data = [byte for block in charset.Data for byte in block]
+            
+            if sprite.width == 16 and sprite.height == 16:
+                sprites_16.extend(flat_data)
+            elif sprite.width == 8 and sprite.height == 8:
+                sprites_8.extend(flat_data)
+                
+        with open(filename_16, 'wb') as f:
+            f.write(sprites_16)
+            
+        with open(filename_8, 'wb') as f:
+            f.write(sprites_8)
