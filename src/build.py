@@ -36,15 +36,16 @@ def checkMemory():
 
 def tapsBuild():
     OUTPUT_FILE = str(Path(DIST_FOLDER + getProjectFileName() + ".tap"))
+    bin2tap_cmd = findBin2tapCmd()
     
-    runCommand("bin2tap " + str(Path("bin/loader.bin")) + " " + str(Path(OUTPUT_FOLDER + "loader.tap")) + " 10 --header \"" + getProjectName() + "\" --block_type 1")
-    runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "loading.bin")) + " " + str(Path(OUTPUT_FOLDER + "loading.tap")) + " 16384")
-    runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "main.bin")) + " " + str(Path(OUTPUT_FOLDER + "main.tap")) + " 24576")
+    runCommand(bin2tap_cmd + " " + str(Path("bin/loader.bin")) + " " + str(Path(OUTPUT_FOLDER + "loader.tap")) + " 10 --header \"" + getProjectName() + "\" --block_type 1")
+    runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "loading.bin")) + " " + str(Path(OUTPUT_FOLDER + "loading.tap")) + " 16384")
+    runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "main.bin")) + " " + str(Path(OUTPUT_FOLDER + "main.tap")) + " 24576")
 
     if getEnabled128K():
-        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "title.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "title.tap")) + " 49152")
-        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "ending.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "ending.tap")) + " 16384")
-        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "hud.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "hud.tap")) + " 24576")
+        runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "title.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "title.tap")) + " 49152")
+        runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "ending.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "ending.tap")) + " 16384")
+        runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "hud.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "hud.tap")) + " 24576")
 
         input_files = [
             str(Path(OUTPUT_FOLDER + "loader.tap")),
@@ -91,46 +92,46 @@ def tapsBuild():
 
         # banco de scr
         if os.path.isfile(OUTPUT_FOLDER + "intro.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "intro.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "intro.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "intro.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "intro.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "intro.tap")
         
         if os.path.isfile(OUTPUT_FOLDER + "gameover.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "gameover.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "gameover.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "gameover.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "gameover.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "gameover.tap")
         
         if os.path.isfile(OUTPUT_FOLDER + "gamemap.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "gamemap.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "gamemap.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "gamemap.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "gamemap.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "gamemap.tap")
 
         if os.path.isfile(OUTPUT_FOLDER + "credits.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "credits.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "credits.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "credits.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "credits.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "credits.tap")
         
         if os.path.isfile(OUTPUT_FOLDER + "redefine.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "redefine.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "redefine.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "redefine.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "redefine.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "redefine.tap")
 
         if os.path.isfile(OUTPUT_FOLDER + "instructions.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "instructions.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "instructions.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "instructions.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "instructions.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "instructions.tap")
 
         if os.path.isfile(OUTPUT_FOLDER + "hud2.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "hud2.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "hud2.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "hud2.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "hud2.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "hud2.tap")
 
         if os.path.isfile(OUTPUT_FOLDER + "adventuretexts.scr.zx0"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "adventuretexts.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "adventuretexts.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "adventuretexts.scr.zx0")) + " " + str(Path(OUTPUT_FOLDER + "adventuretexts.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "adventuretexts.tap")
 
         # Pal banco de sonidos/mapas        
         input_files.append(str(Path(ASSETS_FOLDER + "fx/fx.tap")))
         
-        runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "map.bin.zx0")) + " " + str(Path(OUTPUT_FOLDER + "mapsNew.tap")) + " 49152")
+        runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "map.bin.zx0")) + " " + str(Path(OUTPUT_FOLDER + "mapsNew.tap")) + " 49152")
         input_files.append(OUTPUT_FOLDER + "mapsNew.tap")
 
         # para el banco de textos 
         if os.path.isfile(OUTPUT_FOLDER + "texts.bin"):
-            runCommand("bin2tap " + str(Path(OUTPUT_FOLDER + "texts.bin")) + " " + str(Path(OUTPUT_FOLDER + "textsalt.tap")) + " 49152")
+            runCommand(bin2tap_cmd + " " + str(Path(OUTPUT_FOLDER + "texts.bin")) + " " + str(Path(OUTPUT_FOLDER + "textsalt.tap")) + " 49152")
             input_files.append(OUTPUT_FOLDER + "textsalt.tap")
 
     else:
@@ -144,11 +145,72 @@ def tapsBuild():
 
     concatenateFiles(OUTPUT_FILE, input_files)
 
-def snaBuild():
+def findBin2tapCmd():
+    """Find bin2tap in different locations based on the OS."""
+    # First, try to find it in PATH
+    bin2tap_cmd = shutil.which("bin2tap")
+    if bin2tap_cmd:
+        return bin2tap_cmd
+    
+    # Try platform-specific locations in virtual environment
+    venv_path = os.getenv('VIRTUAL_ENV')
+    if venv_path:
+        if os.name == 'nt':  # Windows
+            scripts_path = os.path.join(venv_path, 'Scripts', 'bin2tap.exe')
+            if os.path.isfile(scripts_path):
+                return scripts_path
+            scripts_path = os.path.join(venv_path, 'Scripts', 'bin2tap')
+            if os.path.isfile(scripts_path):
+                return scripts_path
+        else:  # Linux/Mac
+            bin_path = os.path.join(venv_path, 'bin', 'bin2tap')
+            if os.path.isfile(bin_path):
+                return bin_path
+    
+    # Try local bin folder
+    local_bin_path = os.path.join('bin', 'bin2tap')
+    if os.path.isfile(local_bin_path):
+        return local_bin_path
+    
+    # Fallback - assume it's in PATH
+    return "bin2tap"
+
+def findTap2snaCmd():
+    """Find tap2sna.py in different locations based on the OS."""
+    # First, try to find it in PATH
     tap2sna_cmd = shutil.which("tap2sna.py")
-    if not tap2sna_cmd:
-        print("Error: tap2sna.py not found in PATH using -m sktoolkit.tap2sna instead")
-        tap2sna_cmd = "-m skoolkit.tap2sna"
+    if tap2sna_cmd:
+        return tap2sna_cmd
+    
+    # Try platform-specific locations in virtual environment
+    venv_path = os.getenv('VIRTUAL_ENV')
+    if venv_path:
+        if os.name == 'nt':  # Windows
+            scripts_path = os.path.join(venv_path, 'Scripts', 'tap2sna.py')
+            if os.path.isfile(scripts_path):
+                return scripts_path
+        else:  # Linux/Mac
+            bin_path = os.path.join(venv_path, 'bin', 'tap2sna.py')
+            if os.path.isfile(bin_path):
+                return bin_path
+    
+    # Try local bin folder
+    local_bin_path = os.path.join('bin', 'tap2sna.py')
+    if os.path.isfile(local_bin_path):
+        return local_bin_path
+    
+    # Fallback to module-based approach
+    return "-m skoolkit.tap2sna"
+
+def snaBuild():
+    tap2sna_cmd = findTap2snaCmd()
+    
+    if tap2sna_cmd.startswith('-m'):
+        if verbose:
+            print(f"Using module-based tap2sna: {tap2sna_cmd}")
+    else:
+        if verbose:
+            print(f"Using tap2sna.py from: {tap2sna_cmd}")
     
     runPythonScript([
         tap2sna_cmd,
