@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import platform
 import subprocess
@@ -424,14 +425,33 @@ class ZXInfinityApp(ctk.CTk):
             
         def _play():
             try:
-                if platform.system() == "Windows":
-                    # Intentar usar ffplay si está instalado o similar
-                    subprocess.run(["ffplay", "-nodisp", "-autoexit", sound_path], 
-                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                else:
-                    # Linux: paplay es común para OGG
-                    subprocess.run(["paplay", sound_path], 
-                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                try:
+                    # Intentar usar ffpyplayer si está instalado (evita requerir reproductores externos)
+                    from ffpyplayer.player import MediaPlayer
+                    import time
+                    
+                    player = MediaPlayer(sound_path)
+                    # Dar un breve instante para cargar metadatos e iniciar reproducción
+                    time.sleep(0.2)
+                    metadata = player.get_metadata()
+                    duration = metadata.get('duration', 0) if metadata else 0
+                    
+                    if duration > 0:
+                        while player.get_pts() < duration:
+                            time.sleep(0.1)
+                    else:
+                        time.sleep(3.0)  # Fallback de seguridad si no lee la duración
+                    
+                    player.close_player()
+                except ImportError:
+                    # Fallback a comandos de sistema si ffpyplayer no está disponible
+                    if platform.system() == "Windows":
+                        subprocess.run(["ffplay", "-nodisp", "-autoexit", sound_path], 
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    else:
+                        # Linux: paplay es común para OGG
+                        subprocess.run(["paplay", sound_path], 
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except:
                 pass
                 
@@ -721,15 +741,19 @@ class ZXInfinityApp(ctk.CTk):
                 if platform.system() == "Windows":
                     process = subprocess.Popen(
                         ["powershell", "-ExecutionPolicy", "Bypass", "-File"] + command,
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE
                     )
                 else:
                     process = subprocess.Popen(
                         ["bash"] + command,
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE
                     )
 
-                for line in iter(process.stdout.readline, ''):
+                for line_bytes in iter(process.stdout.readline, b''):
+                    try:
+                        line = line_bytes.decode('utf-8')
+                    except UnicodeDecodeError:
+                        line = line_bytes.decode('cp1252', errors='replace')
                     self.output_text.insert(tk.END, line)
                     self.output_text.see(tk.END)
                     # Incrementar progreso ligeramente
@@ -739,7 +763,11 @@ class ZXInfinityApp(ctk.CTk):
                     self.color_index = (self.color_index + 1) % len(self.spectrum_colors)
                     self.progress_bar.configure(progress_color=self.spectrum_colors[self.color_index])
 
-                for line in iter(process.stderr.readline, ''):
+                for line_bytes in iter(process.stderr.readline, b''):
+                    try:
+                        line = line_bytes.decode('utf-8')
+                    except UnicodeDecodeError:
+                        line = line_bytes.decode('cp1252', errors='replace')
                     self.output_text.insert(tk.END, line)
                     self.output_text.see(tk.END)
                     # Incrementar progreso ligeramente

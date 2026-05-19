@@ -7,3 +7,4 @@ skoolkit
 zxtaputils
 customtkinter
 pyfiglet
+ffpyplayer

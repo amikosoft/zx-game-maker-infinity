@@ -1,3 +1,7 @@
+# Configure UTF-8 encoding for proper character display
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+chcp 65001 | Out-Null
+
 $pythonCommands = @("py", "python", "python3")
 $pythonExe = $null
 
@@ -70,11 +74,5 @@ if (-not (Test-Path $buildFile)) {
 
 Write-Host "Compilando juego..." -ForegroundColor Cyan
 & $pythonExe $buildFile $args
-
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Error durante la compilación." -ForegroundColor Red
-} else {
-    Write-Host "Compilación finalizada con éxito." -ForegroundColor Green
-}
 
 # Read-Host "Pulse una tecla para cerrar..."
