@@ -583,8 +583,8 @@ End Sub
     end sub
     
     Function validaTexto(validateTile as ubyte) as ubyte
-        dim textFound as ubyte = 0
-        
+        dim someTextFound as ubyte = 0
+        Dim textFound as ubyte = 0
         #ifdef IS_TEXT_ADVENTURE
             dim adventureStateTmp as ubyte = currentAdventureState
         #EndIf
@@ -615,7 +615,10 @@ End Sub
                                             textFound = 0
                                         end if
                                         
-                                        if textFound Then muestraDialogo(textsCoord(texto, 3), tileText)
+                                        if textFound Then 
+                                            muestraDialogo(textsCoord(texto, 3), tileText)
+                                            someTextFound = 1
+                                        end if
                                     else
                                         textFound = 0
                                     end if
@@ -641,7 +644,7 @@ End Sub
             #EndIf
         #EndIf
         
-        return textFound
+        return someTextFound
     End Function
 #endif
 

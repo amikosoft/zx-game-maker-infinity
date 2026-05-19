@@ -342,7 +342,7 @@
   </object>
   <object id="60" type="text" x="72" y="224">
    <properties>
-    <property name="adventureState" type="int" value="2"/>
+    <property name="adventureState" type="int" value="3"/>
     <property name="es" value="Con uno mas ya puedo tocar la bateria"/>
     <property name="itemAction" type="int" value="197"/>
    </properties>
@@ -364,7 +364,7 @@
   </object>
   <object id="68" name="1" type="text" x="184" y="224">
    <properties>
-    <property name="adventureState" type="int" value="1"/>
+    <property name="adventureState" type="int" value="2"/>
     <property name="es" value="Esto me sirve  para tocar.    Faltan palos"/>
     <property name="itemAction" type="int" value="165"/>
    </properties>
@@ -385,7 +385,7 @@
   </object>
   <object id="72" name="1" type="text" x="136" y="136">
    <properties>
-    <property name="adventureState" type="int" value="3"/>
+    <property name="adventureState" type="int" value="4"/>
     <property name="es" value="Ya tengo todo!!"/>
     <property name="itemAction" type="int" value="197"/>
    </properties>
@@ -420,7 +420,7 @@
   </object>
   <object id="78" name="1" type="text" x="184" y="224">
    <properties>
-    <property name="adventureState" type="int" value="4"/>
+    <property name="adventureState" type="int" value="5"/>
     <property name="es" value="Vamos a tocar!!"/>
     <property name="itemAction" type="int" value="165"/>
    </properties>
@@ -649,7 +649,7 @@
    </properties>
    <point/>
   </object>
-  <object id="204" name="player" type="player" gid="257" x="488" y="104" width="16" height="16">
+  <object id="204" name="player" type="player" gid="257" x="128" y="248" width="16" height="16">
    <properties>
     <property name="color" type="int" value="67"/>
     <property name="energy" type="int" value="5"/>

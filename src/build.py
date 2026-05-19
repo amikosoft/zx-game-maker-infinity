@@ -167,8 +167,10 @@ def linuxBuild():
     concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + ".linux")), [str(Path("bin/spectral.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])    
     concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + "_infinity.linux")), [str(Path("bin/SpectralExp.linux")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
     
-    # run_command("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + "-RF.linux")))
-    # run_command("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + ".linux")))
+    if os.name != 'nt':
+        runCommand("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + "-RF.linux")))
+        runCommand("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + ".linux")))
+        runCommand("chmod +x " + str(Path(DIST_FOLDER + getProjectFileName() + "_infinity.linux")))
 
 def consoleConfig():
     shutil.copy(BIN_FOLDER + "keys.cfg", DIST_FOLDER + getProjectFileName() + ".cfg")
@@ -179,6 +181,8 @@ def distBuild():
     exeBuild()
     linuxBuild()
     consoleConfig()
+
+    
 
 def removeTempFiles():
     for file in os.listdir("output"):
