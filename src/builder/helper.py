@@ -52,7 +52,21 @@ def getPythonExecutable():
     return str(Path(sys.executable)) + " "
 
 def runPythonScript(script):
-    runCommand(getPythonExecutable() + script)
+    global verbose
+    # Accept either a string (legacy) or a list/tuple of args to avoid shell quoting
+    # issues on Windows. If a sequence is provided, call subprocess directly
+    # with shell=False so paths with backslashes/spaces are handled correctly.
+    if isinstance(script, (list, tuple)):
+        cmd = [str(Path(sys.executable))] + list(script)
+        if verbose:
+            result = subprocess.call(cmd)
+        else:
+            result = subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if result != 0:
+            print("Error executing python command: " + " ".join(cmd))
+            sys.exit(1)
+    else:
+        runCommand(getPythonExecutable() + script)
 
 def getTiledExportCommand():
     if os.name == "nt":

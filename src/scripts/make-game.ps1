@@ -10,7 +10,7 @@ foreach ($cmd in $pythonCommands) {
 
 if ($null -eq $pythonExe) {
     Write-Host "Python no está instalado. Por favor, instala Python antes de continuar (se recomienda el Launcher de Python 'py')." -ForegroundColor Red
-    Read-Host "Pulse una tecla para cerrar..."
+    # Read-Host "Pulse una tecla para cerrar..."
     exit 1
 }
 
@@ -20,13 +20,13 @@ try {
     $pythonVersion = [double]$vStr
 } catch {
     Write-Host "Error al detectar la versión de Python." -ForegroundColor Red
-    Read-Host "Pulse una tecla para cerrar..."
+    # Read-Host "Pulse una tecla para cerrar..."
     exit 1
 }
 
 if ($pythonVersion -lt 3.12) {
     Write-Host "La versión de Python encontrada ($vStr) es menor que 3.12. Por favor, instala Python 3.12 o superior." -ForegroundColor Red
-    Read-Host "Pulse una tecla para cerrar..."
+    # Read-Host "Pulse una tecla para cerrar..."
     exit 1
 }
 
@@ -64,7 +64,7 @@ if (-not $env:VIRTUAL_ENV) {
 # Check build.py
 if (-not (Test-Path $buildFile)) {
     Write-Host "No se encontró el archivo build.py en $buildFile" -ForegroundColor Red
-    Read-Host "Pulse una tecla para cerrar..."
+    # Read-Host "Pulse una tecla para cerrar..."
     exit 1
 }
 
@@ -77,4 +77,4 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "Compilación finalizada con éxito." -ForegroundColor Green
 }
 
-Read-Host "Pulse una tecla para cerrar..."
+# Read-Host "Pulse una tecla para cerrar..."

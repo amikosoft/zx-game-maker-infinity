@@ -15,41 +15,6 @@ from ZXFontRenderer import ZXFontRenderer
 
 version = "6.0.0"
 
-def install_requirements():
-    """Ejecuta el script de instalación de dependencias según el sistema operativo."""
-    try:
-        current_os = platform.system()
-        script_name = ""
-
-        if current_os == "Windows":
-            script_name = "install-requirements.ps1"
-        elif current_os in ["Linux", "Darwin"]:
-            script_name = "install-requirements.sh"
-        else:
-            print(f"Sistema operativo no soportado: {current_os}")
-            sys.exit(1)
-
-        script_path = os.path.join(os.path.dirname(__file__), "scripts", script_name)
-
-        if not os.path.exists(script_path):
-            print(f"No se encontró el script: {script_path}")
-            sys.exit(1)
-
-        if current_os == "Windows":
-            subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", script_path], check=True)
-        else:
-            subprocess.run(["bash", script_path], check=True)
-
-    except subprocess.CalledProcessError as e:
-        print(f"Error al ejecutar el script de instalación de dependencias: {e}")
-        sys.exit(1)
-    except Exception as e:
-        print(f"Error inesperado: {e}")
-        sys.exit(1)
-
-# Ejecutar la instalación de dependencias antes de importar cualquier módulo local
-install_requirements()
-
 # Configuración de CustomTkinter
 # Configuración inicial (se sobreescribirá con los ajustes guardados)
 ctk.set_default_color_theme("blue")
@@ -59,79 +24,7 @@ from builder.SpritesPreviewGenerator import SpritesPreviewGenerator
 from builder.helper import DIST_FOLDER, MAPS_PROJECT, getProjectFileName
 from builder.LanguageManager import LanguageManager
 from builder.KeysConfigManager import KeysConfigManager
-
-TRANSLATIONS = {
-    "Spanish": {
-        "build": "COMPILACIÓN",
-        "run": "EJECUCIÓN",
-        "game_config": "CONFIGURACIÓN",
-        "memory": "MEMORIA",
-        "build_game": "Compilar Juego",
-        "build_verbose": "Compilar Detallado",
-        "build_graphics": "Compilar Gráficos",
-        "build_fx": "Compilar FX",
-        "reload_fonts": "Recargar/Ver Fuentes",
-        "play_normal": "Jugar Normal",
-        "play_rf": "Jugar modo RF",
-        "play_experimental": "Jugar Experimental",
-        "map_tiled": "Mapa (Tiled)",
-        "edit_texts": "Editar Textos Juego",
-        "console_mode": "Opciones Modo Consola",
-        "bank_0": "Banco 0 (Genérico)",
-        "bank_3": "Banco 3 (Textos)",
-        "bank_4": "Banco 4 (Músicas)",
-        "bank_6": "Banco 6 (FX/Mapas)",
-        "bank_7": "Banco 7 (SCR)",
-        "welcome": "Bienvenido a ZXGM Infinity",
-        "available_fonts": "FUENTES DISPONIBLES",
-        "select_font": "SELECCIONA UNA FUENTE",
-        "exit": "SALIR",
-        "donate": "Donar ❤️",
-        "website": "Web",
-        "github": "GitHub",
-        "telegram": "Telegram",
-        "discord": "Discord",
-        "docs": "Docs",
-        "quick_info": "Info Rápida",
-        "dark_mode": "MODO OSCURO",
-        "light_mode": "MODO CLARO"
-    },
-    "English": {
-        "build": "BUILD",
-        "run": "RUN",
-        "game_config": "CONFIGURATION",
-        "memory": "MEMORY",
-        "build_game": "Build Game",
-        "build_verbose": "Build Verbose",
-        "build_graphics": "Build Graphics",
-        "build_fx": "Build FX",
-        "reload_fonts": "Reload/View Fonts",
-        "play_normal": "Play Normal",
-        "play_rf": "Play RF",
-        "play_experimental": "Play Experimental",
-        "map_tiled": "Map (Tiled)",
-        "edit_texts": "Edit Game Texts",
-        "console_mode": "Console Mode Options",
-        "bank_0": "Bank 0 (Generic)",
-        "bank_3": "Bank 3 (Texts)",
-        "bank_4": "Bank 4 (Musics)",
-        "bank_6": "Bank 6 (FX/Maps)",
-        "bank_7": "Bank 7 (SCR)",
-        "welcome": "Welcome to ZXGM Infinity",
-        "available_fonts": "AVAILABLE FONTS",
-        "select_font": "SELECT A FONT",
-        "exit": "EXIT",
-        "donate": "Donate ❤️",
-        "website": "Web Site",
-        "github": "GitHub",
-        "telegram": "Telegram",
-        "discord": "Discord",
-        "docs": "Docs",
-        "quick_info": "Quick Info",
-        "dark_mode": "DARK MODE",
-        "light_mode": "LIGHT MODE"
-    }
-}
+from translations import TRANSLATIONS
 
 class ZXInfinityApp(ctk.CTk):
     def __init__(self):
@@ -511,6 +404,21 @@ class ZXInfinityApp(ctk.CTk):
 
     def play_easter_egg_sound(self):
         sound_path = os.path.join(os.getcwd(), "builder/sonido.ogg")
+        image_path = os.path.join(os.getcwd(), "builder/8999825375b0e6d5.gif")
+        
+        # Mostrar en el log
+        self.show_log()
+        self.log_clear()
+        self.printBanner()
+        
+        # Escribir el texto especial en el log con color especial
+        special_text = "El espíritu sagrado de Sluosnarf\nacaba de extender su dominio sobre ZX Infinity,\nproclamando el inicio de una nueva era\n\n"
+        self.log_write_color(special_text, "#FFD700")
+        
+        # Mostrar imagen a pantalla completa
+        if os.path.exists(image_path):
+            self.show_fullscreen_image(image_path)
+        
         if not os.path.exists(sound_path):
             return
             
@@ -528,6 +436,107 @@ class ZXInfinityApp(ctk.CTk):
                 pass
                 
         threading.Thread(target=_play, daemon=True).start()
+
+    def show_fullscreen_image(self, image_path):
+        """Muestra una imagen a pantalla completa (fullscreen overlay). Soporta GIFs animados."""
+        # Cerrar modal anterior si existe
+        if hasattr(self, "fullscreen_modal_frame") and self.fullscreen_modal_frame.winfo_exists():
+            self.fullscreen_modal_frame.destroy()
+        
+        # Cancelar animación anterior si existe
+        if hasattr(self, "fullscreen_animation_id") and self.fullscreen_animation_id:
+            self.after_cancel(self.fullscreen_animation_id)
+            self.fullscreen_animation_id = None
+
+        # Crear frame que ocupe toda la ventana
+        fullscreen_frame = ctk.CTkFrame(self, fg_color="#000000")
+        self.fullscreen_modal_frame = fullscreen_frame
+        fullscreen_frame.place(relx=0, rely=0, relwidth=1, relheight=1)
+        fullscreen_frame.lift()
+
+        # Cargar imagen
+        img = Image.open(image_path)
+        
+        # Obtener dimensiones de la ventana
+        self.update_idletasks()
+        window_w = self.winfo_width()
+        window_h = self.winfo_height()
+        
+        # Redimensionar imagen para ocupar toda la ventana manteniendo proporción
+        img_w, img_h = img.size
+        ratio = min(window_w / img_w, window_h / img_h)
+        new_w = int(img_w * ratio)
+        new_h = int(img_h * ratio)
+
+        # Crear label centrado con la imagen
+        img_label = ctk.CTkLabel(fullscreen_frame, image=None, text="")
+        img_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Cerrar al hacer clic o presionar Escape
+        def close_fullscreen():
+            if hasattr(self, "fullscreen_animation_id") and self.fullscreen_animation_id:
+                self.after_cancel(self.fullscreen_animation_id)
+                self.fullscreen_animation_id = None
+            if fullscreen_frame.winfo_exists():
+                fullscreen_frame.destroy()
+
+        img_label.bind("<Button-1>", lambda e: close_fullscreen())
+        fullscreen_frame.bind("<Escape>", lambda e: close_fullscreen())
+        
+        # Verificar si es un GIF animado
+        try:
+            is_gif = hasattr(img, 'n_frames') and img.n_frames > 1
+        except:
+            is_gif = False
+        
+        if is_gif:
+            # Animar el GIF
+            self.fullscreen_frames = []
+            self.fullscreen_durations = []
+            
+            try:
+                for frame_idx in range(img.n_frames):
+                    img.seek(frame_idx)
+                    frame = img.copy().convert("RGBA")
+                    
+                    # Redimensionar frame
+                    frame.thumbnail((new_w, new_h), Image.Resampling.LANCZOS)
+                    
+                    ctk_frame = ctk.CTkImage(light_image=frame, dark_image=frame, size=(new_w, new_h))
+                    self.fullscreen_frames.append(ctk_frame)
+                    
+                    # Obtener duración del frame (en milisegundos)
+                    duration = img.info.get('duration', 100)
+                    self.fullscreen_durations.append(max(duration, 50))
+                
+                self.fullscreen_frame_index = 0
+                
+                def animate_gif():
+                    if fullscreen_frame.winfo_exists():
+                        current_frame = self.fullscreen_frames[self.fullscreen_frame_index]
+                        img_label.configure(image=current_frame)
+                        
+                        self.fullscreen_frame_index = (self.fullscreen_frame_index + 1) % len(self.fullscreen_frames)
+                        duration = self.fullscreen_durations[self.fullscreen_frame_index - 1]
+                        
+                        self.fullscreen_animation_id = self.after(duration, animate_gif)
+                    else:
+                        self.fullscreen_animation_id = None
+                
+                animate_gif()
+                
+            except Exception as e:
+                print(f"Error animando GIF: {e}")
+                # Fallback a imagen estática
+                self.fullscreen_img = ctk.CTkImage(light_image=img, dark_image=img, size=(new_w, new_h))
+                img_label.configure(image=self.fullscreen_img)
+        else:
+            # Imagen estática
+            self.fullscreen_img = ctk.CTkImage(light_image=img, dark_image=img, size=(new_w, new_h))
+            img_label.configure(image=self.fullscreen_img)
+        
+        # Auto-cerrar después de 15 segundos (más tiempo para GIFs)
+        self.after(15000, close_fullscreen)
 
     def _setup_scroll_event(self, widget, scroll_frame):
         """Bind mouse wheel events to a widget and all its children recursively to a specific scroll frame."""

@@ -1,6 +1,9 @@
 @echo off
 setlocal
 
+:: Cambiar al directorio donde está este script
+cd /d "%~dp0"
+
 echo Verificando Python...
 python --version >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
@@ -65,4 +68,4 @@ python -m pip install -r src\requirements.txt
 echo.
 echo Instalacion completada dentro del entorno virtual.
 echo.
-pause
+

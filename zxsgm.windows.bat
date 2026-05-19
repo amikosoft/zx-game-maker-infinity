@@ -1,5 +1,8 @@
 @echo off
 
+:: Cambiar al directorio donde está este script
+cd /d "%~dp0"
+
 :: Verificar que el entorno virtual existe
 if not exist "src\venv" (
     echo Error: El entorno virtual no existe en src\venv

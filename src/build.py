@@ -145,8 +145,18 @@ def tapsBuild():
     concatenateFiles(OUTPUT_FILE, input_files)
 
 def snaBuild():
-    # runCommand("tap2sna.py --sim-load-config machine=128 " + str(Path(DIST_FOLDER + getProjectFileName() + ".tap")) + " " + str(Path(DIST_FOLDER + getProjectFileName() + ".z80")))
-    runPythonScript(f'-m skoolkit.tap2sna --sim-load-config machine=128 "{str(Path(DIST_FOLDER + getProjectFileName() + ".tap"))}" "{str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))}"')
+    tap2sna_cmd = shutil.which("tap2sna.py")
+    if not tap2sna_cmd:
+        print("Error: tap2sna.py not found in PATH using -m sktoolkit.tap2sna instead")
+        tap2sna_cmd = "-m skoolkit.tap2sna"
+    
+    runPythonScript([
+        tap2sna_cmd,
+        "--sim-load-config",
+        "machine=128",
+        str(Path(DIST_FOLDER + getProjectFileName() + ".tap")),
+        str(Path(DIST_FOLDER + getProjectFileName() + ".z80")),
+    ])
 
 def exeBuild():
     concatenateFiles(str(Path(DIST_FOLDER + getProjectFileName() + ".exe")), [str(Path("bin/spectral.exe")), str(Path(DIST_FOLDER + getProjectFileName() + ".z80"))])
