@@ -44,6 +44,7 @@ class ZXInfinityApp(ctk.CTk):
         self.configure(fg_color=("#f0f0f0", "#050505")) # Fondo de ventana adaptable
 
         # Configurar el grid (2 columnas, 2 filas: una para menú, otra para contenido)
+        self.grid_columnconfigure(0, minsize=260)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
@@ -58,7 +59,7 @@ class ZXInfinityApp(ctk.CTk):
         self.bind("<Key>", self.check_konami_code)
 
         # --- Sidebar Estructurada (Logo fijo, Menú scrollable, Salida fija) ---
-        self.sidebar_frame = ctk.CTkFrame(self, width=220, corner_radius=0, 
+        self.sidebar_frame = ctk.CTkFrame(self, width=260, corner_radius=0, 
                                           fg_color=("#666666", "#050505"))
         self.sidebar_frame.grid(row=0, column=0, rowspan=2, sticky="nsew", padx=0, pady=0)
         self.sidebar_frame.grid_rowconfigure(1, weight=1) 
@@ -236,6 +237,7 @@ class ZXInfinityApp(ctk.CTk):
 
         # Inicialización final
         self.create_custom_menu_bar()
+        self.update_ui_fonts()
         self.update_ui_texts()
         self.show_help_info()
         self.after(500, self._update_scrollbar_visibility)
@@ -313,28 +315,89 @@ class ZXInfinityApp(ctk.CTk):
         self.save_settings()
 
     def change_log_font_size(self, size):
-        """Cambia el tamaño de la fuente del log."""
+        """Cambia el tamaño de la fuente del log y de la UI."""
         self.log_font_size = size
         self.app_settings["log_font_size"] = size
         self.output_text.configure(font=ctk.CTkFont(family="Consolas", size=size))
+        self.update_ui_fonts()
         self.save_settings()
+
+    def get_font(self, base_size, weight="normal", family=None):
+        """Devuelve un objeto CTkFont escalado según log_font_size."""
+        scale = self.log_font_size / 12.0
+        scaled_size = int(base_size * scale)
+        if family:
+            return ctk.CTkFont(family=family, size=scaled_size, weight=weight)
+        return ctk.CTkFont(size=scaled_size, weight=weight)
+
+    def update_ui_fonts(self):
+        """Actualiza el tamaño de la fuente de todos los botones y menús estáticos."""
+        # 1. Botones de sección del sidebar
+        if hasattr(self, "section_buttons"):
+            for btn, _ in self.section_buttons.values():
+                try:
+                    btn.configure(font=self.get_font(12, weight="bold"))
+                except:
+                    pass
+            
+        # 2. Botones de item del sidebar
+        if hasattr(self, "item_buttons"):
+            for btn, _ in self.item_buttons.values():
+                try:
+                    btn.configure(font=self.get_font(11))
+                except:
+                    pass
+            
+        # 3. Botón de salida
+        if hasattr(self, "btn_exit"):
+            try:
+                self.btn_exit.configure(font=self.get_font(11, weight="bold"))
+            except:
+                pass
+        
+        # 4. Botón de settings
+        if hasattr(self, "settings_button"):
+            try:
+                self.settings_button.configure(font=self.get_font(11, weight="bold"))
+            except:
+                pass
+        
+        # 5. Botones del menú superior
+        if hasattr(self, "menu_buttons"):
+            for btn, key in self.menu_buttons:
+                try:
+                    btn.configure(font=self.get_font(11, weight="bold" if key == "donate" else "normal"))
+                except:
+                    pass
+            
+        # 6. Status label
+        if hasattr(self, "status_label"):
+            try:
+                self.status_label.configure(font=self.get_font(14))
+            except:
+                pass
 
     def show_settings_menu(self):
         """Muestra un menú flotante con opciones de idioma, tema y tamaño de letra."""
+        scale = self.log_font_size / 12.0
+        menu_font_size = int(10 * scale)
+        menu_font = ("Segoe UI", menu_font_size)
+        
         menu = tk.Menu(self, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
                        activebackground="#008888", activeforeground="white",
-                       font=("Segoe UI", 10), bd=1, relief="solid")
+                       font=menu_font, bd=1, relief="solid")
         
         # Submenú Idioma
         lang_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
-                            activebackground="#008888", activeforeground="white", bd=1)
+                            activebackground="#008888", activeforeground="white", bd=1,
+                            font=menu_font)
         current_lang = self.current_lang
         lang_menu.add_command(label="🇪🇸 Spanish", 
                               command=lambda: self.change_language("Spanish"),
-                              font=("Segoe UI", 10, "bold" if current_lang == "Spanish" else "normal"))
+                              font=("Segoe UI", menu_font_size, "bold" if current_lang == "Spanish" else "normal"))
         lang_menu.add_command(label="🇬🇧 English", 
                               command=lambda: self.change_language("English"),
-                              font=("Segoe UI", 10, "bold" if current_lang == "English" else "normal"))
+                              font=("Segoe UI", menu_font_size, "bold" if current_lang == "English" else "normal"))
         menu.add_cascade(label="Language", menu=lang_menu)
         
         # Separador
@@ -342,14 +405,15 @@ class ZXInfinityApp(ctk.CTk):
         
         # Submenú Tema
         theme_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
-                             activebackground="#008888", activeforeground="white", bd=1)
+                             activebackground="#008888", activeforeground="white", bd=1,
+                             font=menu_font)
         current_theme = self.app_settings.get("theme", "light")
         theme_menu.add_command(label="☀️ Light", 
                                command=lambda: self.change_appearance_mode("light"),
-                               font=("Segoe UI", 10, "bold" if current_theme == "light" else "normal"))
+                               font=("Segoe UI", menu_font_size, "bold" if current_theme == "light" else "normal"))
         theme_menu.add_command(label="🌙 Dark", 
                                command=lambda: self.change_appearance_mode("dark"),
-                               font=("Segoe UI", 10, "bold" if current_theme == "dark" else "normal"))
+                               font=("Segoe UI", menu_font_size, "bold" if current_theme == "dark" else "normal"))
         menu.add_cascade(label="Theme", menu=theme_menu)
         
         # Separador
@@ -357,14 +421,15 @@ class ZXInfinityApp(ctk.CTk):
         
         # Submenú Tamaño de Letra del Log
         font_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
-                            activebackground="#008888", activeforeground="white", bd=1)
+                             activebackground="#008888", activeforeground="white", bd=1,
+                             font=menu_font)
         current_size = self.app_settings.get("log_font_size", 12)
         font_menu.add_command(label="1x (Normal)", 
                               command=lambda: self.change_log_font_size(12),
-                              font=("Segoe UI", 10, "bold" if current_size == 12 else "normal"))
+                              font=("Segoe UI", menu_font_size, "bold" if current_size == 12 else "normal"))
         font_menu.add_command(label="1.5x (Large)", 
                               command=lambda: self.change_log_font_size(18),
-                              font=("Segoe UI", 10, "bold" if current_size == 18 else "normal"))
+                              font=("Segoe UI", menu_font_size, "bold" if current_size == 18 else "normal"))
         menu.add_cascade(label="Font Size", menu=font_menu)
         
         self.post_menu(menu, self.settings_button)
@@ -861,13 +926,16 @@ class ZXInfinityApp(ctk.CTk):
             messagebox.showerror("Error", f"No se pudo abrir el juego: {e}")
 
     def show_project_menu(self):
+        scale = self.log_font_size / 12.0
+        menu_font_size = int(10 * scale)
+        menu_font = ("Segoe UI", menu_font_size)
         menu = tk.Menu(self, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
                        activebackground="#008888", activeforeground="white",
-                       font=("Segoe UI", 10), bd=1, relief="solid")
+                       font=menu_font, bd=1, relief="solid")
         
         # Submenú Play
         play_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
-                            activebackground="#008888", activeforeground="white", bd=1)
+                             activebackground="#008888", activeforeground="white", bd=1, font=menu_font)
         play_menu.add_command(label="Play", command=lambda: self.open_game_variant("normal"))
         play_menu.add_command(label="Play RF", command=lambda: self.open_game_variant("rf"))
         if platform.system() in ["Linux", "Darwin"]:
@@ -876,7 +944,7 @@ class ZXInfinityApp(ctk.CTk):
 
         # Submenú Build
         build_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
-                             activebackground="#008888", activeforeground="white", bd=1)
+                              activebackground="#008888", activeforeground="white", bd=1, font=menu_font)
         build_menu.add_command(label="Build", command=lambda: self.run_script("make-game"))
         build_menu.add_command(label="Build (verbose)", command=lambda: self.run_script("make-game", ["--verbose"]))
         build_menu.add_separator()
@@ -890,25 +958,28 @@ class ZXInfinityApp(ctk.CTk):
         self.post_menu(menu, self.btn_project)
 
     def show_utilities_menu(self):
+        scale = self.log_font_size / 12.0
+        menu_font_size = int(10 * scale)
+        menu_font = ("Segoe UI", menu_font_size)
         menu = tk.Menu(self, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
                        activebackground="#008888", activeforeground="white",
-                       font=("Segoe UI", 10), bd=1, relief="solid")
+                       font=menu_font, bd=1, relief="solid")
         
         # Submenú Sprites
         sprites_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
-                               activebackground="#008888", activeforeground="white", bd=1)
+                               activebackground="#008888", activeforeground="white", bd=1, font=menu_font)
         
-        main_menu = tk.Menu(sprites_menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", activebackground="#008888")
+        main_menu = tk.Menu(sprites_menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", activebackground="#008888", font=menu_font)
         main_menu.add_command(label="Running", command=self.open_main_character_running_preview)
         main_menu.add_command(label="Idle", command=self.open_main_character_idle_preview)
         sprites_menu.add_cascade(label="Main Character", menu=main_menu)
 
-        plat_menu = tk.Menu(sprites_menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", activebackground="#008888")
+        plat_menu = tk.Menu(sprites_menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", activebackground="#008888", font=menu_font)
         plat_menu.add_command(label="Platform 1", command=self.open_first_platform_preview)
         plat_menu.add_command(label="Platform 2", command=self.open_second_platform_preview)
         sprites_menu.add_cascade(label="Platforms", menu=plat_menu)
 
-        enemy_menu = tk.Menu(sprites_menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", activebackground="#008888")
+        enemy_menu = tk.Menu(sprites_menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", activebackground="#008888", font=menu_font)
         for i in range(1, 9):
             enemy_menu.add_command(label=f"Enemy {i}", command=lambda i=i: self.open_enemy_preview(i))
         sprites_menu.add_cascade(label="Enemies", menu=enemy_menu)
@@ -917,7 +988,7 @@ class ZXInfinityApp(ctk.CTk):
 
         # Submenú Memory
         memory_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
-                              activebackground="#008888", activeforeground="white", bd=1)
+                              activebackground="#008888", activeforeground="white", bd=1, font=menu_font)
         memory_menu.add_command(label="Bank 0 (Generic)", command=lambda: self.open_memory_bank_image("memory-bank-0-128K.png"))
         memory_menu.add_command(label="Bank 3 (Texts)", command=lambda: self.open_memory_bank_image("memory-bank-3.png"))
         memory_menu.add_command(label="Bank 4 (Musics)", command=lambda: self.open_memory_bank_image("memory-bank-4.png"))
@@ -929,9 +1000,12 @@ class ZXInfinityApp(ctk.CTk):
         self.post_menu(menu, self.btn_utilities)
 
     def show_support_menu(self):
+        scale = self.log_font_size / 12.0
+        menu_font_size = int(10 * scale)
+        menu_font = ("Segoe UI", menu_font_size)
         menu = tk.Menu(self, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
                        activebackground="#008888", activeforeground="white",
-                       font=("Segoe UI", 10), bd=1, relief="solid")
+                       font=menu_font, bd=1, relief="solid")
         menu.add_command(label="Quick Info", command=self.show_help_info)
         menu.add_separator()
         infinity_docs_path = os.path.join(os.path.dirname(__file__), "../site", "index.html")
@@ -943,7 +1017,6 @@ class ZXInfinityApp(ctk.CTk):
         menu.add_command(label="GitHub", command=lambda: webbrowser.open("https://github.com/amikosoft/zx-game-maker-infinity"))
         menu.add_command(label="itch.io", command=lambda: webbrowser.open("https://amikoes.itch.io/"))
         menu.add_command(label="Web Site", command=lambda: webbrowser.open("https://zxinfinitydocs.great-site.net/"))
-        
         self.post_menu(menu, self.btn_support)
 
     def post_menu(self, menu, widget):
@@ -1124,7 +1197,7 @@ class ZXInfinityApp(ctk.CTk):
         header.pack(fill="x", padx=30, pady=(20, 10))
         
         title = ctk.CTkLabel(header, text="AVAILABLE FONTS PREVIEW", 
-                              font=ctk.CTkFont(size=20, weight="bold"), text_color="#00ffff")
+                              font=self.get_font(20, weight="bold"), text_color="#00ffff")
         title.pack(side="left")
 
         # Separador visual
@@ -1151,6 +1224,7 @@ class ZXInfinityApp(ctk.CTk):
         for font in fonts:
             btn = ctk.CTkButton(fonts_scroll, text=font, 
                                 anchor="w",
+                                font=self.get_font(12),
                                 fg_color="transparent",
                                 text_color=("#111111", "#eeeeee"),
                                 hover_color=("#eeeeee", "#222222"),
@@ -1163,11 +1237,12 @@ class ZXInfinityApp(ctk.CTk):
         self.preview_panel.grid(row=0, column=1, sticky="nsew", padx=(10, 30), pady=10)
         
         self.preview_title = ctk.CTkLabel(self.preview_panel, text="SELECT A FONT", 
-                                          font=ctk.CTkFont(size=14, weight="bold"), text_color=("#111111", "#00ffff"))
+                                           font=self.get_font(14, weight="bold"), text_color=("#111111", "#00ffff"))
         self.preview_title.pack(pady=(15, 5))
 
         self.preview_label = ctk.CTkLabel(self.preview_panel, text="Select a font to preview", 
-                                          text_color=("#555555", "#888888"))
+                                           font=self.get_font(12),
+                                           text_color=("#555555", "#888888"))
         self.preview_label.pack(expand=True, fill="both", padx=10, pady=10)
 
         # Pie de página
@@ -1176,6 +1251,7 @@ class ZXInfinityApp(ctk.CTk):
         
         close_btn = ctk.CTkButton(footer, text="CLOSE", fg_color="transparent", 
                                   border_width=1, border_color="#ff5555",
+                                  font=self.get_font(11, weight="bold"),
                                   text_color="#ff5555", hover_color="#330000", 
                                   command=self.show_log)
         close_btn.pack(side="right")
@@ -1237,13 +1313,14 @@ class ZXInfinityApp(ctk.CTk):
         header.pack(fill="x", padx=30, pady=(20, 10))
         
         title = ctk.CTkLabel(header, text="GAME TEXTS EDITOR", 
-                              font=ctk.CTkFont(size=20, weight="bold"), text_color="#00ffff")
+                              font=self.get_font(20, weight="bold"), text_color="#00ffff")
         title.pack(side="left")
 
         # Selector de Idioma
         self.lang_var = tk.StringVar(value="Spanish")
         lang_selector = ctk.CTkSegmentedButton(header, values=["Spanish", "English"],
                                                command=self.load_lang_texts,
+                                               font=self.get_font(12),
                                                variable=self.lang_var,
                                                selected_color="#008888",
                                                selected_hover_color="#00aaaa")
@@ -1263,12 +1340,13 @@ class ZXInfinityApp(ctk.CTk):
         footer = ctk.CTkFrame(editor_root, fg_color="transparent")
         footer.pack(fill="x", padx=30, pady=(10, 20))
         
-        save_btn = ctk.CTkButton(footer, text="SAVE CHANGES", font=ctk.CTkFont(weight="bold"),
+        save_btn = ctk.CTkButton(footer, text="SAVE CHANGES", font=self.get_font(13, weight="bold"),
                                  fg_color="#008888", hover_color="#00aaaa", width=150, height=35,
                                  command=self.save_lang_texts)
         save_btn.pack(side="right", padx=10)
         
         close_btn = ctk.CTkButton(footer, text="CLOSE", fg_color="transparent", border_width=1, border_color="#ff5555",
+                                  font=self.get_font(13, weight="bold"),
                                   text_color="#ff5555", hover_color="#330000", width=120, height=35,
                                   command=self.show_log)
         close_btn.pack(side="right", padx=10)
@@ -1288,7 +1366,7 @@ class ZXInfinityApp(ctk.CTk):
         file_path = os.path.join(os.getcwd(), "boriel/langs", file_name)
         
         if not os.path.exists(file_path):
-            error_label = ctk.CTkLabel(self.editor_scroll, text=f"File not found: {file_name}", text_color="red")
+            error_label = ctk.CTkLabel(self.editor_scroll, text=f"File not found: {file_name}", font=self.get_font(12), text_color="red")
             error_label.pack(pady=20)
             return
 
@@ -1303,7 +1381,7 @@ class ZXInfinityApp(ctk.CTk):
             
             # Label para la clave (Key) - No editable
             key_label = ctk.CTkLabel(row, text=entry['key'], width=220, anchor="w",
-                                     font=ctk.CTkFont(family="Consolas", size=12, weight="bold"),
+                                     font=self.get_font(12, weight="bold", family="Consolas"),
                                      text_color=("#333333", "#aaaaaa"))
             key_label.pack(side="left", padx=(5, 15))
             
@@ -1311,13 +1389,14 @@ class ZXInfinityApp(ctk.CTk):
             val_entry = ctk.CTkEntry(row, height=28, border_width=1, 
                                      border_color=("#cccccc", "#333333"), 
                                      fg_color=("#f0f0f0", "#1a1a1a"),
+                                     font=self.get_font(12),
                                      text_color=("#111111", "#00ffff"))
             val_entry.insert(0, entry['value'])
             val_entry.pack(side="left", expand=True, fill="x", padx=5)
             
             # Label para la longitud
             len_label = ctk.CTkLabel(row, text=str(len(entry['value'])), width=40,
-                                     font=ctk.CTkFont(family="Consolas", size=11, weight="bold"),
+                                     font=self.get_font(11, weight="bold", family="Consolas"),
                                      text_color="#00aaaa")
             len_label.pack(side="right", padx=10)
 
@@ -1354,7 +1433,7 @@ class ZXInfinityApp(ctk.CTk):
         header.pack(fill="x", padx=30, pady=(20, 10))
         
         title = ctk.CTkLabel(header, text="The Spectrum configuration options", 
-                              font=ctk.CTkFont(size=20, weight="bold"), text_color="#00ffff")
+                              font=self.get_font(20, weight="bold"), text_color="#00ffff")
         title.pack(side="left")
 
         # Separador visual
@@ -1384,7 +1463,7 @@ class ZXInfinityApp(ctk.CTk):
             row.pack(fill="x", pady=4)
             
             k_lbl = ctk.CTkLabel(row, text=entry['key'], width=200, anchor="w",
-                                 font=ctk.CTkFont(family="Consolas", size=12, weight="bold"),
+                                 font=self.get_font(12, weight="bold", family="Consolas"),
                                  text_color=("#333333", "#aaaaaa"))
             k_lbl.pack(side="left", padx=(5, 15))
             
@@ -1399,6 +1478,7 @@ class ZXInfinityApp(ctk.CTk):
                 options = ["128", "plus2"] if key == "emulator_machine" else ["none", "kempston", "sinclair1", "sinclair2"]
                 var = tk.StringVar(value=val)
                 widget = ctk.CTkSegmentedButton(row, values=options, variable=var,
+                                               font=self.get_font(12),
                                                selected_color="#008888",
                                                selected_hover_color="#00aaaa")
                 widget.pack(side="left", padx=5)
@@ -1407,6 +1487,7 @@ class ZXInfinityApp(ctk.CTk):
                 k_ent = ctk.CTkEntry(row, height=28, border_width=1, 
                                      border_color=("#cccccc", "#333333"), 
                                      fg_color=("#f0f0f0", "#1a1a1a"),
+                                     font=self.get_font(12),
                                      text_color=("#111111", "#00ffff"))
                 k_ent.insert(0, val)
                 k_ent.pack(side="left", expand=True, fill="x", padx=5)
@@ -1416,12 +1497,13 @@ class ZXInfinityApp(ctk.CTk):
         footer = ctk.CTkFrame(editor_root, fg_color="transparent")
         footer.pack(fill="x", padx=30, pady=(10, 20))
         
-        save_btn = ctk.CTkButton(footer, text="SAVE CHANGES", font=ctk.CTkFont(weight="bold"),
+        save_btn = ctk.CTkButton(footer, text="SAVE CHANGES", font=self.get_font(13, weight="bold"),
                                  fg_color="#008888", hover_color="#00aaaa", width=150, height=35,
                                  command=self.save_keys_config)
         save_btn.pack(side="right", padx=10)
         
         close_btn = ctk.CTkButton(footer, text="CLOSE", fg_color="transparent", border_width=1, border_color="#ff5555",
+                                  font=self.get_font(13, weight="bold"),
                                   text_color="#ff5555", hover_color="#330000", width=120, height=35,
                                   command=self.show_log)
         close_btn.pack(side="right", padx=10)
