@@ -36,7 +36,8 @@ TRANSLATIONS = {
         "docs": "Docs",
         "quick_info": "Info Rápida",
         "dark_mode": "MODO OSCURO",
-        "light_mode": "MODO CLARO"
+        "light_mode": "MODO CLARO",
+        "settings": "Configuración"
     },
     "English": {
         "build": "BUILD",
@@ -71,6 +72,7 @@ TRANSLATIONS = {
         "docs": "Docs",
         "quick_info": "Quick Info",
         "dark_mode": "DARK MODE",
-        "light_mode": "LIGHT MODE"
+        "light_mode": "LIGHT MODE",
+        "settings": "Settings"
     }
 }

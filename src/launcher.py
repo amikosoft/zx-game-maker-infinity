@@ -2,14 +2,13 @@
 import os
 import platform
 import subprocess
-import sys
 import threading
 import webbrowser
 import time
 import tkinter as tk
 from tkinter import messagebox
 import customtkinter as ctk
-from PIL import Image, ImageTk
+from PIL import Image
 import pyfiglet
 import json
 from ZXFontRenderer import ZXFontRenderer
@@ -171,12 +170,6 @@ class ZXInfinityApp(ctk.CTk):
         self.controls_frame = ctk.CTkFrame(self.sidebar_frame, fg_color="transparent")
         self.controls_frame.grid(row=2, column=0, padx=10, pady=20, sticky="ew")
 
-        self.theme_button = ctk.CTkButton(self.controls_frame, text="", 
-                                          command=self.change_appearance_mode,
-                                          height=35)
-        self.theme_button.pack(padx=10, pady=(0, 15), fill="x")
-        self.update_theme_button_ui()
-
         self.btn_exit = ctk.CTkButton(self.controls_frame, text="Exit Application", 
                                       fg_color="transparent", text_color="#ff5555",
                                       hover_color=("#ffdddd", "#330000"), height=30,
@@ -224,8 +217,9 @@ class ZXInfinityApp(ctk.CTk):
         self.progress_bar.grid_remove()
 
         # Consola de Log con scrollbar integrado
+        self.log_font_size = self.app_settings.get("log_font_size", 12)
         self.output_text = ctk.CTkTextbox(self.log_frame, wrap="word", 
-                                           font=ctk.CTkFont(family="Consolas", size=12),
+                                           font=ctk.CTkFont(family="Consolas", size=self.log_font_size),
                                            border_width=1, 
                                            border_color=("#00aa00", "#006600"), 
                                            fg_color=("#cccccc", "#151515"),
@@ -252,14 +246,15 @@ class ZXInfinityApp(ctk.CTk):
                                             fg_color=("#dbdbdb", "#1a1a1a"))
         self.custom_menu_bar.grid(row=0, column=1, sticky="ew")
         
-        # Selector de Idioma (Alineado a la izquierda del menú bar)
-        self.lang_selector = ctk.CTkSegmentedButton(self.custom_menu_bar, values=["Spanish", "English"],
-                                                   command=self.change_language,
-                                                   selected_color="#008888",
-                                                   selected_hover_color="#00aaaa",
-                                                   height=26)
-        self.lang_selector.set(self.current_lang)
-        self.lang_selector.pack(side="left", padx=10)
+        # Botón de Configuración (Idioma + Tema) (Alineado a la izquierda del menú bar)
+        self.settings_button = ctk.CTkButton(self.custom_menu_bar, text="⚙️ Settings",
+                                             width=100, height=26,
+                                             font=ctk.CTkFont(size=11, weight="bold"),
+                                             fg_color="transparent", text_color=("#111111", "#00ffff"),
+                                             hover_color=("#bbbbbb", "#333333"),
+                                             corner_radius=6,
+                                             command=self.show_settings_menu)
+        self.settings_button.pack(side="left", padx=10)
 
         # Acciones de Soporte (Alineadas a la derecha)
         self.support_actions_refs = []
@@ -301,25 +296,14 @@ class ZXInfinityApp(ctk.CTk):
         except Exception as e:
             print(f"Error al guardar ajustes: {e}")
 
-    def update_theme_button_ui(self):
-        """Actualiza el texto y apariencia del botón de tema."""
-        theme = self.app_settings.get("theme", "light")
-        lang = self.current_lang
-        texts = TRANSLATIONS[lang]
-        
-        if theme == "dark":
-            text = "🌙 " + texts.get("dark_mode", "DARK MODE")
-            self.theme_button.configure(text=text, fg_color="#2b2b2b", hover_color="#3b3b3b", text_color="#00ffff")
-        else:
-            text = "☀️ " + texts.get("light_mode", "LIGHT MODE")
-            self.theme_button.configure(text=text, fg_color="#dbdbdb", hover_color="#cbcbcb", text_color="#111111")
 
-    def change_appearance_mode(self):
-        current_theme = self.app_settings.get("theme", "light")
-        new_theme = "light" if current_theme == "dark" else "dark"
+
+    def change_appearance_mode(self, new_theme=None):
+        if new_theme is None:
+            current_theme = self.app_settings.get("theme", "light")
+            new_theme = "light" if current_theme == "dark" else "dark"
         self.app_settings["theme"] = new_theme
         ctk.set_appearance_mode(new_theme)
-        self.update_theme_button_ui()
         self.save_settings()
 
     def change_language(self, new_lang):
@@ -327,6 +311,63 @@ class ZXInfinityApp(ctk.CTk):
         self.app_settings["language"] = new_lang
         self.update_ui_texts()
         self.save_settings()
+
+    def change_log_font_size(self, size):
+        """Cambia el tamaño de la fuente del log."""
+        self.log_font_size = size
+        self.app_settings["log_font_size"] = size
+        self.output_text.configure(font=ctk.CTkFont(family="Consolas", size=size))
+        self.save_settings()
+
+    def show_settings_menu(self):
+        """Muestra un menú flotante con opciones de idioma, tema y tamaño de letra."""
+        menu = tk.Menu(self, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
+                       activebackground="#008888", activeforeground="white",
+                       font=("Segoe UI", 10), bd=1, relief="solid")
+        
+        # Submenú Idioma
+        lang_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
+                            activebackground="#008888", activeforeground="white", bd=1)
+        current_lang = self.current_lang
+        lang_menu.add_command(label="🇪🇸 Spanish", 
+                              command=lambda: self.change_language("Spanish"),
+                              font=("Segoe UI", 10, "bold" if current_lang == "Spanish" else "normal"))
+        lang_menu.add_command(label="🇬🇧 English", 
+                              command=lambda: self.change_language("English"),
+                              font=("Segoe UI", 10, "bold" if current_lang == "English" else "normal"))
+        menu.add_cascade(label="Language", menu=lang_menu)
+        
+        # Separador
+        menu.add_separator()
+        
+        # Submenú Tema
+        theme_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
+                             activebackground="#008888", activeforeground="white", bd=1)
+        current_theme = self.app_settings.get("theme", "light")
+        theme_menu.add_command(label="☀️ Light", 
+                               command=lambda: self.change_appearance_mode("light"),
+                               font=("Segoe UI", 10, "bold" if current_theme == "light" else "normal"))
+        theme_menu.add_command(label="🌙 Dark", 
+                               command=lambda: self.change_appearance_mode("dark"),
+                               font=("Segoe UI", 10, "bold" if current_theme == "dark" else "normal"))
+        menu.add_cascade(label="Theme", menu=theme_menu)
+        
+        # Separador
+        menu.add_separator()
+        
+        # Submenú Tamaño de Letra del Log
+        font_menu = tk.Menu(menu, tearoff=0, bg="#0a0a0a", fg="#00ffff", 
+                            activebackground="#008888", activeforeground="white", bd=1)
+        current_size = self.app_settings.get("log_font_size", 12)
+        font_menu.add_command(label="1x (Normal)", 
+                              command=lambda: self.change_log_font_size(12),
+                              font=("Segoe UI", 10, "bold" if current_size == 12 else "normal"))
+        font_menu.add_command(label="1.5x (Large)", 
+                              command=lambda: self.change_log_font_size(18),
+                              font=("Segoe UI", 10, "bold" if current_size == 18 else "normal"))
+        menu.add_cascade(label="Font Size", menu=font_menu)
+        
+        self.post_menu(menu, self.settings_button)
 
     def update_ui_texts(self):
         """Actualiza todos los textos de la interfaz al idioma actual."""
@@ -372,18 +413,21 @@ class ZXInfinityApp(ctk.CTk):
             new_text = texts.get(trans_key, key_part)
             btn.configure(text=new_text)
 
-        # 3. Botones del menú superior
+        # 3. Botón Settings
+        settings_text = texts.get("settings", "Settings")
+        self.settings_button.configure(text=f"⚙️ {settings_text}")
+
+        # 4. Botones del menú superior
         for btn, key in self.menu_buttons:
             btn.configure(text=texts.get(key, key))
 
-        # 4. Status y Welcome
+        # 5. Status y Welcome
         self.status_label.configure(text=texts.get("welcome", "Welcome"))
         
-        # 5. Botón Salir
+        # 6. Botón Salir
         self.btn_exit.configure(text=texts.get("exit", "EXIT"))
         
-        # 6. Actualizar tema botón (que tiene texto hardcoded)
-        self.update_theme_button_ui()
+
 
     def check_konami_code(self, event):
         key = event.keysym
