@@ -1255,23 +1255,17 @@ if enemiesShoot > 0:
 
 with open("output/screenObjects.bin", "wb") as f:
     for screen in screenObjects:
-        for screen in screenObjects:
-            objectTypes = [screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo']]
-            if hasCoinTiles and coinsEnabled and int(coinsIncrement) > 0 and (int(coinsForLives) > 0 or int(coinsForAmmo) > 0 or int(coinsForKey) > 0):
-                objectTypes.append(screenObjects[screen]['coin'])
-            f.write(bytearray(objectTypes))
+        objectTypes = [screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo']]
+        if hasCoinTiles and coinsEnabled and int(coinsIncrement) > 0 and (int(coinsForLives) > 0 or int(coinsForAmmo) > 0 or int(coinsForKey) > 0):
+            objectTypes.append(screenObjects[screen]['coin'])
+        f.write(bytearray(objectTypes))
     
 with open("output/objectsInScreen.bin", "wb") as f:
     for screen in screenObjects:
-        # if hasCoinTiles and coinsEnabled and int(coinsIncrement) > 0 and (int(coinsForLives) > 0 or int(coinsForAmmo) > 0 or int(coinsForKey) > 0):
-        #     f.write(bytearray([screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo'], screenObjects[screen]['coin']]))
-        # else:
-        #     f.write(bytearray([screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo']]))
-        for screen in screenObjects:
-            objectTypes = [screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo']]
-            if hasCoinTiles and coinsEnabled and int(coinsIncrement) > 0 and (int(coinsForLives) > 0 or int(coinsForAmmo) > 0 or int(coinsForKey) > 0):
-                objectTypes.append(screenObjects[screen]['coin'])
-            f.write(bytearray(objectTypes))
+        objectTypes = [screenObjects[screen]['item'], screenObjects[screen]['key'], screenObjects[screen]['door'], screenObjects[screen]['life'], screenObjects[screen]['ammo']]
+        if hasCoinTiles and coinsEnabled and int(coinsIncrement) > 0 and (int(coinsForLives) > 0 or int(coinsForAmmo) > 0 or int(coinsForKey) > 0):
+            objectTypes.append(screenObjects[screen]['coin'])
+        f.write(bytearray(objectTypes))
 
 # for screen in screenAnimatedTiles:
 #     for i in range(maxAnimatedTilesPerScreen - len(screenAnimatedTiles[screen])):

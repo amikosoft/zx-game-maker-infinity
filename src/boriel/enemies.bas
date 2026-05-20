@@ -11,27 +11,26 @@ Dim enemyModeBucle, enemyColBucle, enemyLinBucle, enemyColIniBucle, enemyLinIniB
     End Function
     
     Function checkPlatformByXY() As Ubyte
-        If not enemiesScreen Then Return 0
-        
-        dim protaY4 As Ubyte = protaY + 4
+        If enemiesScreen Then 
+            dim protaY4 As Ubyte = protaY + 4
 
-        For enemyId=0 To enemiesScreen - 1
-             'ENEMY_PLATFORM
-            #ifdef ENEMIES_PLATFORM_ENABLED
-                If decompressedEnemiesScreen(enemyId, ENEMY_PLATFORM) Then
-            #else
-                If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
-            #endif
-                Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
-                Dim enemyLin As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
-                
-                If (protaX + 3) < enemyCol Or protaX > (enemyCol + 3) Then continue for
-                If protaY4 < enemyLin or protaY4 > (enemyLin + 1) Then continue For
+            For enemyId=0 To enemiesScreen - 1
+                'ENEMY_PLATFORM
+                #ifdef ENEMIES_PLATFORM_ENABLED
+                    If decompressedEnemiesScreen(enemyId, ENEMY_PLATFORM) Then
+                #else
+                    If decompressedEnemiesScreen(enemyId, ENEMY_TILE) < 16 Then
+                #endif
+                    Dim enemyCol As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_COL)
+                    Dim enemyLin As Ubyte = decompressedEnemiesScreen(enemyId, ENEMY_CURRENT_LIN)
+                    
+                    If (protaX + 3) < enemyCol Or protaX > (enemyCol + 3) Then continue for
+                    If protaY4 < enemyLin or protaY4 > (enemyLin + 1) Then continue For
 
-                Return 1
-            End If
-        Next enemyId
-        
+                    Return 1
+                End If
+            Next enemyId
+        end if
         Return 0
     End Function
 #endif
