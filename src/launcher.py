@@ -13,7 +13,7 @@ import pyfiglet
 import json
 from ZXFontRenderer import ZXFontRenderer
 
-version = "6.0.0"
+version = "6.0.2"
 
 # Configuración de CustomTkinter
 # Configuración inicial (se sobreescribirá con los ajustes guardados)
