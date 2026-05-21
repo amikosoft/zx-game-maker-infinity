@@ -73,6 +73,8 @@ glueMode = "prevent jump and slow down player"
 glueTile = 0
 glueTerrainTile = 0
 
+gameViewSideDefault = "side"
+
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
@@ -370,6 +372,8 @@ if 'properties' in data:
             password = property['value']
         elif property['name'] == 'gameView':
             gameView = property['value']
+        elif property['name'] == 'gameViewSideDefault':
+            gameViewSideDefault = property['value']
         elif property['name'] == 'jumpOnEnemies':
             jumpOnEnemies = 1 if property['value'] else 0
         elif property['name'] == 'killJumpingOnTop':
@@ -1395,10 +1399,11 @@ attributesSort = []
 for layer in data['layers']:
     if layer['type'] == 'objectgroup':
         for object in layer['objects']:
-            if 'gid' in object:
+            if 'gid' in object and object['type'] != 'player':
                 xScreenPosition = math.ceil(object['x'] / screenPixelsWidth) - 1
                 yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
                 screenId = xScreenPosition + (yScreenPosition * mapCols)
+
                 objects[str(object['id'])] = {
                     'name': object['name'],
                     'screenId': screenId,
@@ -1616,7 +1621,7 @@ for layer in data['layers']:
                             "teleportTo": 0,
                             "music": 0,
                             "dark": 0,
-                            "cenital": 0,
+                            "cenital": 1 if gameViewSideDefault == 'overhead' else 0,
                             "hud2": 0,
                             "bossEnergy": 0,
                             "finalScreen": 0
@@ -1783,7 +1788,7 @@ with open("output/screenAttributes.bin", "wb") as f:
                 "teleportTo": 0,
                 "music": 0,
                 "dark": 0,
-                "cenital": 0,
+                "cenital": 1 if gameViewSideDefault == 'overhead' else 0,
                 "hud2": 0,
                 "bossEnergy": 0,
                 "finalScreen": 0
