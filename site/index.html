@@ -364,9 +364,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-version-6" class="md-nav__link">
+  <a href="#nuevo-en-esta-version" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en versión 6
+      Nuevo en esta versión
     </span>
   </a>
   
@@ -657,9 +657,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#nuevo-en-version-6" class="md-nav__link">
+  <a href="#nuevo-en-esta-version" class="md-nav__link">
     <span class="md-ellipsis">
-      Nuevo en versión 6
+      Nuevo en esta versión
     </span>
   </a>
   
@@ -702,7 +702,13 @@
 <h1 id="zxgm-infinity-6">ZXGM Infinity 6</h1>
 <p>Manual para configurar las características de Infinity</p>
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
-<h2 id="nuevo-en-version-6">Nuevo en versión 6</h2>
+<h2 id="nuevo-en-esta-version">Nuevo en esta versión</h2>
+<ul>
+<li>Nuevo modo de movimiento continuo del personaje</li>
+<li>El plano del juego se puede activar/desactivar en cualquier caso y más configurable</li>
+<li>Escaleras diagonales se pueden desactivar y configurar el número de tiles</li>
+</ul>
+<h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
 <ul>
 <li>Nueva interfaz de usuario</li>
 <li>Configuración de pantalla boss y boss final</li>
@@ -713,9 +719,6 @@
 <li>Edición de textos de juego integrada en interfaz de usuario</li>
 <li>Mayor personalización para los textos prefijados del juego</li>
 <li>Ahora el personaje principal se configura con su sprite y tiene sus propios atributos</li>
-</ul>
-<h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
-<ul>
 <li>Ahora el jugador tiene un sprite diferente cuando salta y cae.</li>
 <li>Los enemigos pueden configurarse para usar 2 ó 4 sprites</li>
 <li>Los enemigos y plataformas comparten configuración</li>
@@ -933,7 +936,6 @@ Además del tile de la imagen, hay otro tile disponible, que es traspasable, que
     * *prevent jump*: El jugador no puede saltar
     * *prevent jump and slow down*: El jugador se mueve más lento y no puede saltar
 
-
 * **mechanicalBeltEnabled** activa las cintas automáticas en el juego. Si está activo, el tile de la imagen se convierte en un objeto que al tocarlo el jugador se mueve en la dirección indicada por la cinta.
     * *mechanicalBeltSlow* indica que las cintas van más lentas. Si no se indica nada, las cintas irán a la velocidad normal del player.
 
@@ -1111,6 +1113,12 @@ La animación de subir usa el sprite usado para el *mainCharacterExtraFrame* por
 * **livesDeadBackgroundColor** cambia el color del escenario cuando mueres (sólo en modo vidas con tumba "show graveyard")
 
 * **gravityLow** configura el entorno con una gravedad más baja haciendo que el personaje flote
+
+### Escaleras en diagonal / Rampas
+
+* **stepsEnabled** habilita/deshabilita las escaleras en diagonal. Aquellas las que el personaje sube sólo como laderas de montaña, rampas, escaleras laterales, etc.... 
+
+* **stepsCount** indica al motor cuantos tiles reservar para las escaleras en diagonal. Por defecto, 4.
 
 ### Configuración de salto
 

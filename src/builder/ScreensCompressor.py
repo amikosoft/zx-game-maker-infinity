@@ -15,12 +15,12 @@ class ScreensCompressor:
                     else:
                         if screenExists(screenName + "_" + gameLanguage):
                             self.__compressScreen(screenName + "_" + gameLanguage, screenName)
-                        else:
+                        elif screenExists(screenName):
                             self.__compressScreen(screenName, screenName)
             else:
                 if screenExists(screenName + "_" + gameLanguage):
                     self.__compressScreen(screenName + "_" + gameLanguage, screenName)
-                else:
+                elif screenExists(screenName):
                     self.__compressScreen(screenName, screenName)
 
         # self.__compressScreen("title")

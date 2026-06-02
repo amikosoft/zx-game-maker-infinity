@@ -282,7 +282,9 @@ Sub playGame()
             #ifdef GAMEMAP_SCREEN_ENABLED
                 loadScreen(GAMEMAP_SCREEN_ADDRESS)
 
-                pathDraw()
+                #ifdef GAMEMAP_SHOW_ENABLED
+                    pathDraw()
+                #endif
             #else
                 #ifdef GAMEMAP_SHOW_ENABLED
                     mapColor(0)
@@ -720,9 +722,12 @@ Sub swapScreen(waitReady as ubyte)
         #endif
     #endif
     
-    
-
     if waitReady then 
+        #ifdef PERMANENT_MOVEMENT_ENABLED
+            verticalAxisKeyPressed = 0
+            horizontalAxisKeyPressed = 1
+        #endif
+
         #ifdef PLAYER_READY_CONFIRMATION
             #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
                 pauseUntilPressFire()
@@ -731,7 +736,6 @@ Sub swapScreen(waitReady as ubyte)
             #endif
         #endif
     end if
-
 
     'printHud()
 

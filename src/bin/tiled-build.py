@@ -36,6 +36,7 @@ screenPixelsWidth = screenWidth * tileWidth
 screenPixelsHeight = screenHeight * tileHeight
 
 spriteTileOffset = 0
+darkTilesOffset = 0
 
 maxEnemiesPerScreen = 3
 maxAnimatedTilesPerScreen = 6
@@ -119,6 +120,12 @@ for tileset in data['tilesets']:
                 damageTiles.append(tile['id'])
     elif tileset['name'] == 'sprites':
         spriteTileOffset = tileset['firstgid']
+    elif tileset['name'] == 'dark tileset':
+        darkTilesOffset = tileset['firstgid'] - 1
+
+if darkTilesOffset == 0:
+    print('ERROR: Dark tileset should be called "dark tileset"')
+    exit
 
 if spriteTileOffset == 0:
     print('ERROR: Sprite tileset should be called "sprites"')
@@ -277,7 +284,9 @@ teleportDisabledTile = False
 teleportSound = False
 switchesEnabled = False
 
-gameMapIfNoImage = False
+gameMap = False
+gameMapRooms = False
+gameMapSeparatedRooms = False
 gameMapXAdjustment = 14
 gameMapYAdjustment = 10
 gameMapOnlyVisited = False
@@ -313,8 +322,17 @@ consoleMode = "No"
 finalItemTile = 0
 finalItemMode = "Always shown"
 
+permanentMovement = 'Disabled'
+
+stepsEnabled = True
+stepsCount = 4
+
+print('\nReading properties from maps.json...')
+
 if 'properties' in data:
     for property in data['properties']:
+        print(property['name'] + ": " + str(property['value']))
+
         if property['name'] == 'gameName':
             gameName = property['value']
         elif property['name'] == 'consoleMode':
@@ -555,8 +573,12 @@ if 'properties' in data:
             teleportDisabledTile = property['value']
         elif property['name'] == 'teleportSound':
             teleportSound = property['value']
-        elif property['name'] == 'gameMapIfNoImage':
-            gameMapIfNoImage = property['value']
+        elif property['name'] == 'gameMap':
+            gameMap = property['value']
+        elif property['name'] == 'gameMapRooms':
+            gameMapRooms = property['value']
+        elif property['name'] == 'gameMapSeparatedRooms':
+            gameMapSeparatedRooms = property['value']
         elif property['name'] == 'gameMapOnlyVisited':
             gameMapOnlyVisited = property['value']
         elif property['name'] == 'playerColor':
@@ -601,6 +623,12 @@ if 'properties' in data:
             finalItemTile = property['value']
         elif property['name'] == 'finalItemMode':
             finalItemMode = property['value']
+        elif property['name'] == 'permanentMovement':
+            permanentMovement = property['value']
+        elif property['name'] == 'stepsEnabled':
+            stepsEnabled = property['value']
+        elif property['name'] == 'stepsCount':
+            stepsCount = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -662,11 +690,32 @@ configStr += "const BREAKABLE_TILE as ubyte = " + str(breakableTile) + "\n"
 configStr += "const TELEPORT_TILE as ubyte = " + str(teleportTile) + "\n"
 configStr += "const TELEPORT_QUIT_TILE as ubyte = " + str(teleportTile-1) + "\n"
 configStr += "const ENEMY_DOOR_TILE as ubyte = " + str(unlockableTile) + "\n"
-configStr += "const STEPS_TILE_INIT as ubyte = " + str(unlockableTile + 1) + "\n"
-configStr += "const STEPS_TILE_END as ubyte = " + str(unlockableTile + 4) + "\n"
-configStr += "const LADDERS_TILE_INIT as ubyte = " + str(unlockableTile + 9) + "\n"
+
+if stepsEnabled:
+    if gameView == 'overhead':
+        exitWithErrorMessage("Steps is not compatible with overhead view")
+
+    if stepsCount > transpasableItems:
+        exitWithErrorMessage("Steps count cannot be higher than transpasable items count")
+
+    configStr += "#define STEPS_TILE_ENABLED\n"
+    configStr += "const STEPS_TILE_INIT as ubyte = " + str(unlockableTile + 1) + "\n"
+    configStr += "const STEPS_TILE_END as ubyte = " + str(unlockableTile + stepsCount) + "\n"
+# configStr += "const LADDERS_TILE_INIT as ubyte = " + str(unlockableTile + 9) + "\n"
 
 configStr += "const TRANSPASABLE_ITEMS as ubyte = " + str(unlockableTile+transpasableItems) + "\n"
+
+if permanentMovement != 'Disabled':
+    configStr += "#define PERMANENT_MOVEMENT_ENABLED\n"
+        
+    if permanentMovement == 'Bounce':
+        if gameView != 'overhead':
+            configStr += "#define PERMANENT_MOVEMENT_BOUNCE\n"
+        else:
+            exitWithErrorMessage("Permanent movement with bounce is not compatible with overhead view")
+
+    if permanentMovement == 'Free':
+        configStr += "#define PERMANENT_MOVEMENT_FREE\n"
 
 if int(finalItemTile) > 0:
     configStr += "#define FINAL_ITEM_ENABLED\n"
@@ -1001,6 +1050,11 @@ for layer in data['layers']:
 
         for idx, screen in enumerate(layer['chunks']):
             dataCorrected = [x - 1 for x in screen['data']]    
+
+            for i in range(len(dataCorrected)):
+                if dataCorrected[i] > 255:
+                    dataCorrected[i] -= darkTilesOffset
+                    
             screens.append(array.array('B', dataCorrected))
 
             screenObjects[idx]['ammo'] = 0
@@ -1133,11 +1187,14 @@ else:
 configStr += "const LIFE_AMOUNT as ubyte = " + str(lifeAmount) + "\n"
 configStr += "const INITIAL_LIFE as ubyte = " + str(initialLife) + "\n"
 
-if gameMapOnlyVisited:
-    configStr += "#define GAMEMAP_ONLY_VISITED\n"
-
-if gameMapIfNoImage == True:
+if gameMapRooms:
     configStr += "#define GAMEMAP_SHOW_ENABLED\n"
+
+    if gameMapSeparatedRooms:
+        configStr += "#define GAMEMAP_SEPARATED_ROOMS\n"
+
+    if gameMapOnlyVisited:
+        configStr += "#define GAMEMAP_ONLY_VISITED\n"
 
 configStr += "const MAP_X_ADJUSTMENT as ubyte = " + str(gameMapXAdjustment) + "\n"
 configStr += "const MAP_Y_ADJUSTMENT as ubyte = " + str(gameMapYAdjustment) + "\n"    

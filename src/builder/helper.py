@@ -43,7 +43,7 @@ def runCommand(command):
     if verbose:
         result = subprocess.call(command, shell=True)
     else:
-        result = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        result = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL)
     if result != 0:
         print("Error executing command: " + command)
         sys.exit(1)
@@ -61,7 +61,7 @@ def runPythonScript(script):
         if verbose:
             result = subprocess.call(cmd)
         else:
-            result = subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            result = subprocess.call(cmd, stdout=subprocess.DEVNULL)
         if result != 0:
             print("Error executing python command: " + " ".join(cmd))
             sys.exit(1)

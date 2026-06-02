@@ -343,7 +343,8 @@ function isInStep(x as ubyte) as ubyte
     Dim col as uByte = x >> 1
     Dim lin as uByte = (protaY + 3) >> 1
 
-    if GetTile(col, lin) < STEPS_TILE_INIT or GetTile(col, lin) > STEPS_TILE_END then return 0
+    Dim curTile as uByte = GetTile(col, lin)
+    if curTile < STEPS_TILE_INIT or curTile > STEPS_TILE_END then return 0
     
     return 1
 end function

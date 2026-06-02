@@ -169,11 +169,19 @@ Sub pathDraw()
         #endif
             PAPER screensStatus(index) + 1
 
-            if index = currentScreen then
-                PRINT AT y, MAP_X_ADJUSTMENT + (x*2); "X"
-            else
-                PRINT AT y, MAP_X_ADJUSTMENT + (x*2); " "
-            end if
+            #ifdef GAMEMAP_SEPARATED_ROOMS
+                if index = currentScreen then
+                    PRINT AT y, MAP_X_ADJUSTMENT + (x*2); "X"
+                else
+                    PRINT AT y, MAP_X_ADJUSTMENT + (x*2); " "
+                end if
+            #else
+                if index = currentScreen then
+                    PRINT AT y, MAP_X_ADJUSTMENT + x; "X"
+                else
+                    PRINT AT y, MAP_X_ADJUSTMENT + x; " "
+                end if
+            #endif
         #ifdef GAMEMAP_ONLY_VISITED
         end if
         #endif
@@ -181,7 +189,12 @@ Sub pathDraw()
         x = x + 1
         If x >= MAP_SCREENS_WIDTH_COUNT Then
             x = 0
-            y = y + 2
+
+            #ifdef GAMEMAP_SEPARATED_ROOMS
+                y = y + 2
+            #else
+                y = y + 1
+            #endif
         End If
     Next index
 End Sub

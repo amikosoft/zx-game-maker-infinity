@@ -260,7 +260,9 @@ Sub shoot()
 End Sub
 
 Sub leftKey(animate as ubyte)
-    horizontalAxisKeyPressed = -1
+    #ifndef PERMANENT_MOVEMENT_ENABLED
+        horizontalAxisKeyPressed = -1
+    #endif
 
     if animate then
         if protaDirection <> 0 Then
@@ -284,19 +286,30 @@ Sub leftKey(animate as ubyte)
         #endif
 
         #ifdef SIDE_VIEW
-            if isInStep(protaX) then
-                protaY = protaY - 1
-            end if
+            #ifdef STEPS_TILE_ENABLED
+                if isInStep(protaX) then protaY = protaY - 1
+            #endif
         #endif
         
         if Not CheckCollision(protaX - 1, protaY) then 
             protaX = protaX - 1
+        #ifdef PERMANENT_MOVEMENT_BOUNCE
+        Else
+            horizontalAxisKeyPressed = 1
+        #else
+            #ifdef PERMANENT_MOVEMENT_ENABLED
+            Else
+                horizontalAxisKeyPressed = 0
+            #endif
+        #endif
         end if
     End If
 End Sub
 
 Sub rightKey(animate as ubyte)
-    horizontalAxisKeyPressed = 1
+    #ifndef PERMANENT_MOVEMENT_ENABLED
+        horizontalAxisKeyPressed = 1
+    #endif
 
     ' If animate and protaDirection <> 1 Then
     '     protaFrame = PROTA_FRAME_RIGHT
@@ -324,11 +337,22 @@ Sub rightKey(animate as ubyte)
         #endif    
             
         #ifdef SIDE_VIEW
-            if isInStep(protaX+3) then protaY = protaY - 1
+            #ifdef STEPS_TILE_ENABLED
+                if isInStep(protaX+3) then protaY = protaY - 1
+            #endif
         #endif
         
         if Not CheckCollision(protaX + 1, protaY) then 
             protaX = protaX + 1
+        #ifdef PERMANENT_MOVEMENT_BOUNCE
+        Else
+            horizontalAxisKeyPressed = -1
+        #else
+            #ifdef PERMANENT_MOVEMENT_ENABLED
+            Else
+                horizontalAxisKeyPressed = 0
+            #endif
+        #endif
         end if
     End If
 End Sub
@@ -368,7 +392,9 @@ end function
 
 Sub upKey()
     #ifdef OVERHEAD_VIEW
-        verticalAxisKeyPressed = 1
+        #ifndef PERMANENT_MOVEMENT_ENABLED
+            verticalAxisKeyPressed = 1
+        #endif
 
         If canMoveUp() Then
             protaY = protaY - 1
@@ -383,6 +409,10 @@ Sub upKey()
             end if
             
             checkProtaTop()
+        #ifdef PERMANENT_MOVEMENT_ENABLED
+        Else
+            verticalAxisKeyPressed = 0
+        #endif
         End If
     #else
         #ifndef CONSOLE_MODE
@@ -447,9 +477,11 @@ Sub upKey()
 End Sub
 
 Sub downKey()
-    verticalAxisKeyPressed = -1
-
     #ifdef OVERHEAD_VIEW
+        #ifndef PERMANENT_MOVEMENT_ENABLED
+            verticalAxisKeyPressed = -1
+        #endif
+
         If canMoveDown() Then
             If protaY >= MAX_SCREEN_BOTTOM Then
                 #ifndef LEVELS_MODE
@@ -469,8 +501,14 @@ Sub downKey()
                     End If
                 end if
             End If
+        #ifdef PERMANENT_MOVEMENT_ENABLED
+        Else
+            verticalAxisKeyPressed = 0
+        #endif
         End If
     #Else
+        verticalAxisKeyPressed = -1
+    
         #ifdef JUMP_CANCEL
             jumpCurrentKey = jumpStopValue
         #endif
@@ -661,89 +699,6 @@ Sub fireKey()
     
     #ifdef SHOOTING_ENABLED
         if not isActionPerformed then shoot()
-    #endif
-End Sub
-
-Sub keyboardListen()
-    verticalAxisKeyPressed = 0
-    horizontalAxisKeyPressed = 0
-    
-    #ifdef PREVENT_JUMP_ON_FIRE
-        if shootPressed then shootPressed = shootPressed - 1
-    #endif
-    
-    #ifdef CONSOLE_MODE
-        If MultiKeys(KEYO) Then leftKey(1)
-        If MultiKeys(KEYP) Then rightKey(1)
-        
-        #ifdef PREVENT_JUMP_ON_FIRE
-            If MultiKeys(KEYSPACE) Then shootPressed = 5
-
-            #ifdef SIDE_VIEW
-                If MultiKeys(KEYQ) Then 
-                    upKey()
-                else if MultiKeys(KEYW) Then 
-                    goUp(1)
-                end if
-            #Else
-                if MultiKeys(KEYW) Then upKey()
-            #endif
-
-            If MultiKeys(KEYA) Then downKey()
-        #else
-            #ifdef SIDE_VIEW
-                If MultiKeys(KEYQ) Then 
-                    upKey()
-                else if MultiKeys(KEYW) Then 
-                    goUp(1)
-                end if
-            #Else
-                if MultiKeys(KEYW) Then upKey()
-            #endif
-            If MultiKeys(KEYA) Then downKey()
-            If MultiKeys(KEYSPACE) Then fireKey()
-        #endif
-    #else
-        If kempston Then
-            Dim n As Ubyte = In(31)
-            If n bAND %10 Then leftKey(1)
-            If n bAND %1 Then rightKey(1)
-            
-            #ifdef PREVENT_JUMP_ON_FIRE
-                If n bAND %10000 Then shootPressed = 5
-                If n bAND %1000 Then upKey()
-                If n bAND %100 Then downKey()
-            #else
-                If n bAND %1000 Then upKey()
-                If n bAND %100 Then downKey()
-                If n bAND %10000 Then fireKey()
-            #endif
-        Else
-            If MultiKeys(keyArray(LEFT)) Then leftKey(1)
-            If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
-            
-            #ifdef PREVENT_JUMP_ON_FIRE
-                If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
-                If MultiKeys(keyArray(UP)) Then upKey()
-                If MultiKeys(keyArray(DOWN)) Then downKey()
-            #else
-                If MultiKeys(keyArray(UP)) Then upKey()
-                If MultiKeys(keyArray(DOWN)) Then downKey()
-                If MultiKeys(keyArray(FIRE)) Then fireKey()
-            #endif
-        End If
-    #endif
-
-    #ifdef PREVENT_JUMP_ON_FIRE
-        if shootPressed = 5 then fireKey()
-    #endif
-
-    #ifdef IDLE_ENABLED
-        If not horizontalAxisKeyPressed and not verticalAxisKeyPressed Then
-            If protaLoopCounter < IDLE_TIME Then protaLoopCounter = protaLoopCounter + 1
-        Else
-            protaLoopCounter = 0
-        End If
     #endif
 End Sub
 
@@ -1004,7 +959,6 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
         #ifdef KEYS_ENABLED
             #ifdef COINS_FOR_KEY_ENABLED
                 if tile = KEY_TILE Then
-                debugB(tile)
                     if protaCoins >= COINS_FOR_KEY_AMOUNT then
                         protaCoins = protaCoins - COINS_FOR_KEY_AMOUNT
 
@@ -1124,7 +1078,8 @@ Sub protaMovement()
         #endif
     #endif
     
-    keyboardListen()
+    ' keyboardListen()
+    #include "functionsBas/keyboardListen.bas"
 
     if moveScreen then return
 

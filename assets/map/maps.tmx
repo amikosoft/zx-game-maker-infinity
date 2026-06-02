@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="205">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="208">
  <editorsettings>
   <chunksize width="30" height="19"/>
  </editorsettings>
@@ -13,9 +13,12 @@
   <property name="adventureTextsShowTiles" type="bool" value="true"/>
   <property name="adventureTextsSound" type="bool" value="false"/>
   <property name="ammo" type="int" value="100"/>
+  <property name="ammoIncrement" type="int" value="10"/>
+  <property name="animatePeriodEnemy" type="int" value="3"/>
   <property name="animatePeriodMain" type="int" value="1"/>
   <property name="animatePeriodTile" type="int" value="20"/>
   <property name="animatedTilesMode" propertytype="animatedTilesModes" value="Solid tiles disappears"/>
+  <property name="arcadeMode" type="bool" value="false"/>
   <property name="backgroundAttribute" type="int" value="71"/>
   <property name="borderDamageColor" value="2"/>
   <property name="bright" type="int" value="1"/>
@@ -58,9 +61,11 @@
   <property name="fontCustom" propertytype="fontCustomTypes" value="Round"/>
   <property name="fullChangeScreenAnimation" type="bool" value="true"/>
   <property name="gameLanguage" value="es"/>
-  <property name="gameMapIfNoImage" type="bool" value="true"/>
   <property name="gameMapOnlyVisited" type="bool" value="false"/>
+  <property name="gameMapRooms" type="bool" value="true"/>
+  <property name="gameMapSeparatedRooms" type="bool" value="true"/>
   <property name="gameMapXAdjustment" type="int" value="10"/>
+  <property name="gameMapYAdjustment" type="int" value="10"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
   <property name="glueMode" propertytype="glueModes" value="slow down"/>
@@ -68,9 +73,12 @@
   <property name="goalItems" type="int" value="1"/>
   <property name="graphicsModeUnshifted" type="bool" value="true"/>
   <property name="graphicsSpriteColors" type="bool" value="true"/>
+  <property name="gravityLow" type="bool" value="false"/>
   <property name="hiScore" type="bool" value="false"/>
   <property name="hudMessagesEnabled" type="bool" value="true"/>
   <property name="hudShowAmmoMessage" type="bool" value="false"/>
+  <property name="hudShowChecksMessage" type="bool" value="true"/>
+  <property name="hudShowCoinsMessage" type="bool" value="true"/>
   <property name="hudShowDoorMessage" type="bool" value="false"/>
   <property name="hudShowEnemiesEnergyBar" type="bool" value="true"/>
   <property name="hudShowEnemiesWallMessage" type="bool" value="true"/>
@@ -84,11 +92,13 @@
   <property name="itemsCountdown" type="bool" value="true"/>
   <property name="itemsEnabled" type="bool" value="true"/>
   <property name="itemsMulticolor" type="bool" value="true"/>
+  <property name="jetPackFuel" type="int" value="0"/>
   <property name="jumpCancelAllowed" type="bool" value="false"/>
   <property name="jumpDouble" type="bool" value="false"/>
   <property name="jumpFallingSprite" type="bool" value="true"/>
   <property name="jumpOnEnemies" type="bool" value="true"/>
   <property name="jumpType" propertytype="jumpType" value="accelerated"/>
+  <property name="jumpWalls" type="bool" value="false"/>
   <property name="keysEnabled" type="bool" value="true"/>
   <property name="killJumpingOnTop" type="bool" value="false"/>
   <property name="laddersEnabled" type="bool" value="true"/>
@@ -107,7 +117,9 @@
   <property name="musicEnabled" type="bool" value="true"/>
   <property name="musicToggleEnabled" type="bool" value="true"/>
   <property name="newBeeperPlayer" type="bool" value="true"/>
+  <property name="paper" type="int" value="0"/>
   <property name="password" value=""/>
+  <property name="permanentMovement" propertytype="permanentMovementModes" value="Disabled"/>
   <property name="platformMoveable" type="bool" value="true"/>
   <property name="playerColor" type="int" value="67"/>
   <property name="playerReadyConfirmation" type="bool" value="true"/>
@@ -116,6 +128,8 @@
   <property name="shootingPreventJump" type="bool" value="true"/>
   <property name="shouldKillEnemies" type="bool" value="true"/>
   <property name="shouldPickUpItems" type="bool" value="true"/>
+  <property name="stepsCount" type="int" value="4"/>
+  <property name="stepsEnabled" type="bool" value="true"/>
   <property name="teleportAnimation" type="bool" value="true"/>
   <property name="teleportDisabledTile" type="bool" value="true"/>
   <property name="teleportEnabled" type="bool" value="true"/>
@@ -169,28 +183,31 @@
  <tileset firstgid="257" name="sprites" tilewidth="16" tileheight="16" tilecount="48" columns="16" objectalignment="topleft">
   <image source="sprites.png" width="256" height="48"/>
  </tileset>
+ <tileset firstgid="305" name="dark tileset" tilewidth="8" tileheight="8" tilecount="256" columns="32">
+  <image source="darktiles.png" width="256" height="64"/>
+ </tileset>
  <layer id="1" name="map" width="132" height="116">
   <data encoding="csv">
    <chunk x="0" y="0" width="30" height="19">
-8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,8,
-9,1,166,166,1,1,1,146,1,1,1,1,146,1,1,1,1,1,1,181,1,1,1,1,181,1,1,1,1,1,
-8,1,247,247,1,1,1,146,1,1,1,1,146,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
-9,1,247,247,1,124,125,146,1,1,1,1,146,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
-8,1,14,15,1,1,1,146,1,1,1,1,146,1,1,124,125,1,1,180,1,1,1,1,180,1,1,1,1,1,
-9,1,46,47,1,1,1,255,1,1,1,1,146,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
-8,1,1,1,1,1,1,1,1,1,1,1,225,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
-9,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,44,1,1,180,1,1,1,1,180,1,1,1,1,1,
-8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,180,1,131,131,1,180,1,1,1,1,1,
-9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,42,43,16,17,42,43,1,1,1,1,1,
-8,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,42,48,49,43,1,1,1,1,124,1,
-9,1,1,1,1,1,125,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,
-8,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-9,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,206,208,1,1,1,1,1,1,1,
-8,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,98,42,43,42,43,97,1,1,1,1,1,
-9,1,1,1,1,1,1,1,205,1,1,1,1,1,1,1,1,1,98,42,43,42,43,42,43,97,1,1,1,1,
-8,96,96,96,96,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54
+35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,
+35,1,166,166,1,1,1,146,1,1,1,1,146,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+35,1,247,247,1,1,1,146,1,1,1,1,146,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+35,1,247,247,1,124,125,146,1,1,1,1,146,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+35,1,14,15,1,1,1,146,1,1,1,1,146,1,1,124,125,1,1,180,1,1,1,1,180,1,1,1,1,1,
+35,1,46,47,1,1,1,255,1,1,1,1,146,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+35,1,1,1,1,1,1,1,1,1,1,1,225,1,1,1,1,1,1,180,1,1,1,1,180,1,1,1,1,1,
+35,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,44,1,1,180,1,1,1,1,180,1,1,1,1,1,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,180,1,131,131,1,180,1,1,1,1,1,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,42,43,16,17,42,43,1,1,1,1,1,
+35,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,42,48,49,43,1,1,1,1,124,1,
+35,1,1,1,1,1,125,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,
+35,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+35,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+35,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,206,208,1,1,1,1,1,1,1,
+35,1,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,98,42,43,42,43,97,1,1,1,1,1,
+35,1,1,1,1,1,1,1,205,1,1,1,1,1,1,1,1,1,98,42,43,42,43,42,43,97,1,1,1,1,
+35,96,96,96,96,36,37,36,37,36,37,36,37,36,37,36,37,36,37,36,37,36,37,36,37,36,37,36,36,37
 </chunk>
    <chunk x="30" y="0" width="30" height="19">
 8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,8,9,
@@ -245,15 +262,15 @@
 40,1,1,1,1,1,44,1,1,172,1,1,1,1,1,1,1,166,252,1,1,1,1,172,1,124,125,1,1,40,
 41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,52,52,1,1,1,1,1,124,125,1,93,93,41,
 40,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,166,1,1,1,128,128,40,
-41,1,1,1,172,1,1,1,52,52,52,97,1,1,1,1,1,1,1,1,1,1,98,52,52,1,1,128,128,41,
-40,1,1,1,1,1,1,1,1,1,52,52,97,1,1,1,1,1,1,1,1,98,1,1,1,1,1,128,128,40,
-41,1,1,1,129,1,1,1,1,1,1,1,1,97,1,1,1,1,1,1,98,1,1,124,1,1,1,128,128,41,
+41,1,1,1,172,1,1,1,52,52,52,99,1,1,1,1,1,1,1,1,1,1,100,52,52,1,1,128,128,41,
+40,1,1,1,1,1,1,1,1,103,52,52,97,1,1,1,1,1,1,1,1,98,52,52,104,1,1,128,128,40,
+41,1,1,1,129,1,1,1,1,1,1,1,1,97,1,1,1,1,1,1,98,1,1,1,1,1,1,128,128,41,
 40,1,1,1,30,30,30,1,1,1,1,1,1,1,97,1,1,1,1,98,1,1,124,125,1,1,1,128,128,40,
 41,1,1,1,1,1,1,1,1,1,1,124,125,1,1,52,52,52,52,1,1,1,1,1,1,1,1,128,128,41,
 40,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,172,1,1,172,1,128,128,40,
 41,163,1,163,1,196,196,196,196,196,196,196,196,196,196,196,196,196,196,1,1,1,1,1,1,1,1,128,128,94,
 40,195,166,195,163,31,31,31,31,161,161,162,32,32,32,32,161,162,10,11,1,1,254,1,1,253,1,128,128,94,
-41,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,11
+41,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,7,6,6,7
 </chunk>
    <chunk x="30" y="19" width="30" height="19">
 11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,11,10,1,102,1,18,
@@ -649,7 +666,7 @@
    </properties>
    <point/>
   </object>
-  <object id="204" name="player" type="player" gid="257" x="128" y="248" width="16" height="16">
+  <object id="207" name="player" type="player" gid="257" x="128" y="248" width="16" height="16">
    <properties>
     <property name="color" type="int" value="67"/>
     <property name="energy" type="int" value="5"/>

@@ -270,6 +270,19 @@
             "valuesAsFlags": false
         },
         {
+            "id": 18,
+            "name": "permanentMovementModes",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Disabled",
+                "Free",
+                "Collisions",
+                "Bounce"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -912,7 +925,7 @@
                     "value": false
                 },
                 {
-                    "name": "gameMapIfNoImage",
+                    "name": "gameMapRooms",
                     "type": "bool",
                     "value": false
                 },
