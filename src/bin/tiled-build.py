@@ -76,6 +76,8 @@ glueTerrainTile = 0
 
 gameViewSideDefault = "side"
 
+invincibleItem = 0
+
 for tileset in data['tilesets']:
     if tileset['name'] == 'tiles':
         for tile in tileset['tiles']:
@@ -90,7 +92,7 @@ for tileset in data['tilesets']:
             if tile['type'] == 'teleport':
                 teleportTile = tile['id']
             if tile['type'] == 'switcher':
-                switcherTile = tile['id']
+                switcherTile = str(tile['id'])
             if tile['type'] == 'ammo':
                 ammoTile = str(tile['id'])
             if tile['type'] == 'key':
@@ -109,6 +111,8 @@ for tileset in data['tilesets']:
                 rightTile = tile['id']
             if tile['type'] == 'glue':
                 glueTile = tile['id']
+            if tile['type'] == 'invincible':
+                invincibleItem = tile['id']
             if tile['type'] == 'terrain_wall_glue':
                 glueTerrainTile = tile['id']
             if tile['type'] == 'animated':
@@ -282,7 +286,6 @@ teleportEnabled = False
 teleportAnimation = False
 teleportDisabledTile = False
 teleportSound = False
-switchesEnabled = False
 
 gameMap = False
 gameMapRooms = False
@@ -326,6 +329,10 @@ permanentMovement = 'Disabled'
 
 stepsEnabled = True
 stepsCount = 4
+
+itemsAllBehaviour = "Always shown"
+
+invincibleItemPeriod = 0
 
 print('\nReading properties from maps.json...')
 
@@ -629,6 +636,14 @@ if 'properties' in data:
             stepsEnabled = property['value']
         elif property['name'] == 'stepsCount':
             stepsCount = property['value']
+        elif property['name'] == 'gameMapXAdjustment':
+            gameMapXAdjustment = property['value']
+        elif property['name'] == 'gameMapYAdjustment':
+            gameMapYAdjustment = property['value']
+        elif property['name'] == 'itemsAllBehaviour':
+            itemsAllBehaviour = property['value']
+        elif property['name'] == 'invincibleItemPeriod':
+            invincibleItemPeriod = property['value']
 
 if len(damageTiles) == 0:
     damageTiles.append('0')
@@ -1038,6 +1053,8 @@ if buttonPauseEnabled or consoleMode != 'No':
         configStr += "#DEFINE BUTTON_QUIT_ENABLED\n"
 
 hasCoinTiles = False
+hasSwitcherTiles = False
+screenDarkEnabled = False
 
 for layer in data['layers']:
     if layer['type'] == 'tilelayer':
@@ -1091,6 +1108,8 @@ for layer in data['layers']:
                 elif tile == coinTile:
                     hasCoinTiles = True
                     screenObjects[idx]['coin'] = 1
+                elif tile == switcherTile:
+                    hasSwitcherTiles = True
 
 configStr += "const MAP_SCREENS_WIDTH_COUNT as ubyte = " + str(mapCols) + "\n"
 configStr += "const SCREEN_OBJECT_ITEM_INDEX as ubyte = 0 \n"
@@ -1269,6 +1288,13 @@ if glueTileEnabled:
 
     configStr += "const GLUE_TILE as ubyte = " + str(glueTile) + "\n"
     configStr += "const GLUE_TERRAIN_TILE as ubyte = " + str(glueTerrainTile) + "\n"
+
+if invincibleItemPeriod > 0 and invincibleItem > 0:
+    if invincibleItemPeriod > 255:
+        exitWithErrorMessage("Invincible item period cannot be higher than 255")
+    configStr += "#define INVINCIBLE_ITEM_ENABLED\n"
+    configStr += "const INVINCIBLE_ITEM_TILE as ubyte = " + str(invincibleItem) + "\n"
+    configStr += "const INVINCIBLE_ITEM_PERIOD as ubyte = " + str(invincibleItemPeriod) + "\n"
 
 if trampolinEnabled:
     if underPlayerValidation == False:
@@ -1757,7 +1783,7 @@ for layer in data['layers']:
                             if not 'finalScreen' in attributesSort:
                                 attributesSort.append('finalScreen')
                         elif object['properties'][prop]['name'] == 'dark':
-                            switchesEnabled = True
+                            screenDarkEnabled = True
                             if object['properties'][prop]['value'] == True:
                                 attributes[screenId]["dark"] = 1
                             else:
@@ -1812,8 +1838,19 @@ if lastScreen != -1:
     configStr += "#DEFINE FINAL_SCREEN_ENABLED\n"
     configStr += "Const FINAL_SCREEN as ubyte = " + str(lastScreen) + "\n"
 
-if switchesEnabled or teleportEnabled:
+if hasSwitcherTiles or teleportEnabled:
     configStr += "#DEFINE FIRED_ITEMS_ENABLED\n"
+
+if hasSwitcherTiles:
+    if not screenDarkEnabled:
+        configStr += "#DEFINE SCREEN_DARK_ENABLED\n"
+
+    configStr += "#DEFINE SWITCHES_ENABLED\n"
+
+    if itemsAllBehaviour == "Hidden in dark":
+        configStr += "#DEFINE SCREEN_DARK_HIDE_ITEMS\n"
+    elif itemsAllBehaviour == "Hidden in light":
+        configStr += "#DEFINE SCREEN_LIGHT_HIDE_ITEMS\n"
 
 if teleportEnabled:
     configStr += "#DEFINE TELEPORT_ENABLED\n"
@@ -1913,27 +1950,28 @@ if adventureTexts and len(texts) > 0:
 
                 posicion = -1
 
+                # Verificar que no exista ya el texto
                 for p, string in enumerate(allTexts):
                     if string == textoFinal:
                         print("texto existente "+ string + " en posicion " + str(p))
-                        posicion = p - 1
+                        posicion = p
                         break
                 
                 if posicion == -1:
-                    # Verificar que no exista ya el texto
                     allTexts.append(textoFinal)
                     posicion = int(len(allTexts)) - 1
                     print("texto nuevo "+ textoFinal + " en posicion " + str(posicion))
                 
                 print(textoFinal)
+                print(str([int(itemText[0]), int(itemText[1]), int(itemText[2]), posicion, int(itemText[4]), int(itemText[5])]))
                 f.write(bytearray([int(itemText[0]), int(itemText[1]), int(itemText[2]), posicion, int(itemText[4]), int(itemText[5])]))
 
     print("ALL TEXTS")
     with open("output/texts.bin", "wb") as f:
-        for i in allTexts:
-            print(i)
+        for idx in range(len(allTexts)):
+            print(str(idx), allTexts[idx])
             # if len(i > 20)
-            f.write(i.ljust(adventureTextsLength, ' ').encode('ascii'))
+            f.write(allTexts[idx].ljust(adventureTextsLength, ' ').encode('ascii'))
             f.write(b'\x00')
 
     configStr += "const AVAILABLE_ADVENTURES as ubyte = " + str(len(texts) - 1) + "\n"

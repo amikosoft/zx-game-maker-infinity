@@ -536,7 +536,7 @@ Sub downKey()
 End Sub
 
 #ifdef IN_GAME_TEXT_ENABLED
-    Sub muestraDialogo(texto as ubyte, tile as ubyte)
+    Sub muestraDialogo(textId as ubyte, tile as ubyte)
         #ifdef FULLSCREEN_TEXTS
             #ifdef ADVENTURETEXTS_SCREEN_ENABLED
             '     FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
@@ -555,7 +555,6 @@ End Sub
         #EndIf
 
         for fila=0 to ((TEXTS_SIZE / 15 ) - 1)
-            dim textId as ubyte = textsCoord(texto, 3)
             SetBank(textsBank)
             for letra=0 to 14
                 #ifndef FULLSCREEN_TEXTS
@@ -564,13 +563,16 @@ End Sub
 
                 #ifdef ADVENTURE_TEXTS_SOUND
                     dim nextChar as ubyte = textToDisplay(textId, (fila*15)+letra)
-                    
-                    if nextChar <> 32 then 
-                        ' PAUSE 2: 
-                        BEEP .05, 8
 
+                    if nextChar <> 32 then BEEP .05, 8
+
+                    #ifdef CUSTOM_FONT_ENABLED
+                        SetBank(gameBank)
                         Print AT 6+fila, 9 + letra; Chr$(nextChar)
-                    end if
+                        SetBank(textsBank)
+                    #else
+                        Print AT 6+fila, 9 + letra; Chr$(nextChar)
+                    #endif
                 #Else
                     #ifdef CUSTOM_FONT_ENABLED
                         dim nextChar as ubyte = textToDisplay(textId, (fila*15)+letra)
@@ -622,11 +624,10 @@ End Sub
     
     Function validaTexto(validateTile as ubyte) as ubyte
         dim someTextFound as ubyte = 0
-        Dim textFound as ubyte = 0
         #ifdef IS_TEXT_ADVENTURE
             dim adventureStateTmp as ubyte = currentAdventureState
         #EndIf
-        
+
         for texto=currentScreenFirstText to AVAILABLE_ADVENTURES
             if textsCoord(texto, 0) <> currentScreen Then exit for
             dim cordX as ubyte = textsCoord(texto, 1)
@@ -637,18 +638,19 @@ End Sub
                     dim tileText as ubyte = GetTile(cordX>>1, cordY>>1)
                     
                     if tileText Then
-                        textFound = 1
+                        ' textFound = 1
                         
                         #ifdef IS_TEXT_ADVENTURE
+                            Dim textFound as ubyte = 1
+        
                             #ifndef ARCADE_MODE
                                 #ifndef LEVELS_MODE
                                     dim textState as ubyte = textsCoord(texto, 5)
                                     
                                     if not textState or textState = adventureStateTmp Then
-                                        if textState and textState = adventureStateTmp Then
-                                            if currentAdventureState = adventureStateTmp and textsCoord(texto, 4) Then
-                                                currentAdventureState = currentAdventureState + 1
-                                            End if
+                                        if textState = currentAdventureState and textsCoord(texto, 4) Then
+                                            currentAdventureState = currentAdventureState + 1
+                                            invincible = 2
                                         elseif validateTile and validateTile <> tileText Then
                                             textFound = 0
                                         end if
@@ -657,12 +659,13 @@ End Sub
                                             muestraDialogo(textsCoord(texto, 3), tileText)
                                             someTextFound = 1
                                         end if
-                                    else
-                                        textFound = 0
+                                    ' else
+                                    '     textFound = 0
                                     end if
                                 #EndIf
                             #EndIf
                         #Else
+                            someTextFound = 1
                             muestraDialogo(textsCoord(texto, 3), tileText)
                         #EndIf
                     end if
@@ -926,18 +929,26 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
                     ending()
             #endif
         #endif
-
+        #ifdef INVINCIBLE_ITEM_ENABLED
+            ElseIf tile = INVINCIBLE_ITEM_TILE and not invincible Then
+                invincible = INVINCIBLE_ITEM_PERIOD
+                BeepFX_Play(6)
+        #endif
+        
         End If
     #ifdef FIRED_ITEMS_ENABLED
     else if not isActionPerformed then
         #ifdef SCREEN_DARK_ENABLED
+        #ifdef SWITCHES_ENABLED
             if tile = SWITCHER_TILE Then
                 screenIsDark = not screenIsDark
                 BEEP 0.01, 14
                 mapDraw(0)
                 isActionPerformed = tile
+                invincible = 2
                 return tile
             end if
+        #endif
         #endif
         #ifdef TELEPORT_ENABLED
             if tile = TELEPORT_TILE then

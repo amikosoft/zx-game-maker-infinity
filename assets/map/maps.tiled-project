@@ -283,6 +283,18 @@
             "valuesAsFlags": false
         },
         {
+            "id": 19,
+            "name": "itemsBehaviour",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Always shown",
+                "Hidden in dark",
+                "Hidden in light"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -385,6 +397,11 @@
                     "value": 0
                 },
                 {
+                    "name": "invincibleItemPeriod",
+                    "type": "int",
+                    "value": 250
+                },
+                {
                     "name": "coinsEnabled",
                     "type": "bool",
                     "value": false
@@ -445,6 +462,12 @@
                     "name": "dropTile",
                     "type": "int",
                     "value": 0
+                },
+                {
+                    "name": "itemsAllBehaviour",
+                    "type": "string",
+                    "value": "Always shown",
+                    "propertyType": "itemsBehaviour"
                 },
                 {
                     "name": "enemiesRespawn",

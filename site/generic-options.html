@@ -679,9 +679,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tile-invencibilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tile invencibilidad
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tile-interruptor" class="md-nav__link">
     <span class="md-ellipsis">
       Tile interruptor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comportamiento-de-los-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comportamiento de los items
     </span>
   </a>
   
@@ -1189,9 +1207,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tile-invencibilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tile invencibilidad
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tile-interruptor" class="md-nav__link">
     <span class="md-ellipsis">
       Tile interruptor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comportamiento-de-los-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comportamiento de los items
     </span>
   </a>
   
@@ -1473,9 +1509,21 @@ Si activas esta funcionalidad el tile 32 (más del 33% de energía) y 33 (menos 
 </li>
 </ul>
 <p><img alt="Fade tile" src="imgs/fade-tile.png" /></p>
+<h3 id="tile-invencibilidad">Tile invencibilidad</h3>
+<p>Este tile da un tiempo de invencibilidad al jugador. Este tiempo es configurable en la propiedad <strong>invincibleItemPeriod</strong> (máximo 255).
+Al contrario que otros items, éste no desaparece y sólo puede cogerse si no se es invencible.</p>
+<p><img alt="Invincible tile" src="imgs/invincible.png" /></p>
 <h3 id="tile-interruptor">Tile interruptor</h3>
 <p>Este tile permite al jugador cambiar entre el modo oscuro y normal en la pantalla actual.</p>
 <p><img alt="Switch tile" src="imgs/switchTile.png" /></p>
+<h3 id="comportamiento-de-los-items">Comportamiento de los items</h3>
+<p>Con el atributo <strong>itemsAllBehaviour</strong> puedes indicar al motor cómo quieres que se comporten los items cuando tienes habilitado el "Tile interruptor".</p>
+<p>Dependiendo del valor de este parámetros pasará lo siguiente:</p>
+<ul>
+<li><strong>Always shown</strong> indica que siempre se muestren los items especiales</li>
+<li><strong>Hidden in dark</strong> hace que los items no se muestren ni se puedan coger cuando la pantalla está en modo oscuro</li>
+<li><strong>Hidden in light</strong> hace que los items no se muestren ni se puedan coger cuando la pantalla está en modo normal o luminoso</li>
+</ul>
 <h3 id="comportamiento-del-personaje">Comportamiento del personaje</h3>
 <ul>
 <li><strong>laddersEnabled</strong> activando esta opción harás que el personaje suba escaleras (tiles transpasables) usando una animación de subir. La velocidad de subida será más lenta simulando la subida de escaleras. No afecta a la velocidad de bajada.</li>

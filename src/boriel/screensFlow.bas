@@ -263,6 +263,7 @@ Sub playGame()
     ' #endif
     
     ' enemiesScreen = enemiesPerScreen(currentScreen)
+
     Do
         #ifdef MULTICOLOR_ENABLED
             multicolorCurrent = multicolorCurrent + 1
@@ -534,7 +535,7 @@ End Sub
 Sub swapScreen(waitReady as ubyte)
     ' #ifdef HUD2_SCREEN_ENABLED
     '     #ifdef SCREEN_HUD2_ENABLED
-    dim mustPrintHud as ubyte = 0
+    dim mustPrintHud as ubyte = waitReady
     '     #endif
     ' #endif
 
@@ -665,7 +666,7 @@ Sub swapScreen(waitReady as ubyte)
 
     #ifdef PLAYER_READY_CONFIRMATION
         if waitReady Then
-            mustPrintHud = 1
+            ' mustPrintHud = 1
             #ifdef HUD2_SCREEN_ENABLED
                 #ifdef SCREEN_HUD2_ENABLED
                     loadHUDScreen()
@@ -722,20 +723,27 @@ Sub swapScreen(waitReady as ubyte)
         #endif
     #endif
     
-    if waitReady then 
-        #ifdef PERMANENT_MOVEMENT_ENABLED
-            verticalAxisKeyPressed = 0
-            horizontalAxisKeyPressed = 1
-        #endif
+    #ifdef PLAYER_READY_CONFIRMATION
+        if waitReady then 
+            #ifdef PERMANENT_MOVEMENT_ENABLED
+                verticalAxisKeyPressed = 0
+                horizontalAxisKeyPressed = 1
+            #endif
 
-        #ifdef PLAYER_READY_CONFIRMATION
             #ifdef ADVENTURE_TEXTS_CONFIRM_FIRE
                 pauseUntilPressFire()
             #else
                 pauseUntilPressEnter()
             #endif
+        end if
+    #else
+        #ifdef PERMANENT_MOVEMENT_ENABLED
+            if waitReady then 
+                verticalAxisKeyPressed = 0
+                horizontalAxisKeyPressed = 1
+            end if
         #endif
-    end if
+    #endif
 
     'printHud()
 

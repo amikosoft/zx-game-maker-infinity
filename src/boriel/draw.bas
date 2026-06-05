@@ -121,25 +121,35 @@ Sub mapDraw(withHud as ubyte)
                         dim cordX as ubyte = textsCoord(texto, 1) >> 1
                         dim cordY as ubyte = textsCoord(texto, 2) >> 1
                         
-                        if textState >= currentAdventureState Then
-                            #ifdef ADVENTURE_TEXTS_SHOW_TILES
-                                dim textTile as ubyte = textsCoord(texto, 4)
-                                ' #ifdef SCREEN_ATTRIBUTES
-                                '     if textTile Then SetTile(textTile, tileAttrWithBackground(textTile), cordX, cordY)
-                                ' #else
-                                '     if textTile Then SetTile(textTile, attrSet(textTile), cordX, cordY)
-                                ' #endif
-                                if textTile Then SetTileWithBackground(textTile, cordX, cordY)
-                            #endif
-                        #ifdef ADVENTURE_TEXTS_HIDE_TILES
-                        Else
-                            #ifdef SCREEN_ATTRIBUTES
-                                SetTile(currentTileBackground, currentScreenBackground, cordX, cordY)
-                            #else
-                                SetTile(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
+                        #ifdef ADVENTURE_TEXTS_SHOW_TILES
+                            if textState >= currentAdventureState Then
+                                ' dim textTile as ubyte = textsCoord(texto, 4)
+                                SetTileWithBackground(textsCoord(texto, 4), cordX, cordY)
+                                'if textTile Then SetTileWithBackground(textTile, cordX, cordY)
+                                ' if textTile Then
+                                    ' #ifdef SCREEN_ATTRIBUTES
+                                    '     SetTileAnimated(textTile, tileAttrWithBackground(textTile), cordX, cordY)
+                                    ' #else
+                                    '     #ifdef SCREEN_DARK_ENABLED
+                                    '         SetTileAnimated(textTile, tileAttrSet(textTile), cordX, cordY)
+                                    '     #Else
+                                    '         SetTileAnimated(textTile, attrSet(textTile), cordX, cordY)
+                                    '     #endif
+                                    ' #endif
+                                ' end if
+                            End if
+                        #else
+                            #ifdef ADVENTURE_TEXTS_HIDE_TILES
+                                if textState < currentAdventureState Then
+                                    ' #ifdef SCREEN_ATTRIBUTES
+                                    '     SetTile(currentTileBackground, currentScreenBackground, cordX, cordY)
+                                    ' #else
+                                    '     SetTile(0, BACKGROUND_ATTRIBUTE, cordX, cordY)
+                                    ' #endif
+                                    SetTileWithBackground(0, cordX, cordY)
+                                End if
                             #endif
                         #endif
-                        End if
                     End if
                 Next texto
             #endif
@@ -242,9 +252,11 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
                 End If
             #endif
             #ifdef SCREEN_DARK_ENABLED
+            #ifdef SWITCHES_ENABLED
             ElseIf tile = SWITCHER_TILE Then
                 'SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
                 SetTileWithBackground(tile, x, y)
+            #endif
             #endif
             #ifdef FINAL_ITEM_ENABLED
             ElseIf tile = FINAL_ITEM_TILE Then
@@ -267,42 +279,44 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
             SetTileWithBackground(tile, x, y)
         End if
     Else
-        If tile = ITEM_TILE Then
-            If screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then
-                'SetTileChecked(tile, tileAttrWithBackground(tile), x, y)
-                SetTileWithBackground(tile, x, y)
+        #ifdef SCREEN_DARK_HIDE_ITEMS
+            if screenIsDark then Return
+        #else
+            #ifdef SCREEN_LIGHT_HIDE_ITEMS
+                if not screenIsDark then Return
+            #endif
+        #endif
 
-                #ifdef ITEMS_MULTICOLOR_ENABLED
-                    multicolorItem(0) = x
-                    multicolorItem(1) = y
-                #endif
-            End If
+        If tile = ITEM_TILE Then
+            If not screenObjects(currentScreen, SCREEN_OBJECT_ITEM_INDEX) Then return
+
+            #ifdef ITEMS_MULTICOLOR_ENABLED
+                multicolorItem(0) = x
+                multicolorItem(1) = y
+            #endif
         Elseif tile = KEY_TILE then
             #ifdef ARCADE_MODE
                 currentScreenKeyX = x
                 currentScreenKeyY = y
             #Else
-                If screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then
-                    SetTileWithBackground(tile, x, y)
-                End If
+                If not screenObjects(currentScreen, SCREEN_OBJECT_KEY_INDEX) Then return
             #endif
         Elseif tile = LIFE_TILE then
-            If screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then
-                SetTileWithBackground(tile, x, y)
-            End If
+            If not screenObjects(currentScreen, SCREEN_OBJECT_LIFE_INDEX) Then return
         Elseif tile = AMMO_TILE then
-            If screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then
-                SetTileWithBackground(tile, x, y)
-            End If
+            If not screenObjects(currentScreen, SCREEN_OBJECT_AMMO_INDEX) Then return
         #ifdef COINS_ENABLED
         ElseIf tile = COIN_TILE then
-            If screenObjects(currentScreen, SCREEN_OBJECT_COIN_INDEX) Then
-                SetTileWithBackground(tile, x, y)
-            End If
+            If not screenObjects(currentScreen, SCREEN_OBJECT_COIN_INDEX) Then return
         #endif
         End If
+        
+        #ifdef ARCADE_MODE
+            if tile <> KEY_TILE then SetTileWithBackground(tile, x, y)
+        #else
+            SetTileWithBackground(tile, x, y)
+        #endif
     End If
-    
 End Sub
 
 Sub moveToScreen(direction As Ubyte)

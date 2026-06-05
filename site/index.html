@@ -704,12 +704,14 @@
 <p><img alt="logo" src="imgs/infinity_logo.png" /></p>
 <h2 id="nuevo-en-esta-version">Nuevo en esta versión</h2>
 <ul>
-<li>Nuevo modo de movimiento continuo del personaje</li>
-<li>El plano del juego se puede activar/desactivar en cualquier caso y más configurable</li>
-<li>Escaleras diagonales se pueden desactivar y configurar el número de tiles</li>
+<li>Item invencibilidad</li>
+<li>Posibilidad de ocultar/mostrar items según la pantalla está en oscuro o no</li>
 </ul>
 <h2 id="cosas-implementadas-en-infinity">Cosas implementadas en Infinity</h2>
 <ul>
+<li>Nuevo modo de movimiento continuo del personaje</li>
+<li>El plano del juego se puede activar/desactivar en cualquier caso y más configurable</li>
+<li>Escaleras diagonales se pueden desactivar y configurar el número de tiles</li>
 <li>Nueva interfaz de usuario</li>
 <li>Configuración de pantalla boss y boss final</li>
 <li>Nuevo ITEM "Moneda/Coins" que habilita el modo items por dinero</li>
@@ -1096,11 +1098,28 @@ Si activas esta funcionalidad el tile 32 (más del 33% de energía) y 33 (menos 
 
 ![Fade tile](imgs/fade-tile.png)
 
+### Tile invencibilidad
+
+Este tile da un tiempo de invencibilidad al jugador. Este tiempo es configurable en la propiedad **invincibleItemPeriod** (máximo 255).
+Al contrario que otros items, éste no desaparece y sólo puede cogerse si no se es invencible.
+
+![Invincible tile](imgs/invincible.png)
+
 ### Tile interruptor
 
 Este tile permite al jugador cambiar entre el modo oscuro y normal en la pantalla actual.
 
 ![Switch tile](imgs/switchTile.png)
+
+### Comportamiento de los items
+
+Con el atributo **itemsAllBehaviour** puedes indicar al motor cómo quieres que se comporten los items cuando tienes habilitado el "Tile interruptor".
+
+Dependiendo del valor de este parámetros pasará lo siguiente:
+
+* **Always shown** indica que siempre se muestren los items especiales
+* **Hidden in dark** hace que los items no se muestren ni se puedan coger cuando la pantalla está en modo oscuro
+* **Hidden in light** hace que los items no se muestren ni se puedan coger cuando la pantalla está en modo normal o luminoso
 
 ### Comportamiento del personaje
 

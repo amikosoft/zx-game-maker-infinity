@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="208">
+<map version="1.10" tiledversion="1.11.2" class="ZXSpectrumGameMaker" orientation="orthogonal" renderorder="left-down" width="132" height="116" tilewidth="8" tileheight="8" infinite="1" nextlayerid="3" nextobjectid="210">
  <editorsettings>
   <chunksize width="30" height="19"/>
  </editorsettings>
@@ -33,9 +33,9 @@
   <property name="coinsEnabled" type="bool" value="true"/>
   <property name="coinsForAmmo" type="int" value="25"/>
   <property name="coinsForKey" type="int" value="50"/>
-  <property name="coinsForLives" type="int" value="75"/>
+  <property name="coinsForLives" type="int" value="10"/>
   <property name="coinsIncrement" type="int" value="100"/>
-  <property name="coinsInitial" type="int" value="0"/>
+  <property name="coinsInitial" type="int" value="5"/>
   <property name="consoleMode" propertytype="consoleMode" value="No"/>
   <property name="damageAmount" type="int" value="1"/>
   <property name="dropTile" type="int" value="175"/>
@@ -64,7 +64,7 @@
   <property name="gameMapOnlyVisited" type="bool" value="false"/>
   <property name="gameMapRooms" type="bool" value="true"/>
   <property name="gameMapSeparatedRooms" type="bool" value="true"/>
-  <property name="gameMapXAdjustment" type="int" value="10"/>
+  <property name="gameMapXAdjustment" type="int" value="12"/>
   <property name="gameMapYAdjustment" type="int" value="10"/>
   <property name="gameName" value="Game Name"/>
   <property name="gameView" propertytype="gameView" value="side"/>
@@ -89,6 +89,8 @@
   <property name="idleTime" type="int" value="25"/>
   <property name="initialLife" type="int" value="5"/>
   <property name="ink" value="7"/>
+  <property name="invincibleItemPeriod" type="int" value="200"/>
+  <property name="itemsAllBehaviour" propertytype="itemsBehaviour" value="Hidden in dark"/>
   <property name="itemsCountdown" type="bool" value="true"/>
   <property name="itemsEnabled" type="bool" value="true"/>
   <property name="itemsMulticolor" type="bool" value="true"/>
@@ -174,6 +176,7 @@
   <tile id="244" type="switcher"/>
   <tile id="246" type="teleport"/>
   <tile id="247" type="flag"/>
+  <tile id="250" type="invincible"/>
   <tile id="251" type="coin"/>
   <tile id="252" type="ammo"/>
   <tile id="253" type="life"/>
@@ -261,7 +264,7 @@
 41,1,1,1,1,1,255,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,
 40,1,1,1,1,1,44,1,1,172,1,1,1,1,1,1,1,166,252,1,1,1,1,172,1,124,125,1,1,40,
 41,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,52,52,1,1,1,1,1,124,125,1,93,93,41,
-40,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,166,1,1,1,128,128,40,
+40,1,124,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,128,128,40,
 41,1,1,1,172,1,1,1,52,52,52,99,1,1,1,1,1,1,1,1,1,1,100,52,52,1,1,128,128,41,
 40,1,1,1,1,1,1,1,1,103,52,52,97,1,1,1,1,1,1,1,1,98,52,52,104,1,1,128,128,40,
 41,1,1,1,129,1,1,1,1,1,1,1,1,97,1,1,1,1,1,1,98,1,1,1,1,1,1,128,128,41,
@@ -280,17 +283,17 @@
 18,106,106,106,106,106,106,106,106,101,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,18,
 19,1,1,1,1,1,1,1,1,101,125,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
 18,1,1,1,1,1,1,1,1,101,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,
-19,1,1,1,1,1,1,1,1,101,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,19,
-18,1,124,125,1,1,1,1,1,101,1,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,18,
+19,1,1,1,1,1,163,1,1,101,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,1,19,
+18,1,124,125,1,1,195,163,1,101,1,1,1,124,125,1,1,1,1,1,1,1,124,125,1,1,1,1,1,18,
 19,1,1,124,125,1,13,13,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
 18,1,1,1,1,1,1,1,1,13,13,97,1,1,1,1,13,13,13,13,1,1,1,1,1,1,1,1,1,18,
 19,1,1,1,1,1,1,1,1,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,
 18,1,1,1,1,124,125,1,1,1,1,13,13,97,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,18,
-19,1,1,1,124,125,1,1,1,1,1,1,13,13,13,13,13,1,1,1,1,1,1,1,1,1,124,125,1,19,
+19,1,1,1,124,125,1,1,1,1,1,1,13,13,13,13,13,194,1,1,1,1,1,1,1,1,124,125,1,19,
 18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,
 19,1,1,1,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,1,101,13,13,13,101,1,1,1,1,19,
-1,1,1,1,245,1,1,1,1,1,1,1,1,1,124,125,1,1,1,1,101,1,1,1,101,1,1,255,1,18,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,256,1,1,1,1,101,1,1,1,101,1,163,93,163,19,
+1,1,1,1,245,1,1,1,251,1,1,1,1,1,124,125,1,1,1,1,101,1,1,1,101,1,163,255,163,18,
+1,1,1,1,1,1,1,1,195,1,1,1,1,1,1,256,1,1,1,1,101,163,163,163,101,163,195,93,195,19,
 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
 </chunk>
    <chunk x="60" y="19" width="30" height="19">
@@ -342,14 +345,6 @@
    </properties>
    <point/>
   </object>
-  <object id="54" type="text" x="176" y="288">
-   <properties>
-    <property name="en" value="This increased my life!!!"/>
-    <property name="es" value="Esto me da la  vida... lit lit"/>
-    <property name="itemAction" type="int" value="253"/>
-   </properties>
-   <point/>
-  </object>
   <object id="58" type="text" x="200" y="288">
    <properties>
     <property name="es" value="Municion de    mentira"/>
@@ -359,7 +354,7 @@
   </object>
   <object id="60" type="text" x="72" y="224">
    <properties>
-    <property name="adventureState" type="int" value="3"/>
+    <property name="adventureState" type="int" value="2"/>
     <property name="es" value="Con uno mas ya puedo tocar la bateria"/>
     <property name="itemAction" type="int" value="197"/>
    </properties>
@@ -381,7 +376,7 @@
   </object>
   <object id="68" name="1" type="text" x="184" y="224">
    <properties>
-    <property name="adventureState" type="int" value="2"/>
+    <property name="adventureState" type="int" value="1"/>
     <property name="es" value="Esto me sirve  para tocar.    Faltan palos"/>
     <property name="itemAction" type="int" value="165"/>
    </properties>
@@ -402,7 +397,7 @@
   </object>
   <object id="72" name="1" type="text" x="136" y="136">
    <properties>
-    <property name="adventureState" type="int" value="4"/>
+    <property name="adventureState" type="int" value="3"/>
     <property name="es" value="Ya tengo todo!!"/>
     <property name="itemAction" type="int" value="197"/>
    </properties>
@@ -437,7 +432,7 @@
   </object>
   <object id="78" name="1" type="text" x="184" y="224">
    <properties>
-    <property name="adventureState" type="int" value="5"/>
+    <property name="adventureState" type="int" value="4"/>
     <property name="es" value="Vamos a tocar!!"/>
     <property name="itemAction" type="int" value="165"/>
    </properties>
@@ -491,11 +486,10 @@
    <properties>
     <property name="adventureState" type="int" value="1"/>
     <property name="es" value="No se que hacercon esto.      Buscare algo   que aporrear"/>
-    <property name="itemAction" type="int" value="197"/>
    </properties>
    <point/>
   </object>
-  <object id="124" type="text" x="160" y="112">
+  <object id="124" type="text" x="136" y="136">
    <properties>
     <property name="adventureState" type="int" value="1"/>
     <property name="es" value="No se que hacercon esto.      Buscare algo   que aporrear"/>
@@ -516,7 +510,7 @@
   </object>
   <object id="129" type="screen_attributes" x="456" y="208">
    <properties>
-    <property name="dark" type="bool" value="false"/>
+    <property name="dark" type="bool" value="true"/>
     <property name="music" value="music2"/>
    </properties>
    <point/>
@@ -672,6 +666,14 @@
     <property name="energy" type="int" value="5"/>
     <property name="lives" type="int" value="10"/>
    </properties>
+  </object>
+  <object id="208" type="text" x="176" y="288">
+   <properties>
+    <property name="en" value="This increased my life!!!"/>
+    <property name="es" value="Esto me da la  vida... lit lit"/>
+    <property name="itemAction" type="int" value="253"/>
+   </properties>
+   <point/>
   </object>
  </objectgroup>
 </map>
