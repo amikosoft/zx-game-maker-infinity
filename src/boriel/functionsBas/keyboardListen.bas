@@ -43,57 +43,67 @@
                             
             If MultiKeys(KEYSPACE) Then fireKey()
         #else
-            #ifdef PREVENT_JUMP_ON_FIRE
-                If MultiKeys(KEYSPACE) Then shootPressed = 5
-
-                If MultiKeys(KEYQ) Then 
-                    upKey()
-                else if MultiKeys(KEYW) Then 
-                    goUp(1)
-                end if
-                
-                If MultiKeys(KEYA) Then downKey()
-            #else
-                If MultiKeys(KEYQ) Then 
-                    upKey()
-                else if MultiKeys(KEYW) Then 
-                    goUp(1)
-                end if
-
-                If MultiKeys(KEYA) Then downKey()
+            #ifdef JUMP_CONTINUOUS
                 If MultiKeys(KEYSPACE) Then fireKey()
+                upKey()
+            #else
+                #ifdef PREVENT_JUMP_ON_FIRE
+                    If MultiKeys(KEYSPACE) Then shootPressed = 5
+
+                    If MultiKeys(KEYQ) Then 
+                        upKey()
+                    else if MultiKeys(KEYW) Then 
+                        goUp(1)
+                    end if
+                    
+                    If MultiKeys(KEYA) Then downKey()
+                #else
+                    If MultiKeys(KEYQ) Then 
+                        upKey()
+                    else if MultiKeys(KEYW) Then 
+                        goUp(1)
+                    end if
+
+                    If MultiKeys(KEYA) Then downKey()
+                    If MultiKeys(KEYSPACE) Then fireKey()
+                #endif
             #endif
         #endif
     #else
         If MultiKeys(KEYO) Then leftKey(1)
         If MultiKeys(KEYP) Then rightKey(1)
 
-        #ifdef PREVENT_JUMP_ON_FIRE
-            If MultiKeys(KEYSPACE) Then shootPressed = 5
-
-            #ifdef SIDE_VIEW
-                If MultiKeys(KEYQ) Then 
-                    upKey()
-                else if MultiKeys(KEYW) Then 
-                    goUp(1)
-                end if
-            #Else
-                if MultiKeys(KEYW) Then upKey()
-            #endif
-
-            If MultiKeys(KEYA) Then downKey()
+        #ifdef JUMP_CONTINUOUS
+             If MultiKeys(KEYSPACE) Then fireKey()
+            upKey()
         #else
-            #ifdef SIDE_VIEW
-                If MultiKeys(KEYQ) Then 
-                    upKey()
-                else if MultiKeys(KEYW) Then 
-                    goUp(1)
-                end if
-            #Else
-                if MultiKeys(KEYW) Then upKey()
+            #ifdef PREVENT_JUMP_ON_FIRE
+                If MultiKeys(KEYSPACE) Then shootPressed = 5
+
+                #ifdef SIDE_VIEW
+                    If MultiKeys(KEYQ) Then 
+                        upKey()
+                    else if MultiKeys(KEYW) Then 
+                        goUp(1)
+                    end if
+                #Else
+                    if MultiKeys(KEYW) Then upKey()
+                #endif
+
+                If MultiKeys(KEYA) Then downKey()
+            #else
+                #ifdef SIDE_VIEW
+                    If MultiKeys(KEYQ) Then 
+                        upKey()
+                    else if MultiKeys(KEYW) Then 
+                        goUp(1)
+                    end if
+                #Else
+                    if MultiKeys(KEYW) Then upKey()
+                #endif
+                If MultiKeys(KEYA) Then downKey()
+                If MultiKeys(KEYSPACE) Then fireKey()
             #endif
-            If MultiKeys(KEYA) Then downKey()
-            If MultiKeys(KEYSPACE) Then fireKey()
         #endif
     #endif
 #else
@@ -131,6 +141,29 @@
                                 
                 If n bAND %10000 Then fireKey()
             #else
+                #ifdef JUMP_CONTINUOUS
+                    If n bAND %10000 Then fireKey()
+                    upKey()
+                #else
+                    #ifdef PREVENT_JUMP_ON_FIRE
+                        If n bAND %10000 Then shootPressed = 5
+                        If n bAND %1000 Then upKey()
+                        If n bAND %100 Then downKey()
+                    #else
+                        If n bAND %1000 Then upKey()
+                        If n bAND %100 Then downKey()
+                        If n bAND %10000 Then fireKey()
+                    #endif
+                #endif
+            #endif
+        #else
+            If n bAND %10 Then leftKey(1)
+            If n bAND %1 Then rightKey(1)
+            
+            #ifdef JUMP_CONTINUOUS
+                If n bAND %10000 Then fireKey()
+                upKey()
+            #else
                 #ifdef PREVENT_JUMP_ON_FIRE
                     If n bAND %10000 Then shootPressed = 5
                     If n bAND %1000 Then upKey()
@@ -140,19 +173,6 @@
                     If n bAND %100 Then downKey()
                     If n bAND %10000 Then fireKey()
                 #endif
-            #endif
-        #else
-            If n bAND %10 Then leftKey(1)
-            If n bAND %1 Then rightKey(1)
-            
-            #ifdef PREVENT_JUMP_ON_FIRE
-                If n bAND %10000 Then shootPressed = 5
-                If n bAND %1000 Then upKey()
-                If n bAND %100 Then downKey()
-            #else
-                If n bAND %1000 Then upKey()
-                If n bAND %100 Then downKey()
-                If n bAND %10000 Then fireKey()
             #endif
         #endif
     Else
@@ -187,6 +207,29 @@
                                 
                 If MultiKeys(keyArray(FIRE)) Then fireKey()
             #else
+                #ifdef JUMP_CONTINUOUS
+                    If MultiKeys(keyArray(FIRE)) Then fireKey()
+                    upKey()
+                #else
+                    #ifdef PREVENT_JUMP_ON_FIRE
+                        If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
+                        If MultiKeys(keyArray(UP)) Then upKey()
+                        If MultiKeys(keyArray(DOWN)) Then downKey()
+                    #else
+                        If MultiKeys(keyArray(UP)) Then upKey()
+                        If MultiKeys(keyArray(DOWN)) Then downKey()
+                        If MultiKeys(keyArray(FIRE)) Then fireKey()
+                    #endif
+                #endif
+            #endif
+        #else
+            If MultiKeys(keyArray(LEFT)) Then leftKey(1)
+            If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
+
+            #ifdef JUMP_CONTINUOUS
+                If MultiKeys(keyArray(FIRE)) Then fireKey()
+                upKey()
+            #else
                 #ifdef PREVENT_JUMP_ON_FIRE
                     If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
                     If MultiKeys(keyArray(UP)) Then upKey()
@@ -196,19 +239,6 @@
                     If MultiKeys(keyArray(DOWN)) Then downKey()
                     If MultiKeys(keyArray(FIRE)) Then fireKey()
                 #endif
-            #endif
-        #else
-            If MultiKeys(keyArray(LEFT)) Then leftKey(1)
-            If MultiKeys(keyArray(RIGHT)) Then rightKey(1)
-
-            #ifdef PREVENT_JUMP_ON_FIRE
-                If MultiKeys(keyArray(FIRE)) Then shootPressed = 5
-                If MultiKeys(keyArray(UP)) Then upKey()
-                If MultiKeys(keyArray(DOWN)) Then downKey()
-            #else
-                If MultiKeys(keyArray(UP)) Then upKey()
-                If MultiKeys(keyArray(DOWN)) Then downKey()
-                If MultiKeys(keyArray(FIRE)) Then fireKey()
             #endif
         #endif
     End If

@@ -96,6 +96,7 @@
   <property name="itemsMulticolor" type="bool" value="true"/>
   <property name="jetPackFuel" type="int" value="0"/>
   <property name="jumpCancelAllowed" type="bool" value="false"/>
+  <property name="jumpContinous" type="bool" value="false"/>
   <property name="jumpDouble" type="bool" value="false"/>
   <property name="jumpFallingSprite" type="bool" value="true"/>
   <property name="jumpOnEnemies" type="bool" value="true"/>

@@ -421,9 +421,7 @@ Sub upKey()
 
         #ifdef LADDERS_ANIMATION_ENABLED
             #ifdef CONSOLE_MODE
-                if not goUp(0) then
-                    jump()
-                end if
+                if not goUp(0) then jump()
             #else
                 If checkIsLadder(protaY + 3, 1) Then
                     if not horizontalAxisKeyPressed then protaDirection = 8
@@ -483,13 +481,7 @@ Sub downKey()
         #endif
 
         If canMoveDown() Then
-            If protaY >= MAX_SCREEN_BOTTOM Then
-                #ifndef LEVELS_MODE
-                    #ifndef ARCADE_MODE
-                        moveScreen = 2
-                    #endif
-                #endif
-            Else
+            If protaY < MAX_SCREEN_BOTTOM Then
                 protaY = protaY + 1
 
                 if not horizontalAxisKeyPressed then
@@ -500,6 +492,12 @@ Sub downKey()
                         protaTile = PROTA_TILE_DOWN
                     End If
                 end if
+            #ifndef LEVELS_MODE
+                #ifndef ARCADE_MODE
+                    Else
+                        moveScreen = 2
+                #endif
+            #endif
             End If
         #ifdef PERMANENT_MOVEMENT_ENABLED
         Else

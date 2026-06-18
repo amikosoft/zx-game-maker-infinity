@@ -298,6 +298,7 @@ multicolorEnabled = False
 multicolorItem = False
 
 jumpFallingSprite = False
+jumpContinous = False
 
 # Hud configuration
 hudShowProtaEnergyBar = False
@@ -459,6 +460,8 @@ if 'properties' in data:
             jumpWalls = property['value'] 
         elif property['name'] == 'jumpFallingSprite':
             jumpFallingSprite = property['value'] 
+        elif property['name'] == 'jumpContinous':
+            jumpContinous = property['value']
         elif property['name'] == 'jumpCancelAllowed':
             jumpCancelAllowed = property['value'] 
         elif property['name'] == 'livesMode':
@@ -1218,32 +1221,37 @@ if gameMapRooms:
 configStr += "const MAP_X_ADJUSTMENT as ubyte = " + str(gameMapXAdjustment) + "\n"
 configStr += "const MAP_Y_ADJUSTMENT as ubyte = " + str(gameMapYAdjustment) + "\n"    
 
-configStr += "#ifdef SIDE_VIEW\n"
-configStr += "  Const jumpStopValue As Ubyte = 255\n"
-configStr += "  Dim landed As Ubyte = 1\n"
-configStr += "  Dim jumpCurrentKey As Ubyte = jumpStopValue\n"
-configStr += "  #ifndef JETPACK_FUEL\n"
+# Zona de salto
+if gameView != 'overhead':
+    configStr += "#ifdef SIDE_VIEW\n"
+    configStr += "  Const jumpStopValue As Ubyte = 255\n"
+    configStr += "  Dim landed As Ubyte = 1\n"
+    configStr += "  Dim jumpCurrentKey As Ubyte = jumpStopValue\n"
+    configStr += "  #ifndef JETPACK_FUEL\n"
 
-if jumpWalls == True:
-    configStr += "#define WALL_JUMP\n"
+    if jumpWalls:
+        configStr += "#define WALL_JUMP\n"
 
-if jumpFallingSprite:
-    configStr += "#define JUMP_FALLING_SPRITE\n"
+    if jumpFallingSprite:
+        configStr += "#define JUMP_FALLING_SPRITE\n"
 
-if duobleJump == True:
-    configStr += "#define DOUBLE_JUMP\n"
-    configStr += "Dim otherJump As Ubyte = 0\n"
+    if jumpContinous:
+        configStr += "#define JUMP_CONTINUOUS\n"
 
-if jumpCancelAllowed == True:
-    configStr += "#define JUMP_CANCEL\n"
-    
-configStr += "    Const jumpStepsCount As Ubyte = " + str(jumpArrayCount) + "\n"
-configStr += "    Dim jumpArray(jumpStepsCount - 1) As Byte = " + jumpArray + "\n"
-configStr += "  #else\n"
-configStr += "    Const jumpStepsCount As Ubyte = JETPACK_FUEL\n"
-configStr += "    Dim jumpEnergy As Ubyte = jumpStepsCount\n"
-configStr += "  #endif\n"
-configStr += "#endif\n"
+    if duobleJump == True:
+        configStr += "#define DOUBLE_JUMP\n"
+        configStr += "Dim otherJump As Ubyte = 0\n"
+
+    if jumpCancelAllowed == True:
+        configStr += "#define JUMP_CANCEL\n"
+        
+    configStr += "    Const jumpStepsCount As Ubyte = " + str(jumpArrayCount) + "\n"
+    configStr += "    Dim jumpArray(jumpStepsCount - 1) As Byte = " + jumpArray + "\n"
+    configStr += "  #else\n"
+    configStr += "    Const jumpStepsCount As Ubyte = JETPACK_FUEL\n"
+    configStr += "    Dim jumpEnergy As Ubyte = jumpStepsCount\n"
+    configStr += "  #endif\n"
+    configStr += "#endif\n"
 
 
 if bulletType == 'boomerang':

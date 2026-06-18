@@ -347,6 +347,11 @@
                     "value": false
                 },
                 {
+                    "name": "jumpContinous",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "adventureTextsBackgroundColor",
                     "type": "int",
                     "value": 0

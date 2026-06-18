@@ -110,11 +110,13 @@ End Sub
             keyArray(RIGHT) = LeerTecla()
             Print AT 8,20;REDEFINE_X
 
-            keyArray(UP) = LeerTecla()
-            Print AT 10,20;REDEFINE_X
+            #ifndef JUMP_CONTINUOUS
+                keyArray(UP) = LeerTecla()
+                Print AT 10,20;REDEFINE_X
 
-            keyArray(DOWN) = LeerTecla()
-            Print AT 12,20;REDEFINE_X
+                keyArray(DOWN) = LeerTecla()
+                Print AT 12,20;REDEFINE_X
+            #endif
 
             keyArray(FIRE) = LeerTecla()
             Print AT 14,20;REDEFINE_X
@@ -140,11 +142,13 @@ End Sub
             Print AT 10,10;REDEFINE_RIGHT
             keyArray(RIGHT) = LeerTecla()
             
-            Print AT 11,10;REDEFINE_UP
-            keyArray(UP) = LeerTecla()
-            
-            Print AT 12,10;REDEFINE_DOWN
-            keyArray(DOWN) = LeerTecla()
+            #ifndef JUMP_CONTINUOUS
+                Print AT 11,10;REDEFINE_UP
+                keyArray(UP) = LeerTecla()
+
+                Print AT 12,10;REDEFINE_DOWN
+                keyArray(DOWN) = LeerTecla()
+            #endif
             
             Print AT 13,10;REDEFINE_FIRE
             keyArray(FIRE) = LeerTecla()
