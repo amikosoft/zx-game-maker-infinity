@@ -26,11 +26,13 @@ Sub mapDraw(withHud as ubyte)
         multicolorItem(0) = 0
     #endif
 
-    if screenIsDark then
-        SetTileset(@darkTileSet(0,0))
-    else
-        SetTileset(@tileSet(0,0))
-    end if
+    #ifdef SCREEN_DARK_ENABLED
+        if screenIsDark then
+            SetTileset(@darkTileSet(0,0))
+        else
+            SetTileset(@tileSet(0,0))
+        end if
+    #endif
 
     #ifdef FULL_SCREEN_CHANGE_ANIMATION
         #ifdef SCREEN_ATTRIBUTES

@@ -90,6 +90,10 @@ Dim enemyModeBucle, enemyColBucle, enemyLinBucle, enemyColIniBucle, enemyLinIniB
 Dim enemyPlatformBucle as byte
 #endif
 
+#ifdef ENEMIES_RANDOM_MOVEMENTS
+Dim enemyChangeModeTimer as ubyte = 255
+#endif
+
 Sub moveEnemies()
     #ifdef PLATFORM_MOVEABLE
         isOnPlatform = 0
@@ -101,8 +105,13 @@ Sub moveEnemies()
 
     enemiesFrame = enemiesFrame + 1
     if enemiesFrame > 9 Then enemiesFrame = 1
-    
+
+    #ifdef ENEMIES_RANDOM_MOVEMENTS
+    enemyChangeModeTimer = enemyChangeModeTimer - 1
+    #endif
+
     If enemiesScreen Then
+        isPlayerBucle = 0
         For enemyId=0 To enemiesScreen - 1
             if firstTimeEnemiesScreen Then 
                 #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
@@ -199,7 +208,7 @@ Sub moveEnemies()
                         end if
                         decompressedEnemiesScreen(enemyId, ENEMY_ALIVE) = enemyLiveBucle
                         
-                        if enemyModeBucle = 2 Then
+                        if enemyModeBucle = ENEMY_MODE_PURSUIT Then
                             enemyColBucle = enemyColIniBucle
                             enemyLinBucle = enemyLinIniBucle
                             GO TO EnemiesFinal
@@ -243,6 +252,34 @@ Sub moveEnemies()
             enemyColEndBucle = decompressedEnemiesScreen(enemyId, ENEMY_COL_END)
             enemyLinEndBucle = decompressedEnemiesScreen(enemyId, ENEMY_LIN_END)
             
+            #ifdef ENEMIES_RANDOM_MOVEMENTS
+                #ifdef ENEMIES_PLATFORM_ENABLED
+                    if not enemyPlatformBucle and not enemyChangeModeTimer then
+                        if enemyModeBucle < ENEMY_MODE_TRAP_ALL and enemyModeBucle <> ENEMY_MODE_ONEDIRECTION then
+                            If enemyColIniBucle <> enemyColBucle and enemyColEndBucle <> enemyColBucle Then
+                                horizontalDirectionBucle = horizontalDirectionBucle * -1
+                            End If
+
+                            If enemyLinIniBucle <> enemyLinBucle and enemyLinEndBucle <> enemyLinBucle Then
+                                verticalDirectionBucle = verticalDirectionBucle * -1
+                            End If
+                        end if
+                    end if
+                #else
+                    if tile > 16 and enemyModeBucle <> ENEMY_MODE_ONEDIRECTION and not enemyChangeModeTimer then
+                        if enemyModeBucle < ENEMY_MODE_TRAP_ALL and enemyModeBucle <> ENEMY_MODE_ONEDIRECTION then
+                            If enemyColIniBucle <> enemyColBucle and enemyColEndBucle <> enemyColBucle Then
+                                horizontalDirectionBucle = horizontalDirectionBucle * -1
+                            End If
+
+                            If enemyLinIniBucle <> enemyLinBucle and enemyLinEndBucle <> enemyLinBucle Then
+                                verticalDirectionBucle = verticalDirectionBucle * -1
+                            End If
+                        end if
+                    end if
+                #endif
+            #endif
+
             if enemyModeBucle < ENEMY_MODE_PURSUIT Then
                 If horizontalDirectionBucle Then
                     If enemyColIniBucle = enemyColBucle Or enemyColEndBucle = enemyColBucle Then
@@ -386,7 +423,7 @@ Sub moveEnemies()
                                 BEEP .01, 4
                             end if
                         #endif
-                    Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle <= PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle <= PLAYER_BOUNDS_LEFT Then
+                    Elseif enemyLinBucle >= PLAYER_BOUNDS_BOTTOM or enemyLinBucle < PLAYER_BOUNDS_TOP or enemyColBucle >= PLAYER_BOUNDS_RIGHT or enemyColBucle <= PLAYER_BOUNDS_LEFT Then
                         enemyColBucle = enemyColIniBucle
                         enemyLinBucle = enemyLinIniBucle
                         verticalDirectionBucle = 0
@@ -618,6 +655,12 @@ Sub moveEnemies()
         firstTimeEnemiesScreen = 0
         ' #endif
     End if
+
+    #ifdef ENEMIES_RANDOM_MOVEMENTS
+        if not enemyChangeModeTimer Then
+            enemyChangeModeTimer = 100 + (enemiesFrame*enemiesFrame)
+        end if
+    #endif
 End Sub
 
 ' Sub checkProtaCollision(enemyId As Ubyte, enemyX0 As Ubyte, enemyY0 As Ubyte, enemyLive As Ubyte)

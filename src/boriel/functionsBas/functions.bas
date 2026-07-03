@@ -293,48 +293,39 @@ function isSolidTileByColLin(col as ubyte, lin as ubyte) as ubyte
     
     if tile < 1 or tile > ENEMY_DOOR_TILE then return 0
     
-    ' if tile = FADE_TILE or tile = (FADE_TILE + 1) Then
-    '     if timeToBreakTile then timeToBreakTile = timeToBreakTile - 1
-
-    '     if not timeToBreakTile Then
-    '         tile = tile + 1
-    '         if tile > (FADE_TILE + 1) Then
-
-    '         end if
-    '     end if
-    ' else
-    #ifdef KEYS_ENABLED
-    If tile = DOOR_TILE Then
-        If currentKeys Then
-            currentKeys = currentKeys - 1
-            
-            #ifdef LEVELS_MODE
-                moveScreen = 2
-            #Else
-                screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) = 0
-                removeTilesFromScreen(DOOR_TILE)
-            #endif
-            
-            printHud()
-            BeepFX_Play(4)
-            #ifdef MESSAGES_ENABLED
-                #ifdef HUD_SHOW_DOOR_MESSAGE
-                    Else
-                        printMessage(TEXT_NEED_KEYS, 2, 0)
+    if isPlayerBucle then
+        #ifdef KEYS_ENABLED
+        If tile = DOOR_TILE Then
+            If currentKeys Then
+                currentKeys = currentKeys - 1
+                
+                #ifdef LEVELS_MODE
+                    moveScreen = 2
+                #Else
+                    screenObjects(currentScreen, SCREEN_OBJECT_DOOR_INDEX) = 0
+                    removeTilesFromScreen(DOOR_TILE)
                 #endif
-            #endif
-        End If
-    End If
-    #endif
-
-    #ifdef MESSAGES_ENABLED
-        #ifdef HUD_SHOW_WALL_MESSAGE
-            If tile = ENEMY_DOOR_TILE Then
-                printMessage(TEXT_KILL_ALL, 2, 0)
+                
+                printHud()
+                BeepFX_Play(4)
+                #ifdef MESSAGES_ENABLED
+                    #ifdef HUD_SHOW_DOOR_MESSAGE
+                        Else
+                            printMessage(TEXT_NEED_KEYS, 2, 0)
+                    #endif
+                #endif
             End If
-        #endif    
-    #endif
-    ' end if
+        End If
+        #endif
+
+        #ifdef MESSAGES_ENABLED
+            #ifdef HUD_SHOW_WALL_MESSAGE
+                If tile = ENEMY_DOOR_TILE Then
+                    printMessage(TEXT_KILL_ALL, 2, 0)
+                End If
+            #endif    
+        #endif
+    end if
     
     return tile
 end function
@@ -485,6 +476,11 @@ end sub
 sub debugC(value as BYTE)
     PRINT AT 0, 10; "  "
     PRINT AT 0, 10; value
+end sub
+
+sub debugD(value as uinteger)
+    PRINT AT 0, 15; "      "
+    PRINT AT 0, 15; value
 end sub
 
 ' sub debugD(value as UBYTE)

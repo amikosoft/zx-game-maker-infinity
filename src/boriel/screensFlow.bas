@@ -542,9 +542,8 @@ Sub swapScreen(waitReady as ubyte)
     dim mustPrintHud as ubyte = waitReady
     '     #endif
     ' #endif
-
     dim offsetTmp as uinteger = screensOffsets(currentScreen)
-
+    
     SetBank(fxBank)
     dzx0Standard(MAPS_DATA_ADDRESS + offsetTmp, arrayBasePtr(decompressedMap))
     SetBank(gameBank)
@@ -581,7 +580,7 @@ Sub swapScreen(waitReady as ubyte)
         #endif
     #endif
 
-     #ifdef IN_GAME_TEXT_ENABLED
+    #ifdef IN_GAME_TEXT_ENABLED
         'esto es para agilizar la busqueda de textos
         for texto=0 to AVAILABLE_ADVENTURES
             if textsCoord(texto, 0) = currentScreen Then 

@@ -40,7 +40,8 @@
                 "constant",
                 "accelerated",
                 "smooth",
-                "mini"
+                "mini",
+                "levitate"
             ],
             "valuesAsFlags": false
         },
@@ -473,6 +474,11 @@
                     "type": "string",
                     "value": "Always shown",
                     "propertyType": "itemsBehaviour"
+                },
+                {
+                    "name": "enemiesRandomMovements",
+                    "type": "bool",
+                    "value": false
                 },
                 {
                     "name": "enemiesRespawn",

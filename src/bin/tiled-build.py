@@ -241,6 +241,7 @@ enemiesShootOnlyLookingPlayer = False
 enemiesSound = False
 enemiesTrapShowWhileStatic = False
 enemiesCollisionProtaDamage = False
+enemiesRandomMovements = False
 
 graphicsSpriteColors = False
 playerColor = 0
@@ -494,6 +495,8 @@ if 'properties' in data:
             enemiesPursuitCollide = property['value']
         elif property['name'] == 'enemiesCollisionProtaDamage':
             enemiesCollisionProtaDamage = property['value']
+        elif property['name'] == 'enemiesRandomMovements':
+            enemiesRandomMovements = property['value']
         elif property['name'] == 'enemiesShootSpeed':
             if property['value'] == 'slow':
                 enemiesShootSpeed = 1
@@ -789,6 +792,13 @@ elif jumpType == 'mini':
     else:
         jumpArrayCount = 5
         jumpArray = "{-2, -2, -2, 0, 0}"
+elif jumpType == 'levitate':
+    if gravityLow == True:
+        jumpArrayCount = 14
+        jumpArray = "{-1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}"
+    else:
+        jumpArrayCount = 12
+        jumpArray = "{-2, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}"
 
 if unshiftedGraphics:
     configStr += "#DEFINE STORE_UNSHIFTED_SPRITES\n"
@@ -1072,7 +1082,7 @@ for layer in data['layers']:
             dataCorrected = [x - 1 for x in screen['data']]    
 
             for i in range(len(dataCorrected)):
-                if dataCorrected[i] > 255:
+                if int(dataCorrected[i]) > 255:
                     dataCorrected[i] -= darkTilesOffset
                     
             screens.append(array.array('B', dataCorrected))
@@ -1440,10 +1450,6 @@ if fontCustom != 'default':
 with open("output/screensStatus.bin", "wb") as f:
     f.write(bytearray([0] * screensCount))
 
-with open("output/decompressedMap.bin", "wb") as f:
-    f.write(bytearray([0] * len(screens[0])))
-
-
 if useBreakableTile == 1:
     configStr += "#DEFINE USE_BREAKABLE_TILE\n"
     with open("output/brokenTiles.bin", "wb") as f:
@@ -1613,6 +1619,9 @@ if enemiesPursuit == 1:
 if enemiesCollisionProtaDamage:
     configStr += "#DEFINE ENEMY_COLLISION_PROTA_DAMAGE\n"
 
+if enemiesRandomMovements:
+    configStr += "#DEFINE ENEMIES_RANDOM_MOVEMENTS\n"
+
 if enemiesAlert == 1:
     configStr += "#DEFINE ENEMIES_ALERT_ENABLED\n"
     configStr += "#DEFINE ENEMIES_ALERT_DISTANCE " + str(enemiesAlertDistance) + "\n"
@@ -1686,18 +1695,14 @@ for layer in data['layers']:
                             elif object['properties'][prop]['name'] == 'itemAction':
                                 adventureItem = object['properties'][prop]['value']
                             elif object['properties'][prop]['name'] == 'adventureState':
-                                isAdventure = True
                                 adventureState = object['properties'][prop]['value']
 
-                                if adventureState > maxAdventureState:
-                                    maxAdventureState = adventureState
+                                if adventureState > 0:
+                                    isAdventure = True
+                                    if adventureState > maxAdventureState:
+                                        maxAdventureState = adventureState
 
                         if len(adventureText) >0:
-                            if adventureItem == 1 and adventureState == 0:
-                                print(adventureItem)
-                                print(adventureState)
-                                print(object['properties'])
-                                exitWithErrorMessage('Cannot set an item to text without adventure state')
                             texts.append([str(screenId), str(xScreenPosition+(widthSkip*2)), str(yScreenPosition+(heightSkip*2)), adventureText, adventureItem, adventureState])
 
                             if len(texts) > 250:
@@ -1791,13 +1796,13 @@ for layer in data['layers']:
                             if not 'finalScreen' in attributesSort:
                                 attributesSort.append('finalScreen')
                         elif object['properties'][prop]['name'] == 'dark':
-                            screenDarkEnabled = True
                             if object['properties'][prop]['value'] == True:
                                 attributes[screenId]["dark"] = 1
+                                screenDarkEnabled = True
                             else:
                                 attributes[screenId]["dark"] = 0
 
-                            if not 'dark' in attributesSort:
+                            if screenDarkEnabled and not 'dark' in attributesSort:
                                 attributesSort.append('dark')
                         elif object['properties'][prop]['name'] == 'teleportTo':
                             if teleportEnabled:

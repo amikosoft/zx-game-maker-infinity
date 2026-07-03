@@ -260,7 +260,7 @@ class Sizes:
             self.CUSTOM_FONT_STRING()
         ], "0")
 
-        self.__printSizesArraySum([self.TEXTS_COORD_DATA_STRING(), self.TEXTS_DATA_STRING()], "3")
+        self.__printSizesArraySum([self.TEXTS_DATA_STRING()], "3")
 
         self.__printSizesArraySum([self.TITLE_SCREEN_STRING(), self.ENDING_SCREEN_STRING(), self.HUD_SCREEN_STRING(), self.GAMEOVER_SCREEN_STRING(), self.GAMEMAP_SCREEN_STRING(), self.CREDITS_SCREEN_STRING(), self.REDEFINE_SCREEN_STRING(), self.INSTRUCTIONS_SCREEN_STRING(), self.HUD2_SCREEN_STRING(), self.ADVENTURETEXTS_SCREEN_STRING(), self.INTRO_SCREEN_STRING()], "7")
         

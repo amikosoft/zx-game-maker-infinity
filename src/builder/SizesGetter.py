@@ -76,7 +76,9 @@ class SizesGetter:
         return sizes
     
     def __getFileSize(self, file):
-        return os.path.getsize(Path(file))
+        if os.path.isfile(Path(file)):
+            return os.path.getsize(Path(file))
+        return 0
 
     def __getOutputFileSize(self, file):
         return self.__getFileSize(self.outputFolder + file)

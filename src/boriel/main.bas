@@ -59,22 +59,14 @@
 
 'graphicsInitializer.bas
 InitGFXLib()
+
+
 SetTileset(@tileSet(0,0))
+
 
 #ifdef CUSTOM_FONT_ENABLED
     DIM customfont(95,7) AS UBYTE at CUSTOM_FONT_ADDRESS
     POKE UInteger 23606,@customfont(0,0)-256
-    ' #ifdef CUSTOM_FONT_BOLD_ALL
-    '     POKE UInteger 23606,@Glow(0,0)-256
-    ' #endif
-    
-    ' #ifdef CUSTOM_FONT_BOLD_MAYUS
-    '     POKE UInteger 23606,@Fuente(0,0)-256
-    ' #endif
-    
-    ' #ifdef CUSTOM_FONT_MEDIEVAL
-    '     POKE UInteger 23606,@Clasico(0,0)-256
-    ' #endif
 #endif
 
 #ifdef ULA_PLUS_VALIDATION

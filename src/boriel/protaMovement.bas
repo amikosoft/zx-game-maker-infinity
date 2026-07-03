@@ -83,7 +83,7 @@ Function canMoveDown() As Ubyte
     #ifdef SIDE_VIEW
         If checkIsLadder(protaY + 4, 0) then Return 0
 
-        if protaY bAnd 1 then protaY = protaY + 1
+        'if protaY bAnd 1 then protaY = protaY - 1
 
         If CheckCollision(protaX, protaY + 2) Then 
             If not CheckCollision(protaX, protaY) Then Return 0
@@ -510,7 +510,9 @@ Sub downKey()
         #ifdef JUMP_CANCEL
             jumpCurrentKey = jumpStopValue
         #endif
-        
+
+        if not screenIsTerrain and protaY bAnd 1 then protaY = protaY + 1
+
         If not CheckCollision(protaX, protaY + 1) Then
             #ifdef SOUND_LADDERS_ENABLED
                 #ifdef SCREEN_CENITAL_ENABLED
@@ -1079,6 +1081,8 @@ Sub checkObjectContact(withoutFire as ubyte)
 End Sub
 
 Sub protaMovement()
+    isPlayerBucle = 1
+
     #ifdef LIVES_MODE_GRAVEYARD
         #ifdef ENERGY_ENABLED
             if Not currentEnergy and invincible Then Return

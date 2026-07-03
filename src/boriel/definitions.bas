@@ -259,7 +259,10 @@ Const SCREEN_STATUS_COMPLETED as ubyte = 3
     SetBank(fxBank)
     dim textToDisplay(AVAILABLE_TEXTS, TEXTS_SIZE) as ubyte at TEXTS_DATA_ADDRESS
     SetBank(gameBank)
-    dim currentAdventureState as ubyte = 0
+
+    #ifdef IS_TEXT_ADVENTURE
+        dim currentAdventureState as ubyte = 0
+    #endif
     dim currentScreenFirstText as ubyte = 0
 #endif
 
@@ -282,6 +285,8 @@ dim isActionPerformed as ubyte = 0
         dim multicolorItem(1) as ubyte
     #endif
 #endif
+
+Dim isPlayerBucle as ubyte = 0
 
 #ifdef SCREEN_ATTRIBUTES
     #ifdef TELEPORT_ENABLED
