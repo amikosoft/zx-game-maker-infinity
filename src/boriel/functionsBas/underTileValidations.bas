@@ -53,7 +53,19 @@
                             
                             if not tileStatus then
                                 #ifdef SCREEN_ATTRIBUTES
-                                    SetTile(currentTileBackground, currentScreenBackground, c, lin)
+                                    #ifdef SCREEN_TILE_ENABLED
+                                        #ifdef SCREEN_BACKGROUND_ENABLED
+                                            SetTile(currentTileBackground, currentScreenBackground, c, lin)
+                                        #else
+                                            SetTile(currentTileBackground, BACKGROUND_ATTRIBUTE, c, lin)
+                                        #endif
+                                    #else
+                                        #ifdef SCREEN_BACKGROUND_ENABLED
+                                            SetTile(0, currentScreenBackground, c, lin)
+                                        #else
+                                            SetTile(0, BACKGROUND_ATTRIBUTE, c, lin)
+                                        #endif
+                                    #endif 
                                 #else
                                     SetTile(0, BACKGROUND_ATTRIBUTE, c, lin)
                                 #endif

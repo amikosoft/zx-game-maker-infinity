@@ -259,8 +259,12 @@ function allEnemiesKilled() as ubyte
 end function
 
 Function attrWithBackground(attr As Ubyte) As Ubyte
-     #ifdef SCREEN_ATTRIBUTES
-        Dim backgroundAttr as ubyte = currentScreenBackground
+    #ifdef SCREEN_ATTRIBUTES
+        #ifdef SCREEN_BACKGROUND_ENABLED
+            Dim backgroundAttr as ubyte = currentScreenBackground
+        #else
+            Dim backgroundAttr as ubyte = BACKGROUND_ATTRIBUTE
+        #endif
     #else
         Dim backgroundAttr as ubyte = BACKGROUND_ATTRIBUTE
     #endif
@@ -403,7 +407,19 @@ sub removeTilesFromScreen(tile as ubyte)
         for tmpY = SKIP_HEIGHT_SIZE to SKIP_HEIGHT_SIZE + screenHeight - 1
             if GetTile(tmpX, tmpY) = tile then
                 #ifdef SCREEN_ATTRIBUTES
-                    SetTileChecked(currentTileBackground, currentScreenBackground, tmpX, tmpY)
+                    #ifdef SCREEN_TILE_ENABLED
+                        #ifdef SCREEN_BACKGROUND_ENABLED
+                            SetTileChecked(currentTileBackground, currentScreenBackground, tmpX, tmpY)
+                        #else
+                            SetTileChecked(currentTileBackground, BACKGROUND_ATTRIBUTE, tmpX, tmpY)
+                        #endif
+                    #else
+                        #ifdef SCREEN_BACKGROUND_ENABLED
+                            SetTileChecked(0, currentScreenBackground, tmpX, tmpY)
+                        #else
+                            SetTileChecked(0, BACKGROUND_ATTRIBUTE, tmpX, tmpY)
+                        #endif
+                    #endif
                 #else
                     SetTileChecked(0, BACKGROUND_ATTRIBUTE, tmpX, tmpY)
                 #endif
@@ -456,9 +472,9 @@ Sub SetTileWithBackground(tile as uByte, x as ubyte, y as ubyte)
         SetTile(tile, tileAttrWithBackground(tile), x, y)
     #else
         #ifdef SCREEN_DARK_ENABLED
-            SetTile(tile, tileAttrSet(tile), cordX, cordY)
+            SetTile(tile, tileAttrSet(tile), x, y)
         #Else
-            SetTile(tile, attrSet(tile), cordX, cordY)
+            SetTile(tile, attrSet(tile), x, y)
         #endif
     #endif
 end sub

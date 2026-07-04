@@ -293,9 +293,15 @@ Dim isPlayerBucle as ubyte = 0
     Dim currentTeleportTo as ubyte = 0
     #endif
     Dim screenAttributes(SCREENS_COUNT, SCREEN_ATTRIBUTES_TOTAL) As Ubyte at SCREEN_ATTRS_DATA_ADDRESS
-    Dim currentScreenBackground as ubyte = 0
-    Dim currentTileBackground as ubyte = 0
+    
+    #ifdef SCREEN_BACKGROUND_ENABLED
+        Dim currentScreenBackground as ubyte = 0
+    #EndIf
 
+    #ifdef SCREEN_TILE_ENABLED
+        Dim currentTileBackground as ubyte = 0
+    #EndIf
+    
     #ifdef SCREEN_DARK_ENABLED
     Dim screenIsDark as ubyte = 0
     #endif

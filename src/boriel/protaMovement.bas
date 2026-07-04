@@ -1064,7 +1064,19 @@ Sub checkObjectContact(withoutFire as ubyte)
                     validaTexto(tile)
                     
                     #ifdef SCREEN_ATTRIBUTES
-                        if withoutFire then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        #ifdef SCREEN_TILE_ENABLED
+                            #ifdef SCREEN_BACKGROUND_ENABLED
+                                if withoutFire then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                            #else
+                                if withoutFire then SetTileChecked(currentTileBackground, BACKGROUND_ATTRIBUTE, c, l)
+                            #endif
+                        #else
+                            #ifdef SCREEN_BACKGROUND_ENABLED
+                                if withoutFire then SetTileChecked(0, currentScreenBackground, c, l)
+                            #else
+                                if withoutFire then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                            #endif
+                        #endif
                     #else
                         if withoutFire then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif
@@ -1072,7 +1084,19 @@ Sub checkObjectContact(withoutFire as ubyte)
             #else
                 If checkTileObject(GetTile(c, l), withoutFire) Then
                     #ifdef SCREEN_ATTRIBUTES
-                        if withoutFire then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                        #ifdef SCREEN_TILE_ENABLED
+                            #ifdef SCREEN_BACKGROUND_ENABLED
+                                if withoutFire then SetTileChecked(currentTileBackground, currentScreenBackground, c, l)
+                            #else
+                                if withoutFire then SetTileChecked(currentTileBackground, BACKGROUND_ATTRIBUTE, c, l)
+                            #endif
+                        #else
+                            #ifdef SCREEN_BACKGROUND_ENABLED
+                                if withoutFire then SetTileChecked(0, currentScreenBackground, c, l)
+                            #else
+                                if withoutFire then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
+                            #endif
+                        #endif
                     #else
                         if withoutFire then SetTileChecked(0, BACKGROUND_ATTRIBUTE, c, l)
                     #endif

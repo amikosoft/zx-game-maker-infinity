@@ -323,7 +323,7 @@ sub damageEnemy(enemyToKill as Ubyte)
                             'drawDrop(eneX, eneY)
                             for tx=eneX to (eneX + 1)
                                 for ty=eneY to (eneY + 1)
-                                    #ifdef SCREEN_ATTRIBUTES
+                                    #ifdef SCREEN_TILE_ENABLED
                                         if GetTile(tx, ty) = currentTileBackground Then 
                                             SetTileChecked(DROP_TILE, tileAttrWithBackground(DROP_TILE), tx, ty)
                                         end if

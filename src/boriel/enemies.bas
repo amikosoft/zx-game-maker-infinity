@@ -100,7 +100,11 @@ Sub moveEnemies()
     #endif
 
     #ifdef SPRITES_COLOR_ENABLED
-        Dim colorBucle as ubyte = currentScreenBackground
+        #ifdef SCREEN_BACKGROUND_ENABLED
+            Dim colorBucle as ubyte = currentScreenBackground
+        #else
+            Dim colorBucle as ubyte = BACKGROUND_ATTRIBUTE
+        #endif
     #endif 
 
     enemiesFrame = enemiesFrame + 1

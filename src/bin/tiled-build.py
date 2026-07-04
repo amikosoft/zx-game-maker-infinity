@@ -1875,10 +1875,10 @@ if musicEnabled == 1:
     #             f.write(bytearray([0]))
 
 # Atributos por pantalla seleccionados
-if screenAttributesEnabled and len(attributesSort) > 0:
-    if not 'hud2' in attributesSort and os.path.isfile(SCREENS_FOLDER + "hud2.scr"):
-        exitWithErrorMessage('hud2.scr file exists but is not in the screens attributes. Please add it to use this feature.')
+if not 'hud2' in attributesSort and os.path.isfile(SCREENS_FOLDER + "hud2.scr"):
+    exitWithErrorMessage('hud2.scr file exists but is not in the screens attributes. Please add it to use this feature.')
 
+if screenAttributesEnabled and len(attributesSort) > 0:
     configStr += "#DEFINE SCREEN_ATTRIBUTES\n"
 
     configStr += "Const SCREEN_ATTRIBUTES_TOTAL as ubyte = " + str(len(attributesSort) - 1) + "\n"

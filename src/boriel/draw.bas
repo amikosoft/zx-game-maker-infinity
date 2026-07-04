@@ -35,7 +35,7 @@ Sub mapDraw(withHud as ubyte)
     #endif
 
     #ifdef FULL_SCREEN_CHANGE_ANIMATION
-        #ifdef SCREEN_ATTRIBUTES
+        #ifdef SCREEN_TILE_ENABLED
             #ifdef PLAYER_COLOR_ENABLED
                 'FillWithTile(currentTileBackground, screenWidth, screenHeight, attrWithBackground(PLAYER_COLOR), SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
                 CleanWithTile(currentTileBackground, attrWithBackground(PLAYER_COLOR))
@@ -218,9 +218,25 @@ Sub drawTile(tile As Ubyte, x As Ubyte, y As Ubyte)
     #ifndef FULL_SCREEN_CHANGE_ANIMATION
         #ifdef SCREEN_ATTRIBUTES
             #ifdef PLAYER_COLOR_ENABLED
-                SetTile(currentTileBackground, attrWithBackground(PLAYER_COLOR), x, y)
+                #ifdef SCREEN_TILE_ENABLED
+                    SetTile(currentTileBackground, attrWithBackground(PLAYER_COLOR), x, y)
+                #else
+                    SetTile(0, attrWithBackground(PLAYER_COLOR), x, y)
+                #endif
             #else
-                SetTile(currentTileBackground, currentScreenBackground, x, y)
+                #ifdef SCREEN_TILE_ENABLED
+                    #ifdef SCREEN_BACKGROUND_ENABLED
+                        SetTile(currentTileBackground, currentScreenBackground, x, y)
+                    #else
+                        SetTile(currentTileBackground, BACKGROUND_ATTRIBUTE, x, y)
+                    #endif
+                #else
+                    #ifdef SCREEN_BACKGROUND_ENABLED
+                        SetTile(0, currentScreenBackground, x, y)
+                    #else
+                        SetTile(0, BACKGROUND_ATTRIBUTE, x, y)
+                    #endif
+                #endif
             #endif
         #else
             #ifdef PLAYER_COLOR_ENABLED

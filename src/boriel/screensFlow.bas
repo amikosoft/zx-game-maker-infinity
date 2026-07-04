@@ -392,7 +392,19 @@ Sub playGame()
                         
                         if tileMustHide then
                             #ifdef SCREEN_ATTRIBUTES
-                                SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                #ifdef SCREEN_TILE_ENABLED
+                                    #ifdef SCREEN_BACKGROUND_ENABLED
+                                        SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                    #else
+                                        SetTileAnimated(currentTileBackground, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                    #endif
+                                #else
+                                    #ifdef SCREEN_BACKGROUND_ENABLED
+                                        SetTileAnimated(0, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                    #else
+                                        SetTileAnimated(0, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                    #endif
+                                #endif
                             #else
                                 SetTileAnimated(0, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                             #endif
@@ -415,7 +427,19 @@ Sub playGame()
 
                             if tileMustHide then
                                 #ifdef SCREEN_ATTRIBUTES
-                                    SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                    #ifdef SCREEN_TILE_ENABLED
+                                        #ifdef SCREEN_BACKGROUND_ENABLED
+                                            SetTileAnimated(currentTileBackground, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                        #else
+                                            SetTileAnimated(currentTileBackground, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                        #endif
+                                    #else
+                                        #ifdef SCREEN_BACKGROUND_ENABLED
+                                            SetTileAnimated(0, currentScreenBackground, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                        #else
+                                            SetTileAnimated(0, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
+                                        #endif
+                                    #endif
                                 #else
                                     SetTileAnimated(0, BACKGROUND_ATTRIBUTE, animatedTilesPerScreen(i, 2), animatedTilesPerScreen(i, 3))
                                 #endif
@@ -578,14 +602,14 @@ Sub swapScreen(waitReady as ubyte)
     #ifdef SCREEN_ATTRIBUTES
         #ifdef SCREEN_BACKGROUND_ENABLED
             currentScreenBackground = screenAttributes(currentScreen, SCREEN_BACKGROUND)
-        #else
-            currentScreenBackground = BACKGROUND_ATTRIBUTE
+        ' #else
+        '     currentScreenBackground = BACKGROUND_ATTRIBUTE
         #endif
 
         #ifdef SCREEN_TILE_ENABLED
             currentTileBackground = screenAttributes(currentScreen, SCREEN_TILE)
-        #else
-            currentTileBackground = 0
+        ' #else
+        '     currentTileBackground = 0
         #endif
         
         #ifdef SCREEN_TELEPORTTO_ENABLED

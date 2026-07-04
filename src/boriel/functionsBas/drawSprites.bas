@@ -7,7 +7,11 @@
                         #ifdef PLAYER_COLOR_ENABLED
                             drawSpriteWithColor(protaTile, protaX, protaY, PLAYER_COLOR)
                         #Else
-                            drawSpriteWithColor(protaTile, protaX, protaY, currentScreenBackground)
+                            #ifdef SCREEN_BACKGROUND_ENABLED
+                                drawSpriteWithColor(protaTile, protaX, protaY, currentScreenBackground)
+                            #else
+                                drawSpriteWithColor(protaTile, protaX, protaY, BACKGROUND_ATTRIBUTE)
+                            #endif
                         #endif
                     #Else
                         Draw2x2Sprite(protaTile, protaX, protaY)
@@ -18,7 +22,11 @@
                     #ifdef PLAYER_COLOR_ENABLED
                         drawSpriteWithColor(protaTile, protaX, protaY, PLAYER_COLOR)
                     #Else
-                        drawSpriteWithColor(protaTile, protaX, protaY, currentScreenBackground)
+                        #ifdef SCREEN_BACKGROUND_ENABLED
+                            drawSpriteWithColor(protaTile, protaX, protaY, currentScreenBackground)
+                        #else
+                            drawSpriteWithColor(protaTile, protaX, protaY, BACKGROUND_ATTRIBUTE)
+                        #endif
                     #endif
                 #Else
                     Draw2x2Sprite(protaTile, protaX, protaY)
@@ -30,7 +38,11 @@
                     #ifdef PLAYER_COLOR_ENABLED
                         drawSpriteWithColor(protaTile, protaX, protaY, PLAYER_COLOR)
                     #Else
-                        drawSpriteWithColor(protaTile, protaX, protaY, currentScreenBackground)
+                        #ifdef SCREEN_BACKGROUND_ENABLED
+                            drawSpriteWithColor(protaTile, protaX, protaY, currentScreenBackground)
+                        #else
+                            drawSpriteWithColor(protaTile, protaX, protaY, BACKGROUND_ATTRIBUTE)
+                        #endif
                     #endif
                 #Else
                     Draw2x2Sprite(protaTile, protaX, protaY)
