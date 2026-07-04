@@ -1876,7 +1876,7 @@ if musicEnabled == 1:
 
 # Atributos por pantalla seleccionados
 if not 'hud2' in attributesSort and os.path.isfile(SCREENS_FOLDER + "hud2.scr"):
-    exitWithErrorMessage('hud2.scr file exists but is not in the screens attributes. Please add it to use this feature.')
+    exitWithErrorMessage('hud2.scr file exists but is not in the screens attributes. Please add it to use this feature or remove the file from the screens folder.')
 
 if screenAttributesEnabled and len(attributesSort) > 0:
     configStr += "#DEFINE SCREEN_ATTRIBUTES\n"
@@ -2028,6 +2028,11 @@ if adventureTexts and len(texts) > 0:
 
     print("ALL ADVENTURES LENGTH "+ str(len(texts)))
     print("ALL TEXTS LENGTH "+ str(len(allTexts)))
+else:
+    if os.path.isfile(SCREENS_FOLDER + "adventuretexts.scr"):
+        exitWithErrorMessage('adventuretexts.scr file exists but there are no texts in the map. Please add some texts to use this feature or rename this file to avoid using it.')
+
+
 
 # OPTIMIZAR
 if arcadeMode == 1: # Defino el array de posiciones iniciales del personaje principal
