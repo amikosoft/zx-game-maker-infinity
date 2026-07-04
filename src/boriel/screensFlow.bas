@@ -258,15 +258,6 @@ Sub playGame()
     
     #include "functionsBas/resetValues.bas"
     swapScreen(1)
-    
-    ' Let lastFrameProta = framec
-    ' Let lastFrameEnemies = framec
-    
-    ' #ifdef NEW_BEEPER_PLAYER
-    '     Let lastFrameBeep = framec
-    ' #endif
-    
-    ' enemiesScreen = enemiesPerScreen(currentScreen)
 
     Do
         #ifdef MULTICOLOR_ENABLED
@@ -554,9 +545,7 @@ Sub swapScreen(waitReady as ubyte)
 
     if screensStatus(currentScreen) < SCREEN_STATUS_COMPLETED then screensStatus(currentScreen) = SCREEN_STATUS_VISITED
 
-    ' #ifdef ENEMIES_RESPAWN_IN_SCREEN_ENABLED
-        firstTimeEnemiesScreen = 1
-    ' #endif
+    firstTimeEnemiesScreen = 1
 
     #ifdef SHOOTING_ENABLED
         bulletPositionX = 0
@@ -565,10 +554,6 @@ Sub swapScreen(waitReady as ubyte)
             shootPressed = 0
         #endif
     #endif
-
-    ' #ifdef BULLET_ENEMIES
-    '     enemyBulletPositionX = 0
-    ' #endif
     
     #ifdef ARCADE_MODE
         countItemsOnTheScreen()
@@ -753,14 +738,6 @@ Sub swapScreen(waitReady as ubyte)
     asm
     call CLEAR_SCREEN
     end asm
-
-    ' #ifdef FULL_SCREEN_CHANGE_ANIMATION
-    '     #ifdef SCREEN_ATTRIBUTES
-    '         FillWithTile(currentTileBackground, screenWidth, screenHeight, currentScreenBackground, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
-    '     #else
-    '         FillWithTile(0, screenWidth, screenHeight, BACKGROUND_ATTRIBUTE, SKIP_WIDTH_SIZE, SKIP_HEIGHT_SIZE)
-    '     #endif
-    ' #endif
 
     mapDraw(0)    
 End Sub

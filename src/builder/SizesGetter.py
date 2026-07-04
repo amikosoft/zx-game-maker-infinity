@@ -48,8 +48,8 @@ class SizesGetter:
         if self.useBreakableTile:
             sizes.BROKEN_TILES_DATA = self.__getOutputFileSize("brokenTiles.bin")
         
-        if self.screenAttrs:
-            sizes.SCREEN_ATTRS_DATA = self.__getOutputFileSize("screenAttributes.bin")
+        # if self.screenAttrs:
+        sizes.SCREEN_ATTRS_DATA = self.__getOutputFileSize("screenAttributes.bin")
         
         if Path(OUTPUT_FOLDER + "customFont.fnt").exists():
             sizes.CUSTOM_FONT = self.__getOutputFileSize("customFont.fnt")

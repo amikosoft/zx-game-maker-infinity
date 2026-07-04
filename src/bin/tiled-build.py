@@ -5,10 +5,20 @@ import json
 import math
 from collections import defaultdict
 import os
+from pathlib import Path
 from pprint import pprint
 import subprocess
 import sys
 import shutil
+
+# create function to get os separator
+def getOsSeparator():
+    if os.name == "nt":
+        return "\\"
+    else:
+        return "/"
+    
+SCREENS_FOLDER = str(Path("../assets/screens/")) + getOsSeparator()
 
 def exitWithErrorMessage(message):
     print('\n\n=====================================================================================')
@@ -267,7 +277,7 @@ adventureTextsBackgroundColor = 0
 
 unshiftedGraphics = False
 transpasableItems = 16
-screenAttributesEnabled = True
+screenAttributesEnabled = False
 
 playerReadyConfirmation = False
 fullChangeScreenAnimation = False
@@ -1173,11 +1183,15 @@ for layer in data['layers']:
                 initialMainCharacterX = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
                 initialMainCharacterY = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
 
+                if int(initialMainCharacterY) % 2 != 0:
+                    initialMainCharacterY = str(int(initialMainCharacterY) + 1)
+
+                print("Initial main character position: X: " + initialMainCharacterX + ", Y: " + initialMainCharacterY + ", Screen: " + str(initialScreen))
                 # if int(initialMainCharacterX) < 2 or int(initialMainCharacterX) > ((screenWidth*2)-8) or int(initialMainCharacterY) < 0 or int(initialMainCharacterY) > ((screenHeight*2)-8):
                 #     exitWithErrorMessage('Main character initial position is out of bounds. X: ' + initialMainCharacterX + ', Y: ' + initialMainCharacterY)
                 
                 if arcadeMode == 1: # Voy guardando en un array cuyo indice sea la pantalla y el valor sea la posición de inicio
-                    keys[str(screenId)] = [int(initialMainCharacterX+widthSkip), int(initialMainCharacterY+heightSkip)]
+                    keys[str(screenId)] = [int(initialMainCharacterX)+(widthSkip*2), int(initialMainCharacterY)+(heightSkip*2)]
 
                 if 'properties' in object and len(object['properties']) > 0:
                     for property in object['properties']:
@@ -1662,6 +1676,20 @@ for layer in data['layers']:
                 yScreenPosition = math.ceil(object['y'] / screenPixelsHeight) - 1
                 screenId = xScreenPosition + (yScreenPosition * mapCols)
 
+                if not screenId in attributes:
+                    attributes[screenId] = {
+                        "background": int(backgroundAttribute),
+                        "border": int(border),
+                        "tile": 0,
+                        "teleportTo": 0,
+                        "music": 0,
+                        "dark": 0,
+                        "cenital": 1 if gameViewSideDefault == 'overhead' else 0,
+                        "hud2": 0,
+                        "bossEnergy": 0,
+                        "finalScreen": 0
+                    }
+            
                 if object['type'] == '' and 'properties' in object:
                     objects[str(object['properties'][0]['value'])]['linEnd'] = str(int((object['y'] % (tileHeight * screenHeight))) // 4)
                     objects[str(object['properties'][0]['value'])]['colEnd'] = str(int((object['x'] % (tileWidth * screenWidth))) // 4)
@@ -1708,108 +1736,113 @@ for layer in data['layers']:
                             if len(texts) > 250:
                                 exitWithErrorMessage('Total text messages cannot be higher than 250')
                 elif object['type'] == 'screen_attributes':
-                    # screenAttributesEnabled = True
-                    if not screenId in attributes:
-                        attributes[screenId] = {
-                            "background": int(backgroundAttribute),
-                            "border": int(border),
-                            "tile": 0,
-                            "teleportTo": 0,
-                            "music": 0,
-                            "dark": 0,
-                            "cenital": 1 if gameViewSideDefault == 'overhead' else 0,
-                            "hud2": 0,
-                            "bossEnergy": 0,
-                            "finalScreen": 0
-                        }
-                    for prop in range(len(object['properties'])):
-                        if object['properties'][prop]['name'] == 'music':
-                            if object['properties'][prop]['value'] == 'music1' or object['properties'][prop]['value'] == 'music':
-                                attributes[screenId]["music"] = 1
-                                musicsSelected[0] = True
-                            elif object['properties'][prop]['value'] == 'music2':
-                                attributes[screenId]["music"] = 2
-                                musicsSelected[1] = True
-                            elif object['properties'][prop]['value'] == 'music3':
-                                attributes[screenId]["music"] = 3
-                                musicsSelected[2] = True
-                            elif object['properties'][prop]['value'] == 'title':
-                                attributes[screenId]["music"] = 4
-                                musicsSelected[3] = True
-                            elif object['properties'][prop]['value'] == 'ending':
-                                attributes[screenId]["music"] = 5
-                                musicsSelected[4] = True
-                            elif object['properties'][prop]['value'] == 'gameover':
-                                attributes[screenId]["music"] = 6
-                                musicsSelected[5] = True
-                            elif object['properties'][prop]['value'] == 'no_music':
-                                attributes[screenId]["music"] = 10
-                                musicsSelected[6] = True
-                            
-                            if not 'music' in attributesSort:
-                                attributesSort.append('music')
-                        elif object['properties'][prop]['name'] == 'background':
-                            attributes[screenId]["background"] = int(object['properties'][prop]['value'])
-
-                            if not 'background' in attributesSort:
-                                attributesSort.append('background')
-                        elif object['properties'][prop]['name'] == 'tile':
-                            attributes[screenId]["tile"] = int(object['properties'][prop]['value'])
-
-                            if not 'tile' in attributesSort:
-                                attributesSort.append('tile')
-                        elif object['properties'][prop]['name'] == 'border':
-                            attributes[screenId]["border"] = int(object['properties'][prop]['value'])
-
-                            if not 'border' in attributesSort:
-                                attributesSort.append('border')
-                        elif object['properties'][prop]['name'] == 'hud2':
-                            if object['properties'][prop]['value'] == True:
-                                attributes[screenId]["hud2"] = 1
-                            else:
-                                attributes[screenId]["hud2"] = 0
-
-                            if not 'hud2' in attributesSort:
-                                attributesSort.append('hud2')
-                        elif object['properties'][prop]['name'] == 'cenital':
-                            attributes[screenId]["cenital"] = int(object['properties'][prop]['value'])
-
-                            if gameView != 'overhead':
-                                if not 'cenital' in attributesSort:
-                                    attributesSort.append('cenital')
-                        elif object['properties'][prop]['name'] == 'bossEnergy':
-                            attributes[screenId]["bossEnergy"] = int(object['properties'][prop]['value'])
-
-                            if not 'bossEnergy' in attributesSort:
-                                attributesSort.append('bossEnergy')
-                        elif object['properties'][prop]['name'] == 'finalScreen' and object['properties'][prop]['value'] == True:
-                            if lastScreen != -1:
-                                errorMessage = 'Only one final screen is allowed. Found: ' + str(screenId) + ' and ' + str(lastScreen)
-                                exitWithErrorMessage(errorMessage)
-                            
-                            attributes[screenId]["finalScreen"] = 1
-                            
-                            lastScreen = screenId
-
-                            print("FINAL SCREEN = " + str(screenId))
-
-                            if not 'finalScreen' in attributesSort:
-                                attributesSort.append('finalScreen')
-                        elif object['properties'][prop]['name'] == 'dark':
-                            if object['properties'][prop]['value'] == True:
-                                attributes[screenId]["dark"] = 1
-                                screenDarkEnabled = True
-                            else:
-                                attributes[screenId]["dark"] = 0
-
-                            if screenDarkEnabled and not 'dark' in attributesSort:
-                                attributesSort.append('dark')
-                        elif object['properties'][prop]['name'] == 'teleportTo':
-                            if teleportEnabled:
-                                attributes[screenId]["teleportTo"] = int(object['properties'][prop]['value'])
+                    screenAttributesEnabled = True
+                    # if not screenId in attributes:
+                    #     attributes[screenId] = {
+                    #         "background": int(backgroundAttribute),
+                    #         "border": int(border),
+                    #         "tile": 0,
+                    #         "teleportTo": 0,
+                    #         "music": 0,
+                    #         "dark": 0,
+                    #         "cenital": 1 if gameViewSideDefault == 'overhead' else 0,
+                    #         "hud2": 0,
+                    #         "bossEnergy": 0,
+                    #         "finalScreen": 0
+                    #     }
+                    
+                    if 'properties' in object and len(object['properties']) > 0:
+                        for prop in range(len(object['properties'])):
+                            if object['properties'][prop]['name'] == 'music':
+                                if object['properties'][prop]['value'] == 'music1' or object['properties'][prop]['value'] == 'music':
+                                    attributes[screenId]["music"] = 1
+                                    musicsSelected[0] = True
+                                elif object['properties'][prop]['value'] == 'music2':
+                                    attributes[screenId]["music"] = 2
+                                    musicsSelected[1] = True
+                                elif object['properties'][prop]['value'] == 'music3':
+                                    attributes[screenId]["music"] = 3
+                                    musicsSelected[2] = True
+                                elif object['properties'][prop]['value'] == 'title':
+                                    attributes[screenId]["music"] = 4
+                                    musicsSelected[3] = True
+                                elif object['properties'][prop]['value'] == 'ending':
+                                    attributes[screenId]["music"] = 5
+                                    musicsSelected[4] = True
+                                elif object['properties'][prop]['value'] == 'gameover':
+                                    attributes[screenId]["music"] = 6
+                                    musicsSelected[5] = True
+                                elif object['properties'][prop]['value'] == 'no_music':
+                                    attributes[screenId]["music"] = 10
+                                    musicsSelected[6] = True
                                 
-                                if not 'teleportTo' in attributesSort:
-                                    attributesSort.append('teleportTo')
+                                if not 'music' in attributesSort:
+                                    attributesSort.append('music')
+                            elif object['properties'][prop]['name'] == 'background':
+                                attributes[screenId]["background"] = int(object['properties'][prop]['value'])
+
+                                if not 'background' in attributesSort:
+                                    attributesSort.append('background')
+                            elif object['properties'][prop]['name'] == 'tile':
+                                attributes[screenId]["tile"] = int(object['properties'][prop]['value'])
+
+                                if not 'tile' in attributesSort:
+                                    attributesSort.append('tile')
+                            elif object['properties'][prop]['name'] == 'border':
+                                attributes[screenId]["border"] = int(object['properties'][prop]['value'])
+
+                                if not 'border' in attributesSort:
+                                    attributesSort.append('border')
+                            elif object['properties'][prop]['name'] == 'hud2':
+                                if object['properties'][prop]['value'] == True:
+                                    if not os.path.isfile(SCREENS_FOLDER + "hud2.scr"):
+                                        exitWithErrorMessage('hud2.scr file is missing in the screens folder. Please add it to use this feature.')
+
+                                    attributes[screenId]["hud2"] = 1
+
+                                    if not 'hud2' in attributesSort:
+                                        attributesSort.append('hud2')
+                                else:
+                                    attributes[screenId]["hud2"] = 0
+                            elif object['properties'][prop]['name'] == 'cenital':
+                                attributes[screenId]["cenital"] = int(object['properties'][prop]['value'])
+
+                                if gameView != 'overhead':
+                                    if not 'cenital' in attributesSort:
+                                        attributesSort.append('cenital')
+                            elif object['properties'][prop]['name'] == 'bossEnergy':
+                                attributes[screenId]["bossEnergy"] = int(object['properties'][prop]['value'])
+
+                                if not 'bossEnergy' in attributesSort:
+                                    attributesSort.append('bossEnergy')
+                            elif object['properties'][prop]['name'] == 'finalScreen' and object['properties'][prop]['value'] == True:
+                                if lastScreen != -1:
+                                    errorMessage = 'Only one final screen is allowed. Found: ' + str(screenId) + ' and ' + str(lastScreen)
+                                    exitWithErrorMessage(errorMessage)
+                                
+                                attributes[screenId]["finalScreen"] = 1
+                                
+                                lastScreen = screenId
+
+                                print("FINAL SCREEN = " + str(screenId))
+
+                                if not 'finalScreen' in attributesSort:
+                                    attributesSort.append('finalScreen')
+                            elif object['properties'][prop]['name'] == 'dark':
+                                if object['properties'][prop]['value'] == True:
+                                    attributes[screenId]["dark"] = 1
+                                    screenDarkEnabled = True
+                                else:
+                                    attributes[screenId]["dark"] = 0
+
+                                if screenDarkEnabled and not 'dark' in attributesSort:
+                                    attributesSort.append('dark')
+                            elif object['properties'][prop]['name'] == 'teleportTo':
+                                if teleportEnabled:
+                                    attributes[screenId]["teleportTo"] = int(object['properties'][prop]['value'])
+                                    
+                                    if not 'teleportTo' in attributesSort:
+                                        attributesSort.append('teleportTo')
                 else:
                     print(object)
                     errorMessage = 'Unknown object type. Only "enemy", "text", "screen_attributes" or "player" are allowed. Found: ' + object['type']
@@ -1842,70 +1875,73 @@ if musicEnabled == 1:
     #             f.write(bytearray([0]))
 
 # Atributos por pantalla seleccionados
-# if screenAttributesEnabled:
-configStr += "#DEFINE SCREEN_ATTRIBUTES\n"
+if screenAttributesEnabled and len(attributesSort) > 0:
+    if not 'hud2' in attributesSort and os.path.isfile(SCREENS_FOLDER + "hud2.scr"):
+        exitWithErrorMessage('hud2.scr file exists but is not in the screens attributes. Please add it to use this feature.')
 
-configStr += "Const SCREEN_ATTRIBUTES_TOTAL as ubyte = " + str(len(attributesSort) - 1) + "\n"
+    configStr += "#DEFINE SCREEN_ATTRIBUTES\n"
 
-if lastScreen != -1:
-    configStr += "#DEFINE FINAL_SCREEN_ENABLED\n"
-    configStr += "Const FINAL_SCREEN as ubyte = " + str(lastScreen) + "\n"
+    configStr += "Const SCREEN_ATTRIBUTES_TOTAL as ubyte = " + str(len(attributesSort) - 1) + "\n"
 
-if hasSwitcherTiles or teleportEnabled:
-    configStr += "#DEFINE FIRED_ITEMS_ENABLED\n"
+    if lastScreen != -1:
+        configStr += "#DEFINE FINAL_SCREEN_ENABLED\n"
+        configStr += "Const FINAL_SCREEN as ubyte = " + str(lastScreen) + "\n"
 
-if hasSwitcherTiles:
-    if not screenDarkEnabled:
-        configStr += "#DEFINE SCREEN_DARK_ENABLED\n"
+    if hasSwitcherTiles or teleportEnabled:
+        configStr += "#DEFINE FIRED_ITEMS_ENABLED\n"
 
-    configStr += "#DEFINE SWITCHES_ENABLED\n"
+    if hasSwitcherTiles:
+        if not screenDarkEnabled:
+            configStr += "#DEFINE SCREEN_DARK_ENABLED\n"
 
-    if itemsAllBehaviour == "Hidden in dark":
-        configStr += "#DEFINE SCREEN_DARK_HIDE_ITEMS\n"
-    elif itemsAllBehaviour == "Hidden in light":
-        configStr += "#DEFINE SCREEN_LIGHT_HIDE_ITEMS\n"
+        configStr += "#DEFINE SWITCHES_ENABLED\n"
 
-if teleportEnabled:
-    configStr += "#DEFINE TELEPORT_ENABLED\n"
-    if teleportAnimation:
-        configStr += "#DEFINE TELEPORT_ANIMATION\n"
-    
-    if teleportDisabledTile:
-        configStr += "#DEFINE TELEPORT_DISABLED_TILE\n"
+        if itemsAllBehaviour == "Hidden in dark":
+            configStr += "#DEFINE SCREEN_DARK_HIDE_ITEMS\n"
+        elif itemsAllBehaviour == "Hidden in light":
+            configStr += "#DEFINE SCREEN_LIGHT_HIDE_ITEMS\n"
 
-    if teleportSound:
-        configStr += "#DEFINE TELEPORT_SOUND\n"
+    if teleportEnabled:
+        configStr += "#DEFINE TELEPORT_ENABLED\n"
+        if teleportAnimation:
+            configStr += "#DEFINE TELEPORT_ANIMATION\n"
+        
+        if teleportDisabledTile:
+            configStr += "#DEFINE TELEPORT_DISABLED_TILE\n"
 
-for attridx, attributeTmp in enumerate(attributesSort):
-    configStr += "#DEFINE SCREEN_" + attributeTmp.upper() + "_ENABLED\n"
-    configStr += "Const SCREEN_" + attributeTmp.upper() + " as ubyte = " + str(attridx) + "\n"
+        if teleportSound:
+            configStr += "#DEFINE TELEPORT_SOUND\n"
 
-print("SCREEN_ATTRIBUTES\n")
-with open("output/screenAttributes.bin", "wb") as f:
-    for screenId in range(screensCount):
-        print(screenId)
+    for attridx, attributeTmp in enumerate(attributesSort):
+        configStr += "#DEFINE SCREEN_" + attributeTmp.upper() + "_ENABLED\n"
+        configStr += "Const SCREEN_" + attributeTmp.upper() + " as ubyte = " + str(attridx) + "\n"
 
-        arrayAttrs = []
+    print("SCREEN_ATTRIBUTES\n")
+    with open("output/screenAttributes.bin", "wb") as f:
+        for screenId in range(screensCount):
+            print(screenId)
 
-        if not screenId in attributes:
-            attributes[screenId] = {
-                "background": int(backgroundAttribute),
-                "border": int(border),
-                "tile": 0,
-                "teleportTo": 0,
-                "music": 0,
-                "dark": 0,
-                "cenital": 1 if gameViewSideDefault == 'overhead' else 0,
-                "hud2": 0,
-                "bossEnergy": 0,
-                "finalScreen": 0
-            }
+            arrayAttrs = []
 
-        print(attributes[screenId])
-        for attridx, attributeTmp in enumerate(attributesSort):
-            arrayAttrs.append(attributes[screenId][attributeTmp])
+            if not screenId in attributes:
+                attributes[screenId] = {
+                    "background": int(backgroundAttribute),
+                    "border": int(border),
+                    "tile": 0,
+                    "teleportTo": 0,
+                    "music": 0,
+                    "dark": 0,
+                    "cenital": 1 if gameViewSideDefault == 'overhead' else 0,
+                    "hud2": 0,
+                    "bossEnergy": 0,
+                    "finalScreen": 0
+                }
 
-        f.write(bytearray(arrayAttrs))
+            print(attributes[screenId])
+            for attridx, attributeTmp in enumerate(attributesSort):
+                arrayAttrs.append(attributes[screenId][attributeTmp])
+
+            f.write(bytearray(arrayAttrs))
 
 
 if adventureTextsAcceptWithFire == True:
@@ -2012,8 +2048,8 @@ for enemyId in objects:
 enemiesPerScreen = []
 
 configStr += "const INITIAL_SCREEN as ubyte = " + str(initialScreen) + "\n"
-configStr += "const INITIAL_MAIN_CHARACTER_X as ubyte = " + str(int(initialMainCharacterX) + widthSkip) + "\n"
-configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(int(initialMainCharacterY) + heightSkip) + "\n"
+configStr += "const INITIAL_MAIN_CHARACTER_X as ubyte = " + str(int(initialMainCharacterX) + (widthSkip*2)) + "\n"
+configStr += "const INITIAL_MAIN_CHARACTER_Y as ubyte = " + str(int(initialMainCharacterY) + (heightSkip*2)) + "\n"
 
 # configStr += "\n\ntextsData:\n"
 # for i in allTexts:

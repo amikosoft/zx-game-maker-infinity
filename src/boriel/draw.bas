@@ -73,29 +73,31 @@ Sub mapDraw(withHud as ubyte)
                 end if
             #endif
 
-            #ifdef TELEPORT_ENABLED
-                if nextTile = TELEPORT_TILE then
-                    if moveScreen = 10 then
-                        protaX = x*2
-                        protaY = y*2
+            #ifdef SCREEN_ATTRIBUTES
+                #ifdef TELEPORT_ENABLED
+                    if nextTile = TELEPORT_TILE then
+                        if moveScreen = 10 then
+                            protaX = x*2
+                            protaY = y*2
 
-                        #ifdef LIVES_MODE_ENABLED
-                            #ifndef CHECKPOINTS_ENABLED
-                                protaXRespawn = protaX
-                                protaYRespawn = protaY
-                                protaScreenRespawn = currentScreen
+                            #ifdef LIVES_MODE_ENABLED
+                                #ifndef CHECKPOINTS_ENABLED
+                                    protaXRespawn = protaX
+                                    protaYRespawn = protaY
+                                    protaScreenRespawn = currentScreen
+                                #endif
                             #endif
+                        
+                            moveScreen = 0
+                        end if
+                        
+                        #ifdef TELEPORT_DISABLED_TILE
+                            if not currentTeleportTo then nextTile = TELEPORT_QUIT_TILE
+                        #else
+                            if not currentTeleportTo then nextTile = 0
                         #endif
-                       
-                        moveScreen = 0
                     end if
-                    
-                    #ifdef TELEPORT_DISABLED_TILE
-                        if not currentTeleportTo then nextTile = TELEPORT_QUIT_TILE
-                    #else
-                        if not currentTeleportTo then nextTile = 0
-                    #endif
-                end if
+                #endif
             #endif
 
             drawTile(nextTile, x, y)

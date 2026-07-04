@@ -939,33 +939,35 @@ Function checkTileObject(tile As Ubyte, withoutFire as ubyte) As Ubyte
     #ifdef FIRED_ITEMS_ENABLED
     else if not isActionPerformed then
         #ifdef SCREEN_DARK_ENABLED
-        #ifdef SWITCHES_ENABLED
-            if tile = SWITCHER_TILE Then
-                screenIsDark = not screenIsDark
-                BEEP 0.01, 14
-                mapDraw(0)
-                isActionPerformed = tile
-                invincible = 2
-                return tile
-            end if
-        #endif
+            #ifdef SWITCHES_ENABLED
+                if tile = SWITCHER_TILE Then
+                    screenIsDark = not screenIsDark
+                    BEEP 0.01, 14
+                    mapDraw(0)
+                    isActionPerformed = tile
+                    invincible = 2
+                    return tile
+                end if
+            #endif
         #endif
         #ifdef TELEPORT_ENABLED
-            if tile = TELEPORT_TILE then
-                currentScreen = currentTeleportTo - 1
-                moveScreen = 10
-                isActionPerformed = tile
-                ' BeepFX_Play(6)
-                
-                #ifdef TELEPORT_ANIMATION
-                    for color=1 to 7
-                        #ifdef TELEPORT_SOUND
-                            BEEP 0.01, color
-                        #endif
-                        mapColor(7-color)
-                    next color
-                #endif
-            End if
+            #ifdef SCREEN_TELEPORTTO_ENABLED
+                if tile = TELEPORT_TILE then
+                    currentScreen = currentTeleportTo - 1
+                    moveScreen = 10
+                    isActionPerformed = tile
+                    ' BeepFX_Play(6)
+                    
+                    #ifdef TELEPORT_ANIMATION
+                        for color=1 to 7
+                            #ifdef TELEPORT_SOUND
+                                BEEP 0.01, color
+                            #endif
+                            mapColor(7-color)
+                        next color
+                    #endif
+                End if
+            #endif
         #endif
         #ifdef KEYS_ENABLED
             #ifdef COINS_FOR_KEY_ENABLED

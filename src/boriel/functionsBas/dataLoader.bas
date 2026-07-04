@@ -58,9 +58,9 @@
         #endif
 
         #ifdef HUD2_SCREEN_ENABLED
-        #ifdef SCREEN_HUD2_ENABLED
-            load "" CODE HUD2_SCREEN_ADDRESS ' instructions Screen
-        #endif
+            #ifdef SCREEN_HUD2_ENABLED
+                load "" CODE HUD2_SCREEN_ADDRESS ' instructions Screen
+            #endif
         #endif
 
         #ifdef FULLSCREEN_TEXTS

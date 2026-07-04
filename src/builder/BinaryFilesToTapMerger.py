@@ -46,7 +46,7 @@ class BinaryFilesToTapMerger:
         # if is128k and musicEnabled:
         #     input_files.append(OUTPUT_FOLDER + "screenMusic.bin")
 
-        if screenAttrs:
+        if screenAttrs and os.path.isfile(OUTPUT_FOLDER + "screenAttributes.bin"):
             input_files.append(OUTPUT_FOLDER + "screenAttributes.bin")
 
         if useBreakableTile:
